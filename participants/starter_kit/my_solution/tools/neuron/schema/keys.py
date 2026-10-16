@@ -89,12 +89,13 @@ def discover_keys(table: str) -> list[tuple[str, ...]]:
 
 
 def key_check(key: list[str], found: list[tuple[str, ...]]) -> dict:
-    """Is the documented `key` unique (it contains a found key) and minimal (it is a found key)?
+    """Is the documented `key` unique (it contains a found key) and minimal (it is one of the found keys)?
 
     Both are None for a table without a documented key.
     """
     if key:
-        return {"unique": any(set(k).issubset(key) for k in found), "minimal": set(key) in map(set, found)}
+        found_keys = {frozenset(k) for k in found}
+        return {"unique": any(k.issubset(key) for k in found_keys), "minimal": found_keys.issuperset([frozenset(key)])}
     return {"unique": None, "minimal": None}
 
 

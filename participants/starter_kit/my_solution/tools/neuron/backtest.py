@@ -25,10 +25,10 @@ def predicted_dues(extract: dt.date) -> pl.DataFrame:
     return pl.DataFrame(rows, schema=["PR_POLNR", "due"], orient="row")
 
 
-def actual_dues(extract: dt.date, horizon: dt.date) -> pl.DataFrame:
+def actual_dues(extract: dt.date, horizon: pl.Expr) -> pl.DataFrame:
     """PR_POLNR and due of every real due date PR_DUEDT after `extract`, up to and including `horizon`."""
     dues = table(LEGACY, "NRPREM").select("PR_POLNR", due=as_date("PR_DUEDT"))
-    return dues.filter(pl.col("due").is_between(extract, horizon, closed="right"))
+    return dues.filter(pl.col("due").is_between(pl.lit(extract), horizon, closed="right"))
 
 
 def backtest(extract: dt.date) -> dict:
@@ -36,11 +36,12 @@ def backtest(extract: dt.date) -> dict:
 
     A policy whose real list is shorter usually stopped paying in that year without a new version.
     """
-    horizon = extract.replace(year=extract.year + 1)
-    changed = table(LEGACY, "NRPOLH").filter(as_date("PH_VLDFR").is_between(extract, horizon, closed="right"))
+    horizon = pl.lit(extract).dt.offset_by("1y")
+    new_version = as_date("PH_VLDFR").is_between(pl.lit(extract), horizon, closed="right")
+    changed = table(LEGACY, "NRPOLH").filter(new_version)["PH_POLNR"].implode()
     both = due_lists(predicted_dues(extract), "predicted").join(due_lists(actual_dues(extract, horizon), "actual"),
                                                                 on="PR_POLNR", how="left")
-    checked = both.filter(pl.col("PR_POLNR").is_in(changed["PH_POLNR"].implode()).not_())
+    checked = both.filter(pl.col("PR_POLNR").is_in(changed).not_())
     same = checked.filter(pl.col("predicted").eq(pl.col("actual")).fill_null(False))
     return {"extract": extract, "policies": checked.height, "identical": same.height}
 

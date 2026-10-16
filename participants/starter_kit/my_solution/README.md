@@ -9,7 +9,7 @@ in too.
 | t0 commission | 225'848 / 225'858 train rows exact (99.9956 %). The 10 other rows are manual corrections, proven below |
 | t1 next due dates | 15'028 / 15'028 train rows exact (100 %); backtest on 18 past years: no wrong due date |
 | t2 – t5 | not solved yet: the functions return empty results |
-| Maintainability index | 100 for the task files; 95.9 for the whole folder with the tools (radon, weighted by lines) |
+| Maintainability index | 100 for the task files; 98.7 for the whole folder with the tools (radon, weighted by lines) |
 
 ```
 python check.py --tasks t0_commission t1_next_due_dates      # from starter_kit/, needs requirements.txt
@@ -29,7 +29,7 @@ my_solution/
     ├── load.py, codes.py, policy.py   tables decoded for exploring, code texts, history of one policy
     ├── targets.py                     train targets and official scoring, for exploring only
     ├── schema/                        keys and relations found with Desbordante, and their diagram
-    ├── solver/                        Z3: proofs (UNSAT) and rate recovery (MaxSMT), used for t0
+    ├── solver/                        Z3: proofs (UNSAT), interval reasoning, rate recovery (MaxSMT)
     └── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
 ```
 
@@ -88,8 +88,8 @@ them are listed in NREXCP. Four are not: BL10001299 #103, BL10001328 #1, BL10002
 
 As the strategy suggests: thin task functions, small modules with one job each, the conventions as data instead
 of branches, and docstrings that state the rule in business terms. The task files score 100 in the
-maintainability index (radon, weighted by lines of code); with the tools the folder scores 95.9. The two Z3
-modules score about 77, because operators are the natural notation of Z3 constraints.
+maintainability index (radon, weighted by lines of code); with the tools the folder scores 98.7. The three Z3
+modules score 85 to 90, because operators are the natural notation of Z3 constraints.
 
 ## Running the tools
 
