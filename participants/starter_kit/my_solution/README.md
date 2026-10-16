@@ -1,35 +1,36 @@
 # Neuron migration: rules as code
 
 `submission.py` computes everything from the export in `legacy_dir` and nothing else. It does not read any
-target file and has no values written into it. The rules were found in the data with tools that are handed in
-too: `tools/` and `notebooks/`.
+target file and has no values written into it. The rules were found in the data with the tools in `tools/`, handed
+in too.
 
 | | |
 |---|---|
 | t0 commission | 225'848 / 225'858 train rows exact (99.9956 %). The 10 other rows are manual corrections, proven below |
-| t1 – t5 | not solved yet: the functions return empty results |
-| Maintainability index | 95.8 (`scoring.maintainability`, radon, weighted over all `.py` files of this folder) |
+| t1 next due dates | 15'028 / 15'028 train rows exact (100 %); backtest on 18 past years: no wrong due date |
+| t2 – t5 | not solved yet: the functions return empty results |
+| Maintainability index | 100 for the task files; 95.9 for the whole folder with the tools (radon, weighted by lines) |
 
 ```
-python check.py --tasks t0_commission      # from starter_kit/, needs only requirements.txt (polars)
+python check.py --tasks t0_commission t1_next_due_dates      # from starter_kit/, needs requirements.txt
 ```
 
 ## Layout
 
 ```
 my_solution/
-├── submission.py      entry point: one function per task
+├── submission.py      entry point: thin task functions that compose the modules below
+├── conventions.py     the conventions of Neuron as data (states, frequencies, conversion date, calendar, ...)
 ├── legacy.py          reading the export by the types of NRDICT, the version valid on a date
+├── dates.py           calendar: schedules of whole months, business days of canton Ticino
 ├── money.py           exact money arithmetic: cents x millionths, rounded half up
-├── requirements.txt   polars (tested with 1.30, 1.35 and 2.0)
-├── tools/neuron/      the tools that found the rules (not used by the submission)
-│   ├── load.py, codes.py, policy.py   tables decoded for exploring, code texts, history of one policy
-│   ├── targets.py                     train targets and official scoring, for exploring only
-│   ├── schema/                        keys and relations found with Desbordante, and their diagram
-│   └── solver/                        Z3: proofs (UNSAT) and rate recovery (MaxSMT)
-└── notebooks/
-    ├── 00_explore.ipynb               EDA: tables, codes, keys and relations, data quality, dates, versions
-    └── 01_t0_commission.ipynb         t0: rates recovered from the targets alone, proofs of the outliers
+├── requirements.txt   polars, holidays (tested with polars 1.30 and 2.0, holidays 0.60 and 0.106)
+└── tools/neuron/      the tools that found the rules (not used by the submission)
+    ├── load.py, codes.py, policy.py   tables decoded for exploring, code texts, history of one policy
+    ├── targets.py                     train targets and official scoring, for exploring only
+    ├── schema/                        keys and relations found with Desbordante, and their diagram
+    ├── solver/                        Z3: proofs (UNSAT) and rate recovery (MaxSMT), used for t0
+    └── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
 ```
 
 ## Approach
@@ -61,22 +62,40 @@ my_solution/
 Z3 recovers the six rates from the targets alone, and they equal NRCOMR: A/L 4 %, A/E 1.5 %, B/L 3 %, B/E 1 %,
 C/L 2 %, C/E 0.5 %. Each interval of feasible rates closes on a single value.
 
+**t1 next due dates.** For every policy that pays regular premiums on the extract date, the due dates of the
+following year with their collection dates:
+
+- policies: state 10 and frequency other than `E` in the policy version **valid on the extract date** (not the
+  version marked current: BL10001854 has a current version that ended in 2021);
+- schedule: COBOL computed every due date from the previous one, so a day 29 to 31 sank in a short month and
+  stayed there (31 -> 28 -> 28). Since the conversion to Neuron NG on 11.8.2007 the schedule is its first due date
+  plus whole periods of the frequency (M 1, Q 3, H 6, J 12 months), so a day 31 comes back after a short month.
+  The anchor is the first past due date `PR_DUEDT` on or after the conversion. No due date on or after maturity;
+- collection: direct debit (`LS`) on the due date if it is a business day, else on the next one; bank transfer
+  (`UB`) on the due date. Business days are the weekdays without a public holiday of canton Ticino (library
+  `holidays`, `CH`/`TI`): Good Friday is a business day there, 26.3.2027 is collected on the day.
+
+The target window has dues on all 365 days; the moved weekdays are exactly the Ticino holidays. The export keeps
+no past collection dates (`PR_RCVDT` is when the money arrived), but it keeps the past due dates: computing t1
+for 30 June of every year from 2008 to 2025 reproduces the real due dates of 28'366 of 28'386 unchanged policies.
+In the other 20 the real list is the start of the predicted one: the policy stopped paying without a new version.
+
 **Manual corrections (input for t5).** The 10 rows that the rule misses are UNSAT for every base (`PR_AMTDU`,
 `PR_AMTRC`), every NRCOMR rate and every rounding mode. Each differs from the rule by whole francs. Six of
 them are listed in NREXCP. Four are not: BL10001299 #103, BL10001328 #1, BL10002438 #11, BL10004554 #35.
 
 ## Code quality
 
-Small modules with one job each, docstrings that explain the why, and polars expressions over Python loops.
-The maintainability index of this folder is 95.8, measured as the organizers do: radon per file, weighted by
-lines of code. The submission modules and most tools score 100. The two Z3 modules score about 77, because
-operators are the natural notation of Z3 constraints.
+As the strategy suggests: thin task functions, small modules with one job each, the conventions as data instead
+of branches, and docstrings that state the rule in business terms. The task files score 100 in the
+maintainability index (radon, weighted by lines of code); with the tools the folder scores 95.9. The two Z3
+modules score about 77, because operators are the natural notation of Z3 constraints.
 
 ## Running the tools
 
 ```
-pip install -r tools/requirements.txt
-PYTHONPATH="$PWD:$PWD/tools" jupyter lab notebooks/      # from my_solution/
+pip install -r requirements.txt -r tools/requirements.txt
+PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.backtest import backtests; print(backtests())"
 ```
 
 The tools look for the data in `$NEURON_DATA`, by default the `participants` folder that contains this

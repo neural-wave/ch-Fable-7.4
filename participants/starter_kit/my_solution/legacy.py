@@ -14,6 +14,7 @@ import pathlib
 import polars as pl
 
 STORED_AS = {"C": pl.String, "N": pl.Int64, "D": pl.Int64, "T": pl.Int64}  # NRDICT type -> polars type
+CENTURY = 19_000_000  # CYYMMDD + 19000000 = YYYYMMDD: C is 0 for 19xx and 1 for 20xx
 
 
 def read(legacy_dir, name: str) -> pl.DataFrame:
@@ -66,3 +67,26 @@ def valid_on(rows: pl.DataFrame, versions: pl.DataFrame, on: dict[str, str], dat
     joined = rows.with_row_index("row").join(versions, left_on=list(on), right_on=list(on.values()))
     valid = joined.filter(pl.col(date).is_between(pl.col(f"{prefix}_VLDFR"), pl.col(f"{prefix}_VLDTO")))
     return valid.sort(f"{prefix}_{newest}").unique("row", keep="last").drop("row")
+
+
+def as_date(col: str) -> pl.Expr:
+    """The legacy date `CYYMMDD` of column `col` as a date, e.g. 1260630 -> 2026-06-30.
+
+    The open end 9999999 and the empty date 0 are no calendar days and become null.
+    """
+    return pl.col(col).add(CENTURY).cast(pl.String).str.to_date("%Y%m%d", strict=False)
+
+
+def as_cyymmdd(day) -> pl.Expr:
+    """The date `day` as the legacy integer `CYYMMDD`, to compare it with the stored dates."""
+    return pl.lit(day).dt.strftime("%Y%m%d").cast(pl.Int64).sub(CENTURY)
+
+
+def versions_on(versions: pl.DataFrame, day, key: str, prefix: str) -> pl.DataFrame:
+    """The version of every `key` (e.g. every policy) that is valid on the date `day`.
+
+    As in `valid_on`: valid from `<prefix>_VLDFR` to `<prefix>_VLDTO`, both days included, and the highest
+    version number `<prefix>_VRSNR` wins. A key without a valid version on that day is left out.
+    """
+    valid = versions.filter(as_cyymmdd(day).is_between(pl.col(f"{prefix}_VLDFR"), pl.col(f"{prefix}_VLDTO")))
+    return valid.sort(f"{prefix}_VRSNR").unique(key, keep="last")

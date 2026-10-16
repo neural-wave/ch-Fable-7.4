@@ -1,1 +1,2 @@
 polars>=1.30
+holidays>=0.60

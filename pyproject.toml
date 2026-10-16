@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "desbordante>=2.5.0",
+    "holidays>=0.60",
     "ipykernel>=7.4.0",
     "jupyterlab>=4.6.4",
     "matplotlib>=3.11.2",

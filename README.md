@@ -1,6 +1,6 @@
 # Wave · Lifeware Challenge
 
-Progetto Python + Jupyter per il reverse engineering di Neuron (Neural Wave AI Hackathon, vedi
+Progetto Python per il reverse engineering di Neuron (Neural Wave AI Hackathon, vedi
 `Lifeware_Challenge.pdf`).
 
 ## Struttura
@@ -16,9 +16,9 @@ wave/
 │   └── starter_kit/
 │       ├── check.py, scoring.py
 │       └── my_solution/        LA CONSEGNA, come chiede la traccia (vedi il suo README.md)
-│           ├── submission.py, legacy.py, money.py, requirements.txt
-│           ├── tools/neuron/   i tool: load, codes, policy, targets, schema/ (Desbordante), solver/ (Z3)
-│           └── notebooks/      00_explore.ipynb (EDA), 01_t0_commission.ipynb (regola t0 e prove Z3)
+│           ├── submission.py, conventions.py, legacy.py, dates.py, money.py, requirements.txt
+│           └── tools/neuron/   i tool: load, codes, policy, targets, schema/ (Desbordante), solver/ (Z3),
+│                               backtest (t1 su date di estrazione passate)
 └── cache/<versione>/           parquet e CSV di profilazione generati dai tool (ignorati da git)
 ```
 
@@ -32,10 +32,9 @@ Serve [uv](https://docs.astral.sh/uv/):
 
 ```
 uv sync                  # crea .venv con tutte le dipendenze
-uv run jupyter lab       # apre i notebook
 ```
 
-## Uso in un notebook
+## Uso dei tool
 
 ```python
 from neuron.load import load
@@ -71,7 +70,8 @@ Dopo aver cambiato un decoder in `neuron/load.py`, cancella `cache/`.
 
 ```
 cd participants/starter_kit
-uv run --project ../.. python check.py --tasks t0_commission
+uv run --project ../.. python check.py --tasks t0_commission t1_next_due_dates
+uv run python -c "from neuron.backtest import backtests; print(backtests())"   # t1 su 18 anni passati
 ```
 
 `check.py` stampa l'accuratezza e il maintainability index (radon) di tutti i `.py` della consegna, tool

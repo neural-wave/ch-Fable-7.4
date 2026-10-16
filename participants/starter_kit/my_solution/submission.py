@@ -10,11 +10,10 @@ from decimal import Decimal
 
 import polars as pl
 
-from legacy import table, valid_on
+from conventions import CONVERSION, DIRECT_DEBIT, IN_FORCE, MONTHS, REVERSAL, SINGLE_PREMIUM
+from dates import business_day, every_months
+from legacy import as_date, table, valid_on, versions_on
 from money import francs, share
-
-REVERSAL = 900  # event type that reverses the event EV_REVNR
-SINGLE_PREMIUM = "E"  # payment frequency PH_FREQ of single premium policies
 
 
 def received_premiums(legacy_dir) -> pl.DataFrame:
@@ -63,9 +62,56 @@ def t0_commission(legacy_dir) -> dict[tuple[str, int], Decimal]:
     return {(policy, due_nr): commission for policy, due_nr, commission in commissions.iter_rows()}
 
 
+def paying_policies(legacy_dir, day: dt.date) -> pl.DataFrame:
+    """The policies that pay regular premiums on `day`: state 10 and not single premium, in the version valid then.
+
+    A policy without a version valid on that day (e.g. one that ended earlier) is left out.
+    """
+    policies = versions_on(table(legacy_dir, "NRPOLH"), day, "PH_POLNR", "PH")
+    return policies.filter(pl.col("PH_STATE").eq(IN_FORCE), pl.col("PH_FREQ").ne(SINGLE_PREMIUM))
+
+
+def schedule_anchors(legacy_dir) -> pl.DataFrame:
+    """PR_POLNR and ANCHOR: the first due date of every policy from the conversion to Neuron NG on.
+
+    COBOL computed every due date from the previous one, so a day 29 to 31 sank in a short month and stayed there
+    (31 -> 28 -> 28). Neuron NG took over the schedule at the conversion: it adds whole periods to its first due
+    date, which the past due dates PR_DUEDT show.
+    """
+    dues = table(legacy_dir, "NRPREM").select("PR_POLNR", ANCHOR=as_date("PR_DUEDT"))
+    return dues.filter(pl.col("ANCHOR").ge(CONVERSION)).group_by("PR_POLNR").agg(pl.col("ANCHOR").min())
+
+
+def due_dates(policies: pl.DataFrame) -> pl.DataFrame:
+    """One row per policy and due date: from the anchor every period of the frequency, before the maturity date.
+
+    `policies` needs the columns ANCHOR and END (the maturity date); there is no due date on or after maturity.
+    """
+    schedules = [policies.filter(pl.col("PH_FREQ").eq(frequency)).with_columns(
+        DUE=every_months("ANCHOR", "END", months)) for frequency, months in MONTHS.items()]
+    return pl.concat(schedules).explode("DUE")
+
+
+def collection_date(due: pl.Expr) -> pl.Expr:
+    """The day the money is taken: by direct debit (LS) the due date or the next business day, else the due date."""
+    return pl.when(pl.col("PH_PAYMT").is_in(DIRECT_DEBIT)).then(business_day(due)).otherwise(due)
+
+
 def t1_next_due_dates(legacy_dir, extract_date: dt.date) -> dict[tuple[str, int], tuple[dt.date, dt.date]]:
-    """{(policy_id, n): (due_date, collection_date)} for the due dates after `extract_date`, n = 1, 2, ..."""
-    return {}
+    """{(policy_id, n): (due_date, collection_date)} for the due dates after `extract_date`, n = 1, 2, ...
+
+    For every policy that pays regular premiums on `extract_date`, the due dates of the following year (after
+    `extract_date`, up to and including the same day a year later). The schedule continues from the first due
+    date of Neuron NG in whole periods (`schedule_anchors`). Direct debits are collected on a business day of
+    canton Ticino, bank transfers on the due date.
+    """
+    policies = paying_policies(legacy_dir, extract_date).join(schedule_anchors(legacy_dir), left_on="PH_POLNR",
+                                                              right_on="PR_POLNR")
+    dues = due_dates(policies.with_columns(END=as_date("PH_ENDDT")))
+    year = dues.filter(pl.col("DUE").gt(extract_date), pl.col("DUE").le(pl.lit(extract_date).dt.offset_by("1y")))
+    rows = year.select("PH_POLNR", N=pl.col("DUE").rank("ordinal").over("PH_POLNR"), DUE="DUE",
+                       COLLECTION=collection_date(pl.col("DUE")))
+    return {(policy, n): (due, collection) for policy, n, due, collection in rows.iter_rows()}
 
 
 def t2_projected_maturity_value(legacy_dir) -> dict[str, Decimal]:
