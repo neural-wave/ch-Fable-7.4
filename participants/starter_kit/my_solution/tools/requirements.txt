@@ -1,0 +1,10 @@
+# Tools and notebooks only (the submission needs just ../requirements.txt)
+polars>=1.30
+pandas>=2.2
+pyarrow>=16
+desbordante>=2.5.0
+z3-solver>=4.13
+networkx>=3.3
+matplotlib>=3.9
+numpy>=2.0
+jupyterlab>=4.2

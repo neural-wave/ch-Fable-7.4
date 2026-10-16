@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+cache/
+.DS_Store
+participants/legacy/
+participants/targets/
+participants.zip
+.backup/
+.ruff_cache/
+*.py[cod]
+.pytest_cache/
+*.ipynb

@@ -1,0 +1,31 @@
+[project]
+name = "wave"
+version = "0.1.0"
+description = "Neural Wave AI Hackathon - Lifeware Challenge (Neuron migration)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "desbordante>=2.5.0",
+    "ipykernel>=7.4.0",
+    "jupyterlab>=4.6.4",
+    "matplotlib>=3.11.2",
+    "networkx>=3.7",
+    "numpy>=2.5.4",
+    "pandas>=3.0.6",
+    "polars>=2.0.0",
+    "pyarrow>=26.0.0",
+    "radon>=6.0.1",
+    "scikit-learn>=1.9.1",
+    "z3-solver>=5.3.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["participants/starter_kit/my_solution/tools/neuron"]
+
+[tool.hatch.build]
+# editable install: the tools (neuron) and the submission modules (legacy, money) are importable everywhere
+dev-mode-dirs = ["participants/starter_kit/my_solution", "participants/starter_kit/my_solution/tools"]
