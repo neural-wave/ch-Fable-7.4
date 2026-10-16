@@ -14,6 +14,7 @@ from conventions import CONVERSION, DIRECT_DEBIT, IN_FORCE, MONTHS, REVERSAL, SI
 from dates import business_day, every_months
 from legacy import as_date, table, valid_on, versions_on
 from money import francs, share
+from projection import projected_years
 
 
 def received_premiums(legacy_dir) -> pl.DataFrame:
@@ -115,8 +116,15 @@ def t1_next_due_dates(legacy_dir, extract_date: dt.date) -> dict[tuple[str, int]
 
 
 def t2_projected_maturity_value(legacy_dir) -> dict[str, Decimal]:
-    """{policy_id: maturity_value}"""
-    return {}
+    """{policy_id: maturity_value}: the value at maturity that the offer projected for every policy.
+
+    The offer simulates the policy as signed month by month, with the parameters valid on the application date
+    and growth at the illustration rate NRILLU (`projection`). The maturity value is the value at the end of the
+    last policy year.
+    """
+    years = projected_years(legacy_dir)
+    maturity = years.group_by("PH_POLNR").agg(pl.col("VALUE").sort_by("YEAR").last())
+    return dict(maturity.select("PH_POLNR", francs(pl.col("VALUE"))).iter_rows())
 
 
 def t3_surrender_value(legacy_dir, valuation_dates: list[dt.date]) -> dict[tuple[str, dt.date], Decimal]:

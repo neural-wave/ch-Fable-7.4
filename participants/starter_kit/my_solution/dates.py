@@ -12,6 +12,17 @@ import polars as pl
 from conventions import CALENDAR
 
 
+def completed_months(start: pl.Expr, end: pl.Expr) -> pl.Expr:
+    """The whole months from `start` to `end`: a month is complete when `end` reaches the day of `start` again."""
+    months = end.dt.year().sub(start.dt.year()).mul(12).add(end.dt.month()).sub(start.dt.month())
+    return months.sub(end.dt.day().lt(start.dt.day()).cast(pl.Int32))
+
+
+def days_between(start: pl.Expr, end: pl.Expr) -> pl.Expr:
+    """The number of days from `start` to `end`."""
+    return end.sub(start).dt.total_days()
+
+
 def every_months(start: str, end: str, months: int) -> pl.Expr:
     """List of the dates from the column `start` every `months` months, before the column `end` (excluded).
 

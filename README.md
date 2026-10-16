@@ -17,8 +17,9 @@ wave/
 │       ├── check.py, scoring.py
 │       └── my_solution/        LA CONSEGNA, come chiede la traccia (vedi il suo README.md)
 │           ├── submission.py, conventions.py, legacy.py, dates.py, money.py, requirements.txt
+│           ├── tariff.py, charges.py, projection.py   motore dei costi e proiezione dell'offerta (t2)
 │           └── tools/neuron/   i tool: load, codes, policy, targets, schema/ (Desbordante), solver/ (Z3),
-│                               backtest (t1 su date di estrazione passate)
+│                               backtest (t1 su date di estrazione passate), bisection (t2 anno per anno)
 └── cache/<versione>/           parquet e CSV di profilazione generati dai tool (ignorati da git)
 ```
 
@@ -70,8 +71,9 @@ Dopo aver cambiato un decoder in `neuron/load.py`, cancella `cache/`.
 
 ```
 cd participants/starter_kit
-uv run --project ../.. python check.py --tasks t0_commission t1_next_due_dates
+uv run --project ../.. python check.py --tasks t0_commission t1_next_due_dates t2_projected_maturity_value
 uv run python -c "from neuron.backtest import backtests; print(backtests())"   # t1 su 18 anni passati
+uv run python -c "from neuron.bisection import corrected_maturities; print(corrected_maturities())"   # t2
 ```
 
 `check.py` stampa l'accuratezza e il maintainability index (radon) di tutti i `.py` della consegna, tool
@@ -79,13 +81,17 @@ compresi. La submission calcola tutto da `legacy_dir` (niente target, niente cac
 
 ## Trappole trovate nei dati
 
-- `NRPERS.PS_BIRTH`: 10 date impossibili (es. `541131` = 31/11/1954), decodificate come `null`.
+- `NRPERS.PS_BIRTH`: 10 date impossibili (es. `541131` = 31/11/1954): i tool le decodificano come `null`, la
+  submission le fa scorrere al giorno dopo (1/12/1954), come un calendario lenient.
 - `NRCODE`: i testi inglesi stanno in `CD_TXTDE`, `CD_TXTEN` è vuota; righe CRLF.
 - `PS_SMOKE` usa `J`/`N`, non `Y`/`N`, e non ha un dominio in NRCODE; `PS_SEX` è `1`/`2`.
 - `PR_STATE` non segue la convenzione dei codici: il suo dominio è `PRSTAT`, non `STATE`.
 - `NRFXRT`: valute anche in minuscolo (`eur`, `chf`, …) nei giorni che mancano alla serie maiuscola: normalizzare.
 - `NRFPRC`: `FP_FNDID, FP_PRCDT` non è unico (prezzi ripubblicati, conta l'ultima pubblicazione).
-- Conversione COBOL → Java (evento 800) nella notte dell'11.8.2007, su tutte le 946 polizze allora vive.
+- Conversione COBOL → Java (evento 800) nella notte dell'11.8.2007, su tutte le 946 polizze allora vive. Le
+  offerte (t2) firmate prima le ha proiettate COBOL: troncamento al centesimo ed età in giorni / 365.
+- t2: la crescita mensile va calcolata in aritmetica decimale a 28 cifre significative; la frazione esatta sbaglia
+  di un centesimo nel 22 % delle polizze.
 - Incasso LS spostato nei weekend e nei festivi ticinesi (Venerdì Santo escluso); UB sempre il giorno stesso.
 - Un intero `0` nelle colonne di riferimento (`EV_REVNR`, `PR_EVTNR`, `TB_EVTNR`) vuol dire "nessun riferimento".
 - 4011 polizze nell'export: 3019 train (con target), 992 public.

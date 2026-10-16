@@ -77,6 +77,17 @@ def as_date(col: str) -> pl.Expr:
     return pl.col(col).add(CENTURY).cast(pl.String).str.to_date("%Y%m%d", strict=False)
 
 
+def as_lenient_date(col: str) -> pl.Expr:
+    """The legacy date `CYYMMDD` of column `col` as a date, where an impossible day runs on into the next month.
+
+    The export has birth dates such as 31 November (`861131`). Counted like a lenient calendar, the day after
+    30 November, 1 December. Valid dates stay as they are.
+    """
+    day = pl.col(col).add(CENTURY)
+    first = pl.date(day.floordiv(10_000), day.floordiv(100).mod(100), 1)
+    return first.add(pl.duration(days=day.mod(100).sub(1)))
+
+
 def as_cyymmdd(day) -> pl.Expr:
     """The date `day` as the legacy integer `CYYMMDD`, to compare it with the stored dates."""
     return pl.lit(day).dt.strftime("%Y%m%d").cast(pl.Int64).sub(CENTURY)

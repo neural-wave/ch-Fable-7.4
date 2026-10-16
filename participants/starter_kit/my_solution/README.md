@@ -8,11 +8,12 @@ in too.
 |---|---|
 | t0 commission | 225'848 / 225'858 train rows exact (99.9956 %). The 10 other rows are manual corrections, proven below |
 | t1 next due dates | 15'028 / 15'028 train rows exact (100 %); backtest on 18 past years: no wrong due date |
-| t2 – t5 | not solved yet: the functions return empty results |
-| Maintainability index | 100 for the task files; 98.7 for the whole folder with the tools (radon, weighted by lines) |
+| t2 projected maturity value | 3'011 / 3'019 train rows exact (99.735 %), and all 79'040 yearly values of the diagnostic. The 8 other rows are manual corrections |
+| t3 – t5 | not solved yet: the functions return empty results |
+| Maintainability index | 100 for the task files; 99.0 for the whole folder with the tools (radon, weighted by lines) |
 
 ```
-python check.py --tasks t0_commission t1_next_due_dates      # from starter_kit/, needs requirements.txt
+python check.py --tasks t0_commission t1_next_due_dates t2_projected_maturity_value   # from starter_kit/
 ```
 
 ## Layout
@@ -20,17 +21,21 @@ python check.py --tasks t0_commission t1_next_due_dates      # from starter_kit/
 ```
 my_solution/
 ├── submission.py      entry point: thin task functions that compose the modules below
-├── conventions.py     the conventions of Neuron as data (states, frequencies, conversion date, calendar, ...)
+├── conventions.py     the conventions of Neuron as data (states, frequencies, conversion, tariff key, ...)
 ├── legacy.py          reading the export by the types of NRDICT, the version valid on a date
-├── dates.py           calendar: schedules of whole months, business days of canton Ticino
-├── money.py           exact money arithmetic: cents x millionths, rounded half up
-├── requirements.txt   polars, holidays (tested with polars 1.30 and 2.0, holidays 0.60 and 0.106)
+├── dates.py           calendar: schedules of whole months, business days of canton Ticino, ages
+├── money.py           exact money arithmetic: cents x millionths, rounded half up or truncated
+├── tariff.py          the policy as signed and its parameters valid on the application date
+├── charges.py         the charges: entry charge, risk charge, death benefit, ages and mortality
+├── projection.py      t2: the offer month by month, its steps in Neuron's order
+├── requirements.txt   polars >= 1.31 (128-bit integers), holidays; tested with polars 1.31 and 2.0
 └── tools/neuron/      the tools that found the rules (not used by the submission)
     ├── load.py, codes.py, policy.py   tables decoded for exploring, code texts, history of one policy
     ├── targets.py                     train targets and official scoring, for exploring only
     ├── schema/                        keys and relations found with Desbordante, and their diagram
     ├── solver/                        Z3: proofs (UNSAT), interval reasoning, rate recovery (MaxSMT)
-    └── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
+    ├── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
+    └── bisection.py                   the first step where a calculation leaves a diagnostic target (t2)
 ```
 
 ## Approach
@@ -45,6 +50,10 @@ my_solution/
    misses is examined.
 4. **Proofs with Z3.** MaxSMT recovers a parameter from the targets alone. An UNSAT answer proves that no rule of
    a whole space (bases x rates x rounding modes) gives a target value, so the value was corrected by hand.
+5. **Search over conventions, then bisection.** For t2 a grid of conventions (monthly rate, order of the steps,
+   rounding, age, management charge: 768 combinations) was scored on the first policy year; the diagnostic of the
+   yearly values then shows the first year in which a policy leaves the target (`bisection.py`), and the
+   policies that share it point at the missing condition.
 
 ## Rules found
 
@@ -80,15 +89,46 @@ no past collection dates (`PR_RCVDT` is when the money arrived), but it keeps th
 for 30 June of every year from 2008 to 2025 reproduces the real due dates of 28'366 of 28'386 unchanged policies.
 In the other 20 the real list is the start of the predicted one: the policy stopped paying without a new version.
 
-**Manual corrections (input for t5).** The 10 rows that the rule misses are UNSAT for every base (`PR_AMTDU`,
-`PR_AMTRC`), every NRCOMR rate and every rounding mode. Each differs from the rule by whole francs. Six of
-them are listed in NREXCP. Four are not: BL10001299 #103, BL10001328 #1, BL10002438 #11, BL10004554 #35.
+**t2 projected maturity value.** The offer simulates the policy month by month from the start date to the
+maturity date, as one amount (no fund prices, currencies or individual agreements):
+
+- the policy as signed: its first version (`PH_VRSNR` 1), later changes do not count; the insured person of the
+  main risk;
+- the parameters valid on the application date `PH_APPDT`: charges NRCHRG by tariff family and generation (from
+  the tariff key `RK_TARKEY`), entry charge NRENTC by broker tier, growth rate NRILLU;
+- every month, in this order: the premium due (every 1, 3, 6 or 12 months from the start; a single premium once)
+  less the entry charge; the admin fee `CG_ADMFEE`; the management charge at the pot 2 rate `CG_AMCP2` / 12 (one
+  amount has no initial units); the risk charge; the growth at `IL_RATE` / 12 (not the compound monthly rate);
+- risk charge = sum at risk x qx x smoker factor (`CG_SMKFAC` if `PS_SMOKE` = J) x (1 + `RK_LOAD`) / 12. The sum
+  at risk is the death benefit less the value: option A 101 % of the value, B the higher of sum insured and value,
+  C value plus sum insured. qx comes from the table `CG_MORTTB`, for the sex of the tariff key (U: the sex of the
+  person) and the entry age plus the policy year;
+- COBOL made the offers signed before the conversion (11.8.2007), Neuron NG the later ones. Neuron NG rounds the
+  charges and the growth half up to the cent, and its entry age is the completed months since birth / 12, rounded
+  half up. COBOL truncates them, and its entry age is the days since birth / 365, rounded half up: with the leap
+  days its age goes up a little earlier. With the Java rules the first policy year matched 0 to 11 % of the offers
+  per month of application up to July 2007, 80 % in August 2007 and nearly all after it;
+- the growth multiplies by 1 + rate / 12 in decimal arithmetic of 28 significant digits. For 4 % the factor
+  1.00333...3 is a bit less than 1 + 1/300, so a value that would end on exactly half a cent (or a whole cent, for
+  COBOL) may end just below it; the 28 digits round it back only when the error is small enough. The exact
+  fraction misses a cent in 22 % of the policies, an 18-digit rate in 7 %, the 28 digits in none;
+- birth dates that do not exist (31 November, 8 policies) run on into the next month, like a lenient calendar.
+  Taking the last day of the month gives the same values for all 8, so the train data cannot tell them apart.
+
+**Manual corrections (input for t5).** The 10 rows of t0 that the rule misses are UNSAT for every base
+(`PR_AMTDU`, `PR_AMTRC`), every NRCOMR rate and every rounding mode. Each differs from the rule by whole francs.
+Six of them are listed in NREXCP. Four are not: BL10001299 #103, BL10001328 #1, BL10002438 #11, BL10004554 #35.
+
+The 8 maturity values of t2 that the rule misses have a projection that is right in every year; only the final
+value differs, by whole francs with the cents of the projection (`bisection.corrected_maturities`). Five are
+listed in NREXCP (BL10000128, BL10001762, BL10003323, BL10003583, BL10003808). Three are not: BL10002196
+(+1'726.00), BL10002973 (+1'498.00), BL10004278 (+3'294.00).
 
 ## Code quality
 
 As the strategy suggests: thin task functions, small modules with one job each, the conventions as data instead
 of branches, and docstrings that state the rule in business terms. The task files score 100 in the
-maintainability index (radon, weighted by lines of code); with the tools the folder scores 98.7. The three Z3
+maintainability index (radon, weighted by lines of code); with the tools the folder scores 99.0. The three Z3
 modules score 85 to 90, because operators are the natural notation of Z3 constraints.
 
 ## Running the tools
@@ -96,6 +136,7 @@ modules score 85 to 90, because operators are the natural notation of Z3 constra
 ```
 pip install -r requirements.txt -r tools/requirements.txt
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.backtest import backtests; print(backtests())"
+PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.bisection import corrected_maturities; print(corrected_maturities())"
 ```
 
 The tools look for the data in `$NEURON_DATA`, by default the `participants` folder that contains this
