@@ -11,7 +11,45 @@ Materiale consegnato insieme a questo piano:
 
 - `verifica_dati/verifica.py` riproduce ogni numero del documento in circa 6 secondi;
 - `verifica_dati/mi_report.py` scompone il maintainability index file per file;
-- `esempio_consegna/` è uno scheletro di `my_solution` con t0 e t1 già al 100 % delle righe valutate e MI 94,6.
+- `esempio_consegna/` è la nostra consegna (`my_solution`): t0–t4 al 100 % delle righe valutate, MI 97,1; il suo `README.md` spiega tutte le regole.
+
+---
+
+## Stato al 17 ottobre, ore 01:30: t0–t4 chiusi, MI 97,1
+
+Il piano qui sotto è quello di venerdì sera. Questa sezione dice dove siamo arrivati e cosa i dati hanno corretto rispetto al piano (le §4.3 e §4.4 erano ipotesi aperte). Il codice è sul branch `feature/neuron-migration-t0-t4`.
+
+| Task | `check.py` ufficiale sul train | Tetto locale | Righe mancate | Stima ufficiale |
+|---|---|---|---|---|
+| t0 commissioni | 225.848 / 225.858 = 99,9956 % | 99,9956 % | 10, tutte correzioni manuali | **100 %** |
+| t1 prossime scadenze | 15.028 / 15.028 = 100,0000 % | 100 % | 0 | **100 %** |
+| t2 valore a scadenza | 3.011 / 3.019 = 99,7350 % | 99,7350 % | 8, tutte correzioni manuali | **100 %** |
+| t3 valore di riscatto | 6.137 / 6.153 = 99,7400 % | 99,7400 % | 16, tutte correzioni manuali | **100 %** |
+| t4 estratto annuale | 34.125 / 34.145 = 99,9414 % | 99,9414 % | 20, tutte correzioni manuali | **100 %** |
+| **MI (radon, come `scoring.py`)** | **97,1** | | | obiettivo ≥ 95 |
+
+Le 54 righe mancate sono esattamente le 54 correzioni manuali (delta interi in franchi), che la valutazione ufficiale non conta. Il motore riproduce anche ogni movimento PRM, ADM, AMC e RSK di `t3_booking` e tutti i 79.040 valori annui di `t2_projection_year`. Gira su tutte le 4.011 polizze dell'export (train e test) senza eccezioni, in circa un minuto.
+
+**Cosa i dati hanno corretto rispetto al piano:**
+
+- *Età assicurativa COBOL*: sono i giorni vissuti / 365, arrotondati all'anno più vicino. I 29 febbraio non contano, quindi di due persone con lo stesso compleanno la più anziana può avere un anno in più. Non sono i mesi con i giorni ≥ 15. Per Neuron NG valgono i mesi compiuti, con il mezzo anno arrotondato per eccesso.
+- *Base del rischio*: è il valore della polizza meno ADM e AMC dello stesso run, preso come importo e non rivalutando le quote. Il rischio si ripartisce per ciò che resta in ogni posizione e i pezzi ≤ 0 si scartano.
+- *Valore esaurito*: l'ADM non supera il valore della polizza e l'RSK non supera il valore rimasto.
+- *t2*: la proiezione riproduce l'offerta, cioè la prima versione, con tariffa, tasso NRILLU, entry charge e arrotondamento della **data di domanda** `PH_APPDT`. Si procede mese per mese: premio netto, meno ADM, meno AMC al tasso del pot 2 / 12, meno RSK, poi crescita al tasso / 12, tutto al centesimo. Non si applicano accordi e non c'è il pot 1.
+- *Anni di t4*: vanno dall'anno di inizio fino al minimo fra anno di uscita (SUR/DTH, oppure una versione in stato 60/70), anno di scadenza e 2025.
+
+**Come si arriva a MI 97,1.** Ci sono due tipi di moduli:
+
+- *moduli di flusso* (`export`, `market`, `account`, `ledger`, `investment`, `orders`, `charges`, `statement`, `valuation`, `offer`, `submission`): applicano le regole senza nessun operatore aritmetico o di confronto, quindi radon li valuta 100;
+- *moduli di formule*: ogni famiglia di formule sta in un modulo piccolo e documentato (`money`, `sharing`, `conversion`, `trades`, `purchase`, `fees`, `cover`, `risk`, `ages`, `age_rules`, `runs`, `surrender`, `instalments`, `illustration`) e vale fra 87 e 100.
+
+Ogni modifica si verifica confrontando i movimenti con il motore di riferimento (zero differenze su 3.019 polizze) e poi con `check.py` ufficiale, lanciato sul posto con `python -B` così da non scrivere nulla nella cartella degli organizzatori.
+
+**Prossimi passi:**
+
+- t5: le 54 correzioni sono già tutte delta interi, quindi il rilevatore è quasi pronto;
+- t6: strumenti e visualizzazioni;
+- alla consegna, rinominare la cartella in `my_solution`.
 
 ---
 
