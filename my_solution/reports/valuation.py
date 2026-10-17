@@ -7,10 +7,10 @@ policy years); there is no penalty inside the waiver periods of NRWAIV (surrende
 """
 import bisect
 
-from accounting import account, runs
+from accounting import account
 from core import lookup
 from insurance import ages
-from reports import surrender
+from reports import periods, surrender
 
 
 def penalty(export, contract, day):
@@ -21,10 +21,16 @@ def penalty(export, contract, day):
 
 
 def surrender_values(export, contract, bookings, days):
-    """{day: surrender value} on the valuation `days` from the start of the policy on."""
-    traded = [booking.day for booking in bookings]
+    """{day: surrender value} on the valuation `days` from the start of the policy on.
+
+    One account follows the bookings day after day, as the ledger does: each valuation
+    day adds only the bookings traded since the one before.
+    """
+    traded, held, booked = [booking.day for booking in bookings], account.Account(export.market, contract.currency), 0
     values = {}
-    for day in runs.valuation_days(contract, days):
-        held = account.Account(export.market, contract.currency, bookings[:bisect.bisect_right(traded, day)])
+    for day in sorted(periods.valuation_days(contract, days)):
+        cut = bisect.bisect_right(traded, day)
+        held.book(bookings[booked:cut])
+        booked = cut
         values[day] = surrender.value(held.total(day), penalty(export, contract, day), day)
     return values

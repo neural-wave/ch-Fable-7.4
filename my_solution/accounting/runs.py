@@ -1,10 +1,8 @@
-"""The calendar of a policy: its charge runs, valuation days and statement years.
+"""The charge runs of a policy: the days on which Neuron charged ADM, AMC and RSK.
 
 A charge run falls on each monthly anniversary of the start date (the day clamped to the
 month end) after the first premium was invested, before maturity, before a surrender or
-death, and not after the export. A policy is valued from its start on. Statements cover
-every calendar year from the start to the year the policy ended, or to the last full year
-before the export.
+death, and not after the export.
 """
 import itertools
 
@@ -18,15 +16,3 @@ def run_days(contract, premiums, planned):
     stop = min([*(booking.day for booking in planned if booking.kind in c.EXITS), contract.end, c.RUNS_END])
     anniversaries = (months.add_months(contract.start, k, contract.start.day) for k in itertools.count(1))
     return [day for day in itertools.takewhile(lambda day: day < stop, anniversaries) if day > first]
-
-
-def valuation_days(contract, days):
-    """The valuation `days` on which the policy exists."""
-    return [day for day in days if contract.start <= day]
-
-
-def statement_years(contract, bookings):
-    """The calendar years with a statement."""
-    exits = [booking.day.year for booking in bookings if booking.kind in c.EXITS]
-    last = min([*exits, contract.end.year, contract.closed.year, c.LAST_STATEMENT_YEAR])
-    return range(contract.start.year, last + 1)

@@ -9,10 +9,8 @@ total, and shared by the positions in proportion to what is left in each. Every 
 units out at the bid price of the run day. A run with no position worth anything charges
 nothing: the end of the runs.
 """
-import collections
-
 import conventions as c
-from accounting import fees, sharing
+from accounting import fees, remainder, sharing
 from core import money
 from insurance import ages, risk
 
@@ -34,12 +32,10 @@ def charge(export, contract, account, values, day):
     """The ADM, AMC and RSK bookings of a run on positions worth `values`."""
     tariff = export.tariff(contract.policy_id, day)
     admin, management = admin_fees(tariff, values, day), management_fees(export, contract, tariff, values, day)
-    left = collections.Counter(values)
-    left.subtract(admin)
-    left.subtract(management)
+    left = remainder.left(values, admin, management)
     total = risk.monthly_charge(export, contract, tariff, sum(left.values()), ages.insured_age(export, contract, day), day)
     pieces = ((c.ADMIN, admin), (c.MANAGEMENT, management), (c.RISK, sharing.pro_rata(total, money.positive(left), day)))
-    return [account.charge(kind, position, amount, day) for kind, split in pieces for position, amount in split.items()]
+    return [booking for kind, split in pieces for booking in account.take(kind, split, day)]
 
 
 def run(export, contract, account, day):

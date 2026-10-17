@@ -6,12 +6,11 @@ explanation (ARCHITECTURE.md is the map); this file only applies the rules to th
 and returns them in the submission format. Dates are datetime.date, amounts decimal.Decimal.
 """
 import export
-from accounting import ledger
 from billing import collection, commission, schedule
 from core import months
 from legacy import portfolio, premiums
 from maturity import projection
-from reports import statement, valuation
+from reports import books
 
 
 def t0_commission(legacy_dir):
@@ -51,27 +50,18 @@ def t3_surrender_value(legacy_dir, valuation_dates):
     """{(policy_id, valuation_date): surrender_value} of every policy started by that day.
 
     The bookings of each policy come from accounting/ledger.py, the values from
-    reports/valuation.py.
+    reports/valuation.py; reports/books.py makes one pass of the ledger for t3 and t4.
     """
-    data = export.load(legacy_dir)
-    return {
-        (contract.policy_id, day): value
-        for contract, bookings in ledger.ledgers(data)
-        for day, value in valuation.surrender_values(data, contract, bookings, valuation_dates).items()
-    }
+    return books.surrender_values(export.load(legacy_dir), valuation_dates)
 
 
 def t4_annual_statement(legacy_dir):
     """{(policy_id, year): (premiums, entry, admin, management, risk, total charges)}.
 
-    The yearly sums of the same bookings as t3, in reports/statement.py.
+    The yearly sums of the same bookings as t3 (reports/statement.py), kept from the
+    pass of t3 when t3 ran first in the same process.
     """
-    data = export.load(legacy_dir)
-    return {
-        (contract.policy_id, year): row
-        for contract, bookings in ledger.ledgers(data)
-        for year, row in statement.statement(data, contract, bookings).items()
-    }
+    return books.statements(export.load(legacy_dir))
 
 
 def t5_outlier_detection(legacy_dir, targets_dir):

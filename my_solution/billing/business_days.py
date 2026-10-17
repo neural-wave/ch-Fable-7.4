@@ -1,25 +1,17 @@
 """Business days of NeuralWave Life: Monday to Friday, without the public holidays of Ticino.
 
-In Ticino Good Friday is a working day, while 6 Jan, 19 Mar, Corpus Domini and 29 Jun are
-holidays. The calendar is computed offline by the holidays package, for any year.
+The holidays are in holiday_calendar.py. A debit due on a weekend or a holiday is
+collected on the next business day.
 """
 import datetime as dt
-import functools
-
-import holidays
 
 import conventions as c
-
-
-@functools.cache
-def ticino_holidays(year):
-    """Public holidays of the canton of Ticino in `year`."""
-    return holidays.country_holidays(c.HOLIDAY_COUNTRY, subdiv=c.HOLIDAY_REGION, years=year)
+from billing import holiday_calendar
 
 
 def is_business_day(day):
     """Monday to Friday and not a Ticino public holiday."""
-    return day.weekday() < c.SATURDAY and day not in ticino_holidays(day.year)
+    return day.weekday() < c.SATURDAY and day not in holiday_calendar.ticino_holidays(day.year)
 
 
 def next_business_day(day):

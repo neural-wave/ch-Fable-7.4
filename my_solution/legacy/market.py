@@ -6,6 +6,7 @@ FP_CHGTS) is the price of that day. NRFXRT gives the CHF value of one unit of ea
 a day takes the last value published on or before that day.
 """
 import bisect
+import functools
 
 from legacy import tables
 
@@ -40,10 +41,12 @@ class Market:
         self.rates = series({(r["FX_CCY"].upper(), r["FX_RATDT"]): r["FX_RATE"] for r in rates})
         self.currency = {r["FD_FNDID"]: r["FD_CCY"] for r in tables.table(legacy_dir, "NRFUND")}
 
+    @functools.cache
     def bid(self, fund, day):
         """Bid price of a fund on `day`: what Neuron pays for a unit it takes out."""
         return last_on(self.prices, fund, day)[0]
 
+    @functools.cache
     def ask(self, fund, day):
         """Ask price of a fund on `day`: what a premium pays for a unit."""
         return last_on(self.prices, fund, day)[1]

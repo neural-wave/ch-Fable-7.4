@@ -5,19 +5,22 @@ not count, so of two persons with the same birthday the older one can be a year 
 365 is odd, so a half year never falls on a whole day and the rounding has no tie.
 Neuron NG counts the completed months (a month is complete on the day of the birthday)
 and rounds to the nearest year, half a year up. Both rules are exact on every risk charge
-of the train policies.
+of the train policies. The age of a policy is fixed once, so each rule remembers it.
 """
 import datetime as dt
+import functools
 
 import conventions as c
 
 
+@functools.cache
 def cobol(birth, start):
     """Age by the days lived; 30 Feb counts as 2 Mar."""
     year, month, day = birth
     return round(((start - dt.date(year, month, 1)).days - day + 1) / c.DAYS_PER_YEAR)
 
 
+@functools.cache
 def neuron_ng(birth, start):
     """Age by the completed months."""
     year, month, day = birth

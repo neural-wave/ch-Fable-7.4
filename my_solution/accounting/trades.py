@@ -15,3 +15,9 @@ def taken(market, currency, fund, amount, day):
 def bought(market, currency, fund, amount, day):
     """The units of a fund that a premium `amount` buys on its trade day `day`."""
     return money.units(amount * conversion.cross(market, currency, fund, day, before=True) / market.ask(fund, day), day)
+
+
+def book(units, bookings):
+    """Add the units of `bookings` to the Counter `units` of their positions."""
+    for booking in bookings:
+        units[booking.position] += booking.units

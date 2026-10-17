@@ -11,19 +11,14 @@ import conventions as c
 decimal.getcontext().prec = c.PRECISION
 
 
-def rounding(day):
-    """Rounding mode of the system that processed a business event on `day`."""
-    return c.ROUNDING_COBOL if day < c.ERA_SWITCH else c.ROUNDING_JAVA
-
-
 def cents(amount, day):
     """`amount` rounded to the cent the way Neuron rounded it on `day`."""
-    return amount.quantize(c.CENT, rounding=rounding(day))
+    return amount.quantize(c.CENT, c.ROUNDING_COBOL if day < c.ERA_SWITCH else c.ROUNDING_JAVA)
 
 
 def units(quantity, day):
     """`quantity` of fund units rounded to 6 decimals the way Neuron rounded it on `day`."""
-    return quantity.quantize(c.UNIT, rounding=rounding(day))
+    return quantity.quantize(c.UNIT, c.ROUNDING_COBOL if day < c.ERA_SWITCH else c.ROUNDING_JAVA)
 
 
 def positive(amounts):

@@ -4,9 +4,8 @@ The age is fixed on the start date and grows by one on every policy anniversary.
 keeps the age rule of the system that issued it (see age_rules.py). Birth dates are taken
 as written, also the impossible ones of the export (30 Feb 1971).
 """
-from dateutil.relativedelta import relativedelta
-
 import conventions as c
+from core import months
 from insurance import age_rules
 from legacy import formats, tables
 
@@ -18,7 +17,7 @@ def births(legacy_dir):
 
 def policy_years(start, day):
     """Completed policy years on `day`; an anniversary on 29 Feb falls on 28 Feb."""
-    return relativedelta(day, start).years
+    return months.completed_months(start, day) // c.MONTHS_PER_YEAR
 
 
 def insurance_age(birth, start, day):

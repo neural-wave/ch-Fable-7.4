@@ -37,8 +37,7 @@ class Account:
 
     def book(self, bookings):
         """Add the units of `bookings` to their positions."""
-        for booking in bookings:
-            self.units.update({booking.position: booking.units})
+        trades.book(self.units, bookings)
 
     def worth(self, day):
         """{position: value} on `day` of every position that holds units."""
@@ -53,6 +52,7 @@ class Account:
         """The policy value on `day`: all positions, also those below zero."""
         return sum(self.worth(day).values(), Decimal(0))
 
-    def charge(self, kind, position, amount, day):
-        """The booking that takes `amount` out of a position on `day`, at the bid price."""
-        return Booking(day, kind, position, amount, trades.taken(self.market, self.currency, position[0], amount, day))
+    def take(self, kind, split, day):
+        """The bookings that take each amount of `split` {position: amount} out of its position on `day`."""
+        return [Booking(day, kind, position, amount, trades.taken(self.market, self.currency, position[0], amount, day))
+                for position, amount in split.items()]
