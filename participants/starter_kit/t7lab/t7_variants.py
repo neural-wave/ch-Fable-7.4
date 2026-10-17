@@ -5,7 +5,7 @@ convention that changes the most rows and keep the others. Every VARIANT flips c
 (in every module that imported them) and runs the two t7 functions in a fresh process; the table counts the rows
 that differ from the submission as it is, per column and per country.
 
-    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_variants [--variant NAME ...]
+    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.t7_variants [--variant NAME ...]
 """
 import argparse
 import collections
@@ -48,7 +48,7 @@ def run(flips: dict, out: str):
 def results_of(flips: dict) -> dict:
     with tempfile.TemporaryDirectory() as folder:
         out = str(pathlib.Path(folder, "results.pkl"))
-        subprocess.run([sys.executable, "-B", "-m", "neuron.t7_variants", "--worker", repr(flips), out], check=True,
+        subprocess.run([sys.executable, "-B", "-m", "t7lab.t7_variants", "--worker", repr(flips), out], check=True,
                        stdin=subprocess.DEVNULL)
         return pickle.loads(pathlib.Path(out).read_bytes())
 

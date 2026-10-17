@@ -12,7 +12,7 @@ booking, with the rates valid on the effective date as Neuron knew them at the p
 
 Every amount is rounded once: half up, in Germany truncated, or by the system that processed it with
 `conventions.ROUNDED_BY_SYSTEM` (`taxpayer.rounds_half_up`). A booking whose payout, premium or rate is missing
-keeps a null amount, so a check can find it (`tools/neuron/t7_check.py`).
+keeps a null amount, so a check can find it (`t7lab/t7_check.py`, next to the hand-in).
 """
 import functools
 

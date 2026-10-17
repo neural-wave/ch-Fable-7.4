@@ -3,7 +3,7 @@
 NRTAXB has no amounts, but every booking is a label: Neuron booked that tax on that payout. These counts show which
 rule explains the labels. They come from the tax tables, so run this with an open-weights model only.
 
-    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_labels
+    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.t7_labels
 
 - payouts by country and by tax withheld: which rows each open choice of `conventions` touches;
 - CH: VST booked by reporting status AD_TAXST (M reported, E objection) and by gross above the threshold TX_THRSH;

@@ -21,7 +21,7 @@ as counts, dates and rates (never a calculated tax amount) and ends with FINDING
                exceptions to look at by hand
 10. changes    the years in which the share of residents' payouts with a tax type jumps
 
-    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_discover [--section trees ...]
+    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.t7_discover [--section trees ...]
 """
 import argparse
 
@@ -34,9 +34,9 @@ from conventions import CONVERSION, REMITTANCE, TAX_CURRENCY, TAXES, TRUNCATED, 
 from dates import completed_years
 from legacy import as_date, as_lenient_date, table, valid_on
 from market import exchange_rates
-from neuron.base_split import separations
+from t7lab.base_split import separations
 from neuron.load import LEGACY
-from neuron.tax_join import joined
+from t7lab.tax_join import joined
 from payouts import EVENT, payouts
 
 RATE_KEY = ["TX_CNTRY", "TX_TAXTP", "TX_REGIO"]  # one rate series of NRTAXR

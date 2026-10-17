@@ -20,7 +20,7 @@ It prints counts only, never an amount: per candidate the taxed payouts with a p
 none (missed), the untaxed with one (extra) and the untaxed without (rest). Like `t7_check`, it is meant to be
 run on the tax tables by a person or an open-weights model (the team's rule, README).
 
-    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.base_split [--by FULL]
+    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.base_split [--by FULL]
 """
 import argparse
 

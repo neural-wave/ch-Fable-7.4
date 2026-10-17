@@ -4,7 +4,7 @@ The task PDF asks for custom or open-weights models on the tax data, so this too
 gigabytes, and never a tax value. `--debug` adds the counts of the failed checks and the tracebacks, for the
 person or the open model that runs it.
 
-    NEURON_DATA=<participants> POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_check
+    NEURON_DATA=<participants> POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.t7_check
 
 It runs like the evaluator: t0 to t4 and then the two t7 functions in one process, which has 5 minutes and 5 GB.
 Then it checks:
@@ -24,6 +24,7 @@ import sys
 import time
 import traceback
 from decimal import Decimal
+from pathlib import Path
 
 import polars as pl
 
@@ -138,10 +139,30 @@ def result_checks(results: dict, debug: bool) -> list[bool]:
     return oks
 
 
+def print_target_csv(filename: str, legacy_dir) -> None:
+    """Look for `filename` across common locations and print its full CSV content.
+
+    A local mock target file (e.g. the row of the PDF) shows what a t7 check scores. Only this tool reads it: the
+    submission never reads target files.
+    """
+    candidates = [Path(filename), Path(legacy_dir) / filename, Path(legacy_dir).parent / "targets" / filename,
+                  Path("targets") / filename]
+    target_path = next((p for p in candidates if p.is_file()), None)
+    if target_path:
+        print(f"--- Full content of {target_path} ---")
+        print(target_path.read_text(encoding="utf-8"))
+        print(f"--- End of {filename} ---")
+    else:
+        print(f"Warning: '{filename}' not found in candidate paths. Note: check.py won't evaluate those tasks.")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--debug", action="store_true", help="counts of the failed checks and tracebacks")
     debug = parser.parse_args().debug
+    if debug:
+        for task in EXAMPLES:
+            print_target_csv(f"{task}.csv", LEGACY)
     started = time.time()
     results = run_tasks(debug)
     seconds, gigabytes = time.time() - started, peak_gigabytes()

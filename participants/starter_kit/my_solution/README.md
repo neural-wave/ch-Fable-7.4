@@ -12,8 +12,8 @@ in too.
 | t3 surrender value | 6'137 / 6'153 train rows exact (99.74 %), and every link of the diagnostics: all 5'024'847 calculated bookings (amount and units), all 23'052 holdings, all 6'153 policy values. The 16 other rows are manual corrections |
 | t4 annual statement | 34'125 / 34'145 train rows exact (99.94 %): every column of every row, except 20 admin fees. Those 20 are manual corrections |
 | t5 outlier detection | 54 outliers on the train targets: exactly the 54 rows that t0 – t4 miss, among them all 38 corrections that NREXCP lists for train policies. Without them every task scores 100 % (`scoring.accuracy` with `excluded`) |
-| t7 tax audit | No targets. Both PDF examples exact on the real tables (BL10000086 #121 and BL10000044 2019, 616.11), also with the official `scoring_t7.py`. The labels of NRTAXB (which tax was booked) agree with the taxable base on 277 / 285 German and 384 / 393 Italian payouts (`tools/neuron/t7_labels.py`). Before every upload `tools/neuron/t7_check.py` runs both examples and the labels of NRTAXB on the real tables, with an open-weights model |
-| Maintainability index | MI_FOLDER for the whole folder (radon, weighted by lines): 100 for every module of the submission, MI_TOOLS for the t7 tools |
+| t7 tax audit | No targets. Both PDF examples exact on the real tables (BL10000086 #121 and BL10000044 2019, 616.11), also with the official `scoring_t7.py`. The labels of NRTAXB (which tax was booked) agree with the taxable base on 277 / 285 German and 384 / 393 Italian payouts (`t7lab/t7_labels.py`, next to the hand-in). Before every upload `t7lab/t7_check.py` runs both examples and the labels of NRTAXB on the real tables, with an open-weights model |
+| Maintainability index | 100 for the whole folder (radon, weighted by lines) and for every file in it. The t7 lab, which keeps the operators of plain Python, is next to the folder (`../t7lab/`), not in the hand-in |
 
 ```
 python check.py   # from starter_kit/: all tasks and the maintainability index
@@ -49,10 +49,11 @@ my_solution/
     ├── solver/                        Z3 with SMT-LIB constraints: proofs (UNSAT), intervals, rate recovery (MaxSMT)
     ├── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
     ├── bisection.py                   the first step where a calculation leaves a diagnostic target (t2)
-    ├── account_check.py               the unit account link by link against the diagnostics (t3, t4)
-    ├── t7_check.py                    t7 before an upload: run like the evaluator, PDF examples, NRTAXB labels
-    └── t7_labels.py                   t7 rules: the bookings of NRTAXB against what may decide them, counts only
+    └── account_check.py               the unit account link by link against the diagnostics (t3, t4)
 ```
+
+Next to the folder, `../t7lab/` holds the tools that read the real tax tables for t7 (`t7_check`, `t7_labels`,
+`t7_variants`, `t7_discover`, `base_split`, `tax_join`); they run from here with `PYTHONPATH="$PWD:$PWD/tools:$PWD/.."`.
 
 ## Approach
 
@@ -258,7 +259,7 @@ alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`) a
 (`REMITTANCE_SHIFTED`), the rounding of the IT conversion (`TRUNCATED_CONVERSION`) and HEV on the withholding
 (`HALF_INCOME_WITHHELD`). Also
 assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a partial withdrawal (no
-example). `tools/neuron/t7_check.py` checks the rest on the real tables before an upload.
+example). `t7lab/t7_check.py` checks the rest on the real tables before an upload.
 
 ## Code quality
 
@@ -266,8 +267,8 @@ As the strategy suggests: thin task functions, small modules with one job each, 
 of branches, and docstrings that state the rule in business terms. The polars expressions use its methods
 (`.add`, `.mul`, `.floordiv`, `.eq`, ...); the Z3 tools write their constraints in SMT-LIB, the input language of
 Z3, and let Z3 parse them (`(<= low (* base rate) high)`); plain Python keeps its operators where they read
-better, as in the t7 tools. The maintainability index (radon, weighted by lines of code) is MI_FOLDER for the
-whole folder and 100 for every module of the submission: a signal, not a target.
+better, as in the t7 lab next to the folder. The maintainability index (radon, weighted by lines of code) is 100
+for the whole folder and for every module of the submission: a signal, not a target.
 
 ## Memory
 
@@ -291,8 +292,8 @@ PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.backtest import backtests; p
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.bisection import corrected_maturities; print(corrected_maturities())"
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.account_check import surrender_mismatches; print(surrender_mismatches())"
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.account_check import statement_mismatches; print(statement_mismatches())"
-POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_check   # tax tables: open-weights model only
-POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_labels  # tax tables: open-weights model only
+POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.t7_check   # tax tables: open-weights model only
+POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.t7_labels  # tax tables: open-weights model only
 ```
 
 The tools look for the data in `$NEURON_DATA`, by default the `participants` folder that contains this

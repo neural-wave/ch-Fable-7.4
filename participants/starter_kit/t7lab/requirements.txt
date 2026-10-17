@@ -1,0 +1,2 @@
+# The t7 lab (run from my_solution, see __init__.py); the hand-in packages are in my_solution/requirements.txt
+scikit-learn>=1.5  # t7_discover: decision trees on the labels of NRTAXB

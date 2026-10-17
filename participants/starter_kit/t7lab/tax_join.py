@@ -17,7 +17,7 @@ Every booking keeps exactly one row. The dates stay the stored integers `CYYMMDD
 With `--known-at`, only the versions entered up to the booking's processing timestamp TB_CHGTS count (HD_CHGTS,
 AD_CHGTS, TX_CHGTS), as Neuron knew them when it booked (`taxpayer.py`).
 
-    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.tax_join --out joined.parquet
+    NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.tax_join --out joined.parquet
 """
 import argparse
 import pathlib
