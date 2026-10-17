@@ -16,7 +16,7 @@ Status:
 - t0–t4 and t7 run in one process in 10 s, with a peak of 3.4 GB (synthetic tax tables).
 - PDF example 1 (`BL10000086,121`) is exact on the synthetic tables. Example 2 (`BL10000044,2019`, 616.11)
   needs the real Bollo rates: `t7_check.py` checks it.
-- Maintainability index: 97.2 for the whole folder, 100 for every module of the submission, 56.4 for the new
+- Maintainability index: 97.1 for the whole folder, 100 for every module of the submission, 55.4 for the new
   check tool.
 
 ## P0: the taxable base of DE and IT payouts — fixed
@@ -87,12 +87,12 @@ its evidence in the comment:
   and `taxpayer.with_policies` are left joins now. A booking without a match keeps a null amount instead of
   disappearing.
 - **Null or missing amounts:** caught by the check tool. The submission cannot know the right value, so it never
-  stops; `tools/neuron/t7_check.py` fails when a tax booking has no amount, when a booking of NRTAXB has no row,
-  or when a payout has no country.
+  stops; `tools/neuron/t7_check.py` fails when a tax booking has no amount or a booking of NRTAXB has no row. It
+  reports the payouts without a country as INFO: no tax booked and no address known, which no rule can resolve.
 - **Country never checked:** fixed. `country` is now the country of the taxes withheld from the payout (VST, SOS,
   KST: the label), and the residence only when nothing was withheld (`payouts.booked_countries`). The check tool
-  reports every payout whose residence disagrees with its booked taxes, because the residence still decides the
-  payouts without tax, the region and the KIS rate.
+  reports as INFO the payouts whose residence disagrees with their booked taxes. The code handles them, but the
+  residence still decides the payouts without tax, the region and the KIS rate.
 - **Church tax:** fixed. The KST is reduced only when the payout has a KIS booking (`taxes.payout_taxes`,
   `capital_gains_tax`). `AD_CHURCH` is no longer read.
 - **Unused NRTAXR columns:**
