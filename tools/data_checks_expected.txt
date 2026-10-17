@@ -1,0 +1,120 @@
+
+== Data: traps of the format
+impossible birth dates in NRPERS: 10  [541131, 690631, 550431, 891131, 861131, 710230, 720931, 760431, 930931, 640230]
+PS_SMOKE (SCHEMA says Y/N): {'J': 749, 'N': 3581}
+event 800 (system conversion), (date, user, policies): [('2007-08-11', 'CONV2007', 946)]
+batch user CBLBATCH  from 1994-01-01 03:29:53 to 2007-08-10 03:35:16
+batch user NGBATCH   from 2007-08-11 01:30:00 to 2026-06-30 01:30:00
+tables in the export: 27 (the document lists 23: NRHOLD, NRADDR, NRTAXR, NRTAXB are missing)
+
+== t0 commissions
+premium items with PR_STATE='P' of the train policies: 225858  target rows: 225858
+  broker on PR_RCVDT     half-up        225,848 / 225,858   =  99.9956%
+  broker on PR_RCVDT     half-even      225,847 / 225,858   =  99.9951%
+  broker on PR_RCVDT     truncation     225,846 / 225,858   =  99.9947%
+  broker on PR_DUEDT     half-up        225,846 / 225,858   =  99.9947%
+  broker on PR_DUEDT     half-even      225,845 / 225,858   =  99.9942%
+  broker on PR_DUEDT     truncation     225,844 / 225,858   =  99.9938%
+  current broker         half-up        224,418 / 225,858   =  99.3624%
+  current broker         half-even      224,417 / 225,858   =  99.3620%
+  current broker         truncation     224,416 / 225,858   =  99.3615%
+  first broker           half-up        224,130 / 225,858   =  99.2349%
+  first broker           half-even      224,129 / 225,858   =  99.2345%
+  first broker           truncation     224,128 / 225,858   =  99.2340%
+residuals of the best rule: 10  (in NREXCP: 6)
+    ('BL10000237', 41, '180', '49.40') NREXCP
+    ('BL10001299', 103, '190', '79.70') 
+    ('BL10001328', 1, '85900', '936.00') 
+    ('BL10001567', 6, '75', '28.50') NREXCP
+    ('BL10002438', 11, '6060', '310.40') 
+    ('BL10002462', 5, '4290', '101.80') NREXCP
+    ('BL10003175', 247, '390', '20.70') NREXCP
+    ('BL10004049', 6, '1305', '75.15') NREXCP
+    ('BL10004554', 35, '170', '16.10') 
+    ('BL10004722', 1, '78900', '823.00') NREXCP
+
+== t1 next due dates
+  anchor at PH_BEGDT      14,780 / 15,028    =  98.3497%
+  chain from PH_BEGDT     13,916 / 15,028    =  92.6005%
+  hybrid                  15,028 / 15,028    = 100.0000%
+  LS due on Good Friday 26.3.2027: 158, collected on the same day: 158
+
+== t2 projected value
+  final value = last year of the projection:     3,011 / 3,019     =  99.7350%
+    BL10000128  last year    392484.61  final    397339.61  delta    4855.00  NREXCP
+    BL10001762  last year     14144.34  final     15718.34  delta    1574.00  NREXCP
+    BL10002196  last year    268602.08  final    270328.08  delta    1726.00  
+    BL10002973  last year    122433.68  final    123931.68  delta    1498.00  
+    BL10003323  last year     43560.44  final     45507.44  delta    1947.00  NREXCP
+    BL10003583  last year     71383.82  final     70122.82  delta   -1261.00  NREXCP
+    BL10003808  last year    133692.45  final    129737.45  delta   -3955.00  NREXCP
+    BL10004278  last year    305955.99  final    309249.99  delta    3294.00  
+  single premium, NRILLU rate 0.020: median growth in year 2 1.0102 (n=92)
+  single premium, NRILLU rate 0.025: median growth in year 2 1.0154 (n=118)
+  single premium, NRILLU rate 0.030: median growth in year 2 1.0205 (n=108)
+  single premium, NRILLU rate 0.040: median growth in year 2 1.0309 (n=142)
+  single premium, NRILLU rate 0.050: median growth in year 2 1.0413 (n=110)
+    across a change: rate on the application 0.040, at the start 0.030 -> growth 1.0304
+    across a change: rate on the application 0.030, at the start 0.025 -> growth 1.0207
+    across a change: rate on the application 0.030, at the start 0.025 -> growth 1.0208
+    across a change: rate on the application 0.025, at the start 0.020 -> growth 1.0157
+    across a change: rate on the application 0.025, at the start 0.020 -> growth 1.0156
+    across a change: rate on the application 0.025, at the start 0.020 -> growth 1.0142
+    across a change: rate on the application 0.025, at the start 0.020 -> growth 1.0138
+
+== t3 diagnostic bookings (t3_booking)
+t3_booking rows: {'ADM': 1827505, 'AMC': 1833960, 'PRM': 407636, 'RSK': 955746}
+  price PRM = ask   407,636 / 407,636   = 100.0000%
+  price ADM = bid 1,827,505 / 1,827,505 = 100.0000%
+  price AMC = bid 1,833,960 / 1,833,960 = 100.0000%
+  price RSK = bid   955,746 / 955,746   = 100.0000%
+  ADM price date = last price <= trade date 2,460,334 / 2,460,334 = 100.0000%
+  PRM trade date = next TI business day after the money date           565,116 / 567,833   =  99.5215%
+  PRM trade date = first day with a price OF THE FUND after the money date   567,833 / 567,833   = 100.0000%
+  PRM amount COBOL truncation       8,021 / 8,021     = 100.0000%
+  PRM amount COBOL half-up          6,785 / 8,021     =  84.5905%
+  PRM amount Java  truncation      42,237 / 51,979    =  81.2578%
+  PRM amount Java  half-up         51,979 / 51,979    = 100.0000%
+  units PRM     same currency  rate trade date      upper-case rates     3,932 / 3,932     = 100.0000%
+  units PRM     same currency  rate trade date      rates as written     3,932 / 3,932     = 100.0000%
+  units PRM     same currency  rate trade date - 1  upper-case rates     3,932 / 3,932     = 100.0000%
+  units PRM     same currency  rate trade date - 1  rates as written     3,932 / 3,932     = 100.0000%
+  units PRM     other currency rate trade date      upper-case rates         0 / 927       =   0.0000%
+  units PRM     other currency rate trade date      rates as written         1 / 927       =   0.1079%
+  units PRM     other currency rate trade date - 1  upper-case rates       927 / 927       = 100.0000%
+  units PRM     other currency rate trade date - 1  rates as written       922 / 927       =  99.4606%
+  units charges same currency  rate trade date      upper-case rates    37,600 / 37,600    = 100.0000%
+  units charges same currency  rate trade date      rates as written    37,600 / 37,600    = 100.0000%
+  units charges same currency  rate trade date - 1  upper-case rates    37,600 / 37,600    = 100.0000%
+  units charges same currency  rate trade date - 1  rates as written    37,600 / 37,600    = 100.0000%
+  units charges other currency rate trade date      upper-case rates    17,541 / 17,541    = 100.0000%
+  units charges other currency rate trade date      rates as written    17,524 / 17,541    =  99.9031%
+  units charges other currency rate trade date - 1  upper-case rates     9,694 / 17,541    =  55.2648%
+  units charges other currency rate trade date - 1  rates as written     9,686 / 17,541    =  55.2192%
+  policies with at least one wrong unit (upper-case rates, right date rule): 0
+  policies with at least one wrong unit (rates as written, right date rule): 22
+
+== t3 surrender value from the policy value (diagnostic)
+  2006-12-31        623 / 623       = 100.0000%
+  2020-04-30      1,845 / 1,852     =  99.6220%
+  2025-12-31      2,151 / 2,160     =  99.5833%
+  total           4,619 / 4,635     =  99.6548%
+  residuals: 16, with a whole delta: 16, in NREXCP: 11
+
+== t4 annual statement as the sum of the bookings
+  premiums            34,145 / 34,145    = 100.0000%
+  entry_charges       34,145 / 34,145    = 100.0000%
+  admin_fees          34,125 / 34,145    =  99.9414%
+  management_fees     34,145 / 34,145    = 100.0000%
+  risk_charges        34,145 / 34,145    = 100.0000%
+  total_charges       34,125 / 34,145    =  99.9414%
+  whole row           34,125 / 34,145    =  99.9414%
+  rows that differ: 20, policies: 20, of which in NREXCP: 16; columns involved: {'premiums': 0, 'entry_charges': 0, 'admin_fees': 20, 'management_fees': 0, 'risk_charges': 0, 'total_charges': 20}
+
+== t5: policies with residuals (candidates for a manual correction)
+  t0: policies with residuals  10 | NREXCP (train)   6 | NREXCP covered by the residuals   6
+  t2: policies with residuals   8 | NREXCP (train)   5 | NREXCP covered by the residuals   5
+  t3: policies with residuals  16 | NREXCP (train)  11 | NREXCP covered by the residuals  11
+  t4: policies with residuals  20 | NREXCP (train)  16 | NREXCP covered by the residuals  16
+
+done in 6s
