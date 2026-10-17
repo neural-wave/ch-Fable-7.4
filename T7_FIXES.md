@@ -149,6 +149,30 @@ IT/CH, rounding of the IT conversion, HEV. `t7lab/t7_variants.py` counts the row
 leaderboard returns one accuracy per table on a few rows that change at every evaluation, so only one choice per
 table can be read from each upload.
 
+## What the whole extract says (study of 18.10)
+
+Facts measured on every row, not on the two examples of the PDF:
+
+- **When Neuron booked.** Every tax of a payout is booked by the clerk who processed the payout, at the event's
+  own timestamp and effective date. No payout was ever reversed: the reversals hit premiums, switches, allocations
+  and broker changes only. The Bollo batch (TAXBATCH) books 31 December on 10 January at 03:00; TAXFIX19 re-priced
+  2017 – 2019 on 20 July 2019. The premium stamp duty STP names its system: CBLBATCH (COBOL) or NGBATCH (Neuron NG).
+- **Residence.** The view Neuron had at processing and today's view agree on the holder and the country of every
+  payout, although some persons moved country and some addresses were entered late: the country does not hang on
+  that choice.
+- **Prices.** A restated price is always published the day after the first one, so the Bollo batch of 10 January
+  saw final year-end prices.
+- **Rounding.** Every task with targets (t0, t2, t3) shows Neuron rounding by system: COBOL truncates, Neuron NG
+  rounds half up. The German truncation of t7 rests on the one example, which is from the COBOL era (2006) and fits
+  the system rule as well (`ROUNDED_BY_SYSTEM`).
+- **Payment day.** `PD_PAYDAY` ("payout business days": 3 for Flex, 5 for Classic and Single Premium) is the only
+  payout column that no rule reads. In all three countries the law counts the remittance from the payment; with
+  it, the month of about a fifth of the payouts with tax moves (`REMITTED_FROM_PAYMENT`).
+- **Death claims.** The DTH booking is the unit value alone; the benefit follows the tariff option (`RK_TARKEY`
+  position 7: A, B, C; `charges.death_benefit_factors`). No label tells whether the tax base is the unit value or
+  the benefit, and the KST on German death claims follows no visible rule.
+- **Corrections.** NREXCP lists none for t7; the technical corrections (990) book switches only.
+
 ## Uploads and the actuary's readings
 
 The actuary picks a few targets to test different patterns (task PDF, section 7), and t7 is scored on the public

@@ -73,6 +73,10 @@ BASE_WITHOUT_TAX = False  # a payout without withholding reports the base 0; Tru
 # payouts are Swiss ones without withholding: reported (AD_TAXST M) or below the VST threshold)
 REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month. DE the 10th (example: 2006-07-17
 # -> 2006-08-10, a Thursday); IT the 16th, F24 (law); CH 30 days after the month (law)
+REMITTED_FROM_PAYMENT = False  # True: the remittance month follows the day the money was paid, the effective date +
+# the payout business days PD_PAYDAY of the product (NRPROD, read by no other rule; the law of all three countries
+# counts from the payment); False: from the effective date. The example fits both: paid 2006-07-24, still in July
+# (assumption, to test: it moves the month of about a fifth of the payouts with tax)
 REMITTANCE_SHIFTED = []  # countries whose remittance day moves to the next business day of its calendar (assumption:
 # none; the law moves a deadline that falls on a weekend or holiday, about 30 % of the days; the example, a
 # Thursday, fits both)

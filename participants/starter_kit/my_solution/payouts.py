@@ -38,8 +38,10 @@ from bookings import counted_events, received_premiums, uncharged_bookings
 from conventions import (CONVERSION, HALF_INCOME_2012, HALF_INCOME_AGE, HALF_INCOME_WITHHELD, HELD_YEARS, OLD_CONTRACT,
                          PAID_OUT, PARTLY_TAXED, PAYOUTS, PENALIZED, SINGLE_PREMIUM, TAX_CURRENCY, TAXED_ON_GAIN,
                          TAXED_ON_GROSS, TAXES, TERMINATING, TRUNCATED_CONVERSION, WITHHELD)
+from dates import public_holidays
 from legacy import as_date, as_lenient_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
+from tariff import signed_policies
 from taxpayer import residences, rounds_half_up, tax_rates, with_policies, with_tax_currency
 from valuation import penalties_on, values_on
 
@@ -70,14 +72,21 @@ def in_turn(rows: pl.DataFrame, key: str, step: Callable[[pl.DataFrame], pl.Data
 
 
 def payout_events(legacy_dir) -> pl.DataFrame:
-    """EVENT, TB_EFFDT, TB_CHGTS, FULL (the payout ends the policy) and PENALIZED (it pays the units less the
-    surrender penalty) of every payout event that is reported."""
+    """EVENT, TB_EFFDT, TB_CHGTS, FULL (the payout ends the policy), PENALIZED (it pays the units less the
+    surrender penalty) and PAID of every payout event that is reported.
+
+    PAID is the day the money is paid: the effective date plus the payout business days PD_PAYDAY of the product
+    (NRPROD), in Neuron's calendar (`dates.public_holidays`).
+    """
     events = table(legacy_dir, "NREVNT").filter(pl.col("EV_EVTTP").is_in(PAYOUTS))
     booked = table(legacy_dir, "NRTAXB").select(EV_POLNR="TB_POLNR", EV_EVTNR="TB_EVTNR")
     reported = pl.concat([booked, counted_events(legacy_dir).select("EV_POLNR", "EV_EVTNR")]).unique()
-    return events.join(reported, on=["EV_POLNR", "EV_EVTNR"]).select(
+    products = signed_policies(legacy_dir).join(table(legacy_dir, "NRPROD"), left_on="PH_PRDCD", right_on="PD_PRDCD")
+    paydays = products.select(EV_POLNR="PH_POLNR", PAYDAY="PD_PAYDAY")
+    paid = as_date("EV_EFFDT").dt.add_business_days(pl.col("PAYDAY"), holidays=public_holidays(), roll="forward")
+    return events.join(reported, on=["EV_POLNR", "EV_EVTNR"]).join(paydays, on="EV_POLNR", how="left").select(
         TB_POLNR="EV_POLNR", TB_EVTNR="EV_EVTNR", TB_EFFDT="EV_EFFDT", TB_CHGTS="EV_CHGTS",
-        FULL=pl.col("EV_EVTTP").is_in(TERMINATING), PENALIZED=pl.col("EV_EVTTP").is_in(PENALIZED))
+        FULL=pl.col("EV_EVTTP").is_in(TERMINATING), PENALIZED=pl.col("EV_EVTTP").is_in(PENALIZED), PAID=paid)
 
 
 def net_of_penalty() -> pl.Expr:

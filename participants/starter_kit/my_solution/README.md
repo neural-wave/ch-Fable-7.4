@@ -259,8 +259,9 @@ Open, with no labels: each choice is one line in `conventions.py`, to be changed
 answers: the base of a payout without tax (`BASE_WITHOUT_TAX`: 0 since the upload after the 5 % of 19:30), the
 base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`: the surrender value, against the 70 % of the annual table), the
 rounding by system instead of by country (`ROUNDED_BY_SYSTEM`), the remittance day of a payout with stamp duty
-alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`) and their move to a business day
-(`REMITTANCE_SHIFTED`), the rounding of the IT conversion (`TRUNCATED_CONVERSION`) and HEV on the withholding
+alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`), the month of the payment day
+instead of the effective date (`REMITTED_FROM_PAYMENT`, with the payout business days `PD_PAYDAY`) and the move to
+a business day (`REMITTANCE_SHIFTED`), the rounding of the IT conversion (`TRUNCATED_CONVERSION`) and HEV on the withholding
 (`HALF_INCOME_WITHHELD`). Also
 assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a partial withdrawal (no
 example). `t7lab/t7_check.py` checks the rest on the real tables before an upload.

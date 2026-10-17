@@ -19,9 +19,9 @@ import functools
 import polars as pl
 
 from bollo import bollo_bookings
-from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_TAX, PREMIUM_STAMP, REMITTANCE,
-                         REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY, STAMP_DUTY_REMITTED, SURCHARGES,
-                         TAX_CURRENCY, TAXES, WITHHELD)
+from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_TAX, PREMIUM_STAMP,
+                         REMITTED_FROM_PAYMENT, REMITTANCE, REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
+                         STAMP_DUTY_REMITTED, SURCHARGES, TAX_CURRENCY, TAXES, WITHHELD)
 from dates import tax_office_holidays
 from legacy import as_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
@@ -106,13 +106,14 @@ def shifted(day: pl.Expr, country: pl.Expr) -> pl.Expr:
 def remittance() -> pl.Expr:
     """The day Neuron paid the taxes of a payout to the tax office, null without tax.
 
-    The country of the withholding decides, Italy for stamp duty alone; the day comes from REMITTANCE, moved to a
-    business day for the countries of REMITTANCE_SHIFTED. A payout with stamp duty alone has a day with
-    STAMP_DUTY_REMITTED.
+    The country of the withholding decides, Italy for stamp duty alone; the day comes from REMITTANCE in the month
+    after the effective date, or after the day of the payment PAID with REMITTED_FROM_PAYMENT, moved to a business
+    day for the countries of REMITTANCE_SHIFTED. A payout with stamp duty alone has a day with STAMP_DUTY_REMITTED.
     """
     withheld = pl.col("withholding").add(pl.col("surcharges"))
     country = pl.when(withheld.ne(0)).then("COUNTRY").otherwise(pl.lit(STAMP_DUTY_COUNTRY))
-    first = as_date("TB_EFFDT").dt.month_start().dt.offset_by("1mo")
+    month = pl.when(pl.lit(REMITTED_FROM_PAYMENT)).then(pl.col("PAID")).otherwise(as_date("TB_EFFDT"))
+    first = month.dt.month_start().dt.offset_by("1mo")
     days = country.replace_strict(REMITTANCE, default=None, return_dtype=pl.Int64)
     remitted = pl.when(pl.lit(STAMP_DUTY_REMITTED)).then(withheld.add(pl.col("stamp_duty"))).otherwise(withheld)
     return pl.when(remitted.ne(0)).then(shifted(first.add(pl.duration(days=days)), country))
