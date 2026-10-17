@@ -10,24 +10,14 @@ from decimal import Decimal
 
 import polars as pl
 
-from conventions import CONVERSION, DIRECT_DEBIT, IN_FORCE, MONTHS, REVERSAL, SINGLE_PREMIUM
+from bookings import received_premiums
+from conventions import CONVERSION, DIRECT_DEBIT, IN_FORCE, MONTHS, SINGLE_PREMIUM
 from dates import business_day, every_months
 from legacy import as_date, table, valid_on, versions_on
 from money import francs, share
 from projection import projected_years
+from statement import STATEMENT, annual_statements
 from valuation import surrender_values
-
-
-def received_premiums(legacy_dir) -> pl.DataFrame:
-    """Premium items whose money was received and whose receipt was not reversed.
-
-    The money date PR_RCVDT is 0 while nothing was received. A later event 900 can reverse the receipt event
-    PR_EVTNR: then the money counts as not received.
-    """
-    events = table(legacy_dir, "NREVNT")
-    reversals = events.filter(pl.col("EV_EVTTP").eq(REVERSAL)).select("EV_POLNR", "EV_REVNR")
-    items = table(legacy_dir, "NRPREM").filter(pl.col("PR_RCVDT").gt(0))
-    return items.join(reversals, left_on=["PR_POLNR", "PR_EVTNR"], right_on=["EV_POLNR", "EV_REVNR"], how="anti")
 
 
 def premium_type() -> pl.Expr:
@@ -145,8 +135,13 @@ def t3_surrender_value(legacy_dir, valuation_dates: list[dt.date]) -> dict[tuple
 
 
 def t4_annual_statement(legacy_dir) -> dict[tuple[str, int], tuple[Decimal, ...]]:
-    """{(policy_id, year): (premiums, entry_charges, admin_fees, management_fees, risk_charges, total_charges)}"""
-    return {}
+    """{(policy_id, year): (premiums, entry_charges, admin_fees, management_fees, risk_charges, total_charges)}
+
+    Per calendar year the premiums by their money date and the charges of the unit account by their trade date;
+    the entry charge of a premium per fund, since its funds can trade in two years (`statement`).
+    """
+    statements = annual_statements(legacy_dir).select("BK_POLNR", "YEAR", *map(francs, map(pl.col, STATEMENT)))
+    return {(policy, year): tuple(amounts) for policy, year, *amounts in statements.iter_rows()}
 
 
 def t5_outlier_detection(legacy_dir, targets_dir) -> set[tuple[str, object]]:

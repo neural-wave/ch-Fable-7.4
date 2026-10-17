@@ -11,6 +11,7 @@ A premium (event 110) buys units in every fund of the allocation:
 - the entry charge rate: an individual agreement (NRAGRE) or the rate of the broker tier (NRENTC); the
   allocation and the rates are those valid on the money date BK_RCVDT, the broker that of the policy version
 - units = amount at the ask price of the trade date BK_TRDDT, with the exchange rates of the day before
+- entry charge = the fund's share of the premium less the amount invested in it
 
 Neuron NG rounds half up and COBOL truncated, by the trade date of the booking (column HALF_UP).
 """
@@ -21,10 +22,22 @@ import polars as pl
 from conventions import AGREED_ENTRY, CALCULATED, CONVERSION, MANUAL_CORRECTION, PREMIUM_RECEIPT, REVERSAL
 from legacy import as_date, table, valid_on
 from market import with_exchange_rates, with_prices
-from money import RATE_UNIT, rounded, units_for
+from money import RATE_UNIT, rounded, share, units_for
 
 POSITION = ["BK_POLNR", "BK_FNDID", "BK_POTCD"]  # a position: the units of a policy in one fund and pot
 SHARE_OF_SHARE = math.prod([RATE_UNIT, RATE_UNIT])  # two rates in millionths multiplied
+
+
+def received_premiums(legacy_dir) -> pl.DataFrame:
+    """Premium items whose money was received and whose receipt was not reversed.
+
+    The money date PR_RCVDT is 0 while nothing was received. A later event 900 can reverse the receipt event
+    PR_EVTNR: then the money counts as not received.
+    """
+    events = table(legacy_dir, "NREVNT")
+    reversals = events.filter(pl.col("EV_EVTTP").eq(REVERSAL)).select("EV_POLNR", "EV_REVNR")
+    items = table(legacy_dir, "NRPREM").filter(pl.col("PR_RCVDT").gt(0))
+    return items.join(reversals, left_on=["PR_POLNR", "PR_EVTNR"], right_on=["EV_POLNR", "EV_REVNR"], how="anti")
 
 
 def counted_events(legacy_dir) -> pl.DataFrame:
@@ -70,7 +83,10 @@ def invested_amount() -> pl.Expr:
 
 
 def premium_bookings(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
-    """The PRM bookings of `bookings` (`counted_bookings`) with BK_AMTPC and BK_UNITS."""
+    """The PRM bookings of `bookings` (`counted_bookings`) with BK_AMTPC, BK_UNITS and ENTRY_CHARGE.
+
+    ENTRY_CHARGE is the part of the fund's share of the premium (AL_PCTG) that is not invested.
+    """
     receipts = bookings.filter(pl.col("EV_EVTTP").eq(PREMIUM_RECEIPT)).join(
         table(legacy_dir, "NRPREM").select("PR_POLNR", "PR_EVTNR", "PR_AMTRC"),
         left_on=["BK_POLNR", "BK_EVTNR"], right_on=["PR_POLNR", "PR_EVTNR"])
@@ -80,7 +96,8 @@ def premium_bookings(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
     funds = allocated.join(table(legacy_dir, "NRFUND"), left_on="BK_FNDID", right_on="FD_FNDID")
     priced = with_exchange_rates(legacy_dir, with_prices(legacy_dir, funds, "BK_TRDDT"), "BK_TRDDT", same_day=False)
     invested = priced.with_columns(BK_AMTPC=invested_amount())
-    return invested.with_columns(BK_UNITS=units_for(pl.col("BK_AMTPC"), pl.col("FP_ASKPR"), pl.col("HALF_UP")))
+    return invested.with_columns(BK_UNITS=units_for(pl.col("BK_AMTPC"), pl.col("FP_ASKPR"), pl.col("HALF_UP")),
+                                 ENTRY_CHARGE=share(pl.col("PR_AMTRC"), pl.col("AL_PCTG")).sub(pl.col("BK_AMTPC")))
 
 
 def moved_bookings(bookings: pl.DataFrame) -> pl.DataFrame:

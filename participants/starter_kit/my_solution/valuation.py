@@ -26,11 +26,14 @@ ACCOUNT = [*POSITION, "BK_EVTNR", "BK_BKTYP", "BK_TRDDT", "BK_AMTPC", "BK_UNITS"
 
 @functools.cache
 def unit_account(legacy_dir) -> pl.DataFrame:
-    """Every counted booking with the columns ACCOUNT: moved units, premiums and the charges of the runs."""
+    """Every counted booking with the columns ACCOUNT: moved units, premiums and the charges of the runs.
+
+    The premiums also have their ENTRY_CHARGE (`bookings.premium_bookings`); the other bookings have null there.
+    """
     bookings = counted_bookings(legacy_dir)
     investments = pl.concat([moved_bookings(bookings).select(ACCOUNT),
-                             premium_bookings(legacy_dir, bookings).select(ACCOUNT)])
-    return pl.concat([investments, charge_bookings(legacy_dir, investments).select(ACCOUNT)])
+                             premium_bookings(legacy_dir, bookings).select(*ACCOUNT, "ENTRY_CHARGE")], how="diagonal")
+    return pl.concat([investments, charge_bookings(legacy_dir, investments).select(ACCOUNT)], how="diagonal")
 
 
 def holdings(legacy_dir, day: dt.date) -> pl.DataFrame:

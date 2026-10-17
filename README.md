@@ -19,9 +19,10 @@ wave/
 │           ├── submission.py, conventions.py, legacy.py, dates.py, money.py, requirements.txt
 │           ├── tariff.py, charges.py, projection.py   motore dei costi e proiezione dell'offerta (t2)
 │           ├── market.py, bookings.py, charge_run.py, valuation.py   conto quote e valore di riscatto (t3)
+│           ├── statement.py    rendiconto annuale (t4) sullo stesso conto quote
 │           └── tools/neuron/   i tool: load, codes, policy, targets, schema/ (Desbordante), solver/ (Z3),
 │                               backtest (t1 su date di estrazione passate), bisection (t2 anno per anno),
-│                               account_check (t3 anello per anello contro le diagnostiche)
+│                               account_check (t3 anello per anello contro le diagnostiche, t4 per colonna)
 └── cache/<versione>/           parquet e CSV di profilazione generati dai tool (ignorati da git)
 ```
 
@@ -73,10 +74,11 @@ Dopo aver cambiato un decoder in `neuron/load.py`, cancella `cache/`.
 
 ```
 cd participants/starter_kit
-uv run --project ../.. python check.py --tasks t0_commission t1_next_due_dates t2_projected_maturity_value t3_surrender_value
+uv run --project ../.. python check.py --tasks t0_commission t1_next_due_dates t2_projected_maturity_value t3_surrender_value t4_annual_statement
 uv run python -c "from neuron.backtest import backtests; print(backtests())"   # t1 su 18 anni passati
 uv run python -c "from neuron.bisection import corrected_maturities; print(corrected_maturities())"   # t2
 uv run python -c "from neuron.account_check import surrender_mismatches; print(surrender_mismatches())"   # t3
+uv run python -c "from neuron.account_check import statement_mismatches; print(statement_mismatches())"   # t4
 ```
 
 `check.py` stampa l'accuratezza e il maintainability index (radon) di tutti i `.py` della consegna, tool
@@ -104,6 +106,9 @@ compresi. La submission calcola tutto da `legacy_dir` (niente target, niente cac
   Java mesi / 12) più gli anni di polizza compiuti; chi inizia il 29 febbraio compie gli anni il 28.
 - t3: gli eventi 990 ("technical correction", online) sono le correzioni manuali di NREXCP: le loro quote non
   contano. `t3_holding` elenca anche posizioni svuotate con 0 quote.
+- t4: i premi vanno nell'anno della data di incasso, i costi d'ingresso nell'anno della data di negoziazione
+  **di ogni fondo**: i fondi di un premio possono negoziare in giorni diversi (31.12 e 2.1), quindi il costo
+  d'ingresso di un premio si divide tra due anni.
 - polars: `when().then(intero oltre Int32).otherwise(0)` va in panic e la 1.31 non accetta finestre (`over`)
   annidate: `money.rounded` e `money.allotted` le evitano.
 - Un intero `0` nelle colonne di riferimento (`EV_REVNR`, `PR_EVTNR`, `TB_EVTNR`) vuol dire "nessun riferimento".

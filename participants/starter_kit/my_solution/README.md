@@ -10,11 +10,12 @@ in too.
 | t1 next due dates | 15'028 / 15'028 train rows exact (100 %); backtest on 18 past years: no wrong due date |
 | t2 projected maturity value | 3'011 / 3'019 train rows exact (99.735 %), and all 79'040 yearly values of the diagnostic. The 8 other rows are manual corrections |
 | t3 surrender value | 6'137 / 6'153 train rows exact (99.74 %), and every link of the diagnostics: all 5'024'847 calculated bookings (amount and units), all 23'052 holdings, all 6'153 policy values. The 16 other rows are manual corrections |
-| t4 – t5 | not solved yet: the functions return empty results |
-| Maintainability index | 100 for the task files; 99.2 for the whole folder with the tools (radon, weighted by lines) |
+| t4 annual statement | 34'125 / 34'145 train rows exact (99.94 %): every column of every row, except 20 admin fees. Those 20 are manual corrections |
+| t5 | not solved yet: the function returns an empty result |
+| Maintainability index | 100 for the task files; 99.3 for the whole folder with the tools (radon, weighted by lines) |
 
 ```
-python check.py --tasks t0_commission t1_next_due_dates t2_projected_maturity_value t3_surrender_value   # from starter_kit/
+python check.py --tasks t0_commission t1_next_due_dates t2_projected_maturity_value t3_surrender_value t4_annual_statement   # from starter_kit/
 ```
 
 ## Layout
@@ -33,6 +34,7 @@ my_solution/
 ├── bookings.py        t3: the counted bookings, the premiums bought in units, the units moved by events
 ├── charge_run.py      t3: the monthly charge runs (admin fee, management and risk charge) one after another
 ├── valuation.py       t3: holdings, policy value and surrender value on a date
+├── statement.py       t4: premiums and charges of the unit account per calendar year
 ├── requirements.txt   polars >= 1.31 (128-bit integers), holidays; tested with polars 1.31 and 2.0
 └── tools/neuron/      the tools that found the rules (not used by the submission)
     ├── load.py, codes.py, policy.py   tables decoded for exploring, code texts, history of one policy
@@ -41,7 +43,7 @@ my_solution/
     ├── solver/                        Z3: proofs (UNSAT), interval reasoning, rate recovery (MaxSMT)
     ├── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
     ├── bisection.py                   the first step where a calculation leaves a diagnostic target (t2)
-    └── account_check.py               the unit account link by link against the diagnostics (t3)
+    └── account_check.py               the unit account link by link against the diagnostics (t3, t4)
 ```
 
 ## Approach
@@ -161,6 +163,18 @@ blank, since the nightly job that calculated them is not in the extract. The sub
   the run of October 2021, the admin fee took all of it and the management charge 2 cents more, so its policy
   value at the end of 2025 is -0.03 and its surrender value 0.
 
+**t4 annual statement.** Per policy and calendar year, from the same unit account as t3:
+
+- premiums: the received premiums `PR_AMTRC` not reversed (as in t0), in the year of the money date `PR_RCVDT`;
+- entry charges: per premium booking, the fund's share of the premium (`PR_AMTRC` x `AL_PCTG`) less the amount
+  invested in it, in the year of the booking's trade date. The funds of one premium can trade on different days:
+  BL10000851 received 715.00 on 29.12.2018, its CHF fund N0001 traded on 31.12.2018 and N0016 on 2.1.2019, so
+  21.45 of its entry charge is in 2018 and 14.30 in 2019. Taking the whole premium on one date misses 36 rows;
+- admin fees, management fees, risk charges: the `ADM`, `AMC` and `RSK` bookings, in the year of their trade
+  date; total charges = entry charges + the three charges;
+- a statement for every year from the year of the start date on, with zeros in the years without bookings
+  (extra years after the end of a policy are not scored).
+
 **Manual corrections (input for t5).** The 10 rows of t0 that the rule misses are UNSAT for every base
 (`PR_AMTDU`, `PR_AMTRC`), every NRCOMR rate and every rounding mode. Each differs from the rule by whole francs.
 Six of them are listed in NREXCP. Four are not: BL10001299 #103, BL10001328 #1, BL10002438 #11, BL10004554 #35.
@@ -175,11 +189,17 @@ value is higher, by whole francs (`account_check.surrender_mismatches`). Eleven 
 not: BL10000321 2025 (+175.00), BL10000768 2020 (+117.00), BL10001080 2020 (+158.00), BL10002328 2020 (+499.00),
 BL10004896 2025 (+474.00).
 
+The 20 statements of t4 that the rule misses differ in `admin_fees` alone (so also in `total_charges`), by whole
+francs from 7.00 to 147.00; the other four amounts are exact (`account_check.statement_mismatches`). Sixteen are
+listed in NREXCP, each with an event 990 at the same timestamp and no amount. Four are not: BL10003910 2024
+(+21.00), BL10004031 2013 (+96.00), BL10004844 2018 (+46.00), BL10004909 2017 (+53.00). The export has no
+trace of the corrected amounts, so no rule can reproduce them.
+
 ## Code quality
 
 As the strategy suggests: thin task functions, small modules with one job each, the conventions as data instead
 of branches, and docstrings that state the rule in business terms. The task files score 100 in the
-maintainability index (radon, weighted by lines of code); with the tools the folder scores 99.2. The three Z3
+maintainability index (radon, weighted by lines of code); with the tools the folder scores 99.3. The three Z3
 modules score 85 to 90, because operators are the natural notation of Z3 constraints.
 
 ## Running the tools
@@ -189,6 +209,7 @@ pip install -r requirements.txt -r tools/requirements.txt
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.backtest import backtests; print(backtests())"
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.bisection import corrected_maturities; print(corrected_maturities())"
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.account_check import surrender_mismatches; print(surrender_mismatches())"
+PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.account_check import statement_mismatches; print(statement_mismatches())"
 ```
 
 The tools look for the data in `$NEURON_DATA`, by default the `participants` folder that contains this
