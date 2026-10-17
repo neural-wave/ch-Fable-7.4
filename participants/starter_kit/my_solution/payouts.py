@@ -7,9 +7,12 @@ effective date and the processing timestamp of the event, the same as those of i
 
 - country: the country of the taxes withheld from the payout, a label of NRTAXB; without them the residence of the
   holder as Neuron knew it (`taxpayer`)
-- gross: the money paid out, the negative BK_AMTPC of the WDR, SUR and DTH bookings (policy currency)
-- value before: the gross plus the policy value left at the end of the day (`valuation.values_on`)
-- share PART / WHOLE: what the payout takes of the policy, gross / value before; all of it when it ends the policy
+- units sold: the negative BK_AMTPC of the WDR, SUR and DTH bookings (policy currency), the units at their value
+- gross: the money paid out, the units sold less the surrender penalty of the day for a withdrawal or a surrender
+  (`conventions.PENALIZED`, `valuation.penalties_on`), rounded once as the surrender value of t3
+- value before: the units sold plus the policy value left at the end of the day (`valuation.values_on`)
+- share PART / WHOLE: what the payout takes of the policy, units sold / value before; all of it when it ends the
+  policy
 - premiums used: the share of the premiums received up to the payout day that no earlier payout used. Each premium
   is converted to the tax currency at the rates of its money date and rounded to the cent (truncated in Germany,
   or by COBOL with `conventions.ROUNDED_BY_SYSTEM`: `taxpayer.rounds_half_up`). The payouts of a policy use them
@@ -32,13 +35,13 @@ from collections.abc import Callable
 import polars as pl
 
 from bookings import counted_events, received_premiums, uncharged_bookings
-from conventions import (HALF_INCOME_2012, HALF_INCOME_AGE, HALF_INCOME_WITHHELD, HELD_YEARS, OLD_CONTRACT, PAID_OUT,
-                         PARTLY_TAXED, PAYOUTS, SINGLE_PREMIUM, TAX_CURRENCY, TAXED_ON_GAIN, TAXED_ON_GROSS, TAXES,
-                         TERMINATING, TRUNCATED_CONVERSION, WITHHELD)
+from conventions import (CONVERSION, HALF_INCOME_2012, HALF_INCOME_AGE, HALF_INCOME_WITHHELD, HELD_YEARS, OLD_CONTRACT,
+                         PAID_OUT, PARTLY_TAXED, PAYOUTS, PENALIZED, SINGLE_PREMIUM, TAX_CURRENCY, TAXED_ON_GAIN,
+                         TAXED_ON_GROSS, TAXES, TERMINATING, TRUNCATED_CONVERSION, WITHHELD)
 from legacy import as_date, as_lenient_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
 from taxpayer import residences, rounds_half_up, tax_rates, with_policies, with_tax_currency
-from valuation import values_on
+from valuation import penalties_on, values_on
 
 BASIS_UNIT = RATE_UNIT  # the premiums used are kept in millionths of a cent, so a share loses nothing in the cents
 FACTOR_UNIT = SHARE_UNIT  # the German factor: two rates in millionths multiplied
@@ -67,26 +70,43 @@ def in_turn(rows: pl.DataFrame, key: str, step: Callable[[pl.DataFrame], pl.Data
 
 
 def payout_events(legacy_dir) -> pl.DataFrame:
-    """EVENT, TB_EFFDT, TB_CHGTS and FULL (the payout ends the policy) of every payout event that is reported."""
+    """EVENT, TB_EFFDT, TB_CHGTS, FULL (the payout ends the policy) and PENALIZED (it pays the units less the
+    surrender penalty) of every payout event that is reported."""
     events = table(legacy_dir, "NREVNT").filter(pl.col("EV_EVTTP").is_in(PAYOUTS))
     booked = table(legacy_dir, "NRTAXB").select(EV_POLNR="TB_POLNR", EV_EVTNR="TB_EVTNR")
     reported = pl.concat([booked, counted_events(legacy_dir).select("EV_POLNR", "EV_EVTNR")]).unique()
     return events.join(reported, on=["EV_POLNR", "EV_EVTNR"]).select(
         TB_POLNR="EV_POLNR", TB_EVTNR="EV_EVTNR", TB_EFFDT="EV_EFFDT", TB_CHGTS="EV_CHGTS",
-        FULL=pl.col("EV_EVTTP").is_in(TERMINATING))
+        FULL=pl.col("EV_EVTTP").is_in(TERMINATING), PENALIZED=pl.col("EV_EVTTP").is_in(PENALIZED))
+
+
+def net_of_penalty() -> pl.Expr:
+    """The money paid: the units SOLD less the surrender penalty SR_RATE of the day, rounded once as the surrender
+    value (`valuation.surrender_values`), for a PENALIZED payout; the units SOLD whole for a death claim."""
+    kept = pl.col("SOLD").mul(pl.lit(RATE_UNIT).sub(pl.col("SR_RATE")))
+    net = rounded(kept, RATE_UNIT, as_date("TB_EFFDT").ge(CONVERSION))
+    return pl.when(pl.col("PENALIZED")).then(net).otherwise("SOLD")
 
 
 def paid_out(legacy_dir, payouts: pl.DataFrame) -> pl.DataFrame:
-    """`payouts` with GROSS and BEFORE (cents of the policy currency) and their share PART / WHOLE."""
+    """`payouts` with GROSS (`net_of_penalty`) and BEFORE (cents of the policy currency) and their share PART / WHOLE.
+
+    BEFORE and the share count the units SOLD at their value, as the bookings do; only the money paid loses the
+    penalty.
+    """
     money = uncharged_bookings(legacy_dir).filter(pl.col("BK_BKTYP").is_in(PAID_OUT)).group_by(
-        TB_POLNR="BK_POLNR", TB_EVTNR="BK_EVTNR").agg(GROSS=pl.col("BK_AMTPC").sum().neg())
-    gross = payouts.join(money, on=EVENT, how="left").with_columns(pl.col("GROSS").fill_null(0))
-    left = values_on(legacy_dir, gross.select(BK_POLNR="TB_POLNR", DAY="TB_EFFDT").unique()).select(
-        TB_POLNR="BK_POLNR", TB_EFFDT="DAY", LEFT="VALUE")
-    before = gross.join(left, on=["TB_POLNR", "TB_EFFDT"]).with_columns(BEFORE=pl.col("GROSS").add(pl.col("LEFT")))
+        TB_POLNR="BK_POLNR", TB_EVTNR="BK_EVTNR").agg(SOLD=pl.col("BK_AMTPC").sum().neg())
+    sold = payouts.join(money, on=EVENT, how="left").with_columns(pl.col("SOLD").fill_null(0))
+    days = sold.select(BK_POLNR="TB_POLNR", DAY="TB_EFFDT").unique()
+    left = values_on(legacy_dir, days).select(TB_POLNR="BK_POLNR", TB_EFFDT="DAY", LEFT="VALUE")
+    penalties = penalties_on(legacy_dir, days).select(TB_POLNR="BK_POLNR", TB_EFFDT="DAY", SR_RATE="SR_RATE")
+    before = sold.join(left, on=["TB_POLNR", "TB_EFFDT"]).join(penalties, on=["TB_POLNR", "TB_EFFDT"],
+                                                               how="left").with_columns(
+        BEFORE=pl.col("SOLD").add(pl.col("LEFT")))
     whole = pl.col("FULL").or_(pl.col("BEFORE").le(0))
-    return before.with_columns(PART=pl.when(whole).then(1).otherwise(pl.min_horizontal("GROSS", "BEFORE")),
-                               WHOLE=pl.when(whole).then(1).otherwise("BEFORE")).drop("LEFT")
+    return before.with_columns(PART=pl.when(whole).then(1).otherwise(pl.min_horizontal("SOLD", "BEFORE")),
+                               WHOLE=pl.when(whole).then(1).otherwise("BEFORE"), GROSS=net_of_penalty()).drop(
+        "LEFT", "SOLD", "SR_RATE")
 
 
 def booked_countries(legacy_dir) -> pl.DataFrame:

@@ -75,17 +75,27 @@ def values_on(legacy_dir, days: pl.DataFrame) -> pl.DataFrame:
 
 
 def penalty_rates(legacy_dir, day: dt.date) -> pl.DataFrame:
-    """PH_POLNR and SR_RATE: the surrender penalty (millionths) of every policy on `day`.
+    """PH_POLNR and SR_RATE: the surrender penalty (millionths) of every policy on `day` (`penalties_on`)."""
+    policies = signed_policies(legacy_dir).select(BK_POLNR="PH_POLNR", DAY=as_cyymmdd(day))
+    return penalties_on(legacy_dir, policies).select(PH_POLNR="BK_POLNR", SR_RATE="SR_RATE")
 
-    The scale PD_SRPSCL of the product has a rate per completed policy year SR_YEAR; later years and the days
-    of a waiver period have none.
+
+def penalties_on(legacy_dir, days: pl.DataFrame) -> pl.DataFrame:
+    """`days` (BK_POLNR and DAY, a date `CYYMMDD`) with SR_RATE: the surrender penalty (millionths) on DAY.
+
+    The scale PD_SRPSCL of the product has a rate per policy year SR_YEAR completed on DAY; later years and the
+    days of a waiver period NRWAIV have none. Every row looks up its own day, so any number of days costs one join.
     """
-    waivers = table(legacy_dir, "NRWAIV").filter(as_cyymmdd(day).is_between(pl.col("WV_VLDFR"), pl.col("WV_VLDTO")))
+    waived = days.select("DAY").unique().join(table(legacy_dir, "NRWAIV"), how="cross").filter(
+        pl.col("DAY").is_between(pl.col("WV_VLDFR"), pl.col("WV_VLDTO"))).select("DAY", WAIVED=pl.lit(True)).unique()
     products = signed_policies(legacy_dir).join(table(legacy_dir, "NRPROD"), left_on="PH_PRDCD", right_on="PD_PRDCD")
-    years = products.with_columns(SR_SCALE="PD_SRPSCL", SR_YEAR=completed_years(as_date("PH_BEGDT"), pl.lit(day)))
-    scale = table(legacy_dir, "NRSURR").filter(pl.lit(waivers.is_empty()))
-    rates = years.join(scale, on=["SR_SCALE", "SR_YEAR"], how="left")
-    return rates.select("PH_POLNR", pl.col("SR_RATE").fill_null(0))
+    scales = products.select(BK_POLNR="PH_POLNR", SR_SCALE="PD_SRPSCL", BEGIN=as_date("PH_BEGDT"))
+    years = days.join(scales, on="BK_POLNR", how="left").with_columns(
+        SR_YEAR=completed_years(pl.col("BEGIN"), as_date("DAY")))
+    rates = years.join(table(legacy_dir, "NRSURR"), on=["SR_SCALE", "SR_YEAR"], how="left").join(
+        waived, on="DAY", how="left")
+    penalty = pl.when(pl.col("WAIVED").fill_null(False)).then(0).otherwise(pl.col("SR_RATE").fill_null(0))
+    return rates.select(*days.columns, SR_RATE=penalty)
 
 
 def surrender_values(legacy_dir, day: dt.date) -> pl.DataFrame:

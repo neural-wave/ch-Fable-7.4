@@ -84,8 +84,8 @@ its evidence in the comment:
 - **Base of the Bollo** (`BOLLO_ON_SURRENDER_VALUE = True`: the surrender value, the policy value less the
   penalty). The Italian rules tax insurance policies on their surrender value. The example's policy has no penalty,
   so it fits both. The Bollo is most of the annual table, and its years with a penalty are about the share of rows
-  the actuary found wrong. The gross of a full surrender (SUR) is the value before the penalty, so the Bollo of the
-  year of a payout takes the penalty off it as well.
+  the actuary found wrong. A full surrender (SUR) books the units sold at their value before the penalty, so the
+  Bollo of the year of a payout takes the penalty off them as well.
 - **VST of holders who chose the reporting:** closed by the labels. NRTAXB never books VST for M holders.
 - **Remittance day on a weekend or holiday** (`REMITTANCE_SHIFTED = []`). About 30 % of the days of each rule
   fall on one; listing a country moves its days to the next business day of `REMITTANCE_CALENDARS`.
@@ -114,6 +114,12 @@ its evidence in the comment:
 - **Negative Bollo difference:** fixed. `money.rounded_signed` rounds a negative amount like its positive twin
   (Java's half up), in `bollo.bollo`, `fixed_bollo` and `collected`.
 - **Crash on no rows:** fixed. `payouts.in_turn` returns an empty result instead of failing on `pl.concat([])`.
+- **Surrender penalty in the payouts:** fixed (labels). The WDR and SUR bookings sell the units at their value; the
+  money paid is that value less the surrender penalty of the day (`conventions.PENALIZED`, `payouts.paid_out`,
+  `valuation.penalties_on`), and the base of the taxes comes from it. With the value itself, some withdrawals
+  and surrenders had a base that called for VST, SOS or KST that NRTAXB never booked; with the penalty taken off,
+  `t7_check` finds no contradiction left, both examples stay exact, and no other payout changes its label.
+  The share PART / WHOLE and the value before still count the units at their value.
 
 ## P2: code quality — fixed
 
@@ -132,7 +138,9 @@ Run this with an open-weights model, from `participants/starter_kit/my_solution`
 
     NEURON_DATA=<participants> POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools:$PWD/.." python -B -m t7lab.t7_check
 
-It prints only PASS/FAIL, seconds and gigabytes; `--debug` adds counts and tracebacks. Upload when it says
+It prints only PASS/FAIL, seconds and gigabytes; `--debug` adds counts and tracebacks. Its last checks hold the
+bases against the labels of NRTAXB (a tax booked exactly where the base says it is due): a defect of the base
+shows there before it costs an upload. Upload when it says
 `ALL PASS`, then change one convention per table and upload, in this order: base without tax
 (`BASE_WITHOUT_TAX`, now `False`: the payout table) with the base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`, now
 `True`: the annual table, which the base does not touch), rounding by system (`ROUNDED_BY_SYSTEM`), stamp duty
@@ -140,3 +148,15 @@ alone without a remittance day (`STAMP_DUTY_REMITTED`), business-day shift (`REM
 IT/CH, rounding of the IT conversion, HEV. `t7lab/t7_variants.py` counts the rows each one changes. The
 leaderboard returns one accuracy per table on a few rows that change at every evaluation, so only one choice per
 table can be read from each upload.
+
+## Uploads and the actuary's readings
+
+The actuary picks a few targets to test different patterns (task PDF, section 7), and t7 is scored on the public
+and private policies (section 6): a reading is not a uniform sample, so compare readings with care. Before an
+upload, write down the commit and its switches here; after the evaluation, its two scores and its MI.
+
+| Evaluated | Code | t7 switches | Payout | Annual | MI |
+|---|---|---|---|---|---|
+| 17.10 19:30 | `0522fa7` | base as calculated (before `BASE_WITHOUT_TAX`), Bollo on the value, rounding by country | 1/20 | 14/20 | 100 |
+| 17.10 22:09 | Roberto's own upload (#43), not on the branch | base as calculated | 1/20 | 14/20 | 98 |
+| 17.10 23:48 | unconfirmed: `cbaf38b`, or a version with `t7_impl.py` (another engine) written 23:40 – 23:47 | if `cbaf38b`: `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = True` | 0/40 | 8/30 | ? |

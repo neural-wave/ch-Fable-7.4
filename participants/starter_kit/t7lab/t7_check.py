@@ -11,7 +11,9 @@ Then it checks:
 
 - the two examples of the task PDF, to the cent and to the day;
 - the format of every row: a country, four amounts to the cent, a date or None, None exactly when no tax is due;
-- that every tax booking of NRTAXB gets an amount: nothing dropped or zeroed silently.
+- that every tax booking of NRTAXB gets an amount: nothing dropped or zeroed silently;
+- that the labels agree with the bases: a tax booked exactly where the calculated base says it was due
+  (`due_against_booked`, with no contradiction).
 
 It also reports, as INFO, what the rules handle but a person should look at: the payouts without a country, those
 whose residence disagrees with the taxes Neuron booked (the country follows the taxes), and the thresholds.
@@ -123,6 +125,47 @@ def label_checks(debug: bool) -> list[bool]:
                      debug)]
 
 
+def due_against_booked(debug: bool) -> list[bool]:
+    """The labels against the bases: where the calculated base says a tax was due, NRTAXB must book it, and nowhere
+    else. Every rule must have no contradiction:
+
+    - CH: VST exactly when the holder objected to the reporting (AD_TAXST E) and the base is above TX_THRSH;
+    - IT: SOS exactly when the gain is above 0 and the payout is no death claim;
+    - DE: KST exactly when the base is above 0, from the first KST that Neuron booked on (death claims left out);
+    - DE: KIS exactly with a KST, for a church member (AD_CHURCH J), from the first KIS rate on;
+    - IT: a BOC on a withdrawal only after a BOL of the policy.
+    """
+    booked, rates = table(LEGACY, "NRTAXB"), table(LEGACY, "NRTAXR")
+    flags = booked.group_by("TB_POLNR", "TB_EVTNR").agg(
+        *[pl.col("TB_TAXTP").eq(tax).any().alias(tax) for tax in ["VST", "SOS", "KST", "KIS"]])
+    events = table(LEGACY, "NREVNT").select(TB_POLNR="EV_POLNR", TB_EVTNR="EV_EVTNR", EVENT_TYPE="EV_EVTTP")
+    vst = rates.filter(pl.col("TX_TAXTP").eq("VST")).select("TX_VLDFR", "TX_VLDTO", "TX_THRSH")
+    rows = payouts(str(LEGACY)).join(events, on=["TB_POLNR", "TB_EVTNR"], how="left")
+    limits = rows.select("TB_POLNR", "TB_EVTNR", "TB_EFFDT").join(vst, how="cross").filter(
+        pl.col("TB_EFFDT").is_between(pl.col("TX_VLDFR"), pl.col("TX_VLDTO"))).group_by("TB_POLNR", "TB_EVTNR").agg(
+        THRESHOLD=pl.col("TX_THRSH").max())
+    rows = rows.join(flags, on=["TB_POLNR", "TB_EVTNR"], how="left").join(
+        limits, on=["TB_POLNR", "TB_EVTNR"], how="left").with_columns(pl.col("VST", "SOS", "KST", "KIS").fill_null(False))
+    first_kst = booked.filter(pl.col("TB_TAXTP").eq("KST"))["TB_EFFDT"].min()
+    first_kis = rates.filter(pl.col("TX_TAXTP").eq("KIS"))["TX_VLDFR"].min()
+    base, country, death = pl.col("TAXABLE_BASE"), pl.col("COUNTRY"), pl.col("EVENT_TYPE").eq(500)
+    rules = {"CH VST <=> objection and base above TX_THRSH": (country.eq("CH"), pl.col("AD_TAXST").eq("E").and_(
+                 base.gt(pl.col("THRESHOLD"))), "VST"),
+             "IT SOS <=> gain above 0, no death claim": (country.eq("IT"), base.gt(0).and_(death.not_()), "SOS"),
+             "DE KST <=> base above 0 (from the first KST)": (country.eq("DE").and_(death.not_()).and_(
+                 pl.col("TB_EFFDT").ge(first_kst)), base.gt(0), "KST"),
+             "DE KIS <=> KST and church member (from the KIS rate)": (country.eq("DE").and_(pl.col("KST")).and_(
+                 pl.col("TB_EFFDT").ge(first_kis)), pl.col("AD_CHURCH").eq("J"), "KIS")}
+    oks = [failures(f"labels: {name}", rows.filter(scope).filter(due.fill_null(False).ne(pl.col(tax))).height, debug)
+           for name, (scope, due, tax) in rules.items()]
+    accrued = booked.filter(pl.col("TB_TAXTP").eq("BOL")).select("TB_POLNR", BOL_CHGTS="TB_CHGTS")
+    collected = booked.filter(pl.col("TB_TAXTP").eq("BOC")).join(events, on=["TB_POLNR", "TB_EVTNR"]).filter(
+        pl.col("EVENT_TYPE").eq(400))
+    unaccrued = collected.join(accrued, on="TB_POLNR", how="left").group_by("TB_BOOKID").agg(
+        AFTER_BOL=pl.col("BOL_CHGTS").lt(pl.col("TB_CHGTS")).fill_null(False).any()).filter(pl.col("AFTER_BOL").not_())
+    return [*oks, failures("labels: a BOC on a withdrawal only after a BOL", unaccrued.height, debug)]
+
+
 def result_checks(results: dict, debug: bool) -> list[bool]:
     """The format of the two t7 results and the two examples of the task PDF."""
     payout, annual = results["t7_tax_payout"], results["t7_tax_annual"]
@@ -149,7 +192,7 @@ def main():
                     int(seconds > SECONDS / 2), debug),
            failures(f"peak memory {gigabytes:.2f} GB: under 80 % of {GIGABYTES} GB", int(gigabytes > GIGABYTES * 0.8),
                     debug),
-           *result_checks(results, debug), *label_checks(debug)]
+           *result_checks(results, debug), *label_checks(debug), *due_against_booked(debug)]
     print("\nALL PASS: ready to upload" if all(oks) else "\nSOMETHING FAILED: do not upload yet")
     sys.exit(0 if all(oks) else 1)
 

@@ -20,11 +20,11 @@ import polars as pl
 
 from conventions import BOLLO_FIX, BOLLO_ON_SURRENDER_VALUE, CONVERSION, STAMP_DUTY, TAX_CURRENCY, TAXES
 from dates import days_between
-from legacy import as_cyymmdd, as_date
+from legacy import as_date
 from money import RATE_UNIT, rounded, rounded_signed
 from payouts import EVENT, in_turn, payouts
 from taxpayer import tax_rates, with_policies, with_tax_currency
-from valuation import penalty_rates, values_on
+from valuation import penalties_on, values_on
 
 BOLLO = "BOL"  # TB_TAXTP of the Bollo accrued; its rate in NRTAXR has the same type
 
@@ -50,10 +50,9 @@ def bollo(rate: pl.Expr, parts: int = 1) -> pl.Expr:
 
 
 def penalties(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
-    """TB_POLNR, TB_EFFDT and SR_RATE: the surrender penalty of every policy on each day of `bookings`."""
-    days = bookings.select(as_date("TB_EFFDT").unique()).to_series()
-    return pl.concat([penalty_rates(legacy_dir, day).select(TB_POLNR="PH_POLNR", TB_EFFDT=as_cyymmdd(day),
-                                                             SR_RATE="SR_RATE") for day in days])
+    """TB_POLNR, TB_EFFDT and SR_RATE: the surrender penalty of the policy on the day of each of `bookings`."""
+    days = bookings.select(BK_POLNR="TB_POLNR", DAY="TB_EFFDT").unique()
+    return penalties_on(legacy_dir, days).select(TB_POLNR="BK_POLNR", TB_EFFDT="DAY", SR_RATE="SR_RATE")
 
 
 def taxed_value() -> pl.Expr:

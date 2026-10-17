@@ -51,6 +51,9 @@ JAVA_MONTH = 12  # Neuron NG: a twelfth of the yearly rate, whatever the days of
 # (to be decided by the actuary).
 PAYOUTS = [400, 410, 500]  # EV_EVTTP of a payout: partial withdrawal, full surrender, death claim (NRCODE)
 TERMINATING = [410, 500]  # payouts that end the policy: they pay out all of it
+PENALIZED = [400, 410]  # payouts that pay the units sold less the surrender penalty of the day; a death claim pays
+# them whole. NRTAXB books no tax on the withdrawals and surrenders that the penalty takes to the limit or below,
+# and taxes all the others (labels)
 PAID_OUT = ["WDR", "SUR", "DTH"]  # BK_BKTYP of the money of a payout: its BK_AMTPC is negative
 TAXES = {"STP": "CH", "VST": "CH", "SOS": "IT", "BOL": "IT", "BOC": "IT", "KST": "DE", "SOL": "DE", "KIS": "DE",
          "HEV": "DE", "TFS": "DE"}  # every TAXTP of NRCODE -> its country, TX_CNTRY of its rates in NRTAXR

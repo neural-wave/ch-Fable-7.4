@@ -221,11 +221,13 @@ the amount of every booking (`taxes.py`) and add them up per payout and per poli
   entered up to the processing timestamp (`legacy.valid_on` with `known_at`). The rates NRTAXR are looked up the
   same way, for the country of their tax type (`TX_CNTRY`), so the Bollo batches of 2017 – 2019 used rate
   version 1 and the fix of July 2019 version 2;
-- payouts: the events 400, 410 and 500 with a tax booking or not reversed. Gross = the WDR, SUR, DTH bookings;
-  value before = gross + the value left that day (`valuation.values_on`);
+- payouts: the events 400, 410 and 500 with a tax booking or not reversed. Units sold = the WDR, SUR, DTH
+  bookings; gross = the units sold less the surrender penalty of the day for a withdrawal or a surrender
+  (`PENALIZED`, rounded as in t3), so NRTAXB books no tax where the penalty takes the gain or the gross to the
+  limit or below; value before = units sold + the value left that day (`valuation.values_on`);
 - premiums used: every premium received (not reversed) up to the payout, converted to the tax currency at the
   rates of its own money date and rounded to the cent, truncated in DE. The payouts of a policy use them one
-  after another: a partial withdrawal uses its share gross / value before. A holder who moved (CH -> DE) has the
+  after another: a partial withdrawal uses its share units sold / value before. A holder who moved (CH -> DE) has the
   chain counted in the currency of each payout;
 - taxable base, in the tax currency, rounded once: CH the gross converted on the payout day, IT and DE the gain
   = that gross less the premiums used (at least 0); DE x (1 - TFS), half under HEV, 0 for contracts with regular
