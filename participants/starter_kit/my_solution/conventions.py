@@ -68,6 +68,9 @@ ROUNDED_BY_SYSTEM = True  # the system that processed a tax decides its rounding
 # The example (DE, 2006) was processed by COBOL and fits it; truncating by country (False: TRUNCATED and
 # TRUNCATED_CONVERSION) rests on that one example (targets of t0, t2, t3; too few rows for the actuary to read)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
+BLENDED_RATES = []  # tax types whose rate is averaged by days over the life of the policy (`taxpayer.blended_rates`):
+# the Italian SOS takes the gain of each period at its rate, 12.5 % to 2011, 20 % to June 2014, 26 % after (law,
+# DL 138/2011 and DL 66/2014); [] takes the rate valid on the payout day (assumption, to test: ["SOS"])
 BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calculated: what Neuron calculated and,
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
@@ -75,6 +78,8 @@ REMITTANCE = {"DE": 9, "IT": 9, "CH": 9}  # days after the 1st of the next month
 # Neuron's tax batch (TAXBATCH runs every 10 January, weekends included) and of the example (DE: 2006-07-17 ->
 # 2006-08-10). The laws are the other variant, IT the 16th (F24) and CH 30 days after the month: {"DE": 9, "IT": 15,
 # "CH": 29}, with which the payout table scored 0 of 40 twice (assumption, to test)
+REMITTANCE_MONTH_END = []  # countries that remit on the last day of the month after instead of REMITTANCE (CH: the
+# reading "by the end of the next month" of art. 16 VStG; assumption, to test)
 REMITTED_FROM_PAYMENT = True  # the remittance month follows the day the money was paid, the effective date + the
 # payout business days PD_PAYDAY of the product (NRPROD, read by no other rule; the law of all three countries
 # counts from the payment); False: from the effective date. The example fits both: paid 2006-07-24, still in July
@@ -90,6 +95,10 @@ STAMP_DUTY_REMITTED = True  # a payout with stamp duty alone has a remittance da
 # "None if nothing was withheld" if the stamp duty collected does not count as withheld (assumption)
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
+CHURCH_REDUCES_KST = True  # DE: the KIS booking reduces the KST as above (law, from 2009); False: base x KST and the
+# church tax on top (assumption, to test)
+COLLECTED_IN_ANNUAL = False  # IT: it_bol of the annual table adds up the Bollo accrued (BOL); True also the Bollo
+# collected at the payouts of the year (BOC), which pays the accrued one (assumption, to test)
 PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
 BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019 (NRTAXB)
 BOLLO_FIX_PER_YEAR = True  # the fix books, for every earlier BOL, the Bollo at the restated rate less the amount

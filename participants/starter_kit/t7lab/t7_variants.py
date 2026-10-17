@@ -29,10 +29,14 @@ VARIANTS = {  # name -> {convention: value} to flip
         "REMITTANCE_CALENDARS": dict.fromkeys(["DE", "IT", "CH"], NEURON_CALENDAR)},
     "remittance on the days of the law (IT the 16th, CH 30 days after the month)": {
         "REMITTANCE": {"DE": 9, "IT": 15, "CH": 29}},
-    "rounding by system, not by country": {"ROUNDED_BY_SYSTEM": True},
+    "rounding by country, not by system": {"ROUNDED_BY_SYSTEM": False},
     "HEV not in the withholding": {"HALF_INCOME_WITHHELD": False},
-    "Bollo on the policy value, without the penalty": {"BOLLO_ON_SURRENDER_VALUE": False},
-    "remittance month from the payment day (PD_PAYDAY)": {"REMITTED_FROM_PAYMENT": True},
+    "Bollo on the surrender value": {"BOLLO_ON_SURRENDER_VALUE": True},
+    "remittance month from the effective date, not the payment day": {"REMITTED_FROM_PAYMENT": False},
+    "CH on the last day of the next month": {"REMITTANCE_MONTH_END": ["CH"]},
+    "KST plain, the church tax on top": {"CHURCH_REDUCES_KST": False},
+    "Bollo collected in the annual Bollo": {"COLLECTED_IN_ANNUAL": True},
+    "SOS at the rate averaged over the periods": {"BLENDED_RATES": ["SOS"]},
 }
 COLUMNS = {"t7_tax_payout": ["country", "taxable_base", "withholding", "surcharges", "stamp_duty", "remittance"],
            "t7_tax_annual": ["ch_stp", "ch_vst", "it_sos", "it_bol", "de_kst", "de_sol", "de_kis"]}

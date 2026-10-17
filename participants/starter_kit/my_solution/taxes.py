@@ -20,18 +20,20 @@ import functools
 import polars as pl
 
 from bollo import bollo_bookings
-from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_TAX, PREMIUM_STAMP,
-                         REMITTED_FROM_PAYMENT, REMITTANCE, REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
+from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, BLENDED_RATES, CHURCH_REDUCED, CHURCH_REDUCES_KST,
+                         CHURCH_TAX, COLLECTED_IN_ANNUAL, PREMIUM_STAMP, REMITTED_FROM_PAYMENT, REMITTANCE,
+                         REMITTANCE_MONTH_END, REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
                          STAMP_DUTY_REMITTED, SURCHARGES, TAX_CURRENCY, TAXES, WITHHELD)
 from dates import tax_office_holidays
 from legacy import as_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
 from payouts import EVENT, payouts
-from taxpayer import rounds_half_up, tax_rates, with_policies, with_tax_currency
+from taxpayer import blended_rates, rounds_half_up, tax_rates, with_policies, with_tax_currency
 
 BOOKING = ["TB_POLNR", "TB_EVTNR", "TB_TAXTP", "TB_EFFDT"]  # the columns of a booking besides TB_AMOUNT
 PAYOUT_AMOUNTS = {"withholding": WITHHELD, "surcharges": SURCHARGES, "stamp_duty": STAMP_DUTY}  # name -> types
 ANNUAL_AMOUNTS = {f"{TAXES[tax].lower()}_{tax.lower()}": tax for tax in ANNUAL_TAXES}  # ch_stp -> STP, ...
+COLLECTED = {"BOL": STAMP_DUTY}  # accrued tax type -> the types that collect it at a payout
 
 
 def half_up(tax_type: pl.Expr) -> pl.Expr:
@@ -59,7 +61,8 @@ def capital_gains_tax() -> pl.Expr:
 
     The KIS booking is the label that Neuron withheld church tax; the address may say otherwise.
     """
-    church = pl.when(pl.col("KIS_BOOKED")).then(pl.col("KIS_RATE").fill_null(0)).otherwise(0)
+    reduced = pl.col("KIS_BOOKED").and_(pl.lit(CHURCH_REDUCES_KST))
+    church = pl.when(reduced).then(pl.col("KIS_RATE").fill_null(0)).otherwise(0)
     taxed = pl.col("TAXABLE_BASE").cast(pl.Int128).mul(pl.col("KST_RATE")).mul(RATE_UNIT)
     whole = pl.lit(SHARE_UNIT, pl.Int128).add(pl.col("KST_RATE").mul(church))
     return rounded(taxed, whole, half_up(pl.lit(CHURCH_REDUCED)))
@@ -68,13 +71,17 @@ def capital_gains_tax() -> pl.Expr:
 def payout_taxes(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
     """The withholding taxes and surcharges of the payouts in `bookings` with TB_AMOUNT.
 
-    VST and SOS are the base x their rate, SOL and KIS the KST x their rate. A booking of no reported payout keeps
-    a null amount.
+    VST and SOS are the base x their rate, SOL and KIS the KST x their rate; the rate of the types in
+    `conventions.BLENDED_RATES` is averaged over the life of the policy (`taxpayer.blended_rates`). A booking of no
+    reported payout keeps a null amount.
     """
-    residents = payouts(legacy_dir).select(*EVENT, "TAXABLE_BASE", "AD_REGIO")
+    residents = payouts(legacy_dir).select(*EVENT, "TAXABLE_BASE", "AD_REGIO", "PH_BEGDT")
     church_tax = bookings.group_by(EVENT).agg(KIS_BOOKED=pl.col("TB_TAXTP").eq(CHURCH_TAX).any())
     booked = bookings.join(residents, on=EVENT, how="left").join(church_tax, on=EVENT, how="left")
-    rows = tax_rates(legacy_dir, booked, pl.col("TB_TAXTP"), "RATE", region="AD_REGIO")
+    dated = tax_rates(legacy_dir, booked, pl.col("TB_TAXTP"), "DAY_RATE", region="AD_REGIO")
+    blended = blended_rates(legacy_dir, dated, pl.col("TB_TAXTP"), "LIFE_RATE")
+    rows = blended.with_columns(RATE=pl.when(pl.col("TB_TAXTP").is_in(BLENDED_RATES)).then("LIFE_RATE").otherwise(
+        "DAY_RATE")).drop("DAY_RATE", "LIFE_RATE")
     german = tax_rates(legacy_dir, rows, pl.lit(CHURCH_REDUCED), "KST_RATE")
     church = tax_rates(legacy_dir, german, pl.lit(CHURCH_TAX), "KIS_RATE", region="AD_REGIO")
     tax_type = pl.col("TB_TAXTP")
@@ -108,16 +115,19 @@ def remittance() -> pl.Expr:
     """The day Neuron paid the taxes of a payout to the tax office, null without tax.
 
     The country of the withholding decides, Italy for stamp duty alone; the day comes from REMITTANCE in the month
-    after the effective date, or after the day of the payment PAID with REMITTED_FROM_PAYMENT, moved to a business
-    day for the countries of REMITTANCE_SHIFTED. A payout with stamp duty alone has a day with STAMP_DUTY_REMITTED.
+    after the effective date, or after the day of the payment PAID with REMITTED_FROM_PAYMENT, its last day for the
+    countries of REMITTANCE_MONTH_END, moved to a business day for the countries of REMITTANCE_SHIFTED. A payout
+    with stamp duty alone has a day with STAMP_DUTY_REMITTED.
     """
     withheld = pl.col("withholding").add(pl.col("surcharges"))
     country = pl.when(withheld.ne(0)).then("COUNTRY").otherwise(pl.lit(STAMP_DUTY_COUNTRY))
     month = pl.when(pl.lit(REMITTED_FROM_PAYMENT)).then(pl.col("PAID")).otherwise(as_date("TB_EFFDT"))
     first = month.dt.month_start().dt.offset_by("1mo")
     days = country.replace_strict(REMITTANCE, default=None, return_dtype=pl.Int64)
+    due = pl.when(country.is_in(REMITTANCE_MONTH_END)).then(first.dt.month_end()).otherwise(
+        first.add(pl.duration(days=days)))
     remitted = pl.when(pl.lit(STAMP_DUTY_REMITTED)).then(withheld.add(pl.col("stamp_duty"))).otherwise(withheld)
-    return pl.when(remitted.ne(0)).then(shifted(first.add(pl.duration(days=days)), country))
+    return pl.when(remitted.ne(0)).then(shifted(due, country))
 
 
 def withheld_amounts(legacy_dir) -> pl.DataFrame:
@@ -143,10 +153,17 @@ def payout_table(legacy_dir) -> pl.DataFrame:
                        *PAYOUT_AMOUNTS, remittance().alias("remittance_date"))
 
 
+def annual_types(tax: str) -> pl.Expr:
+    """True for the bookings that the annual column of `tax` adds up: that type, and for the Bollo accrued also the
+    Bollo collected with `conventions.COLLECTED_IN_ANNUAL`."""
+    collected = pl.lit(COLLECTED_IN_ANNUAL).and_(pl.col("TB_TAXTP").is_in(COLLECTED.get(tax, [])))
+    return pl.col("TB_TAXTP").eq(tax).or_(collected)
+
+
 def annual_table(legacy_dir) -> pl.DataFrame:
     """policy_id, year and the ANNUAL_AMOUNTS (cents) of the bookings effective in the year, if any is not 0."""
-    tax_type, amount = pl.col("TB_TAXTP"), pl.col("TB_AMOUNT")
+    amount = pl.col("TB_AMOUNT")
     booked = tax_bookings(legacy_dir).with_columns(year=as_date("TB_EFFDT").dt.year())
     years = booked.group_by(policy_id="TB_POLNR", year="year").agg(
-        **{name: amount.filter(tax_type.eq(tax)).sum() for name, tax in ANNUAL_AMOUNTS.items()})
+        **{name: amount.filter(annual_types(tax)).sum() for name, tax in ANNUAL_AMOUNTS.items()})
     return years.filter(pl.any_horizontal(pl.col(*ANNUAL_AMOUNTS).ne(0)))
