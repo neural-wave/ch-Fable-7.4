@@ -10,9 +10,10 @@ booking, with the rates valid on the effective date as Neuron knew them at the p
   SOL and KIS: the KST x their rate, KIS of the region of residence
 - BOL, BOC: the Bollo (`bollo`)
 
-Every amount is rounded once: half up, in Germany truncated, or by the system that processed it with
-`conventions.ROUNDED_BY_SYSTEM` (`taxpayer.rounds_half_up`). A booking whose payout, premium or rate is missing
-keeps a null amount, so a check can find it (`t7lab/t7_check.py`, next to the hand-in).
+Every amount is rounded once, by the system that processed it: COBOL truncates, Neuron NG rounds half up
+(`taxpayer.rounds_half_up`); without `conventions.ROUNDED_BY_SYSTEM`, half up and in Germany truncated. A booking
+whose payout, premium or rate is missing keeps a null amount, so a check can find it (`t7lab/t7_check.py`, next to
+the hand-in).
 """
 import functools
 

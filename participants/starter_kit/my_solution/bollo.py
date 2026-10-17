@@ -1,11 +1,10 @@
 """The Italian stamp duty on the policy value, the Bollo (t7): accrued every year, collected at the payouts.
 
-- BOL accrued: on 31 December the batch accrues the Bollo of the policies of Italian residents: the surrender
-  value (the policy value less the penalty of the day, as `valuation.surrender_values`; the policy value itself
-  without `conventions.BOLLO_ON_SURRENDER_VALUE`) x the rate valid on the day as Neuron knew it then
-  (`taxpayer.tax_rates`) x the days of the year the policy ran (from 1 January or from its start date) / the days
-  of the year. A payout that ends the policy accrues the Bollo of the year so far on the value before it, less the
-  penalty in the same way (a BOL with the event number of the payout).
+- BOL accrued: on 31 December the batch accrues the Bollo of the policies of Italian residents: the policy value
+  (less the penalty of the day, as `valuation.surrender_values`, with `conventions.BOLLO_ON_SURRENDER_VALUE`) x the
+  rate valid on the day as Neuron knew it then (`taxpayer.tax_rates`) x the days of the year the policy ran (from
+  1 January or from its start date) / the days of the year. A payout that ends the policy accrues the Bollo of the
+  year so far on the value before it, taken the same way (a BOL with the event number of the payout).
 - BOL re-priced: the rate of 2017 to June 2019 was restated in July 2019 (version 2 of NRTAXR). The fix
   (TB_USRID TAXFIX19) booked per policy the difference of every BOL before it at the new rate, rounded once on
   the total: BL10000044 has 421.57 + 194.54 = 616.11 in 2019, as in the example; rounding every year gives 194.53.

@@ -14,8 +14,9 @@ effective date and the processing timestamp of the event, the same as those of i
 - share PART / WHOLE: what the payout takes of the policy, units sold / value before; all of it when it ends the
   policy
 - premiums used: the share of the premiums received up to the payout day that no earlier payout used. Each premium
-  is converted to the tax currency at the rates of its money date and rounded to the cent (truncated in Germany,
-  or by COBOL with `conventions.ROUNDED_BY_SYSTEM`: `taxpayer.rounds_half_up`). The payouts of a policy use them
+  is converted to the tax currency at the rates of its money date and rounded to the cent by the system (COBOL
+  truncates, Neuron NG rounds half up: `taxpayer.rounds_half_up`; truncated in Germany without
+  `conventions.ROUNDED_BY_SYSTEM`). The payouts of a policy use them
   one after another (`in_turn`), kept in millionths of a cent (BASIS_UNIT)
 - gain: the gross, converted on the payout day, less the premiums used
 

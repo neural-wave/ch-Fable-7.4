@@ -235,15 +235,16 @@ the amount of every booking (`taxes.py`) and add them up per payout and per poli
   the old law asked for 5 years of premiums); LU none. A payout without withholding reports the base 0;
 - amounts: VST, SOS = base x rate; KST = base x rate, divided by (1 + rate x KIS) when the payout has a KIS
   booking (the label, not the address); SOL, KIS = KST x rate; STP = the premium of event 2 in francs x rate.
-  Rounded half up, German taxes truncated (or COBOL truncates and Neuron NG rounds half up, with
-  `ROUNDED_BY_SYSTEM`);
-- Bollo: BOL = surrender value (the value less the penalty, as Italian rules have it for insurance policies;
-  `BOLLO_ON_SURRENDER_VALUE`) x rate x days run / days of the year; the TAXFIX19 re-pricing is the difference of the
+  Rounded by the system, as in every task with targets: COBOL truncates, Neuron NG rounds half up
+  (`ROUNDED_BY_SYSTEM`; without it half up, German taxes truncated);
+- Bollo: BOL = policy value (the surrender value with `BOLLO_ON_SURRENDER_VALUE`) x rate x days run / days of the
+  year; the TAXFIX19 re-pricing is the difference of the
   earlier BOL at the restated rate, **rounded once on the total**: BL10000044 2019 = 421.57 + 194.54 = 616.11, as
   in the example (rounding every year gives 194.53). BOC collects the outstanding BOL, all of it at a payout that
   ends the policy, its share at a partial withdrawal. A negative amount rounds like its positive twin;
-- remittance: DE the 10th of the next month (example), IT the 16th and CH 30 days after the month end (law),
-  no business-day shift.
+- remittance: in the month after the payment day, the effective date + the payout business days `PD_PAYDAY` of
+  the product (`REMITTED_FROM_PAYMENT`): DE the 10th (example), IT the 16th and CH 30 days after the month end
+  (law), no business-day shift.
 
 Example 1 (BL10000086 #121: a USD policy, surrendered on 17.7.2006, gross 12'107.36 USD, 28 premiums of 420.00
 USD) decides the base. Every premium converted on its money date and truncated gives 5'628.16, as in the PDF;
@@ -257,8 +258,9 @@ the gain is above 0, no SOS on Italian death claims, and the country of every pa
 
 Open, with no labels: each choice is one line in `conventions.py`, to be changed one per upload as the actuary
 answers: the base of a payout without tax (`BASE_WITHOUT_TAX`: 0 since the upload after the 5 % of 19:30), the
-base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`: the surrender value, against the 70 % of the annual table), the
-rounding by system instead of by country (`ROUNDED_BY_SYSTEM`), the remittance day of a payout with stamp duty
+base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`: back to the policy value after 8 of 30 with the surrender value),
+the rounding by system instead of by country (`ROUNDED_BY_SYSTEM`, on: set by the targets of t0, t2, t3, too few
+rows for the actuary), the remittance day of a payout with stamp duty
 alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`), the month of the payment day
 instead of the effective date (`REMITTED_FROM_PAYMENT`, with the payout business days `PD_PAYDAY`) and the move to
 a business day (`REMITTANCE_SHIFTED`), the rounding of the IT conversion (`TRUNCATED_CONVERSION`) and HEV on the withholding

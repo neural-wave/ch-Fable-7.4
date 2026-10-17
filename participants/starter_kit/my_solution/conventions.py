@@ -63,18 +63,18 @@ TAX_CURRENCY = {"CH": "CHF", "IT": "EUR", "DE": "EUR", "LU": "EUR"}  # country -
 TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent (example: 1407.04 x 5.5 % = 77.3872 -> 77.38)
 TRUNCATED_CONVERSION = ["DE"]  # countries whose premiums are truncated to the cent when converted to the tax
 # currency (example: only this gives 5628.16); IT rounds them half up like its taxes (assumption)
-ROUNDED_BY_SYSTEM = False  # True: the system that processed a tax decides its rounding, as in t2 and t3: COBOL
-# truncated, Neuron NG (TB_CHGTS from CONVERSION) rounds half up, the taxes and the conversions alike. The example
-# (DE, 2006) was processed by COBOL, so it fits this rule as well as TRUNCATED; False rounds by country (assumption,
-# to test on its own: it changes the annual table, which BASE_WITHOUT_TAX does not touch)
+ROUNDED_BY_SYSTEM = True  # the system that processed a tax decides its rounding, as in every task with targets (t0,
+# t2, t3): COBOL truncated, Neuron NG (TB_CHGTS from CONVERSION) rounds half up, the taxes and the conversions alike.
+# The example (DE, 2006) was processed by COBOL and fits it; truncating by country (False: TRUNCATED and
+# TRUNCATED_CONVERSION) rests on that one example (targets of t0, t2, t3; too few rows for the actuary to read)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
 BASE_WITHOUT_TAX = False  # a payout without withholding reports the base 0; True reports it as calculated
 # (assumption, from the actuary: with the calculated base the payout table scored 1 of 20, while 56 % of the
 # payouts are Swiss ones without withholding: reported (AD_TAXST M) or below the VST threshold)
 REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month. DE the 10th (example: 2006-07-17
 # -> 2006-08-10, a Thursday); IT the 16th, F24 (law); CH 30 days after the month (law)
-REMITTED_FROM_PAYMENT = False  # True: the remittance month follows the day the money was paid, the effective date +
-# the payout business days PD_PAYDAY of the product (NRPROD, read by no other rule; the law of all three countries
+REMITTED_FROM_PAYMENT = True  # the remittance month follows the day the money was paid, the effective date + the
+# payout business days PD_PAYDAY of the product (NRPROD, read by no other rule; the law of all three countries
 # counts from the payment); False: from the effective date. The example fits both: paid 2006-07-24, still in July
 # (assumption, to test: it moves the month of about a fifth of the payouts with tax)
 REMITTANCE_SHIFTED = []  # countries whose remittance day moves to the next business day of its calendar (assumption:
@@ -90,10 +90,9 @@ CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is b
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
 BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019 (NRTAXB)
-BOLLO_ON_SURRENDER_VALUE = True  # IT: the Bollo is on the surrender value, the policy value less the penalty, as the
-# Italian rules have it for insurance policies (law). The example cannot tell: its policy has no penalty. The share
-# of annual rows the actuary found wrong is about the share of Bollo in years with a penalty (assumption, to test);
-# False: on the policy value
+BOLLO_ON_SURRENDER_VALUE = False  # IT: the Bollo is on the policy value. True: on the surrender value, the value less
+# the penalty, as the Italian rules have it for insurance policies (law); the example cannot tell, its policy has no
+# penalty. The actuary scored the annual table 14 of 20 twice without it and 8 of 30 with it (leaderboard)
 PARTLY_TAXED = ["DE"]  # countries whose gain is taxed only in part: TFS, HEV and the old contracts
 OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS (law), if it
 # pays regular premiums: NRTAXB has KST on every payout with a gain of a single premium (PH_FREQ E) policy and on

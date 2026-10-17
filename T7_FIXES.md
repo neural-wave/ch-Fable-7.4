@@ -140,14 +140,16 @@ Run this with an open-weights model, from `participants/starter_kit/my_solution`
 
 It prints only PASS/FAIL, seconds and gigabytes; `--debug` adds counts and tracebacks. Its last checks hold the
 bases against the labels of NRTAXB (a tax booked exactly where the base says it is due): a defect of the base
-shows there before it costs an upload. Upload when it says
-`ALL PASS`, then change one convention per table and upload, in this order: base without tax
-(`BASE_WITHOUT_TAX`, now `False`: the payout table) with the base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`, now
-`True`: the annual table, which the base does not touch), rounding by system (`ROUNDED_BY_SYSTEM`), stamp duty
-alone without a remittance day (`STAMP_DUTY_REMITTED`), business-day shift (`REMITTANCE_SHIFTED`), remittance
-IT/CH, rounding of the IT conversion, HEV. `t7lab/t7_variants.py` counts the rows each one changes. The
-leaderboard returns one accuracy per table on a few rows that change at every evaluation, so only one choice per
-table can be read from each upload.
+shows there before it costs an upload. Upload when it says `ALL PASS`.
+
+The switches now: base 0 without withholding (`BASE_WITHOUT_TAX = False`), Bollo on the policy value
+(`BOLLO_ON_SURRENDER_VALUE = False`, back after 8 of 30), rounding by system (`ROUNDED_BY_SYSTEM = True`, set by
+the targets of t0, t2 and t3: too few rows change for the actuary to read it) and the remittance month from the
+payment day (`REMITTED_FROM_PAYMENT = True`, the probe of the payout table). Then one per table and upload: stamp
+duty alone without a remittance day (`STAMP_DUTY_REMITTED`), business-day shift (`REMITTANCE_SHIFTED`),
+remittance IT/CH, death claims on the benefit of the tariff option. `t7lab/t7_variants.py` counts the rows each
+one changes. The leaderboard returns one accuracy per table on a few rows that change at every evaluation, so
+only one choice per table can be read from each upload.
 
 ## What the whole extract says (study of 18.10)
 
@@ -176,11 +178,13 @@ Facts measured on every row, not on the two examples of the PDF:
 ## Uploads and the actuary's readings
 
 The actuary picks a few targets to test different patterns (task PDF, section 7), and t7 is scored on the public
-and private policies (section 6): a reading is not a uniform sample, so compare readings with care. Before an
+and private policies (section 6): a reading is not a uniform sample, so compare readings with care. At 23:48 the samples grew (40 and 30
+rows) and some were dropped. Before an
 upload, write down the commit and its switches here; after the evaluation, its two scores and its MI.
 
 | Evaluated | Code | t7 switches | Payout | Annual | MI |
 |---|---|---|---|---|---|
 | 17.10 19:30 | `0522fa7` | base as calculated (before `BASE_WITHOUT_TAX`), Bollo on the value, rounding by country | 1/20 | 14/20 | 100 |
 | 17.10 22:09 | Roberto's own upload (#43), not on the branch | base as calculated | 1/20 | 14/20 | 98 |
-| 17.10 23:48 | unconfirmed: `cbaf38b`, or a version with `t7_impl.py` (another engine) written 23:40 – 23:47 | if `cbaf38b`: `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = True` | 0/40 | 8/30 | ? |
+| 17.10 23:48 | `cbaf38b` (uploaded from this branch; MI not reported. Another engine's `t7_impl.py` was still being written at 23:47 and runs for minutes) | `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = True`, rounding by country | 0/40 | 8/30 | ? |
+| next | this commit | `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = False`, `ROUNDED_BY_SYSTEM = True`, `REMITTED_FROM_PAYMENT = True` | | | |
