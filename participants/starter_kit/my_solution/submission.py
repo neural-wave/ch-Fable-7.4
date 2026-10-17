@@ -15,6 +15,7 @@ from dates import business_day, every_months
 from legacy import as_date, table, valid_on, versions_on
 from money import francs, share
 from projection import projected_years
+from valuation import surrender_values
 
 
 def received_premiums(legacy_dir) -> pl.DataFrame:
@@ -128,8 +129,19 @@ def t2_projected_maturity_value(legacy_dir) -> dict[str, Decimal]:
 
 
 def t3_surrender_value(legacy_dir, valuation_dates: list[dt.date]) -> dict[tuple[str, dt.date], Decimal]:
-    """{(policy_id, valuation_date): surrender_value}"""
-    return {}
+    """{(policy_id, valuation_date): surrender_value} of every policy on every valuation date.
+
+    The unit account rebuilds the bookings that the nightly job calculated (`valuation.unit_account`):
+    - premiums: the received premium less the entry charge, split by the allocation and bought at the ask price
+    - monthly charge runs: admin fee, management charge and risk charge, sold at the bid price (`charge_run`)
+    The policy value adds up the positions at the bid price of the valuation date, and the surrender value is
+    the policy value less the surrender penalty of the policy year (`valuation`).
+    """
+    values = {}
+    for day in valuation_dates:
+        surrender = surrender_values(legacy_dir, day).select("PH_POLNR", francs(pl.col("SURRENDER")))
+        values.update({(policy, day): value for policy, value in surrender.iter_rows()})
+    return values
 
 
 def t4_annual_statement(legacy_dir) -> dict[tuple[str, int], tuple[Decimal, ...]]:

@@ -33,3 +33,14 @@ DEATH_BENEFIT = {  # option -> millionths of (sum insured, value) of which the h
 # Projection of the offer: COBOL projected the offers signed before the conversion, Neuron NG (Java) the later ones
 COBOL_AGE = 365  # COBOL: entry age = days since birth / 365 rounded half up, as if there were no leap years
 JAVA_AGE = 12  # Neuron NG: entry age = completed months since birth / 12 rounded half up
+
+# Unit account (t3): NRBOOK has every booking, but those that the nightly job calculated have no amounts and units
+PREMIUM_RECEIPT = 110  # EV_EVTTP that invests a received premium: bookings PRM, one per fund of the allocation
+CHARGE_RUN = 300  # EV_EVTTP of the monthly charge run at 01:30: bookings ADM, AMC and RSK
+MANUAL_CORRECTION = 990  # EV_EVTTP entered online with a manual correction of NREXCP: its units don't count
+CALCULATED = ["PRM", "ADM", "AMC", "RSK"]  # BK_BKTYP of the nightly job; the others carry their units
+CHARGES = ["ADM", "AMC", "RSK"]  # BK_BKTYP of a charge run, in the order the run takes them
+INITIAL_POT = "1"  # BK_POTCD of the initial units: management charge CG_AMCP1; the base pot 2 pays CG_AMCP2
+AGREED_ENTRY, AGREED_MANAGEMENT = "ENT", "AMC"  # AG_FEETP: individual rates (NRAGRE) that replace the tariff
+COBOL_MONTH = 360  # COBOL: the management charge of a month is its days / 360 of the yearly rate
+JAVA_MONTH = 12  # Neuron NG: a twelfth of the yearly rate, whatever the days of the month

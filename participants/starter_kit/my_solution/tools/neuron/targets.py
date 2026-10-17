@@ -12,13 +12,14 @@ from neuron.load import DATA, HAND_IN
 TARGETS = DATA.joinpath("targets")
 
 
-def target(task: str, policy_id: str | None = None, amounts: tuple[str, ...] = ()) -> pl.DataFrame:
+def target(task: str, policy_id: str | None = None, amounts: tuple[str, ...] = (),
+           units: tuple[str, ...] = ()) -> pl.DataFrame:
     """Target file of a task (e.g. "t0_commission"), optionally of one policy only.
 
-    Polars parses the dates. Amounts are floats, except the columns `amounts`, which are read as exact decimals
-    with two places; other exact comparisons go through `score` and `mismatches`.
+    Polars parses the dates. Amounts are floats, except the columns `amounts` and `units`, which are read as
+    exact decimals with two and six places; other exact comparisons go through `score` and `mismatches`.
     """
-    exact = dict.fromkeys(amounts, pl.Decimal(38, 2))
+    exact = {**dict.fromkeys(amounts, pl.Decimal(38, 2)), **dict.fromkeys(units, pl.Decimal(38, 6))}
     frame = pl.scan_csv(TARGETS.joinpath(f"{task}.csv"), try_parse_dates=True, schema_overrides=exact)
     if policy_id:
         frame = frame.filter(pl.col("policy_id").eq(policy_id))
