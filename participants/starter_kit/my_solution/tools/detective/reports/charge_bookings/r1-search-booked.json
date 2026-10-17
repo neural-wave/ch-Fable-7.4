@@ -1,0 +1,26 @@
+{
+ "findings": [
+  {
+   "ID": "charge_bookings/r1-search-booked/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "booked": "positive"
+   },
+   "RIGHT": 4470186,
+   "TOTAL": 4470186,
+   "RIGHT_HELD_OUT": 1034553,
+   "TOTAL_HELD_OUT": 1034553
+  },
+  {
+   "ID": "charge_bookings/r1-search-booked/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "booked": "nonzero"
+   },
+   "RIGHT": 4470186,
+   "TOTAL": 4470186,
+   "RIGHT_HELD_OUT": 1034551,
+   "TOTAL_HELD_OUT": 1034553
+  }
+ ]
+}

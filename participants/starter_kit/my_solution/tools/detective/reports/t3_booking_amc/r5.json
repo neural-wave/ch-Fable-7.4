@@ -1,0 +1,196 @@
+{
+ "rows": {
+  "right": 1833882,
+  "wrong": 78
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": 2,
+    "ROWS": 11
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 11
+   },
+   {
+    "DIFF": 3,
+    "ROWS": 5
+   },
+   {
+    "DIFF": 5,
+    "ROWS": 5
+   },
+   {
+    "DIFF": 8,
+    "ROWS": 3
+   },
+   {
+    "DIFF": 9,
+    "ROWS": 3
+   },
+   {
+    "DIFF": 4,
+    "ROWS": 3
+   },
+   {
+    "DIFF": 7,
+    "ROWS": 2
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 78
+   }
+  ],
+  "units": [
+   {
+    "DIFF": -40,
+    "ROWS": 2
+   },
+   {
+    "DIFF": -114,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -3850,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -4006,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -1047,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -127,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -1703,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -81,
+    "ROWS": 1
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_amc/r5/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_EVTNR <= 3.5",
+    "EV_EFFDT@BK_PRCDT:day > 30.5",
+    "EV_USRID = CBLBATCH"
+   ],
+   "ROWS": 112,
+   "WRONG": 78,
+   "SHARE": 0.6964285714285714
+  },
+  {
+   "ID": "t3_booking_amc/r5/C1",
+   "METHOD": "change point",
+   "COLUMN": "BK_TRDDT",
+   "BEFORE": "1999-02-28",
+   "AFTER": "1999-03-01",
+   "RATE_BEFORE": 0.0016276703967446592,
+   "RATE_AFTER": 2.5354131069834095e-05,
+   "EXPLAINED": 0.0006402109623753232
+  },
+  {
+   "ID": "t3_booking_amc/r5/C2",
+   "METHOD": "change point",
+   "COLUMN": "BK_PRCDT",
+   "BEFORE": "1999-02-26",
+   "AFTER": "1999-03-01",
+   "RATE_BEFORE": 0.0016276703967446592,
+   "RATE_AFTER": 2.5354131069834095e-05,
+   "EXPLAINED": 0.0006402109623753232
+  },
+  {
+   "ID": "t3_booking_amc/r5/C3",
+   "METHOD": "change point",
+   "COLUMN": "EV_CHGTS",
+   "BEFORE": "1999-02-28T01:30:00.000000",
+   "AFTER": "1999-03-01T01:30:00.000000",
+   "RATE_BEFORE": 0.0016276703967446592,
+   "RATE_AFTER": 2.5354131069834095e-05,
+   "EXPLAINED": 0.0006402109623753232
+  },
+  {
+   "ID": "t3_booking_amc/r5/C4",
+   "METHOD": "change point",
+   "COLUMN": "PH_ENDDT@BK_TRDDT",
+   "BEFORE": "2028-01-16",
+   "AFTER": "2028-01-26",
+   "RATE_BEFORE": 0.0,
+   "RATE_AFTER": 4.370849794065731e-05,
+   "EXPLAINED": 0.00018335580379928758
+  },
+  {
+   "ID": "t3_booking_amc/r5/C5",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDTO@BK_TRDDT",
+   "BEFORE": "2017-11-03",
+   "AFTER": "2017-11-08",
+   "RATE_BEFORE": 0.00022623380598454956,
+   "RATE_AFTER": 2.613334061899193e-05,
+   "EXPLAINED": 7.082871609911145e-05
+  },
+  {
+   "ID": "t3_booking_amc/r5/C6",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDTO@BK_PRCDT",
+   "BEFORE": "2017-11-03",
+   "AFTER": "2017-11-08",
+   "RATE_BEFORE": 0.00022620370308768054,
+   "RATE_AFTER": 2.6133651055175858e-05,
+   "EXPLAINED": 7.081576889074386e-05
+  },
+  {
+   "ID": "t3_booking_amc/r5/C7",
+   "METHOD": "change point",
+   "COLUMN": "EX_TSTMP@BK_TRDDT",
+   "BEFORE": "2005-01-03T16:04:48.000000",
+   "AFTER": "2008-04-09T12:27:02.000000",
+   "RATE_BEFORE": 0.001392757660167131,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 6.405649502000522e-05
+  },
+  {
+   "ID": "t3_booking_amc/r5/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@BK_TRDDT",
+   "BEFORE": "2007-05-31",
+   "AFTER": "2007-06-01",
+   "RATE_BEFORE": 8.997847438035978e-05,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 4.74495757494782e-05
+  },
+  {
+   "ID": "t3_booking_amc/r5/C9",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@BK_TRDDT",
+   "BEFORE": "2007-05-31",
+   "AFTER": "2007-06-01",
+   "RATE_BEFORE": 8.997847438035978e-05,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 4.74495757494782e-05
+  },
+  {
+   "ID": "t3_booking_amc/r5/C10",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@BK_PRCDT",
+   "BEFORE": "2007-05-31",
+   "AFTER": "2007-06-01",
+   "RATE_BEFORE": 8.997764401614061e-05,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 4.74487453499414e-05
+  }
+ ]
+}

@@ -1,0 +1,216 @@
+{
+ "findings": [
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "up",
+     "value"
+    ]
+   },
+   "RIGHT": 4990,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "up",
+     "half_up"
+    ]
+   },
+   "RIGHT": 4990,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": "half_up"
+   },
+   "RIGHT": 4896,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1119,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "half_up",
+     "value"
+    ]
+   },
+   "RIGHT": 4896,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1119,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "up",
+     "down"
+    ]
+   },
+   "RIGHT": 4853,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1105,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": "up"
+   },
+   "RIGHT": 4846,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1101,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": "value"
+   },
+   "RIGHT": 4803,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1098,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "value",
+     "half_up"
+    ]
+   },
+   "RIGHT": 4803,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1098,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "down",
+     "value"
+    ]
+   },
+   "RIGHT": 4803,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1098,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "down",
+     "half_up"
+    ]
+   },
+   "RIGHT": 4803,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1098,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "half_up",
+     "down"
+    ]
+   },
+   "RIGHT": 4759,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1083,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "half_up",
+     "up"
+    ]
+   },
+   "RIGHT": 4752,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1079,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S13",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": "down"
+   },
+   "RIGHT": 4666,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1062,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S14",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "value",
+     "down"
+    ]
+   },
+   "RIGHT": 4666,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1062,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S15",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "value",
+     "up"
+    ]
+   },
+   "RIGHT": 4659,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1058,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r2-search-penalty/S16",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "down",
+     "up"
+    ]
+   },
+   "RIGHT": 4659,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1058,
+   "TOTAL_HELD_OUT": 1144
+  }
+ ]
+}

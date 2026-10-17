@@ -1,0 +1,189 @@
+{
+ "rows": {
+  "missing": 2167,
+  "right": 404597,
+  "wrong": 872
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": -1,
+    "ROWS": 843
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 24
+   },
+   {
+    "DIFF": 0,
+    "ROWS": 5
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 872
+   }
+  ],
+  "units": [
+   {
+    "DIFF": -69,
+    "ROWS": 23
+   },
+   {
+    "DIFF": -78,
+    "ROWS": 19
+   },
+   {
+    "DIFF": -71,
+    "ROWS": 17
+   },
+   {
+    "DIFF": -77,
+    "ROWS": 17
+   },
+   {
+    "DIFF": -70,
+    "ROWS": 17
+   },
+   {
+    "DIFF": -14,
+    "ROWS": 16
+   },
+   {
+    "DIFF": -74,
+    "ROWS": 16
+   },
+   {
+    "DIFF": -80,
+    "ROWS": 15
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r3/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_TRDDT-BK_RCVDT:days > 1.5",
+    "BK_TRDDT:weekday > 1.5",
+    "PR_DUEDT:holiday != Neujahrstag"
+   ],
+   "ROWS": 18456,
+   "WRONG": 1513,
+   "SHARE": 0.0819787602947551
+  },
+  {
+   "ID": "t3_booking_prm/r3/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_TRDDT-BK_RCVDT:days > 1.5",
+    "BK_TRDDT:weekday <= 1.5",
+    "BK_TRDDT-BK_RCVDT:days > 3.5"
+   ],
+   "ROWS": 3425,
+   "WRONG": 470,
+   "SHARE": 0.13722627737226278
+  },
+  {
+   "ID": "t3_booking_prm/r3/C1",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@BK_TRDDT",
+   "BEFORE": "2005-08-23T11:04:27.000000",
+   "AFTER": "2005-08-25T14:02:58.000000",
+   "RATE_BEFORE": 0.006966447741150303,
+   "RATE_AFTER": 0.007719192186348781,
+   "EXPLAINED": 0.0033859719386037236
+  },
+  {
+   "ID": "t3_booking_prm/r3/C2",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@BK_RCVDT",
+   "BEFORE": "2005-08-23T11:04:27.000000",
+   "AFTER": "2005-08-25T14:02:58.000000",
+   "RATE_BEFORE": 0.006966350289914879,
+   "RATE_AFTER": 0.00771925051858401,
+   "EXPLAINED": 0.0033859633174975687
+  },
+  {
+   "ID": "t3_booking_prm/r3/C3",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@BK_RCVDT",
+   "BEFORE": "2005-08-20",
+   "AFTER": "2005-08-22",
+   "RATE_BEFORE": 0.006929296404610356,
+   "RATE_AFTER": 0.007746529882467758,
+   "EXPLAINED": 0.003381627770978933
+  },
+  {
+   "ID": "t3_booking_prm/r3/C4",
+   "METHOD": "change point",
+   "COLUMN": "EX_TSTMP@BK_RCVDT",
+   "BEFORE": "2015-06-21T13:21:22.000000",
+   "AFTER": "2016-03-03T15:56:57.000000",
+   "RATE_BEFORE": 0.004357298474945534,
+   "RATE_AFTER": 0.019138755980861243,
+   "EXPLAINED": 0.003353393849949557
+  },
+  {
+   "ID": "t3_booking_prm/r3/C5",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_TRDDT",
+   "BEFORE": "2005-09-01",
+   "AFTER": "2005-09-30",
+   "RATE_BEFORE": 0.006936561987640308,
+   "RATE_AFTER": 0.0077345855636168715,
+   "EXPLAINED": 0.00326453349276032
+  },
+  {
+   "ID": "t3_booking_prm/r3/C6",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_RCVDT",
+   "BEFORE": "2005-09-01",
+   "AFTER": "2005-09-30",
+   "RATE_BEFORE": 0.00693631898659679,
+   "RATE_AFTER": 0.007734731549324485,
+   "EXPLAINED": 0.003264512495790202
+  },
+  {
+   "ID": "t3_booking_prm/r3/C7",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_TRDDT",
+   "BEFORE": "2005-07-26T11:36:57.000000",
+   "AFTER": "2005-07-29T12:48:37.000000",
+   "RATE_BEFORE": 0.0069309014380918976,
+   "RATE_AFTER": 0.007737111729778261,
+   "EXPLAINED": 0.003236157999099448
+  },
+  {
+   "ID": "t3_booking_prm/r3/C8",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_RCVDT",
+   "BEFORE": "2005-07-26T11:36:57.000000",
+   "AFTER": "2005-07-29T12:48:37.000000",
+   "RATE_BEFORE": 0.0069306583423941635,
+   "RATE_AFTER": 0.007737257668410788,
+   "EXPLAINED": 0.003236137112884629
+  },
+  {
+   "ID": "t3_booking_prm/r3/C9",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@last",
+   "BEFORE": "2005-09-01",
+   "AFTER": "2005-09-30",
+   "RATE_BEFORE": 0.006944096444193089,
+   "RATE_AFTER": 0.007721618666238724,
+   "EXPLAINED": 0.003235510811823924
+  },
+  {
+   "ID": "t3_booking_prm/r3/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@last",
+   "BEFORE": "2005-07-26T11:36:57.000000",
+   "AFTER": "2005-07-29T12:48:37.000000",
+   "RATE_BEFORE": 0.0069344451369338,
+   "RATE_AFTER": 0.007726372261167052,
+   "EXPLAINED": 0.0031313974135528835
+  }
+ ]
+}

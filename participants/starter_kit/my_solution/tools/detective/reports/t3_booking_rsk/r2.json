@@ -1,0 +1,197 @@
+{
+ "rows": {
+  "missing": 66,
+  "right": 950602,
+  "wrong": 5078
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": -1,
+    "ROWS": 2229
+   },
+   {
+    "DIFF": -2,
+    "ROWS": 765
+   },
+   {
+    "DIFF": -3,
+    "ROWS": 473
+   },
+   {
+    "DIFF": -4,
+    "ROWS": 390
+   },
+   {
+    "DIFF": -5,
+    "ROWS": 190
+   },
+   {
+    "DIFF": -7,
+    "ROWS": 103
+   },
+   {
+    "DIFF": -6,
+    "ROWS": 99
+   },
+   {
+    "DIFF": -8,
+    "ROWS": 73
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 5078
+   }
+  ],
+  "units": [
+   {
+    "DIFF": 25,
+    "ROWS": 49
+   },
+   {
+    "DIFF": 26,
+    "ROWS": 47
+   },
+   {
+    "DIFF": 35,
+    "ROWS": 47
+   },
+   {
+    "DIFF": 32,
+    "ROWS": 45
+   },
+   {
+    "DIFF": 33,
+    "ROWS": 43
+   },
+   {
+    "DIFF": 27,
+    "ROWS": 42
+   },
+   {
+    "DIFF": 60,
+    "ROWS": 42
+   },
+   {
+    "DIFF": 34,
+    "ROWS": 41
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_rsk/r2/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PS_BIRTH@BK_PRCDT:day <= 12.5",
+    "HD_CHGTS@last <= 2007-04-24 01:27:53.437500",
+    "HD_VLDFR@BK_PRCDT:year > 2001.5"
+   ],
+   "ROWS": 66004,
+   "WRONG": 4787,
+   "SHARE": 0.07252590752075631
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C1",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@last",
+   "BEFORE": "2006-02-12T14:37:44.000000",
+   "AFTER": "2006-02-14T14:35:53.000000",
+   "RATE_BEFORE": 0.009880580590664982,
+   "RATE_AFTER": 0.0037181221906247134,
+   "EXPLAINED": 0.036338055109338276
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C2",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_TRDDT",
+   "BEFORE": "2006-03-24T10:27:03.000000",
+   "AFTER": "2006-04-04T11:28:46.000000",
+   "RATE_BEFORE": 0.008278461295470265,
+   "RATE_AFTER": 0.0035750210695158087,
+   "EXPLAINED": 0.0312632879085405
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C3",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_PRCDT",
+   "BEFORE": "2006-03-24T10:27:03.000000",
+   "AFTER": "2006-04-04T11:28:46.000000",
+   "RATE_BEFORE": 0.008278461295470265,
+   "RATE_AFTER": 0.0035750210695158087,
+   "EXPLAINED": 0.0312632879085405
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C4",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@BK_PRCDT",
+   "BEFORE": "2006-03-24T10:27:03.000000",
+   "AFTER": "2006-04-04T11:28:46.000000",
+   "RATE_BEFORE": 0.0083847728112709,
+   "RATE_AFTER": 0.003546960133786481,
+   "EXPLAINED": 0.03121203248916198
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C5",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@BK_TRDDT",
+   "BEFORE": "2006-03-24T10:27:03.000000",
+   "AFTER": "2006-04-04T11:28:46.000000",
+   "RATE_BEFORE": 0.008384865318100829,
+   "RATE_AFTER": 0.0035469362158371378,
+   "EXPLAINED": 0.03121195229535436
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C6",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@BK_TRDDT",
+   "BEFORE": "2006-03-21",
+   "AFTER": "2006-04-01",
+   "RATE_BEFORE": 0.008137110308701623,
+   "RATE_AFTER": 0.003614194991316656,
+   "EXPLAINED": 0.03112652117638037
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C7",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@last",
+   "BEFORE": "2006-03-24T10:27:03.000000",
+   "AFTER": "2006-04-04T11:28:46.000000",
+   "RATE_BEFORE": 0.008451769311180801,
+   "RATE_AFTER": 0.0035298578326270263,
+   "EXPLAINED": 0.030961578828881803
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_BEGDT@BK_TRDDT",
+   "BEFORE": "2006-04-01",
+   "AFTER": "2006-05-01",
+   "RATE_BEFORE": 0.008143911488540927,
+   "RATE_AFTER": 0.00361225901820036,
+   "EXPLAINED": 0.030606078909690623
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C9",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_TRDDT",
+   "BEFORE": "2006-04-01",
+   "AFTER": "2006-05-01",
+   "RATE_BEFORE": 0.008285500918491385,
+   "RATE_AFTER": 0.0035731268256232592,
+   "EXPLAINED": 0.030444093504104135
+  },
+  {
+   "ID": "t3_booking_rsk/r2/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_PRCDT",
+   "BEFORE": "2006-04-01",
+   "AFTER": "2006-05-01",
+   "RATE_BEFORE": 0.008285500918491385,
+   "RATE_AFTER": 0.0035731268256232592,
+   "EXPLAINED": 0.030444093504104135
+  }
+ ]
+}

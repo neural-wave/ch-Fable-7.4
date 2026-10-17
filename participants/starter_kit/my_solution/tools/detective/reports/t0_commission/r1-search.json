@@ -1,0 +1,238 @@
+{
+ "findings": [
+  {
+   "ID": "t0_commission/r1-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_RCVDT",
+    "rate_day": "PR_DUEDT",
+    "half_up": true
+   },
+   "RIGHT": 183519,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_RCVDT",
+    "rate_day": "PR_RCVDT",
+    "half_up": true
+   },
+   "RIGHT": 183519,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_RCVDT",
+    "rate_day": null,
+    "half_up": true
+   },
+   "RIGHT": 183519,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_DUEDT",
+    "rate_day": "PR_DUEDT",
+    "half_up": true
+   },
+   "RIGHT": 183517,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_DUEDT",
+    "rate_day": "PR_RCVDT",
+    "half_up": true
+   },
+   "RIGHT": 183517,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_DUEDT",
+    "rate_day": null,
+    "half_up": true
+   },
+   "RIGHT": 183517,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_RCVDT",
+    "rate_day": "PR_DUEDT",
+    "half_up": false
+   },
+   "RIGHT": 183517,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_RCVDT",
+    "rate_day": "PR_RCVDT",
+    "half_up": false
+   },
+   "RIGHT": 183517,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_RCVDT",
+    "rate_day": null,
+    "half_up": false
+   },
+   "RIGHT": 183517,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_DUEDT",
+    "rate_day": "PR_DUEDT",
+    "half_up": false
+   },
+   "RIGHT": 183515,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_DUEDT",
+    "rate_day": "PR_RCVDT",
+    "half_up": false
+   },
+   "RIGHT": 183515,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": "PR_DUEDT",
+    "rate_day": null,
+    "half_up": false
+   },
+   "RIGHT": 183515,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42329,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S13",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": null,
+    "rate_day": "PR_DUEDT",
+    "half_up": true
+   },
+   "RIGHT": 182304,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42114,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S14",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": null,
+    "rate_day": "PR_RCVDT",
+    "half_up": true
+   },
+   "RIGHT": 182304,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42114,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S15",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": null,
+    "rate_day": null,
+    "half_up": true
+   },
+   "RIGHT": 182304,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42114,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S16",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": null,
+    "rate_day": "PR_DUEDT",
+    "half_up": false
+   },
+   "RIGHT": 182302,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42114,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S17",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": null,
+    "rate_day": "PR_RCVDT",
+    "half_up": false
+   },
+   "RIGHT": 182302,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42114,
+   "TOTAL_HELD_OUT": 42331
+  },
+  {
+   "ID": "t0_commission/r1-search/S18",
+   "METHOD": "search",
+   "HOLES": {
+    "broker_day": null,
+    "rate_day": null,
+    "half_up": false
+   },
+   "RIGHT": 182302,
+   "TOTAL": 183527,
+   "RIGHT_HELD_OUT": 42114,
+   "TOTAL_HELD_OUT": 42331
+  }
+ ]
+}

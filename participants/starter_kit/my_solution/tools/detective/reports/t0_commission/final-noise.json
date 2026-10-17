@@ -1,0 +1,12 @@
+{
+ "findings": [
+  {
+   "ID": "t0_commission/final-noise/N1",
+   "TEXT": "isolated 7 of 10 differences as anomalies, 7 of them in whole francs"
+  },
+  {
+   "ID": "t0_commission/final-noise/N2",
+   "TEXT": "NREXCP lists 6 of the differing entities: 4 isolated, 2 not"
+  }
+ ]
+}

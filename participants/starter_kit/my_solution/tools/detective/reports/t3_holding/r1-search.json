@@ -1,0 +1,26 @@
+{
+ "findings": [
+  {
+   "ID": "t3_holding/r1-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "exact": true
+   },
+   "RIGHT": 25660,
+   "TOTAL": 25660,
+   "RIGHT_HELD_OUT": 5918,
+   "TOTAL_HELD_OUT": 5918
+  },
+  {
+   "ID": "t3_holding/r1-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "exact": false
+   },
+   "RIGHT": 23961,
+   "TOTAL": 25660,
+   "RIGHT_HELD_OUT": 5580,
+   "TOTAL_HELD_OUT": 5918
+  }
+ ]
+}

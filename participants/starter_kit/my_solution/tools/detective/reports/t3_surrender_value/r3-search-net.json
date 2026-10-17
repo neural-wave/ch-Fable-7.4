@@ -1,0 +1,118 @@
+{
+ "findings": [
+  {
+   "ID": "t3_surrender_value/r3-search-net/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": "net",
+    "floor": "zero"
+   },
+   "RIGHT": 4996,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r3-search-net/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "up",
+     "net"
+    ],
+    "floor": "zero"
+   },
+   "RIGHT": 4996,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r3-search-net/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": "net",
+    "floor": "none"
+   },
+   "RIGHT": 4995,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r3-search-net/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "up",
+     "net"
+    ],
+    "floor": "none"
+   },
+   "RIGHT": 4995,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r3-search-net/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "up",
+     "value"
+    ],
+    "floor": "zero"
+   },
+   "RIGHT": 4991,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r3-search-net/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "net",
+     "value"
+    ],
+    "floor": "zero"
+   },
+   "RIGHT": 4991,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r3-search-net/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "up",
+     "value"
+    ],
+    "floor": "none"
+   },
+   "RIGHT": 4990,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  },
+  {
+   "ID": "t3_surrender_value/r3-search-net/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "penalty": [
+     "net",
+     "value"
+    ],
+    "floor": "none"
+   },
+   "RIGHT": 4990,
+   "TOTAL": 5009,
+   "RIGHT_HELD_OUT": 1141,
+   "TOTAL_HELD_OUT": 1144
+  }
+ ]
+}

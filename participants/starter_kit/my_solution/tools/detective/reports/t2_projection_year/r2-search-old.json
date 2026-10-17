@@ -1,0 +1,316 @@
+{
+ "findings": [
+  {
+   "ID": "t2_projection_year/r2-search-old/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "nearest",
+    "half_up": false,
+    "growth": "decimal28"
+   },
+   "RIGHT": 18751,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 4043,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "months",
+    "half_up": false,
+    "growth": "decimal28"
+   },
+   "RIGHT": 18751,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 4043,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "nearest",
+    "half_up": false,
+    "growth": "fraction"
+   },
+   "RIGHT": 16796,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 3725,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "months",
+    "half_up": false,
+    "growth": "fraction"
+   },
+   "RIGHT": 16796,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 3725,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "calendar",
+    "half_up": false,
+    "growth": "decimal28"
+   },
+   "RIGHT": 14848,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 3193,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "calendar",
+    "half_up": false,
+    "growth": "fraction"
+   },
+   "RIGHT": 13376,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 2978,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "days365",
+    "half_up": false,
+    "growth": "decimal28"
+   },
+   "RIGHT": 10331,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 2423,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "completed",
+    "half_up": false,
+    "growth": "decimal28"
+   },
+   "RIGHT": 9841,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 2371,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "days365.25",
+    "half_up": false,
+    "growth": "decimal28"
+   },
+   "RIGHT": 9808,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 2371,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "days365",
+    "half_up": false,
+    "growth": "fraction"
+   },
+   "RIGHT": 9193,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 2242,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "completed",
+    "half_up": false,
+    "growth": "fraction"
+   },
+   "RIGHT": 8782,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 2190,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "days365.25",
+    "half_up": false,
+    "growth": "fraction"
+   },
+   "RIGHT": 8749,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 2190,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S13",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "days365",
+    "half_up": true,
+    "growth": "decimal28"
+   },
+   "RIGHT": 76,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 16,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S14",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "completed",
+    "half_up": true,
+    "growth": "decimal28"
+   },
+   "RIGHT": 75,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 17,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S15",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "nearest",
+    "half_up": true,
+    "growth": "decimal28"
+   },
+   "RIGHT": 75,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 17,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S16",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "days365.25",
+    "half_up": true,
+    "growth": "decimal28"
+   },
+   "RIGHT": 75,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 17,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S17",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "months",
+    "half_up": true,
+    "growth": "decimal28"
+   },
+   "RIGHT": 75,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 17,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S18",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "days365",
+    "half_up": true,
+    "growth": "fraction"
+   },
+   "RIGHT": 74,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 16,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S19",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "completed",
+    "half_up": true,
+    "growth": "fraction"
+   },
+   "RIGHT": 73,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 17,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S20",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "days365.25",
+    "half_up": true,
+    "growth": "fraction"
+   },
+   "RIGHT": 73,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 17,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S21",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "nearest",
+    "half_up": true,
+    "growth": "fraction"
+   },
+   "RIGHT": 73,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 14,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S22",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "months",
+    "half_up": true,
+    "growth": "fraction"
+   },
+   "RIGHT": 73,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 14,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S23",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "calendar",
+    "half_up": true,
+    "growth": "decimal28"
+   },
+   "RIGHT": 69,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 14,
+   "TOTAL_HELD_OUT": 4334
+  },
+  {
+   "ID": "t2_projection_year/r2-search-old/S24",
+   "METHOD": "search",
+   "HOLES": {
+    "age": "calendar",
+    "half_up": true,
+    "growth": "fraction"
+   },
+   "RIGHT": 67,
+   "TOTAL": 19505,
+   "RIGHT_HELD_OUT": 11,
+   "TOTAL_HELD_OUT": 4334
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_charges/r1-search-limit/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "limit": "value"
+   },
+   "RIGHT": 3693246,
+   "TOTAL": 3693246,
+   "RIGHT_HELD_OUT": 923965,
+   "TOTAL_HELD_OUT": 923965
+  },
+  {
+   "ID": "t3_booking_charges/r1-search-limit/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "limit": "all"
+   },
+   "RIGHT": 3693245,
+   "TOTAL": 3693246,
+   "RIGHT_HELD_OUT": 923964,
+   "TOTAL_HELD_OUT": 923965
+  },
+  {
+   "ID": "t3_booking_charges/r1-search-limit/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "limit": "none"
+   },
+   "RIGHT": 3693243,
+   "TOTAL": 3693246,
+   "RIGHT_HELD_OUT": 923962,
+   "TOTAL_HELD_OUT": 923965
+  }
+ ]
+}

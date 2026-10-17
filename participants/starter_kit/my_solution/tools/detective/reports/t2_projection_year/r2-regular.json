@@ -1,0 +1,51 @@
+{
+ "rows": {
+  "wrong": 44737
+ },
+ "differences": {
+  "value": [
+   {
+    "DIFF": -7415,
+    "ROWS": 5
+   },
+   {
+    "DIFF": -15974,
+    "ROWS": 5
+   },
+   {
+    "DIFF": -38231,
+    "ROWS": 4
+   },
+   {
+    "DIFF": -16211,
+    "ROWS": 4
+   },
+   {
+    "DIFF": -6076,
+    "ROWS": 4
+   },
+   {
+    "DIFF": -103470,
+    "ROWS": 4
+   },
+   {
+    "DIFF": -706,
+    "ROWS": 4
+   },
+   {
+    "DIFF": -141213,
+    "ROWS": 4
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t2_projection_year/r2-regular/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [],
+   "ROWS": 44737,
+   "WRONG": 44737,
+   "SHARE": 1.0
+  }
+ ]
+}

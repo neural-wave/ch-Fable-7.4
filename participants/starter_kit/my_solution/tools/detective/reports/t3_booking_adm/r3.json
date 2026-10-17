@@ -1,0 +1,209 @@
+{
+ "rows": {
+  "missing": 7,
+  "right": 1787188,
+  "wrong": 40310
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": -1,
+    "ROWS": 12178
+   },
+   {
+    "DIFF": -2,
+    "ROWS": 4172
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 2721
+   },
+   {
+    "DIFF": -3,
+    "ROWS": 2312
+   },
+   {
+    "DIFF": -4,
+    "ROWS": 1709
+   },
+   {
+    "DIFF": 2,
+    "ROWS": 1666
+   },
+   {
+    "DIFF": 3,
+    "ROWS": 1417
+   },
+   {
+    "DIFF": -5,
+    "ROWS": 1082
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 40310
+   }
+  ],
+  "units": [
+   {
+    "DIFF": 17,
+    "ROWS": 302
+   },
+   {
+    "DIFF": 18,
+    "ROWS": 270
+   },
+   {
+    "DIFF": 33,
+    "ROWS": 234
+   },
+   {
+    "DIFF": 23,
+    "ROWS": 234
+   },
+   {
+    "DIFF": 25,
+    "ROWS": 225
+   },
+   {
+    "DIFF": 16,
+    "ROWS": 223
+   },
+   {
+    "DIFF": 24,
+    "ROWS": 219
+   },
+   {
+    "DIFF": 22,
+    "ROWS": 218
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_adm/r3/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_TRDDT:day > 29.5",
+    "PH_BEGDT@BK_TRDDT <= 2007-03-16",
+    "PH_PREMI@last <= 219750"
+   ],
+   "ROWS": 74652,
+   "WRONG": 9252,
+   "SHARE": 0.1239350586722392
+  },
+  {
+   "ID": "t3_booking_adm/r3/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_TRDDT:day > 29.5",
+    "PH_BEGDT@BK_TRDDT > 2007-03-16",
+    "BR_SINCE@BK_TRDDT:month_end"
+   ],
+   "ROWS": 2063,
+   "WRONG": 527,
+   "SHARE": 0.25545322346097915
+  },
+  {
+   "ID": "t3_booking_adm/r3/C1",
+   "METHOD": "change point",
+   "COLUMN": "PH_ENDDT@BK_TRDDT",
+   "BEFORE": "2037-06-03",
+   "AFTER": "2037-06-30",
+   "RATE_BEFORE": 0.023437697061420102,
+   "RATE_AFTER": 0.018936594705340287,
+   "EXPLAINED": 0.005294730284425906
+  },
+  {
+   "ID": "t3_booking_adm/r3/C2",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@last",
+   "BEFORE": "2008-11-16T16:28:18.000000",
+   "AFTER": "2008-11-18T12:09:53.000000",
+   "RATE_BEFORE": 0.02065450393307962,
+   "RATE_AFTER": 0.023039640465450283,
+   "EXPLAINED": 0.0036815043636411553
+  },
+  {
+   "ID": "t3_booking_adm/r3/C3",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@last",
+   "BEFORE": "1996-10-14T12:29:22.000000",
+   "AFTER": "1996-10-16T15:41:43.000000",
+   "RATE_BEFORE": 0.017525086793170684,
+   "RATE_AFTER": 0.02252109186525072,
+   "EXPLAINED": 0.0034684735760621994
+  },
+  {
+   "ID": "t3_booking_adm/r3/C4",
+   "METHOD": "change point",
+   "COLUMN": "BR_SINCE@BK_PRCDT",
+   "BEFORE": "1996-04-29",
+   "AFTER": "1996-04-30",
+   "RATE_BEFORE": 0.023559669943403236,
+   "RATE_AFTER": 0.02073254582282872,
+   "EXPLAINED": 0.003453432980382724
+  },
+  {
+   "ID": "t3_booking_adm/r3/C5",
+   "METHOD": "change point",
+   "COLUMN": "BR_SINCE@BK_TRDDT",
+   "BEFORE": "1996-04-29",
+   "AFTER": "1996-04-30",
+   "RATE_BEFORE": 0.023559834528110543,
+   "RATE_AFTER": 0.020732417398629816,
+   "EXPLAINED": 0.003453417419314244
+  },
+  {
+   "ID": "t3_booking_adm/r3/C6",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_TRDDT",
+   "BEFORE": "1996-10-14T12:29:22.000000",
+   "AFTER": "1996-10-16T15:41:43.000000",
+   "RATE_BEFORE": 0.01792154895073935,
+   "RATE_AFTER": 0.022484168626741453,
+   "EXPLAINED": 0.0033473641925076646
+  },
+  {
+   "ID": "t3_booking_adm/r3/C7",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_PRCDT",
+   "BEFORE": "1996-10-14T12:29:22.000000",
+   "AFTER": "1996-10-16T15:41:43.000000",
+   "RATE_BEFORE": 0.01792154895073935,
+   "RATE_AFTER": 0.022484168626741453,
+   "EXPLAINED": 0.0033473641925076646
+  },
+  {
+   "ID": "t3_booking_adm/r3/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@BK_TRDDT",
+   "BEFORE": "1996-10-11",
+   "AFTER": "1996-10-13",
+   "RATE_BEFORE": 0.017775591934237337,
+   "RATE_AFTER": 0.022503046702830733,
+   "EXPLAINED": 0.0032714505669595487
+  },
+  {
+   "ID": "t3_booking_adm/r3/C9",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@last",
+   "BEFORE": "1996-10-01",
+   "AFTER": "1996-10-31",
+   "RATE_BEFORE": 0.01779118889559445,
+   "RATE_AFTER": 0.02248699456314068,
+   "EXPLAINED": 0.0032516071125612634
+  },
+  {
+   "ID": "t3_booking_adm/r3/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_TRDDT",
+   "BEFORE": "1996-10-01",
+   "AFTER": "1996-10-31",
+   "RATE_BEFORE": 0.01819173222920624,
+   "RATE_AFTER": 0.02245010285339898,
+   "EXPLAINED": 0.003135070533362427
+  }
+ ]
+}

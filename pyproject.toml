@@ -25,8 +25,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["participants/starter_kit/my_solution/tools/neuron"]
+packages = ["participants/starter_kit/my_solution/tools/detective"]
 
 [tool.hatch.build]
-# editable install: the tools (neuron) and the submission modules (legacy, money) are importable everywhere
+# editable install: the tools (detective) and the submission modules are importable everywhere
 dev-mode-dirs = ["participants/starter_kit/my_solution", "participants/starter_kit/my_solution/tools"]

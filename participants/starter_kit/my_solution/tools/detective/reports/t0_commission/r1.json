@@ -1,0 +1,154 @@
+{
+ "rows": {
+  "right": 224418,
+  "wrong": 1440
+ },
+ "differences": {
+  "amount": [
+   {
+    "DIFF": 785,
+    "ROWS": 199
+   },
+   {
+    "DIFF": -740,
+    "ROWS": 143
+   },
+   {
+    "DIFF": -700,
+    "ROWS": 142
+   },
+   {
+    "DIFF": 340,
+    "ROWS": 139
+   },
+   {
+    "DIFF": 305,
+    "ROWS": 110
+   },
+   {
+    "DIFF": 510,
+    "ROWS": 85
+   },
+   {
+    "DIFF": -580,
+    "ROWS": 69
+   },
+   {
+    "DIFF": 1160,
+    "ROWS": 63
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t0_commission/r1/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BR_TIER@PR_RCVDT!=BR_TIER@last"
+   ],
+   "ROWS": 1430,
+   "WRONG": 1430,
+   "SHARE": 1.0
+  },
+  {
+   "ID": "t0_commission/r1/C1",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH@last",
+   "BEFORE": "1977-06-08",
+   "AFTER": "1977-06-12",
+   "RATE_BEFORE": 0.0064324740655161625,
+   "RATE_AFTER": 0.005098497552382404,
+   "EXPLAINED": 0.02045756702431839
+  },
+  {
+   "ID": "t0_commission/r1/C2",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH@PR_DUEDT",
+   "BEFORE": "1977-06-08",
+   "AFTER": "1977-06-12",
+   "RATE_BEFORE": 0.006423738387395291,
+   "RATE_AFTER": 0.0051180901532026325,
+   "EXPLAINED": 0.020437764937454403
+  },
+  {
+   "ID": "t0_commission/r1/C3",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH@PR_RCVDT",
+   "BEFORE": "1977-06-08",
+   "AFTER": "1977-06-12",
+   "RATE_BEFORE": 0.006423738387395291,
+   "RATE_AFTER": 0.0051180901532026325,
+   "EXPLAINED": 0.020437764937454403
+  },
+  {
+   "ID": "t0_commission/r1/C4",
+   "METHOD": "change point",
+   "COLUMN": "BR_SINCE@last",
+   "BEFORE": "1980-07-30",
+   "AFTER": "1980-10-10",
+   "RATE_BEFORE": 0.0,
+   "RATE_AFTER": 0.006524102935846321,
+   "EXPLAINED": 0.013291786485772108
+  },
+  {
+   "ID": "t0_commission/r1/C5",
+   "METHOD": "change point",
+   "COLUMN": "AD_CHGTS@last",
+   "BEFORE": "2020-06-27T14:28:09.000000",
+   "AFTER": "2020-07-24T14:30:04.000000",
+   "RATE_BEFORE": 0.006562181741097967,
+   "RATE_AFTER": 0.001806480749689511,
+   "EXPLAINED": 0.012630345417714668
+  },
+  {
+   "ID": "t0_commission/r1/C6",
+   "METHOD": "change point",
+   "COLUMN": "AD_VLDFR@last",
+   "BEFORE": "2020-08-15",
+   "AFTER": "2020-10-17",
+   "RATE_BEFORE": 0.006548541523915513,
+   "RATE_AFTER": 0.0019036287923854848,
+   "EXPLAINED": 0.012123031813514219
+  },
+  {
+   "ID": "t0_commission/r1/C7",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDTO@PR_RCVDT",
+   "BEFORE": "2022-01-20",
+   "AFTER": "2022-01-26",
+   "RATE_BEFORE": 0.025492600302261255,
+   "RATE_AFTER": 0.0028618002086074146,
+   "EXPLAINED": 0.01060367359586937
+  },
+  {
+   "ID": "t0_commission/r1/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDTO@PR_DUEDT",
+   "BEFORE": "2022-01-20",
+   "AFTER": "2022-01-26",
+   "RATE_BEFORE": 0.02548896618577864,
+   "RATE_AFTER": 0.0028618752096611876,
+   "EXPLAINED": 0.010601431558590517
+  },
+  {
+   "ID": "t0_commission/r1/C9",
+   "METHOD": "change point",
+   "COLUMN": "AD_VLDTO@PR_RCVDT",
+   "BEFORE": "2019-10-17",
+   "AFTER": "2019-10-24",
+   "RATE_BEFORE": 0.08749447635881573,
+   "RATE_AFTER": 0.005554685927681746,
+   "EXPLAINED": 0.010512745713328098
+  },
+  {
+   "ID": "t0_commission/r1/C10",
+   "METHOD": "change point",
+   "COLUMN": "AD_VLDTO@PR_DUEDT",
+   "BEFORE": "2019-10-17",
+   "AFTER": "2019-10-24",
+   "RATE_BEFORE": 0.08734009704455227,
+   "RATE_AFTER": 0.005554785299944989,
+   "EXPLAINED": 0.010491468610034995
+  }
+ ]
+}

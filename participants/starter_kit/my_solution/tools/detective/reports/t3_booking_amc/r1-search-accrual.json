@@ -1,0 +1,54 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_amc/r1-search-accrual/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "accrual": [
+     "days360",
+     "month"
+    ]
+   },
+   "RIGHT": 1441857,
+   "TOTAL": 1467108,
+   "RIGHT_HELD_OUT": 360433,
+   "TOTAL_HELD_OUT": 366852
+  },
+  {
+   "ID": "t3_booking_amc/r1-search-accrual/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "accrual": "month"
+   },
+   "RIGHT": 1350566,
+   "TOTAL": 1467108,
+   "RIGHT_HELD_OUT": 337927,
+   "TOTAL_HELD_OUT": 366852
+  },
+  {
+   "ID": "t3_booking_amc/r1-search-accrual/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "accrual": [
+     "days365",
+     "month"
+    ]
+   },
+   "RIGHT": 1308389,
+   "TOTAL": 1467108,
+   "RIGHT_HELD_OUT": 327348,
+   "TOTAL_HELD_OUT": 366852
+  },
+  {
+   "ID": "t3_booking_amc/r1-search-accrual/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "accrual": "days360"
+   },
+   "RIGHT": 578543,
+   "TOTAL": 1467108,
+   "RIGHT_HELD_OUT": 144123,
+   "TOTAL_HELD_OUT": 366852
+  }
+ ]
+}

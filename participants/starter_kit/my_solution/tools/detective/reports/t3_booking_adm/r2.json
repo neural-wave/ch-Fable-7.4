@@ -1,0 +1,197 @@
+{
+ "rows": {
+  "missing": 7,
+  "right": 1642263,
+  "wrong": 185235
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": -1,
+    "ROWS": 78915
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 49527
+   },
+   {
+    "DIFF": -2,
+    "ROWS": 18845
+   },
+   {
+    "DIFF": -3,
+    "ROWS": 9857
+   },
+   {
+    "DIFF": -4,
+    "ROWS": 5371
+   },
+   {
+    "DIFF": 2,
+    "ROWS": 4491
+   },
+   {
+    "DIFF": -5,
+    "ROWS": 2278
+   },
+   {
+    "DIFF": 3,
+    "ROWS": 1431
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 185235
+   }
+  ],
+  "units": [
+   {
+    "DIFF": 18,
+    "ROWS": 1648
+   },
+   {
+    "DIFF": 17,
+    "ROWS": 1536
+   },
+   {
+    "DIFF": 33,
+    "ROWS": 1460
+   },
+   {
+    "DIFF": 34,
+    "ROWS": 1379
+   },
+   {
+    "DIFF": 30,
+    "ROWS": 1304
+   },
+   {
+    "DIFF": 19,
+    "ROWS": 1296
+   },
+   {
+    "DIFF": 32,
+    "ROWS": 1283
+   },
+   {
+    "DIFF": 35,
+    "ROWS": 1257
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_adm/r2/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_POTCD != 1",
+    "BK_PRCDT <= 2007-08-16",
+    "BK_EVTNR > 63.5"
+   ],
+   "ROWS": 69503,
+   "WRONG": 23839,
+   "SHARE": 0.34299238881774885
+  },
+  {
+   "ID": "t3_booking_adm/r2/C1",
+   "METHOD": "change point",
+   "COLUMN": "BK_TRDDT",
+   "BEFORE": "2007-08-16",
+   "AFTER": "2007-08-17",
+   "RATE_BEFORE": 0.26019706147495614,
+   "RATE_AFTER": 0.08296770459232955,
+   "EXPLAINED": 0.03207689785693728
+  },
+  {
+   "ID": "t3_booking_adm/r2/C2",
+   "METHOD": "change point",
+   "COLUMN": "BK_PRCDT",
+   "BEFORE": "2007-08-16",
+   "AFTER": "2007-08-17",
+   "RATE_BEFORE": 0.26019706147495614,
+   "RATE_AFTER": 0.08296770459232955,
+   "EXPLAINED": 0.03207689785693728
+  },
+  {
+   "ID": "t3_booking_adm/r2/C3",
+   "METHOD": "change point",
+   "COLUMN": "EV_CHGTS",
+   "BEFORE": "2007-08-16T01:30:00.000000",
+   "AFTER": "2007-08-17T01:30:00.000000",
+   "RATE_BEFORE": 0.26019706147495614,
+   "RATE_AFTER": 0.08296770459232955,
+   "EXPLAINED": 0.03207689785693728
+  },
+  {
+   "ID": "t3_booking_adm/r2/C4",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_TRDDT",
+   "BEFORE": "2003-07-07",
+   "AFTER": "2003-07-29",
+   "RATE_BEFORE": 0.13574388782596605,
+   "RATE_AFTER": 0.08438233926073796,
+   "EXPLAINED": 0.006409305546323771
+  },
+  {
+   "ID": "t3_booking_adm/r2/C5",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_PRCDT",
+   "BEFORE": "2003-07-07",
+   "AFTER": "2003-07-29",
+   "RATE_BEFORE": 0.13574388782596605,
+   "RATE_AFTER": 0.08438233926073796,
+   "EXPLAINED": 0.006409305546323771
+  },
+  {
+   "ID": "t3_booking_adm/r2/C6",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_TRDDT",
+   "BEFORE": "2003-07-22T09:52:42.000000",
+   "AFTER": "2003-07-22T15:20:47.000000",
+   "RATE_BEFORE": 0.13544810150625244,
+   "RATE_AFTER": 0.08425571013425555,
+   "EXPLAINED": 0.006401548043697981
+  },
+  {
+   "ID": "t3_booking_adm/r2/C7",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_PRCDT",
+   "BEFORE": "2003-07-22T09:52:42.000000",
+   "AFTER": "2003-07-22T15:20:47.000000",
+   "RATE_BEFORE": 0.13544810150625244,
+   "RATE_AFTER": 0.08425571013425555,
+   "EXPLAINED": 0.006401548043697981
+  },
+  {
+   "ID": "t3_booking_adm/r2/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_BEGDT@BK_TRDDT",
+   "BEFORE": "2003-07-07",
+   "AFTER": "2003-07-29",
+   "RATE_BEFORE": 0.13460447260311728,
+   "RATE_AFTER": 0.08442755039923745,
+   "EXPLAINED": 0.006180394068461422
+  },
+  {
+   "ID": "t3_booking_adm/r2/C9",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@BK_TRDDT",
+   "BEFORE": "2003-06-22",
+   "AFTER": "2003-07-08",
+   "RATE_BEFORE": 0.13439781418302998,
+   "RATE_AFTER": 0.08434103565044061,
+   "EXPLAINED": 0.0061733465223954
+  },
+  {
+   "ID": "t3_booking_adm/r2/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@last",
+   "BEFORE": "2003-07-07",
+   "AFTER": "2003-07-29",
+   "RATE_BEFORE": 0.1354895738970396,
+   "RATE_AFTER": 0.08497919356223385,
+   "EXPLAINED": 0.006138285463006637
+  }
+ ]
+}

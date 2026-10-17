@@ -1,0 +1,190 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_rsk/r1-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": "month",
+    "age_basis": "policy",
+    "risk_age": [
+     "nearest_days365",
+     "nearest"
+    ]
+   },
+   "RIGHT": 714346,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 178291,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": "month",
+    "age_basis": "policy",
+    "risk_age": "nearest"
+   },
+   "RIGHT": 713475,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 178104,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": [
+     "anniversary360",
+     "month"
+    ],
+    "age_basis": "policy",
+    "risk_age": [
+     "nearest_days365",
+     "nearest"
+    ]
+   },
+   "RIGHT": 690435,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 172329,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": [
+     "anniversary360",
+     "month"
+    ],
+    "age_basis": "policy",
+    "risk_age": "nearest"
+   },
+   "RIGHT": 690036,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 172247,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": "month",
+    "age_basis": "attained",
+    "risk_age": "completed"
+   },
+   "RIGHT": 613822,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 153234,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": [
+     "anniversary360",
+     "month"
+    ],
+    "age_basis": "attained",
+    "risk_age": "completed"
+   },
+   "RIGHT": 596505,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 148949,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": "month",
+    "age_basis": "attained",
+    "risk_age": "nearest"
+   },
+   "RIGHT": 534322,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 132996,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": "month",
+    "age_basis": "attained",
+    "risk_age": [
+     "nearest_days365",
+     "nearest"
+    ]
+   },
+   "RIGHT": 532834,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 132656,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": [
+     "anniversary360",
+     "month"
+    ],
+    "age_basis": "attained",
+    "risk_age": "nearest"
+   },
+   "RIGHT": 519801,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 129358,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": [
+     "anniversary360",
+     "month"
+    ],
+    "age_basis": "attained",
+    "risk_age": [
+     "nearest_days365",
+     "nearest"
+    ]
+   },
+   "RIGHT": 518831,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 129140,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": "month",
+    "age_basis": "policy",
+    "risk_age": "completed"
+   },
+   "RIGHT": 506583,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 126410,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_accrual": [
+     "anniversary360",
+     "month"
+    ],
+    "age_basis": "policy",
+    "risk_age": "completed"
+   },
+   "RIGHT": 497469,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 124097,
+   "TOTAL_HELD_OUT": 190856
+  }
+ ]
+}

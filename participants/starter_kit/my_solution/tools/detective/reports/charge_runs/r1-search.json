@@ -1,0 +1,160 @@
+{
+ "findings": [
+  {
+   "ID": "charge_runs/r1-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "after_invested",
+    "ending": "before",
+    "maturity": "before"
+   },
+   "RIGHT": 548855,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126269,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "after_invested",
+    "ending": "before",
+    "maturity": "on"
+   },
+   "RIGHT": 548855,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126269,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "invested",
+    "ending": "before",
+    "maturity": "before"
+   },
+   "RIGHT": 548855,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126268,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "invested",
+    "ending": "before",
+    "maturity": "on"
+   },
+   "RIGHT": 548855,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126268,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "after_invested",
+    "ending": "on",
+    "maturity": "before"
+   },
+   "RIGHT": 548831,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126264,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "after_invested",
+    "ending": "on",
+    "maturity": "on"
+   },
+   "RIGHT": 548831,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126264,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "invested",
+    "ending": "on",
+    "maturity": "before"
+   },
+   "RIGHT": 548831,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126263,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "invested",
+    "ending": "on",
+    "maturity": "on"
+   },
+   "RIGHT": 548831,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126263,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "start",
+    "ending": "before",
+    "maturity": "before"
+   },
+   "RIGHT": 548463,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126214,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "start",
+    "ending": "before",
+    "maturity": "on"
+   },
+   "RIGHT": 548463,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126214,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "start",
+    "ending": "on",
+    "maturity": "before"
+   },
+   "RIGHT": 548439,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126209,
+   "TOTAL_HELD_OUT": 126269
+  },
+  {
+   "ID": "charge_runs/r1-search/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "first": "start",
+    "ending": "on",
+    "maturity": "on"
+   },
+   "RIGHT": 548439,
+   "TOTAL": 548977,
+   "RIGHT_HELD_OUT": 126209,
+   "TOTAL_HELD_OUT": 126269
+  }
+ ]
+}

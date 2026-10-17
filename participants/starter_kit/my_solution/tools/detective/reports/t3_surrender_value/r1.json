@@ -1,0 +1,174 @@
+{
+ "rows": {
+  "missing": 7,
+  "right": 5894,
+  "wrong": 252
+ },
+ "differences": {
+  "surrender_value": [
+   {
+    "DIFF": 1,
+    "ROWS": 230
+   },
+   {
+    "DIFF": -1,
+    "ROWS": 5
+   },
+   {
+    "DIFF": -2900,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -47400,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -48400,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -15800,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -22800,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -49800,
+    "ROWS": 1
+   }
+  ],
+  "policy_value": [
+   {
+    "DIFF": 0,
+    "ROWS": 252
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_surrender_value/r1/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "valuation_date:weekday_right > 5.5",
+    "PR_RCVDT:first > 2002-01-03",
+    "PR_RCVDT:last > 2005-01-18"
+   ],
+   "ROWS": 286,
+   "WRONG": 230,
+   "SHARE": 0.8041958041958042
+  },
+  {
+   "ID": "t3_surrender_value/r1/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "valuation_date:weekday_right <= 5.5",
+    "EX_TSTMP > 2020-04-09 13:42:39.375000"
+   ],
+   "ROWS": 31,
+   "WRONG": 11,
+   "SHARE": 0.3548387096774194
+  },
+  {
+   "ID": "t3_surrender_value/r1/C1",
+   "METHOD": "change point",
+   "COLUMN": "valuation_date",
+   "BEFORE": "2006-12-31",
+   "AFTER": "2020-04-30",
+   "RATE_BEFORE": 0.3142857142857143,
+   "RATE_AFTER": 0.00516795865633075,
+   "EXPLAINED": 0.24926674767032725
+  },
+  {
+   "ID": "t3_surrender_value/r1/C2",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@RK_BEGDT",
+   "BEFORE": "2002-07-23T14:39:07.000000",
+   "AFTER": "2002-07-27T08:51:29.000000",
+   "RATE_BEFORE": 0.015283842794759825,
+   "RATE_AFTER": 0.04980121364302155,
+   "EXPLAINED": 0.12324609802637863
+  },
+  {
+   "ID": "t3_surrender_value/r1/C3",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@RK_BEGDT",
+   "BEFORE": "2002-07-20",
+   "AFTER": "2002-07-24",
+   "RATE_BEFORE": 0.015283842794759825,
+   "RATE_AFTER": 0.04980121364302155,
+   "EXPLAINED": 0.12324609802637863
+  },
+  {
+   "ID": "t3_surrender_value/r1/C4",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@valuation_date",
+   "BEFORE": "2002-07-23T14:39:07.000000",
+   "AFTER": "2002-07-27T08:51:29.000000",
+   "RATE_BEFORE": 0.01564828614008942,
+   "RATE_AFTER": 0.04946996466431095,
+   "EXPLAINED": 0.12266946325750418
+  },
+  {
+   "ID": "t3_surrender_value/r1/C5",
+   "METHOD": "change point",
+   "COLUMN": "RK_BEGDT",
+   "BEFORE": "2002-06-20",
+   "AFTER": "2002-07-01",
+   "RATE_BEFORE": 0.012762762762762763,
+   "RATE_AFTER": 0.050197054552997306,
+   "EXPLAINED": 0.12050147057792004
+  },
+  {
+   "ID": "t3_surrender_value/r1/C6",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:first",
+   "BEFORE": "2002-06-20",
+   "AFTER": "2002-07-01",
+   "RATE_BEFORE": 0.012762762762762763,
+   "RATE_AFTER": 0.050197054552997306,
+   "EXPLAINED": 0.12050147057792004
+  },
+  {
+   "ID": "t3_surrender_value/r1/C7",
+   "METHOD": "change point",
+   "COLUMN": "PR_RCVDT:first",
+   "BEFORE": "2002-10-01",
+   "AFTER": "2002-10-02",
+   "RATE_BEFORE": 0.017278617710583154,
+   "RATE_AFTER": 0.04932829554995802,
+   "EXPLAINED": 0.1199662975753263
+  },
+  {
+   "ID": "t3_surrender_value/r1/C8",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@valuation_date",
+   "BEFORE": "2002-06-20",
+   "AFTER": "2002-07-01",
+   "RATE_BEFORE": 0.013076923076923076,
+   "RATE_AFTER": 0.04986606222954873,
+   "EXPLAINED": 0.11985247162133926
+  },
+  {
+   "ID": "t3_surrender_value/r1/C9",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@RK_ENDDT",
+   "BEFORE": "2002-07-23T14:39:07.000000",
+   "AFTER": "2002-07-27T08:51:29.000000",
+   "RATE_BEFORE": 0.015765765765765764,
+   "RATE_AFTER": 0.04936735117195602,
+   "EXPLAINED": 0.11446825634775443
+  },
+  {
+   "ID": "t3_surrender_value/r1/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@RK_ENDDT",
+   "BEFORE": "2002-11-26",
+   "AFTER": "2002-11-30",
+   "RATE_BEFORE": 0.020378457059679767,
+   "RATE_AFTER": 0.04833647206528562,
+   "EXPLAINED": 0.11249964074668878
+  }
+ ]
+}

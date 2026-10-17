@@ -1,0 +1,26 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r6-search-pot/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "pot_day": "PR_RCVDT"
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r6-search-pot/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "pot_day": "PR_DUEDT"
+   },
+   "RIGHT": 325706,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81559,
+   "TOTAL_HELD_OUT": 81619
+  }
+ ]
+}

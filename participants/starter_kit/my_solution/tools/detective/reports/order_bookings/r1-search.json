@@ -1,0 +1,160 @@
+{
+ "findings": [
+  {
+   "ID": "order_bookings/r1-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_BIDPR",
+    "fx_day": "BK_TRDDT",
+    "fx_round": "half_up"
+   },
+   "RIGHT": 19964,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 4948,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_BIDPR",
+    "fx_day": "BK_PRCDT",
+    "fx_round": "half_up"
+   },
+   "RIGHT": 19927,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 4936,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_BIDPR",
+    "fx_day": "BK_TRDDT",
+    "fx_round": "down"
+   },
+   "RIGHT": 16544,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 4053,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_BIDPR",
+    "fx_day": "BK_PRCDT",
+    "fx_round": "down"
+   },
+   "RIGHT": 16529,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 4047,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_ASKPR",
+    "fx_day": "BK_TRDDT",
+    "fx_round": "half_up"
+   },
+   "RIGHT": 5393,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 1313,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_MIDPR",
+    "fx_day": "BK_TRDDT",
+    "fx_round": "half_up"
+   },
+   "RIGHT": 5393,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 1313,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_ASKPR",
+    "fx_day": "BK_PRCDT",
+    "fx_round": "half_up"
+   },
+   "RIGHT": 5389,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 1312,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_MIDPR",
+    "fx_day": "BK_PRCDT",
+    "fx_round": "half_up"
+   },
+   "RIGHT": 5389,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 1312,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_ASKPR",
+    "fx_day": "BK_TRDDT",
+    "fx_round": "down"
+   },
+   "RIGHT": 4490,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 1087,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_MIDPR",
+    "fx_day": "BK_TRDDT",
+    "fx_round": "down"
+   },
+   "RIGHT": 4490,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 1087,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_ASKPR",
+    "fx_day": "BK_PRCDT",
+    "fx_round": "down"
+   },
+   "RIGHT": 4487,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 1086,
+   "TOTAL_HELD_OUT": 4948
+  },
+  {
+   "ID": "order_bookings/r1-search/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "price": "FP_MIDPR",
+    "fx_day": "BK_PRCDT",
+    "fx_round": "down"
+   },
+   "RIGHT": 4487,
+   "TOTAL": 19964,
+   "RIGHT_HELD_OUT": 1086,
+   "TOTAL_HELD_OUT": 4948
+  }
+ ]
+}

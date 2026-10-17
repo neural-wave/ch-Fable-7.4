@@ -1,0 +1,201 @@
+{
+ "rows": {
+  "missing": 204,
+  "right": 406907,
+  "wrong": 525
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": 0,
+    "ROWS": 363
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 160
+   },
+   {
+    "DIFF": -1,
+    "ROWS": 2
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 525
+   }
+  ],
+  "units": [
+   {
+    "DIFF": 11,
+    "ROWS": 12
+   },
+   {
+    "DIFF": 25,
+    "ROWS": 12
+   },
+   {
+    "DIFF": 15,
+    "ROWS": 10
+   },
+   {
+    "DIFF": 12,
+    "ROWS": 9
+   },
+   {
+    "DIFF": 23,
+    "ROWS": 9
+   },
+   {
+    "DIFF": 13,
+    "ROWS": 8
+   },
+   {
+    "DIFF": 24,
+    "ROWS": 7
+   },
+   {
+    "DIFF": 26,
+    "ROWS": 7
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r5/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_TRDDT-BK_RCVDT:days > 1.5",
+    "BK_TRDDT:weekday > 1.5",
+    "BK_RCVDT:month > 1.5"
+   ],
+   "ROWS": 18390,
+   "WRONG": 285,
+   "SHARE": 0.015497553017944535
+  },
+  {
+   "ID": "t3_booking_prm/r5/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_TRDDT-BK_RCVDT:days <= 1.5",
+    "PR_DUENR <= 25.5",
+    "PH_PAYMT@BK_RCVDT = UB"
+   ],
+   "ROWS": 11310,
+   "WRONG": 113,
+   "SHARE": 0.009991158267020336
+  },
+  {
+   "ID": "t3_booking_prm/r5/T3",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_TRDDT-BK_RCVDT:days > 1.5",
+    "BK_TRDDT:weekday <= 1.5",
+    "BK_TRDDT-BK_RCVDT:days > 3.5"
+   ],
+   "ROWS": 3425,
+   "WRONG": 104,
+   "SHARE": 0.030364963503649634
+  },
+  {
+   "ID": "t3_booking_prm/r5/C1",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@last",
+   "BEFORE": "2022-05-14",
+   "AFTER": "2022-05-21",
+   "RATE_BEFORE": 0.0017050039239960648,
+   "RATE_AFTER": 0.0024475524475524478,
+   "EXPLAINED": 0.0008324456462304912
+  },
+  {
+   "ID": "t3_booking_prm/r5/C2",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@last",
+   "BEFORE": "2022-05-14",
+   "AFTER": "2022-05-21",
+   "RATE_BEFORE": 0.0017050039239960648,
+   "RATE_AFTER": 0.0024475524475524478,
+   "EXPLAINED": 0.0008324456462304912
+  },
+  {
+   "ID": "t3_booking_prm/r5/C3",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@last",
+   "BEFORE": "2022-04-15T10:56:13.000000",
+   "AFTER": "2022-04-19T12:03:27.000000",
+   "RATE_BEFORE": 0.001704110058952249,
+   "RATE_AFTER": 0.0024481660419871307,
+   "EXPLAINED": 0.0007929035559032709
+  },
+  {
+   "ID": "t3_booking_prm/r5/C4",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@last",
+   "BEFORE": "2022-09-03",
+   "AFTER": "2022-09-12",
+   "RATE_BEFORE": 0.0017884646562905317,
+   "RATE_AFTER": 0.0017851598882334678,
+   "EXPLAINED": 0.0006745019626663895
+  },
+  {
+   "ID": "t3_booking_prm/r5/C5",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_RCVDT",
+   "BEFORE": "2022-09-30",
+   "AFTER": "2022-10-01",
+   "RATE_BEFORE": 0.0017819972968007108,
+   "RATE_AFTER": 0.0020331106593087424,
+   "EXPLAINED": 0.0006439523156390035
+  },
+  {
+   "ID": "t3_booking_prm/r5/C6",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_TRDDT",
+   "BEFORE": "2022-09-30",
+   "AFTER": "2022-10-01",
+   "RATE_BEFORE": 0.0017819972968007108,
+   "RATE_AFTER": 0.0020331106593087424,
+   "EXPLAINED": 0.0006439523156390035
+  },
+  {
+   "ID": "t3_booking_prm/r5/C7",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@last",
+   "BEFORE": "2022-09-01T13:25:59.000000",
+   "AFTER": "2022-09-04T14:26:45.000000",
+   "RATE_BEFORE": 0.0017864236860550148,
+   "RATE_AFTER": 0.0018499155473337087,
+   "EXPLAINED": 0.0006106973982470254
+  },
+  {
+   "ID": "t3_booking_prm/r5/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@BK_RCVDT",
+   "BEFORE": "2022-08-29",
+   "AFTER": "2022-09-01",
+   "RATE_BEFORE": 0.0017788184926774485,
+   "RATE_AFTER": 0.002183179124649132,
+   "EXPLAINED": 0.0005985915351716076
+  },
+  {
+   "ID": "t3_booking_prm/r5/C9",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@BK_TRDDT",
+   "BEFORE": "2022-10-01",
+   "AFTER": "2022-10-19",
+   "RATE_BEFORE": 0.0017803317410234264,
+   "RATE_AFTER": 0.002091453560224356,
+   "EXPLAINED": 0.000596093412626077
+  },
+  {
+   "ID": "t3_booking_prm/r5/C10",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@BK_TRDDT",
+   "BEFORE": "2022-10-01",
+   "AFTER": "2022-10-19",
+   "RATE_BEFORE": 0.0017803317410234264,
+   "RATE_AFTER": 0.002091453560224356,
+   "EXPLAINED": 0.000596093412626077
+  }
+ ]
+}

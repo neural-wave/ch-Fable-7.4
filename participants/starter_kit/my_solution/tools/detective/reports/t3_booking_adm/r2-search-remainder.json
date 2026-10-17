@@ -1,0 +1,139 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "largest",
+    "rounding": [
+     "down",
+     "half_up"
+    ]
+   },
+   "RIGHT": 1427910,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 357920,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "largest",
+    "rounding": "half_up"
+   },
+   "RIGHT": 1315557,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 329273,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "none",
+    "rounding": [
+     "down",
+     "half_up"
+    ]
+   },
+   "RIGHT": 1313394,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 328869,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "last",
+    "rounding": [
+     "down",
+     "half_up"
+    ]
+   },
+   "RIGHT": 1261688,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 316409,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "first",
+    "rounding": [
+     "down",
+     "half_up"
+    ]
+   },
+   "RIGHT": 1235531,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 309322,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "none",
+    "rounding": "half_up"
+   },
+   "RIGHT": 1234809,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 308832,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "hamilton",
+    "rounding": [
+     "down",
+     "half_up"
+    ]
+   },
+   "RIGHT": 1212099,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 303336,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "last",
+    "rounding": "half_up"
+   },
+   "RIGHT": 1192012,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 298429,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "hamilton",
+    "rounding": "half_up"
+   },
+   "RIGHT": 1178985,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 294932,
+   "TOTAL_HELD_OUT": 366257
+  },
+  {
+   "ID": "t3_booking_adm/r2-search-remainder/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "remainder": "first",
+    "rounding": "half_up"
+   },
+   "RIGHT": 1173701,
+   "TOTAL": 1461248,
+   "RIGHT_HELD_OUT": 293553,
+   "TOTAL_HELD_OUT": 366257
+  }
+ ]
+}

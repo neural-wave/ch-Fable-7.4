@@ -1,0 +1,96 @@
+{
+ "importance": [
+  {
+   "ID": "t4_annual_statement/r1-structure/I1",
+   "COLUMN": "EX_TARGET=t4_annual_statement.admin_fees",
+   "DROP": 0.07872926859508085,
+   "SPREAD": 9.368774715264039e-05
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I2",
+   "COLUMN": "EX_TSTMP",
+   "DROP": 0.015965208434665795,
+   "SPREAD": 0.00018245664377478462
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I3",
+   "COLUMN": "EV_EFFDT@last",
+   "DROP": 0.012231409687848749,
+   "SPREAD": 0.0079259579326692
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I4",
+   "COLUMN": "year",
+   "DROP": 0.0073293086511593275,
+   "SPREAD": 0.0043420435251317665
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I5",
+   "COLUMN": "PS_BIRTH@RK_BEGDT",
+   "DROP": 0.005984568872612228,
+   "SPREAD": 0.005614079937288605
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I6",
+   "COLUMN": "PH_VLDFR@RK_ENDDT:day",
+   "DROP": 0.003967459204791505,
+   "SPREAD": 0.001337992727697478
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I7",
+   "COLUMN": "PH_VLDFR@RK_ENDDT",
+   "DROP": 0.0039054676547166287,
+   "SPREAD": 0.0003226465589737643
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I8",
+   "COLUMN": "PH_CHGTS@last",
+   "DROP": 0.0025082734876447077,
+   "SPREAD": 0.0003937473482559577
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I9",
+   "COLUMN": "PS_BIRTH@RK_BEGDT:year",
+   "DROP": 0.002474893422219737,
+   "SPREAD": 0.000348269665846631
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/I10",
+   "COLUMN": "EV_EFFDT:last:day",
+   "DROP": 0.0023842903874949175,
+   "SPREAD": 0.0012795622636169184
+  }
+ ],
+ "clusters": [
+  {
+   "ID": "t4_annual_statement/r1-structure/K1",
+   "SIZE": 17,
+   "WRONG_SHARE": 0.11036857712679143,
+   "APART": [
+    "EX_TARGET=t4_annual_statement.admin_fees +12.9 sd",
+    "EX_TSTMP +7.7 sd",
+    "WRONG_SHARE +6.1 sd"
+   ]
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/K2",
+   "SIZE": 1906,
+   "WRONG_SHARE": 0.0009618747813920951,
+   "APART": [
+    "PH_VLDFR@RK_ENDDT +0.6 sd",
+    "EV_EFFDT@last +0.6 sd",
+    "PH_CHGTS@last +0.6 sd"
+   ]
+  },
+  {
+   "ID": "t4_annual_statement/r1-structure/K3",
+   "SIZE": 1096,
+   "WRONG_SHARE": 0.001038761654439217,
+   "APART": [
+    "PH_VLDFR@RK_ENDDT -1.1 sd",
+    "EV_EFFDT@last -1.1 sd",
+    "PH_CHGTS@last -1.1 sd"
+   ]
+  }
+ ]
+}

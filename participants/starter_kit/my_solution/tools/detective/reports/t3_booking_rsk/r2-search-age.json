@@ -1,0 +1,85 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_rsk/r2-search-age/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "age_era_day": "PH_APPDT",
+    "risk_age": [
+     "nearest_days365",
+     "nearest"
+    ]
+   },
+   "RIGHT": 764888,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 190855,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r2-search-age/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "age_era_day": "PH_BEGDT",
+    "risk_age": [
+     "nearest_days365",
+     "nearest"
+    ]
+   },
+   "RIGHT": 764888,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 190855,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r2-search-age/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "age_era_day": "RUN",
+    "risk_age": [
+     "nearest_days365",
+     "nearest"
+    ]
+   },
+   "RIGHT": 760776,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 189826,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r2-search-age/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "age_era_day": "RUN",
+    "risk_age": "nearest"
+   },
+   "RIGHT": 759772,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 189605,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r2-search-age/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "age_era_day": "PH_APPDT",
+    "risk_age": "nearest"
+   },
+   "RIGHT": 759772,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 189605,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r2-search-age/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "age_era_day": "PH_BEGDT",
+    "risk_age": "nearest"
+   },
+   "RIGHT": 759772,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 189605,
+   "TOTAL_HELD_OUT": 190856
+  }
+ ]
+}

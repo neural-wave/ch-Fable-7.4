@@ -1,0 +1,37 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r8-search-era/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "era_day": "BK_TRDDT"
+   },
+   "RIGHT": 326017,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81619,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r8-search-era/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "era_day": "PR_RCVDT"
+   },
+   "RIGHT": 326011,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81618,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r8-search-era/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "era_day": "PR_DUEDT"
+   },
+   "RIGHT": 325996,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81612,
+   "TOTAL_HELD_OUT": 81619
+  }
+ ]
+}

@@ -1,0 +1,161 @@
+{
+ "rows": {
+  "extra": 2904,
+  "right": 6137,
+  "wrong": 16
+ },
+ "differences": {
+  "surrender_value": [
+   {
+    "DIFF": -47400,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -17500,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -35800,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -48400,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -1500,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -49800,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -18900,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -11400,
+    "ROWS": 1
+   }
+  ],
+  "policy_value": [
+   {
+    "DIFF": 0,
+    "ROWS": 16
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_surrender_value/r4/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "EX_TARGET = t3_surrender_value.surrender_value"
+   ],
+   "ROWS": 21,
+   "WRONG": 11,
+   "SHARE": 0.5238095238095238
+  },
+  {
+   "ID": "t3_surrender_value/r4/C1",
+   "METHOD": "change point",
+   "COLUMN": "EX_TSTMP",
+   "BEFORE": "2025-01-12T15:03:53.000000",
+   "AFTER": "2026-01-07T16:27:52.000000",
+   "RATE_BEFORE": 0.06349206349206349,
+   "RATE_AFTER": 0.5,
+   "EXPLAINED": 0.1367643664113845
+  },
+  {
+   "ID": "t3_surrender_value/r4/C2",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH@RK_BEGDT",
+   "BEFORE": "1945-03-27",
+   "AFTER": "1945-04-01",
+   "RATE_BEFORE": 0.0017605633802816902,
+   "RATE_AFTER": 0.0026944494341656186,
+   "EXPLAINED": 0.014055926520047684
+  },
+  {
+   "ID": "t3_surrender_value/r4/C3",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH@valuation_date",
+   "BEFORE": "1945-03-27",
+   "AFTER": "1945-04-01",
+   "RATE_BEFORE": 0.0018115942028985507,
+   "RATE_AFTER": 0.0026867275658248252,
+   "EXPLAINED": 0.013994117328160843
+  },
+  {
+   "ID": "t3_surrender_value/r4/C4",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH@RK_ENDDT",
+   "BEFORE": "1945-03-27",
+   "AFTER": "1945-04-01",
+   "RATE_BEFORE": 0.001841620626151013,
+   "RATE_AFTER": 0.002682403433476395,
+   "EXPLAINED": 0.013957918962227972
+  },
+  {
+   "ID": "t3_surrender_value/r4/C5",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH",
+   "BEFORE": "1945-03-20",
+   "AFTER": "1945-03-25",
+   "RATE_BEFORE": 0.0019230769230769232,
+   "RATE_AFTER": 0.0026714158504007124,
+   "EXPLAINED": 0.007083055228270726
+  },
+  {
+   "ID": "t3_surrender_value/r4/C6",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@valuation_date",
+   "BEFORE": "2005-08-13",
+   "AFTER": "2005-08-24",
+   "RATE_BEFORE": 0.0020491803278688526,
+   "RATE_AFTER": 0.0027724461505651524,
+   "EXPLAINED": 0.003399286196806048
+  },
+  {
+   "ID": "t3_surrender_value/r4/C7",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@valuation_date",
+   "BEFORE": "2005-08-13",
+   "AFTER": "2005-08-24",
+   "RATE_BEFORE": 0.0020491803278688526,
+   "RATE_AFTER": 0.0027724461505651524,
+   "EXPLAINED": 0.003399286196806048
+  },
+  {
+   "ID": "t3_surrender_value/r4/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@valuation_date",
+   "BEFORE": "2005-08-23T11:04:27.000000",
+   "AFTER": "2005-08-24T12:01:37.000000",
+   "RATE_BEFORE": 0.0020297699594046007,
+   "RATE_AFTER": 0.0027807486631016044,
+   "EXPLAINED": 0.0033972752031071205
+  },
+  {
+   "ID": "t3_surrender_value/r4/C9",
+   "METHOD": "change point",
+   "COLUMN": "BR_SINCE@RK_ENDDT",
+   "BEFORE": "2005-02-09",
+   "AFTER": "2005-05-05",
+   "RATE_BEFORE": 0.002770083102493075,
+   "RATE_AFTER": 0.002054794520547945,
+   "EXPLAINED": 0.003334207467639347
+  },
+  {
+   "ID": "t3_surrender_value/r4/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@valuation_date",
+   "BEFORE": "2005-08-25T14:02:58.000000",
+   "AFTER": "2005-09-03T16:24:05.000000",
+   "RATE_BEFORE": 0.0015657620041753654,
+   "RATE_AFTER": 0.003068208638187397,
+   "EXPLAINED": 0.0033280636923055306
+  }
+ ]
+}

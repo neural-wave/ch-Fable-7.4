@@ -1,0 +1,26 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_adm_amc/r2-search-units/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "conversion": "exact"
+   },
+   "RIGHT": 2882990,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 721764,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r2-search-units/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "conversion": "rate"
+   },
+   "RIGHT": 2874657,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 719650,
+   "TOTAL_HELD_OUT": 733109
+  }
+ ]
+}

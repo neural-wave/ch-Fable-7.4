@@ -1,0 +1,26 @@
+{
+ "findings": [
+  {
+   "ID": "t2_projection_year/r6-search-boundary/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "boundary": "new"
+   },
+   "RIGHT": 64021,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 15019,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r6-search-boundary/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "boundary": "old"
+   },
+   "RIGHT": 64021,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14998,
+   "TOTAL_HELD_OUT": 15019
+  }
+ ]
+}

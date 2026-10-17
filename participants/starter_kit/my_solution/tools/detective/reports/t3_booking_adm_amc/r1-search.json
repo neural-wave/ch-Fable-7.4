@@ -1,0 +1,172 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": [
+     "down",
+     "half_up"
+    ],
+    "valued": "cents",
+    "parameter_day": "RUN"
+   },
+   "RIGHT": 2663960,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 666796,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": [
+     "down",
+     "half_up"
+    ],
+    "valued": "micro",
+    "parameter_day": "RUN"
+   },
+   "RIGHT": 2662917,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 666549,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "half_up",
+    "valued": "cents",
+    "parameter_day": "RUN"
+   },
+   "RIGHT": 2547558,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 637126,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "half_up",
+    "valued": "micro",
+    "parameter_day": "RUN"
+   },
+   "RIGHT": 2546548,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 636884,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": [
+     "down",
+     "half_up"
+    ],
+    "valued": "cents",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 1720220,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 430611,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": [
+     "down",
+     "half_up"
+    ],
+    "valued": "micro",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 1719266,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 430374,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "half_up",
+    "valued": "cents",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 1647499,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 411992,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "half_up",
+    "valued": "micro",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 1646567,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 411760,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "down",
+    "valued": "micro",
+    "parameter_day": "RUN"
+   },
+   "RIGHT": 810766,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 202414,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "down",
+    "valued": "cents",
+    "parameter_day": "RUN"
+   },
+   "RIGHT": 810754,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 202417,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "down",
+    "valued": "micro",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 512266,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 128215,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r1-search/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "down",
+    "valued": "cents",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 512247,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 128214,
+   "TOTAL_HELD_OUT": 733109
+  }
+ ]
+}

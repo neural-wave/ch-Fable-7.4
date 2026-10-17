@@ -1,0 +1,32 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_amc/r2-search-accrual/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "accrual": [
+     "runs360",
+     "month"
+    ]
+   },
+   "RIGHT": 1446747,
+   "TOTAL": 1467108,
+   "RIGHT_HELD_OUT": 361730,
+   "TOTAL_HELD_OUT": 366852
+  },
+  {
+   "ID": "t3_booking_amc/r2-search-accrual/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "accrual": [
+     "days360",
+     "month"
+    ]
+   },
+   "RIGHT": 1441857,
+   "TOTAL": 1467108,
+   "RIGHT_HELD_OUT": 360433,
+   "TOTAL_HELD_OUT": 366852
+  }
+ ]
+}

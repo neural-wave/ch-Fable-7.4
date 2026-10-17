@@ -1,0 +1,197 @@
+{
+ "rows": {
+  "missing": 4,
+  "right": 1688493,
+  "wrong": 145463
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": 0,
+    "ROWS": 8677
+   },
+   {
+    "DIFF": -1,
+    "ROWS": 7361
+   },
+   {
+    "DIFF": -2,
+    "ROWS": 5817
+   },
+   {
+    "DIFF": -3,
+    "ROWS": 5251
+   },
+   {
+    "DIFF": -4,
+    "ROWS": 4604
+   },
+   {
+    "DIFF": -5,
+    "ROWS": 3930
+   },
+   {
+    "DIFF": -7,
+    "ROWS": 3362
+   },
+   {
+    "DIFF": -6,
+    "ROWS": 3333
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 145463
+   }
+  ],
+  "units": [
+   {
+    "DIFF": -1,
+    "ROWS": 4280
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 4188
+   },
+   {
+    "DIFF": 34,
+    "ROWS": 218
+   },
+   {
+    "DIFF": 32,
+    "ROWS": 211
+   },
+   {
+    "DIFF": 39,
+    "ROWS": 185
+   },
+   {
+    "DIFF": 31,
+    "ROWS": 183
+   },
+   {
+    "DIFF": 94,
+    "ROWS": 181
+   },
+   {
+    "DIFF": 84,
+    "ROWS": 172
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_amc/r1/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "BK_TRDDT <= 2007-08-17",
+    "BK_TRDDT:holiday != Tag der Arbeit",
+    "BK_TRDDT:month <= 11.5"
+   ],
+   "ROWS": 163397,
+   "WRONG": 122004,
+   "SHARE": 0.7466722155241529
+  },
+  {
+   "ID": "t3_booking_amc/r1/C1",
+   "METHOD": "change point",
+   "COLUMN": "BK_TRDDT",
+   "BEFORE": "2007-08-10",
+   "AFTER": "2007-08-11",
+   "RATE_BEFORE": 0.6510687433434215,
+   "RATE_AFTER": 0.01336983928703921,
+   "EXPLAINED": 0.5163312952795664
+  },
+  {
+   "ID": "t3_booking_amc/r1/C2",
+   "METHOD": "change point",
+   "COLUMN": "EV_CHGTS",
+   "BEFORE": "2007-08-10T01:30:00.000000",
+   "AFTER": "2007-08-11T01:30:00.000000",
+   "RATE_BEFORE": 0.6510687433434215,
+   "RATE_AFTER": 0.01336983928703921,
+   "EXPLAINED": 0.5163312952795664
+  },
+  {
+   "ID": "t3_booking_amc/r1/C3",
+   "METHOD": "change point",
+   "COLUMN": "BK_PRCDT",
+   "BEFORE": "2007-08-10",
+   "AFTER": "2007-08-13",
+   "RATE_BEFORE": 0.651010391239937,
+   "RATE_AFTER": 0.013369977516008517,
+   "EXPLAINED": 0.5162775170372538
+  },
+  {
+   "ID": "t3_booking_amc/r1/C4",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@BK_TRDDT",
+   "BEFORE": "2002-07-23T14:39:07.000000",
+   "AFTER": "2002-07-27T08:51:29.000000",
+   "RATE_BEFORE": 0.21006680556688342,
+   "RATE_AFTER": 0.024829198352393694,
+   "EXPLAINED": 0.09755811346216753
+  },
+  {
+   "ID": "t3_booking_amc/r1/C5",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@BK_PRCDT",
+   "BEFORE": "2002-07-23T14:39:07.000000",
+   "AFTER": "2002-07-27T08:51:29.000000",
+   "RATE_BEFORE": 0.21006446925013253,
+   "RATE_AFTER": 0.024829313437540076,
+   "EXPLAINED": 0.09755616416870384
+  },
+  {
+   "ID": "t3_booking_amc/r1/C6",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@BK_TRDDT",
+   "BEFORE": "2003-04-01",
+   "AFTER": "2003-04-26",
+   "RATE_BEFORE": 0.2021397066575075,
+   "RATE_AFTER": 0.021338981989690507,
+   "EXPLAINED": 0.09751333870047438
+  },
+  {
+   "ID": "t3_booking_amc/r1/C7",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@BK_TRDDT",
+   "BEFORE": "2003-04-01",
+   "AFTER": "2003-04-26",
+   "RATE_BEFORE": 0.2021397066575075,
+   "RATE_AFTER": 0.021338981989690507,
+   "EXPLAINED": 0.09751333870047438
+  },
+  {
+   "ID": "t3_booking_amc/r1/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@BK_PRCDT",
+   "BEFORE": "2003-04-01",
+   "AFTER": "2003-04-26",
+   "RATE_BEFORE": 0.20213764444232848,
+   "RATE_AFTER": 0.02133908475914968,
+   "EXPLAINED": 0.09751152857308584
+  },
+  {
+   "ID": "t3_booking_amc/r1/C9",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@BK_PRCDT",
+   "BEFORE": "2003-04-01",
+   "AFTER": "2003-04-26",
+   "RATE_BEFORE": 0.20213764444232848,
+   "RATE_AFTER": 0.02133908475914968,
+   "EXPLAINED": 0.09751152857308584
+  },
+  {
+   "ID": "t3_booking_amc/r1/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_TRDDT",
+   "BEFORE": "2003-04-01",
+   "AFTER": "2003-04-26",
+   "RATE_BEFORE": 0.20164228173270368,
+   "RATE_AFTER": 0.02115526492152157,
+   "EXPLAINED": 0.0974261449399942
+  }
+ ]
+}

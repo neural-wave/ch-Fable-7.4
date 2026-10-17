@@ -1,0 +1,202 @@
+{
+ "rows": {
+  "right": 5058,
+  "wrong": 73982
+ },
+ "differences": {
+  "value": [
+   {
+    "DIFF": 1,
+    "ROWS": 467
+   },
+   {
+    "DIFF": 12,
+    "ROWS": 137
+   },
+   {
+    "DIFF": 2,
+    "ROWS": 129
+   },
+   {
+    "DIFF": -1,
+    "ROWS": 72
+   },
+   {
+    "DIFF": 24,
+    "ROWS": 65
+   },
+   {
+    "DIFF": 13,
+    "ROWS": 54
+   },
+   {
+    "DIFF": 14,
+    "ROWS": 48
+   },
+   {
+    "DIFF": 11,
+    "ROWS": 48
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t2_projection_year/r1/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PD_SRPSCL@RK_BEGDT <= 2.5"
+   ],
+   "ROWS": 63741,
+   "WRONG": 63741,
+   "SHARE": 1.0
+  },
+  {
+   "ID": "t2_projection_year/r1/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PD_SRPSCL@RK_BEGDT > 2.5",
+    "EV_EFFDT:first > 2007-08-16",
+    "PS_BIRTH@RK_ENDDT > 1944-11-01"
+   ],
+   "ROWS": 10359,
+   "WRONG": 5319,
+   "SHARE": 0.5134665508253693
+  },
+  {
+   "ID": "t2_projection_year/r1/T3",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PD_SRPSCL@RK_BEGDT > 2.5",
+    "EV_EFFDT:first <= 2007-08-16",
+    "policy_year > 2.5"
+   ],
+   "ROWS": 4507,
+   "WRONG": 4502,
+   "SHARE": 0.9988906145995119
+  },
+  {
+   "ID": "t2_projection_year/r1/T4",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PD_SRPSCL@RK_BEGDT > 2.5",
+    "EV_EFFDT:first <= 2007-08-16",
+    "policy_year <= 2.5"
+   ],
+   "ROWS": 328,
+   "WRONG": 315,
+   "SHARE": 0.9603658536585366
+  },
+  {
+   "ID": "t2_projection_year/r1/T5",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PD_SRPSCL@RK_BEGDT > 2.5",
+    "EV_EFFDT:first > 2007-08-16",
+    "PS_BIRTH@RK_ENDDT <= 1944-11-01"
+   ],
+   "ROWS": 105,
+   "WRONG": 105,
+   "SHARE": 1.0
+  },
+  {
+   "ID": "t2_projection_year/r1/C1",
+   "METHOD": "change point",
+   "COLUMN": "PR_DUEDT:last",
+   "BEFORE": "2025-06-01",
+   "AFTER": "2025-06-09",
+   "RATE_BEFORE": 0.8573925792263448,
+   "RATE_AFTER": 1.0,
+   "EXPLAINED": 0.08398922086385482
+  },
+  {
+   "ID": "t2_projection_year/r1/C2",
+   "METHOD": "change point",
+   "COLUMN": "PR_RCVDT:last",
+   "BEFORE": "2025-06-04",
+   "AFTER": "2025-06-05",
+   "RATE_BEFORE": 0.8576534489066502,
+   "RATE_AFTER": 1.0,
+   "EXPLAINED": 0.08371051605009829
+  },
+  {
+   "ID": "t2_projection_year/r1/C3",
+   "METHOD": "change point",
+   "COLUMN": "PR_RCVDT:first",
+   "BEFORE": "2011-01-02",
+   "AFTER": "2011-01-03",
+   "RATE_BEFORE": 0.9850529676389493,
+   "RATE_AFTER": 0.8981047437478973,
+   "EXPLAINED": 0.031035415392025412
+  },
+  {
+   "ID": "t2_projection_year/r1/C4",
+   "METHOD": "change point",
+   "COLUMN": "RK_BEGDT",
+   "BEFORE": "2010-12-31",
+   "AFTER": "2011-01-01",
+   "RATE_BEFORE": 0.9850447206411894,
+   "RATE_AFTER": 0.8981481481481481,
+   "EXPLAINED": 0.030994662162382572
+  },
+  {
+   "ID": "t2_projection_year/r1/C5",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:first",
+   "BEFORE": "2010-12-31",
+   "AFTER": "2011-01-01",
+   "RATE_BEFORE": 0.9850447206411894,
+   "RATE_AFTER": 0.8981481481481481,
+   "EXPLAINED": 0.030994662162382572
+  },
+  {
+   "ID": "t2_projection_year/r1/C6",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@RK_BEGDT",
+   "BEFORE": "2010-11-14T12:31:08.000000",
+   "AFTER": "2010-11-17T17:31:38.000000",
+   "RATE_BEFORE": 0.9850029120559115,
+   "RATE_AFTER": 0.8983668903803133,
+   "EXPLAINED": 0.03078930769720885
+  },
+  {
+   "ID": "t2_projection_year/r1/C7",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@RK_BEGDT",
+   "BEFORE": "2010-11-11",
+   "AFTER": "2010-11-14",
+   "RATE_BEFORE": 0.9850029120559115,
+   "RATE_AFTER": 0.8983668903803133,
+   "EXPLAINED": 0.03078930769720885
+  },
+  {
+   "ID": "t2_projection_year/r1/C8",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@RK_ENDDT",
+   "BEFORE": "2010-12-31",
+   "AFTER": "2011-01-01",
+   "RATE_BEFORE": 0.9847466698382493,
+   "RATE_AFTER": 0.8999075052854123,
+   "EXPLAINED": 0.02937466630920527
+  },
+  {
+   "ID": "t2_projection_year/r1/C9",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:last",
+   "BEFORE": "2024-07-29",
+   "AFTER": "2024-08-10",
+   "RATE_BEFORE": 0.9619434345342084,
+   "RATE_AFTER": 0.9265135410725704,
+   "EXPLAINED": 0.029315212161715346
+  },
+  {
+   "ID": "t2_projection_year/r1/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@RK_ENDDT",
+   "BEFORE": "2010-11-14T12:31:08.000000",
+   "AFTER": "2010-11-17T17:31:38.000000",
+   "RATE_BEFORE": 0.9847030057251909,
+   "RATE_AFTER": 0.900118670886076,
+   "EXPLAINED": 0.029176676480566283
+  }
+ ]
+}

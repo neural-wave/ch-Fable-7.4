@@ -1,0 +1,266 @@
+{
+ "rows": {
+  "right": 34089,
+  "wrong": 56
+ },
+ "differences": {
+  "premiums": [
+   {
+    "DIFF": 0,
+    "ROWS": 56
+   }
+  ],
+  "entry_charges": [
+   {
+    "DIFF": 0,
+    "ROWS": 20
+   },
+   {
+    "DIFF": -1925,
+    "ROWS": 1
+   },
+   {
+    "DIFF": 764,
+    "ROWS": 1
+   },
+   {
+    "DIFF": 280,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -102,
+    "ROWS": 1
+   },
+   {
+    "DIFF": 375,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -312,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -516,
+    "ROWS": 1
+   }
+  ],
+  "admin_fees": [
+   {
+    "DIFF": 0,
+    "ROWS": 36
+   },
+   {
+    "DIFF": -4500,
+    "ROWS": 2
+   },
+   {
+    "DIFF": -2100,
+    "ROWS": 2
+   },
+   {
+    "DIFF": -13600,
+    "ROWS": 2
+   },
+   {
+    "DIFF": -6600,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -5300,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -700,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -5600,
+    "ROWS": 1
+   }
+  ],
+  "management_fees": [
+   {
+    "DIFF": 0,
+    "ROWS": 56
+   }
+  ],
+  "risk_charges": [
+   {
+    "DIFF": 0,
+    "ROWS": 56
+   }
+  ],
+  "total_charges": [
+   {
+    "DIFF": -4500,
+    "ROWS": 2
+   },
+   {
+    "DIFF": -2100,
+    "ROWS": 2
+   },
+   {
+    "DIFF": -13600,
+    "ROWS": 2
+   },
+   {
+    "DIFF": 375,
+    "ROWS": 1
+   },
+   {
+    "DIFF": 36,
+    "ROWS": 1
+   },
+   {
+    "DIFF": 312,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -1925,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -5300,
+    "ROWS": 1
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t4_annual_statement/r1/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PR_RCVDT:last:day > 18.5",
+    "year <= 2019.5",
+    "PS_BIRTH@RK_ENDDT:year > 1945.5"
+   ],
+   "ROWS": 2914,
+   "WRONG": 41,
+   "SHARE": 0.014070006863417982
+  },
+  {
+   "ID": "t4_annual_statement/r1/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PR_RCVDT:last:day <= 18.5",
+    "EX_TARGET = t4_annual_statement.admin_fees",
+    "RK_BEGDT <= 2012-07-16"
+   ],
+   "ROWS": 128,
+   "WRONG": 7,
+   "SHARE": 0.0546875
+  },
+  {
+   "ID": "t4_annual_statement/r1/T3",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PR_RCVDT:last:day <= 18.5",
+    "EX_TARGET = t4_annual_statement.admin_fees",
+    "RK_BEGDT > 2012-07-16"
+   ],
+   "ROWS": 30,
+   "WRONG": 4,
+   "SHARE": 0.13333333333333333
+  },
+  {
+   "ID": "t4_annual_statement/r1/C1",
+   "METHOD": "change point",
+   "COLUMN": "PR_RCVDT:last",
+   "BEFORE": "2026-05-28",
+   "AFTER": "2026-05-29",
+   "RATE_BEFORE": 0.0015922030300106146,
+   "RATE_AFTER": 0.0017139876294805872,
+   "EXPLAINED": 0.004844712517109248
+  },
+  {
+   "ID": "t4_annual_statement/r1/C2",
+   "METHOD": "change point",
+   "COLUMN": "PR_DUEDT:last",
+   "BEFORE": "2026-06-21",
+   "AFTER": "2026-06-22",
+   "RATE_BEFORE": 0.0006981382978723405,
+   "RATE_AFTER": 0.008610086100861008,
+   "EXPLAINED": 0.0040096172743115405
+  },
+  {
+   "ID": "t4_annual_statement/r1/C3",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:last",
+   "BEFORE": "2026-06-21",
+   "AFTER": "2026-06-22",
+   "RATE_BEFORE": 0.0006342271237799936,
+   "RATE_AFTER": 0.00659264399722415,
+   "EXPLAINED": 0.003042363815194224
+  },
+  {
+   "ID": "t4_annual_statement/r1/C4",
+   "METHOD": "change point",
+   "COLUMN": "EX_TSTMP",
+   "BEFORE": "2020-03-04T16:43:37.000000",
+   "AFTER": "2020-05-15T10:41:28.000000",
+   "RATE_BEFORE": 0.04779411764705882,
+   "RATE_AFTER": 0.013636363636363636,
+   "EXPLAINED": 0.002538223869773117
+  },
+  {
+   "ID": "t4_annual_statement/r1/C5",
+   "METHOD": "change point",
+   "COLUMN": "RK_ENDDT",
+   "BEFORE": "2033-04-26",
+   "AFTER": "2033-04-30",
+   "RATE_BEFORE": 0.001682490085326283,
+   "RATE_AFTER": 0.0015997257612980632,
+   "EXPLAINED": 0.0007463813809918714
+  },
+  {
+   "ID": "t4_annual_statement/r1/C6",
+   "METHOD": "change point",
+   "COLUMN": "AL_VLDFR:last",
+   "BEFORE": "2012-09-01",
+   "AFTER": "2012-09-10",
+   "RATE_BEFORE": 0.0016709258895223117,
+   "RATE_AFTER": 0.0016269659171498894,
+   "EXPLAINED": 0.0007031736256924183
+  },
+  {
+   "ID": "t4_annual_statement/r1/C7",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH",
+   "BEFORE": "1974-04-30",
+   "AFTER": "1974-05-03",
+   "RATE_BEFORE": 0.0014978633419974448,
+   "RATE_AFTER": 0.001935767707875055,
+   "EXPLAINED": 0.0006987654475304974
+  },
+  {
+   "ID": "t4_annual_statement/r1/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@RK_ENDDT",
+   "BEFORE": "2016-02-21",
+   "AFTER": "2016-02-26",
+   "RATE_BEFORE": 0.001518148778580301,
+   "RATE_AFTER": 0.0018536428110896197,
+   "EXPLAINED": 0.0006075280388837345
+  },
+  {
+   "ID": "t4_annual_statement/r1/C9",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@RK_ENDDT",
+   "BEFORE": "2016-02-21",
+   "AFTER": "2016-02-26",
+   "RATE_BEFORE": 0.001518148778580301,
+   "RATE_AFTER": 0.0018536428110896197,
+   "EXPLAINED": 0.0006075280388837345
+  },
+  {
+   "ID": "t4_annual_statement/r1/C10",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@last",
+   "BEFORE": "2016-02-21",
+   "AFTER": "2016-02-26",
+   "RATE_BEFORE": 0.001518148778580301,
+   "RATE_AFTER": 0.0018536428110896197,
+   "EXPLAINED": 0.0006021721201599161
+  }
+ ]
+}

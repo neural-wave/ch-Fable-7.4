@@ -1,0 +1,256 @@
+{
+ "findings": [
+  {
+   "ID": "t2_projection_year/r4-search-risk/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "exact",
+    "charge": "once"
+   },
+   "RIGHT": 63454,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14788,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "exact",
+    "charge": "rate10"
+   },
+   "RIGHT": 63454,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14788,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "exact",
+    "charge": "rate9"
+   },
+   "RIGHT": 63130,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14766,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent_half_up",
+    "charge": "rate10"
+   },
+   "RIGHT": 62684,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14575,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent_half_up",
+    "charge": "once"
+   },
+   "RIGHT": 62657,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14575,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent",
+    "charge": "once"
+   },
+   "RIGHT": 62536,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14599,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent",
+    "charge": "rate10"
+   },
+   "RIGHT": 62536,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14599,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent_half_up",
+    "charge": "rate9"
+   },
+   "RIGHT": 62408,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14560,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent",
+    "charge": "rate9"
+   },
+   "RIGHT": 62268,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14584,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "exact",
+    "charge": "rate8"
+   },
+   "RIGHT": 60038,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13941,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent_half_up",
+    "charge": "rate8"
+   },
+   "RIGHT": 59563,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13821,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent",
+    "charge": "rate8"
+   },
+   "RIGHT": 59352,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13795,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S13",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "exact",
+    "charge": "yearly"
+   },
+   "RIGHT": 30057,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 6455,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S14",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent_half_up",
+    "charge": "yearly"
+   },
+   "RIGHT": 29776,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 6345,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S15",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent",
+    "charge": "yearly"
+   },
+   "RIGHT": 29655,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 6369,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S16",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "exact",
+    "charge": "steps"
+   },
+   "RIGHT": 28010,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 6003,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S17",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent_half_up",
+    "charge": "steps"
+   },
+   "RIGHT": 27749,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 5893,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S18",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent",
+    "charge": "steps"
+   },
+   "RIGHT": 27632,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 5917,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S19",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "exact",
+    "charge": "rate6"
+   },
+   "RIGHT": 15178,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 3706,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S20",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent_half_up",
+    "charge": "rate6"
+   },
+   "RIGHT": 15153,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 3707,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r4-search-risk/S21",
+   "METHOD": "search",
+   "HOLES": {
+    "at_risk": "cent",
+    "charge": "rate6"
+   },
+   "RIGHT": 15131,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 3705,
+   "TOTAL_HELD_OUT": 15019
+  }
+ ]
+}

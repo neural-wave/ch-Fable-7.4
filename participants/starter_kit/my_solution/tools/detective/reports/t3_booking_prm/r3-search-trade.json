@@ -1,0 +1,48 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r3-search-trade/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "trade": "price_day"
+   },
+   "RIGHT": 324867,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81332,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r3-search-trade/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "trade": "TI"
+   },
+   "RIGHT": 323577,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81020,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r3-search-trade/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "trade": "CH"
+   },
+   "RIGHT": 306111,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 76710,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r3-search-trade/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "trade": "weekend"
+   },
+   "RIGHT": 302873,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 75902,
+   "TOTAL_HELD_OUT": 81619
+  }
+ ]
+}

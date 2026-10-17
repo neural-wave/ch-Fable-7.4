@@ -1,0 +1,52 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_adm_amc/r2-search-value/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "valuation": "exact",
+    "valued": "cents"
+   },
+   "RIGHT": 2883152,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 721804,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r2-search-value/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "valuation": "rate",
+    "valued": "cents"
+   },
+   "RIGHT": 2882990,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 721764,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r2-search-value/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "valuation": "exact",
+    "valued": "micro"
+   },
+   "RIGHT": 2881840,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 721488,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r2-search-value/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "valuation": "rate",
+    "valued": "micro"
+   },
+   "RIGHT": 2881755,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 721468,
+   "TOTAL_HELD_OUT": 733109
+  }
+ ]
+}

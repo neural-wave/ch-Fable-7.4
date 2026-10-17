@@ -1,0 +1,170 @@
+{
+ "rows": {
+  "right": 10758,
+  "wrong": 4270
+ },
+ "differences": {
+  "due_date": [
+   {
+    "DIFF": 0,
+    "ROWS": 4022
+   },
+   {
+    "DIFF": 2,
+    "ROWS": 133
+   },
+   {
+    "DIFF": 3,
+    "ROWS": 88
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 27
+   }
+  ],
+  "collection_date": [
+   {
+    "DIFF": -2,
+    "ROWS": 2080
+   },
+   {
+    "DIFF": -1,
+    "ROWS": 1274
+   },
+   {
+    "DIFF": -3,
+    "ROWS": 673
+   },
+   {
+    "DIFF": 2,
+    "ROWS": 108
+   },
+   {
+    "DIFF": 3,
+    "ROWS": 78
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 32
+   },
+   {
+    "DIFF": 0,
+    "ROWS": 25
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t1_next_due_dates/r1-due/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PR_DUEDT:days_of_month > 1.5",
+    "PH_APPDT@RK_BEGDT:year <= 2006.5",
+    "collection_date:holiday != Jahrestag der Ausrufung der Republik"
+   ],
+   "ROWS": 255,
+   "WRONG": 248,
+   "SHARE": 0.9725490196078431
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C1",
+   "METHOD": "change point",
+   "COLUMN": "PR_DUEDT:last",
+   "BEFORE": "2026-06-28",
+   "AFTER": "2026-06-29",
+   "RATE_BEFORE": 0.017799001519426958,
+   "RATE_AFTER": 0.0016570008285004142,
+   "EXPLAINED": 0.35793608834934226
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C2",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:last",
+   "BEFORE": "2026-06-28",
+   "AFTER": "2026-06-29",
+   "RATE_BEFORE": 0.0,
+   "RATE_AFTER": 0.1608300907911803,
+   "EXPLAINED": 0.14674929664478067
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C3",
+   "METHOD": "change point",
+   "COLUMN": "PR_RCVDT:last",
+   "BEFORE": "2026-05-29",
+   "AFTER": "2026-05-30",
+   "RATE_BEFORE": 0.02095238095238095,
+   "RATE_AFTER": 0.014776505356483192,
+   "EXPLAINED": 0.1186393996030104
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C4",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@RK_ENDDT",
+   "BEFORE": "2006-08-31",
+   "AFTER": "2006-09-01",
+   "RATE_BEFORE": 0.10097719869706841,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.08589210703785821
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C5",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@RK_ENDDT",
+   "BEFORE": "2006-08-27T09:16:47.000000",
+   "AFTER": "2006-08-31T11:41:09.000000",
+   "RATE_BEFORE": 0.1,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.08489851150202982
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C6",
+   "METHOD": "change point",
+   "COLUMN": "RK_BEGDT",
+   "BEFORE": "2006-08-31",
+   "AFTER": "2006-09-01",
+   "RATE_BEFORE": 0.09771473601260836,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.08257490208372657
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C7",
+   "METHOD": "change point",
+   "COLUMN": "PR_RCVDT:first",
+   "BEFORE": "2006-09-03",
+   "AFTER": "2006-09-12",
+   "RATE_BEFORE": 0.09771473601260836,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.08257490208372657
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C8",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:first",
+   "BEFORE": "2006-08-31",
+   "AFTER": "2006-09-01",
+   "RATE_BEFORE": 0.09771473601260836,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.08257490208372657
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C9",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@RK_BEGDT",
+   "BEFORE": "2006-08-27T09:16:47.000000",
+   "AFTER": "2006-08-31T11:41:09.000000",
+   "RATE_BEFORE": 0.09679937548790007,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.08164418232964565
+  },
+  {
+   "ID": "t1_next_due_dates/r1-due/C10",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@RK_BEGDT",
+   "BEFORE": "2006-08-24",
+   "AFTER": "2006-08-28",
+   "RATE_BEFORE": 0.09679937548790007,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.08164418232964565
+  }
+ ]
+}

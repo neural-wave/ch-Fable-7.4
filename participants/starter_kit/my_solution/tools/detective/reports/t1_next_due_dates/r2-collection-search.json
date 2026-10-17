@@ -1,0 +1,114 @@
+{
+ "findings": [
+  {
+   "ID": "t1_next_due_dates/r2-collection-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "shifted": [
+     "LS"
+    ],
+    "calendar": "TI"
+   },
+   "RIGHT": 12131,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2897,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-collection-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "shifted": [
+     "LS"
+    ],
+    "calendar": "none"
+   },
+   "RIGHT": 11518,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2777,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-collection-search/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "shifted": [
+     "LS",
+     "UB"
+    ],
+    "calendar": "TI"
+   },
+   "RIGHT": 11475,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2722,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-collection-search/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "shifted": [
+     "LS",
+     "UB"
+    ],
+    "calendar": "none"
+   },
+   "RIGHT": 10985,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2635,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-collection-search/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "shifted": [],
+    "calendar": "none"
+   },
+   "RIGHT": 8828,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2138,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-collection-search/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "shifted": [],
+    "calendar": "TI"
+   },
+   "RIGHT": 8828,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2138,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-collection-search/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "shifted": [
+     "UB"
+    ],
+    "calendar": "none"
+   },
+   "RIGHT": 8295,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 1996,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-collection-search/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "shifted": [
+     "UB"
+    ],
+    "calendar": "TI"
+   },
+   "RIGHT": 8172,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 1963,
+   "TOTAL_HELD_OUT": 2897
+  }
+ ]
+}

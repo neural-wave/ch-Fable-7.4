@@ -1,0 +1,364 @@
+{
+ "findings": [
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest_days365",
+     "nearest"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 64021,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14998,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest_days365",
+     "months"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 64021,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14998,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest_days365",
+     "nearest"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 63832,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14998,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest_days365",
+     "months"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 63832,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14998,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest_days365.25",
+     "nearest"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 63637,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14864,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest_days365.25",
+     "months"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 63637,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14864,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest",
+     "nearest"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 63604,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14835,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest",
+     "months"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 63604,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14835,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "months",
+     "nearest"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 63604,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14835,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "months",
+     "months"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 63604,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14835,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest_days365.25",
+     "nearest"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 63448,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14864,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest_days365.25",
+     "months"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 63448,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14864,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S13",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest",
+     "nearest"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 63415,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14835,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S14",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "nearest",
+     "months"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 63415,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14835,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S15",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "months",
+     "nearest"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 63415,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14835,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S16",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "months",
+     "months"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 63415,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14835,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S17",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "days365",
+     "nearest"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 54926,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13097,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S18",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "days365",
+     "months"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 54926,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13097,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S19",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "days365",
+     "nearest"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 54830,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13118,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S20",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "days365",
+     "months"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 54830,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13118,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S21",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "completed",
+     "nearest"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 54435,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13045,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S22",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "completed",
+     "months"
+    ],
+    "era_day": "PH_APPDT"
+   },
+   "RIGHT": 54435,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13045,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S23",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "completed",
+     "nearest"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 54360,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13066,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r5-search-era-age/S24",
+   "METHOD": "search",
+   "HOLES": {
+    "age": [
+     "completed",
+     "months"
+    ],
+    "era_day": "PH_BEGDT"
+   },
+   "RIGHT": 54360,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 13066,
+   "TOTAL_HELD_OUT": 15019
+  }
+ ]
+}

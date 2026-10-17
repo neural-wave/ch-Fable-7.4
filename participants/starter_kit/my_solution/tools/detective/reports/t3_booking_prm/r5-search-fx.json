@@ -1,0 +1,37 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r5-search-fx/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "EVE"
+   },
+   "RIGHT": 325706,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81559,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r5-search-fx/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "PR_RCVDT"
+   },
+   "RIGHT": 325425,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81482,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r5-search-fx/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "BK_TRDDT"
+   },
+   "RIGHT": 260018,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 65051,
+   "TOTAL_HELD_OUT": 81619
+  }
+ ]
+}

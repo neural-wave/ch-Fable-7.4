@@ -1,0 +1,436 @@
+{
+ "findings": [
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 800,
+    "chained": false
+   },
+   "RIGHT": 12131,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2897,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 400,
+    "chained": false
+   },
+   "RIGHT": 12019,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2855,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 200,
+    "chained": false
+   },
+   "RIGHT": 11999,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2868,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 210,
+    "chained": false
+   },
+   "RIGHT": 11985,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2840,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 900,
+    "chained": false
+   },
+   "RIGHT": 11962,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2854,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 610,
+    "chained": false
+   },
+   "RIGHT": 11944,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2840,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 620,
+    "chained": false
+   },
+   "RIGHT": 11944,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2840,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": "PH_BEGDT",
+    "chained": false
+   },
+   "RIGHT": 11933,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2847,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": "first_due",
+    "chained": false
+   },
+   "RIGHT": 11933,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2847,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 100,
+    "chained": false
+   },
+   "RIGHT": 11933,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2847,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 410,
+    "chained": false
+   },
+   "RIGHT": 11933,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2847,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 500,
+    "chained": false
+   },
+   "RIGHT": 11933,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2847,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S13",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 600,
+    "chained": false
+   },
+   "RIGHT": 11933,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2847,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S14",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 700,
+    "chained": false
+   },
+   "RIGHT": 11933,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2840,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S15",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 990,
+    "chained": false
+   },
+   "RIGHT": 11931,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2847,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S16",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": "last_due",
+    "chained": false
+   },
+   "RIGHT": 11827,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2804,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S17",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 110,
+    "chained": false
+   },
+   "RIGHT": 11711,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2774,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S18",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 300,
+    "chained": false
+   },
+   "RIGHT": 11691,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2774,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S19",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": "last_due",
+    "chained": true
+   },
+   "RIGHT": 11601,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2741,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S20",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 200,
+    "chained": true
+   },
+   "RIGHT": 11270,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S21",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 400,
+    "chained": true
+   },
+   "RIGHT": 11268,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2657,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S22",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 210,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2652,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S23",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": "PH_BEGDT",
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S24",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": "first_due",
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S25",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 100,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S26",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 110,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S27",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 300,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S28",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 410,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S29",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 500,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S30",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 600,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S31",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 610,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S32",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 620,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S33",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 700,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S34",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 800,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S35",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 900,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  },
+  {
+   "ID": "t1_next_due_dates/r2-due-search/S36",
+   "METHOD": "search",
+   "HOLES": {
+    "anchor": 990,
+    "chained": true
+   },
+   "RIGHT": 11266,
+   "TOTAL": 12131,
+   "RIGHT_HELD_OUT": 2650,
+   "TOTAL_HELD_OUT": 2897
+  }
+ ]
+}

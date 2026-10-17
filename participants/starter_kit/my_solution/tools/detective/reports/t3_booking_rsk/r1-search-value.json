@@ -1,0 +1,26 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_rsk/r1-search-value/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_value": "after"
+   },
+   "RIGHT": 760776,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 189826,
+   "TOTAL_HELD_OUT": 190856
+  },
+  {
+   "ID": "t3_booking_rsk/r1-search-value/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "risk_value": "before"
+   },
+   "RIGHT": 714346,
+   "TOTAL": 764890,
+   "RIGHT_HELD_OUT": 178291,
+   "TOTAL_HELD_OUT": 190856
+  }
+ ]
+}

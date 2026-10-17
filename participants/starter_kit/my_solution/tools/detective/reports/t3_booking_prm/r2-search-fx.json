@@ -1,0 +1,112 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "PR_RCVDT",
+    "conversion": "exact"
+   },
+   "RIGHT": 323577,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81020,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "PR_RCVDT",
+    "conversion": "rate"
+   },
+   "RIGHT": 306147,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 76715,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "PR_DUEDT",
+    "conversion": "exact"
+   },
+   "RIGHT": 263961,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 66035,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "PR_DUEDT",
+    "conversion": "rate"
+   },
+   "RIGHT": 262330,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 65635,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "PR_RCVDT",
+    "conversion": "cents"
+   },
+   "RIGHT": 260296,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 65145,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "PR_DUEDT",
+    "conversion": "cents"
+   },
+   "RIGHT": 258384,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 64667,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "BK_TRDDT",
+    "conversion": "cents"
+   },
+   "RIGHT": 258202,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 64609,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "BK_TRDDT",
+    "conversion": "rate"
+   },
+   "RIGHT": 258194,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 64609,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r2-search-fx/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "fx_day": "BK_TRDDT",
+    "conversion": "exact"
+   },
+   "RIGHT": 258194,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 64609,
+   "TOTAL_HELD_OUT": 81619
+  }
+ ]
+}

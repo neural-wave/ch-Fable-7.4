@@ -1,0 +1,208 @@
+{
+ "rows": {
+  "right": 1802290,
+  "wrong": 31670
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": 0,
+    "ROWS": 9094
+   },
+   {
+    "DIFF": 2,
+    "ROWS": 747
+   },
+   {
+    "DIFF": 4,
+    "ROWS": 672
+   },
+   {
+    "DIFF": 3,
+    "ROWS": 635
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 617
+   },
+   {
+    "DIFF": 5,
+    "ROWS": 599
+   },
+   {
+    "DIFF": 7,
+    "ROWS": 544
+   },
+   {
+    "DIFF": 14,
+    "ROWS": 481
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 31670
+   }
+  ],
+  "units": [
+   {
+    "DIFF": -1,
+    "ROWS": 4481
+   },
+   {
+    "DIFF": 1,
+    "ROWS": 4404
+   },
+   {
+    "DIFF": -2,
+    "ROWS": 90
+   },
+   {
+    "DIFF": 2,
+    "ROWS": 87
+   },
+   {
+    "DIFF": -1277,
+    "ROWS": 55
+   },
+   {
+    "DIFF": -460,
+    "ROWS": 54
+   },
+   {
+    "DIFF": -461,
+    "ROWS": 47
+   },
+   {
+    "DIFF": -1278,
+    "ROWS": 41
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_amc/r2/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PH_ENDDT@BK_TRDDT:day > 29.5",
+    "HD_CHGTS@BK_PRCDT <= 2007-03-01 03:02:06.562500",
+    "EV_CHGTS <= 2007-07-15 01:30:00"
+   ],
+   "ROWS": 21019,
+   "WRONG": 7899,
+   "SHARE": 0.3758028450449593
+  },
+  {
+   "ID": "t3_booking_amc/r2/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PH_ENDDT@BK_TRDDT:day > 29.5",
+    "HD_CHGTS@BK_PRCDT <= 2007-03-01 03:02:06.562500",
+    "EV_CHGTS > 2007-07-15 01:30:00"
+   ],
+   "ROWS": 73481,
+   "WRONG": 4077,
+   "SHARE": 0.0554837304881534
+  },
+  {
+   "ID": "t3_booking_amc/r2/C1",
+   "METHOD": "change point",
+   "COLUMN": "BK_TRDDT",
+   "BEFORE": "2007-06-30",
+   "AFTER": "2007-07-01",
+   "RATE_BEFORE": 0.05209043214884526,
+   "RATE_AFTER": 0.01336450241651355,
+   "EXPLAINED": 0.008010940079390256
+  },
+  {
+   "ID": "t3_booking_amc/r2/C2",
+   "METHOD": "change point",
+   "COLUMN": "EV_CHGTS",
+   "BEFORE": "2007-06-30T01:30:00.000000",
+   "AFTER": "2007-07-01T01:30:00.000000",
+   "RATE_BEFORE": 0.05209043214884526,
+   "RATE_AFTER": 0.01336450241651355,
+   "EXPLAINED": 0.008010940079390256
+  },
+  {
+   "ID": "t3_booking_amc/r2/C3",
+   "METHOD": "change point",
+   "COLUMN": "BK_PRCDT",
+   "BEFORE": "2007-07-02",
+   "AFTER": "2007-07-03",
+   "RATE_BEFORE": 0.05168804048084388,
+   "RATE_AFTER": 0.013366278028539253,
+   "EXPLAINED": 0.007914766418456612
+  },
+  {
+   "ID": "t3_booking_amc/r2/C4",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_TRDDT",
+   "BEFORE": "1998-04-30",
+   "AFTER": "1998-05-01",
+   "RATE_BEFORE": 0.0374750075852465,
+   "RATE_AFTER": 0.013974412796899198,
+   "EXPLAINED": 0.0039223747118900575
+  },
+  {
+   "ID": "t3_booking_amc/r2/C5",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_TRDDT",
+   "BEFORE": "1998-03-09T12:59:10.000000",
+   "AFTER": "1998-03-27T13:38:04.000000",
+   "RATE_BEFORE": 0.0374750075852465,
+   "RATE_AFTER": 0.013974412796899198,
+   "EXPLAINED": 0.0039223747118900575
+  },
+  {
+   "ID": "t3_booking_amc/r2/C6",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@BK_PRCDT",
+   "BEFORE": "1998-04-30",
+   "AFTER": "1998-05-01",
+   "RATE_BEFORE": 0.0374750075852465,
+   "RATE_AFTER": 0.013974412796899198,
+   "EXPLAINED": 0.0039223747118900575
+  },
+  {
+   "ID": "t3_booking_amc/r2/C7",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_PRCDT",
+   "BEFORE": "1998-03-09T12:59:10.000000",
+   "AFTER": "1998-03-27T13:38:04.000000",
+   "RATE_BEFORE": 0.0374750075852465,
+   "RATE_AFTER": 0.013974412796899198,
+   "EXPLAINED": 0.0039223747118900575
+  },
+  {
+   "ID": "t3_booking_amc/r2/C8",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@BK_TRDDT",
+   "BEFORE": "1998-03-06",
+   "AFTER": "1998-03-24",
+   "RATE_BEFORE": 0.03704529124031216,
+   "RATE_AFTER": 0.013998122908208687,
+   "EXPLAINED": 0.003811329191218428
+  },
+  {
+   "ID": "t3_booking_amc/r2/C9",
+   "METHOD": "change point",
+   "COLUMN": "PH_BEGDT@BK_TRDDT",
+   "BEFORE": "1998-04-30",
+   "AFTER": "1998-05-01",
+   "RATE_BEFORE": 0.03704529124031216,
+   "RATE_AFTER": 0.013998122908208687,
+   "EXPLAINED": 0.003811329191218428
+  },
+  {
+   "ID": "t3_booking_amc/r2/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@last",
+   "BEFORE": "1998-04-30",
+   "AFTER": "1998-05-01",
+   "RATE_BEFORE": 0.03722978382706165,
+   "RATE_AFTER": 0.014047939289396162,
+   "EXPLAINED": 0.0037882888203920697
+  }
+ ]
+}

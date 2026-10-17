@@ -1,0 +1,96 @@
+{
+ "importance": [
+  {
+   "ID": "t3_surrender_value/r1-structure/I1",
+   "COLUMN": "BR_REGIO@RK_BEGDT=NRD",
+   "DROP": 0.0011348993953810282,
+   "SPREAD": 7.008690466676281e-06
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I2",
+   "COLUMN": "valuation_date-RK_BEGDT:days",
+   "DROP": 0.0007285162057686367,
+   "SPREAD": 0.000346983270179658
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I3",
+   "COLUMN": "EX_TARGET=t3_surrender_value.surrender_value",
+   "DROP": 0.00044850827634050167,
+   "SPREAD": 3.5043452333119717e-06
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I4",
+   "COLUMN": "PH_APPDT@RK_BEGDT",
+   "DROP": 0.00040390524333433486,
+   "SPREAD": 4.595905687133064e-05
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I5",
+   "COLUMN": "PR_RCVDT:first:day",
+   "DROP": 0.0004014272970561672,
+   "SPREAD": 6.069703991358147e-06
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I6",
+   "COLUMN": "PS_BIRTH@valuation_date:month",
+   "DROP": 0.00037169194171871034,
+   "SPREAD": 0.00026289597006393307
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I7",
+   "COLUMN": "HD_CHGTS@RK_ENDDT",
+   "DROP": 0.0003295668549905262,
+   "SPREAD": 0.0001298027639380651
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I8",
+   "COLUMN": "RK_ENDDT",
+   "DROP": 0.0003246109624343019,
+   "SPREAD": 0.00019407239814853416
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I9",
+   "COLUMN": "RK_BEGDT",
+   "DROP": 0.0003171771235999099,
+   "SPREAD": 0.0003568930892534008
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/I10",
+   "COLUMN": "EX_TSTMP",
+   "DROP": 0.00031469917732181624,
+   "SPREAD": 0.00030676534574153335
+  }
+ ],
+ "clusters": [
+  {
+   "ID": "t3_surrender_value/r1-structure/K1",
+   "SIZE": 1397,
+   "WRONG_SHARE": 0.055595323311858735,
+   "APART": [
+    "valuation_date-RK_BEGDT:days +0.9 sd",
+    "RK_BEGDT -0.9 sd",
+    "PH_APPDT@RK_BEGDT -0.9 sd"
+   ]
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/K2",
+   "SIZE": 11,
+   "WRONG_SHARE": 0.6363636363636364,
+   "APART": [
+    "EX_TARGET=t3_surrender_value.surrender_value +16.5 sd",
+    "EX_TSTMP +9.8 sd",
+    "WRONG_SHARE +5.7 sd"
+   ]
+  },
+  {
+   "ID": "t3_surrender_value/r1-structure/K3",
+   "SIZE": 1611,
+   "WRONG_SHARE": 0.0040347610180012415,
+   "APART": [
+    "valuation_date-RK_BEGDT:days -0.8 sd",
+    "RK_BEGDT +0.8 sd",
+    "PH_APPDT@RK_BEGDT +0.8 sd"
+   ]
+  }
+ ]
+}

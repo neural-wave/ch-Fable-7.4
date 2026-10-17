@@ -1,0 +1,166 @@
+{
+ "rows": {
+  "right": 3011,
+  "wrong": 8
+ },
+ "differences": {
+  "maturity_value": [
+   {
+    "DIFF": -329400,
+    "ROWS": 1
+   },
+   {
+    "DIFF": 126100,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -157400,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -485500,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -172600,
+    "ROWS": 1
+   },
+   {
+    "DIFF": 395500,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -194700,
+    "ROWS": 1
+   },
+   {
+    "DIFF": -149800,
+    "ROWS": 1
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t2_projected_maturity_value/r1/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "EX_TSTMP <= 2024-05-01 14:34:41.250000"
+   ],
+   "ROWS": 28,
+   "WRONG": 5,
+   "SHARE": 0.17857142857142858
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "EX_TSTMP > 2024-05-01 14:34:41.250000",
+    "PR_RCVDT:last:day <= 2.5",
+    "AL_VLDTO:first <= 2015-03-06"
+   ],
+   "ROWS": 125,
+   "WRONG": 3,
+   "SHARE": 0.024
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C1",
+   "METHOD": "change point",
+   "COLUMN": "EX_TSTMP",
+   "BEFORE": "1997-10-20T16:45:50.000000",
+   "AFTER": "2002-02-27T10:44:42.000000",
+   "RATE_BEFORE": 1.0,
+   "RATE_AFTER": 0.10810810810810811,
+   "EXPLAINED": 0.0970744479818664
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C2",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:last",
+   "BEFORE": "2026-06-04",
+   "AFTER": "2026-06-05",
+   "RATE_BEFORE": 0.0026726057906458797,
+   "RATE_AFTER": 0.002583979328165375,
+   "EXPLAINED": 0.014657388492711528
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C3",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@RK_ENDDT",
+   "BEFORE": "2024-03-19",
+   "AFTER": "2024-03-25",
+   "RATE_BEFORE": 0.0027991602519244225,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.014086192396350087
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C4",
+   "METHOD": "change point",
+   "COLUMN": "RK_BEGDT",
+   "BEFORE": "2024-03-19",
+   "AFTER": "2024-03-25",
+   "RATE_BEFORE": 0.002785515320334262,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.013878584549683177
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C5",
+   "METHOD": "change point",
+   "COLUMN": "PR_RCVDT:first",
+   "BEFORE": "2024-03-13",
+   "AFTER": "2024-03-23",
+   "RATE_BEFORE": 0.002786485545106235,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.011990402782986836
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C6",
+   "METHOD": "change point",
+   "COLUMN": "PR_RCVDT:last",
+   "BEFORE": "2026-06-08",
+   "AFTER": "2026-06-09",
+   "RATE_BEFORE": 0.002772002772002772,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.01060042694539735
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C7",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@RK_BEGDT",
+   "BEFORE": "2024-02-27T16:19:05.000000",
+   "AFTER": "2024-03-02T15:08:31.000000",
+   "RATE_BEFORE": 0.0027787426189649182,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.010053858290027714
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C8",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@RK_ENDDT",
+   "BEFORE": "2024-02-27T16:19:05.000000",
+   "AFTER": "2024-03-02T15:08:31.000000",
+   "RATE_BEFORE": 0.002792321116928447,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.009949044226153588
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C9",
+   "METHOD": "change point",
+   "COLUMN": "PH_APPDT@RK_BEGDT",
+   "BEFORE": "2024-02-24",
+   "AFTER": "2024-02-28",
+   "RATE_BEFORE": 0.0027787426189649182,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.009748053433706041
+  },
+  {
+   "ID": "t2_projected_maturity_value/r1/C10",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:first",
+   "BEFORE": "2024-02-24",
+   "AFTER": "2024-03-01",
+   "RATE_BEFORE": 0.0027913468248429866,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.009365476768332959
+  }
+ ]
+}

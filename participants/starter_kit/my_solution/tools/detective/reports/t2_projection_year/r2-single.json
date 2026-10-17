@@ -1,0 +1,144 @@
+{
+ "rows": {
+  "right": 10142,
+  "wrong": 322
+ },
+ "differences": {
+  "value": [
+   {
+    "DIFF": 1,
+    "ROWS": 171
+   },
+   {
+    "DIFF": -1,
+    "ROWS": 82
+   },
+   {
+    "DIFF": 2,
+    "ROWS": 41
+   },
+   {
+    "DIFF": -2,
+    "ROWS": 6
+   },
+   {
+    "DIFF": 3,
+    "ROWS": 4
+   },
+   {
+    "DIFF": -3,
+    "ROWS": 2
+   },
+   {
+    "DIFF": 149,
+    "ROWS": 1
+   },
+   {
+    "DIFF": 61,
+    "ROWS": 1
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t2_projection_year/r2-single/C1",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH",
+   "BEFORE": "1958-02-26",
+   "AFTER": "1958-07-09",
+   "RATE_BEFORE": 0.11633237822349571,
+   "RATE_AFTER": 0.011839080459770114,
+   "EXPLAINED": 0.05085121847421093
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C2",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH@RK_BEGDT",
+   "BEFORE": "1960-09-09",
+   "AFTER": "1960-09-16",
+   "RATE_BEFORE": 0.09132007233273057,
+   "RATE_AFTER": 0.012632090368031094,
+   "EXPLAINED": 0.03459153719589398
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C3",
+   "METHOD": "change point",
+   "COLUMN": "PS_BIRTH@RK_ENDDT",
+   "BEFORE": "1960-09-09",
+   "AFTER": "1960-09-16",
+   "RATE_BEFORE": 0.08709386281588448,
+   "RATE_AFTER": 0.01373192368453032,
+   "EXPLAINED": 0.03010705192905016
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C4",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:last",
+   "BEFORE": "2026-06-02",
+   "AFTER": "2026-06-03",
+   "RATE_BEFORE": 0.03337767565606482,
+   "RATE_AFTER": 0.020956719817767654,
+   "EXPLAINED": 0.014914146166593853
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C5",
+   "METHOD": "change point",
+   "COLUMN": "AD_VLDFR@RK_BEGDT",
+   "BEFORE": "2017-09-16",
+   "AFTER": "2017-10-09",
+   "RATE_BEFORE": 0.031301642850199284,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.012423082836755025
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C6",
+   "METHOD": "change point",
+   "COLUMN": "BR_SINCE@last",
+   "BEFORE": "1998-01-28",
+   "AFTER": "1998-02-26",
+   "RATE_BEFORE": 0.02838577291381669,
+   "RATE_AFTER": 0.033795493934142114,
+   "EXPLAINED": 0.010077684990392775
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C7",
+   "METHOD": "change point",
+   "COLUMN": "BR_SINCE@RK_BEGDT",
+   "BEFORE": "1998-01-28",
+   "AFTER": "1998-02-26",
+   "RATE_BEFORE": 0.028499156829679594,
+   "RATE_AFTER": 0.0337450374944861,
+   "EXPLAINED": 0.010075933267965628
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C8",
+   "METHOD": "change point",
+   "COLUMN": "BR_SINCE@RK_ENDDT",
+   "BEFORE": "1998-01-28",
+   "AFTER": "1998-02-26",
+   "RATE_BEFORE": 0.0282793867120954,
+   "RATE_AFTER": 0.03395733565520244,
+   "EXPLAINED": 0.010043164516836843
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C9",
+   "METHOD": "change point",
+   "COLUMN": "AD_CHGTS@RK_BEGDT",
+   "BEFORE": "2018-07-25T12:37:46.000000",
+   "AFTER": "2018-07-26T08:35:08.000000",
+   "RATE_BEFORE": 0.031234843340770202,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.009592210853238343
+  },
+  {
+   "ID": "t2_projection_year/r2-single/C10",
+   "METHOD": "change point",
+   "COLUMN": "AL_VLDTO:first",
+   "BEFORE": "2018-01-17",
+   "AFTER": "2018-03-23",
+   "RATE_BEFORE": 0.029556650246305417,
+   "RATE_AFTER": 0.03102929257844159,
+   "EXPLAINED": 0.009575223142878253
+  }
+ ]
+}

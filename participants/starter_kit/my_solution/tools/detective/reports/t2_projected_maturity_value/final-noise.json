@@ -1,0 +1,12 @@
+{
+ "findings": [
+  {
+   "ID": "t2_projected_maturity_value/final-noise/N1",
+   "TEXT": "isolated 2 of 8 differences as anomalies, 2 of them in whole francs"
+  },
+  {
+   "ID": "t2_projected_maturity_value/final-noise/N2",
+   "TEXT": "NREXCP lists 5 of the differing entities: 2 isolated, 3 not"
+  }
+ ]
+}

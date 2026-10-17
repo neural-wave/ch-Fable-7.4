@@ -1,0 +1,52 @@
+{
+ "findings": [
+  {
+   "ID": "t4_annual_statement/r1-search/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "invested": "first",
+    "first_year": "PH_BEGDT"
+   },
+   "RIGHT": 27682,
+   "TOTAL": 27726,
+   "RIGHT_HELD_OUT": 6407,
+   "TOTAL_HELD_OUT": 6419
+  },
+  {
+   "ID": "t4_annual_statement/r1-search/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "invested": "first",
+    "first_year": "PH_APPDT"
+   },
+   "RIGHT": 27682,
+   "TOTAL": 27726,
+   "RIGHT_HELD_OUT": 6407,
+   "TOTAL_HELD_OUT": 6419
+  },
+  {
+   "ID": "t4_annual_statement/r1-search/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "invested": "last",
+    "first_year": "PH_BEGDT"
+   },
+   "RIGHT": 27682,
+   "TOTAL": 27726,
+   "RIGHT_HELD_OUT": 6407,
+   "TOTAL_HELD_OUT": 6419
+  },
+  {
+   "ID": "t4_annual_statement/r1-search/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "invested": "last",
+    "first_year": "PH_APPDT"
+   },
+   "RIGHT": 27682,
+   "TOTAL": 27726,
+   "RIGHT_HELD_OUT": 6407,
+   "TOTAL_HELD_OUT": 6419
+  }
+ ]
+}

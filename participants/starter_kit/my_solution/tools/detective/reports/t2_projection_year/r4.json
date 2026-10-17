@@ -1,0 +1,180 @@
+{
+ "rows": {
+  "right": 78242,
+  "wrong": 798
+ },
+ "differences": {
+  "value": [
+   {
+    "DIFF": 12,
+    "ROWS": 8
+   },
+   {
+    "DIFF": 23,
+    "ROWS": 6
+   },
+   {
+    "DIFF": 24,
+    "ROWS": 5
+   },
+   {
+    "DIFF": 25,
+    "ROWS": 5
+   },
+   {
+    "DIFF": 26,
+    "ROWS": 5
+   },
+   {
+    "DIFF": 20,
+    "ROWS": 5
+   },
+   {
+    "DIFF": 19,
+    "ROWS": 4
+   },
+   {
+    "DIFF": 4,
+    "ROWS": 4
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t2_projection_year/r4/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PS_BIRTH@RK_ENDDT:day <= 12.5",
+    "PS_BIRTH <= 1967-03-22",
+    "PS_BIRTH@RK_BEGDT:month > 2.5"
+   ],
+   "ROWS": 11482,
+   "WRONG": 748,
+   "SHARE": 0.06514544504441735
+  },
+  {
+   "ID": "t2_projection_year/r4/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PS_BIRTH@RK_ENDDT:day <= 12.5",
+    "PS_BIRTH > 1967-03-22",
+    "AL_VLDFR:last:holiday = Knabenschiessen"
+   ],
+   "ROWS": 105,
+   "WRONG": 29,
+   "SHARE": 0.2761904761904762
+  },
+  {
+   "ID": "t2_projection_year/r4/T3",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PS_BIRTH@RK_ENDDT:day > 12.5",
+    "AL_VLDTO:first:holiday = Bruder Klaus",
+    "AL_VLDTO:first:weekday > 5"
+   ],
+   "ROWS": 21,
+   "WRONG": 21,
+   "SHARE": 1.0
+  },
+  {
+   "ID": "t2_projection_year/r4/C1",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@RK_ENDDT",
+   "BEFORE": "2006-03-04T09:47:22.000000",
+   "AFTER": "2006-03-06T10:42:13.000000",
+   "RATE_BEFORE": 0.01988407663822251,
+   "RATE_AFTER": 0.008271037857636075,
+   "EXPLAINED": 0.035402714571785544
+  },
+  {
+   "ID": "t2_projection_year/r4/C2",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@last",
+   "BEFORE": "2006-03-04T09:47:22.000000",
+   "AFTER": "2006-03-06T10:42:13.000000",
+   "RATE_BEFORE": 0.01988407663822251,
+   "RATE_AFTER": 0.008271037857636075,
+   "EXPLAINED": 0.035402714571785544
+  },
+  {
+   "ID": "t2_projection_year/r4/C3",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@RK_ENDDT",
+   "BEFORE": "2006-03-04",
+   "AFTER": "2006-03-06",
+   "RATE_BEFORE": 0.020011342461314106,
+   "RATE_AFTER": 0.008261241135283447,
+   "EXPLAINED": 0.03472821700389366
+  },
+  {
+   "ID": "t2_projection_year/r4/C4",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@last",
+   "BEFORE": "2006-03-04",
+   "AFTER": "2006-03-06",
+   "RATE_BEFORE": 0.020011342461314106,
+   "RATE_AFTER": 0.008261241135283447,
+   "EXPLAINED": 0.03472821700389366
+  },
+  {
+   "ID": "t2_projection_year/r4/C5",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@RK_ENDDT",
+   "BEFORE": "2006-03-04",
+   "AFTER": "2006-03-06",
+   "RATE_BEFORE": 0.020011342461314106,
+   "RATE_AFTER": 0.008261241135283447,
+   "EXPLAINED": 0.03472821700389366
+  },
+  {
+   "ID": "t2_projection_year/r4/C6",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@last",
+   "BEFORE": "2006-03-04",
+   "AFTER": "2006-03-06",
+   "RATE_BEFORE": 0.020011342461314106,
+   "RATE_AFTER": 0.008261241135283447,
+   "EXPLAINED": 0.03472821700389366
+  },
+  {
+   "ID": "t2_projection_year/r4/C7",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@RK_BEGDT",
+   "BEFORE": "2006-03-24T10:27:03.000000",
+   "AFTER": "2006-04-04T11:28:46.000000",
+   "RATE_BEFORE": 0.024104717214126947,
+   "RATE_AFTER": 0.005272557190237265,
+   "EXPLAINED": 0.017585609846457195
+  },
+  {
+   "ID": "t2_projection_year/r4/C8",
+   "METHOD": "change point",
+   "COLUMN": "RK_BEGDT",
+   "BEFORE": "2006-04-01",
+   "AFTER": "2006-05-01",
+   "RATE_BEFORE": 0.02414048973534504,
+   "RATE_AFTER": 0.005269868253293668,
+   "EXPLAINED": 0.016992663354946914
+  },
+  {
+   "ID": "t2_projection_year/r4/C9",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:first",
+   "BEFORE": "2006-04-01",
+   "AFTER": "2006-05-01",
+   "RATE_BEFORE": 0.02414048973534504,
+   "RATE_AFTER": 0.005269868253293668,
+   "EXPLAINED": 0.016992663354946914
+  },
+  {
+   "ID": "t2_projection_year/r4/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@RK_ENDDT",
+   "BEFORE": "2006-03-24T10:27:03.000000",
+   "AFTER": "2006-04-04T11:28:46.000000",
+   "RATE_BEFORE": 0.02489668894444161,
+   "RATE_AFTER": 0.005215430946011877,
+   "EXPLAINED": 0.016338604638792754
+  }
+ ]
+}

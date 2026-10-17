@@ -1,0 +1,228 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "down",
+     "net"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "down",
+     "down"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "down",
+     "half_down"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "half_down",
+     "net"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "half_down",
+     "down"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "half_down",
+     "half_down"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "split",
+     "net"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "split",
+     "down"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "split",
+     "half_down"
+    ]
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "net",
+     "net"
+    ]
+   },
+   "RIGHT": 325864,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81588,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "net",
+     "down"
+    ]
+   },
+   "RIGHT": 325864,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81588,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "net",
+     "half_down"
+    ]
+   },
+   "RIGHT": 325864,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81588,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S13",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "down",
+     "split"
+    ]
+   },
+   "RIGHT": 325319,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81441,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S14",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "half_down",
+     "split"
+    ]
+   },
+   "RIGHT": 325319,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81441,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S15",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "split",
+     "split"
+    ]
+   },
+   "RIGHT": 325319,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81441,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-entry-era/S16",
+   "METHOD": "search",
+   "HOLES": {
+    "entry": [
+     "net",
+     "split"
+    ]
+   },
+   "RIGHT": 325305,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81438,
+   "TOTAL_HELD_OUT": 81619
+  }
+ ]
+}

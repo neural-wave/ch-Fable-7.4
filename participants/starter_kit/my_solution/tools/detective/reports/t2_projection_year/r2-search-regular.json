@@ -1,0 +1,32 @@
+{
+ "findings": [
+  {
+   "ID": "t2_projection_year/r2-search-regular/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "pots": "one",
+    "age": "nearest",
+    "half_up": true,
+    "growth": "decimal28"
+   },
+   "RIGHT": 35896,
+   "TOTAL": 36376,
+   "RIGHT_HELD_OUT": 8280,
+   "TOTAL_HELD_OUT": 8361
+  },
+  {
+   "ID": "t2_projection_year/r2-search-regular/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "pots": "two",
+    "age": "nearest",
+    "half_up": true,
+    "growth": "decimal28"
+   },
+   "RIGHT": 0,
+   "TOTAL": 36376,
+   "RIGHT_HELD_OUT": 0,
+   "TOTAL_HELD_OUT": 8361
+  }
+ ]
+}

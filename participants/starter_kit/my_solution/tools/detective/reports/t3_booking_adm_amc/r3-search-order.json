@@ -1,0 +1,37 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_adm_amc/r3-search-order/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "order": "day_strict"
+   },
+   "RIGHT": 2906371,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 727599,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r3-search-order/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "order": "day"
+   },
+   "RIGHT": 2895346,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 724823,
+   "TOTAL_HELD_OUT": 733109
+  },
+  {
+   "ID": "t3_booking_adm_amc/r3-search-order/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "order": "event"
+   },
+   "RIGHT": 2883152,
+   "TOTAL": 2928356,
+   "RIGHT_HELD_OUT": 721804,
+   "TOTAL_HELD_OUT": 733109
+  }
+ ]
+}

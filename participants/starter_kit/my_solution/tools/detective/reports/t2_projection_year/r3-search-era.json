@@ -1,0 +1,100 @@
+{
+ "findings": [
+  {
+   "ID": "t2_projection_year/r3-search-era/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "PH_APPDT",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 62657,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14575,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r3-search-era/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "PH_BEGDT",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 62468,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14575,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r3-search-era/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "PH_APPDT",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 60943,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14184,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r3-search-era/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "PH_BEGDT",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 60754,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 14184,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r3-search-era/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "half_up",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 43861,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 10549,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r3-search-era/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "half_up",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 42508,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 10158,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r3-search-era/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "down",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 19105,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 4097,
+   "TOTAL_HELD_OUT": 15019
+  },
+  {
+   "ID": "t2_projection_year/r3-search-era/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "rounding": "down",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 18734,
+   "TOTAL": 64021,
+   "RIGHT_HELD_OUT": 4095,
+   "TOTAL_HELD_OUT": 15019
+  }
+ ]
+}

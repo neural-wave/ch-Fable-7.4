@@ -1,0 +1,164 @@
+{
+ "rows": {
+  "right": 674677,
+  "wrong": 569
+ },
+ "differences": {
+  "run": [
+   {
+    "DIFF": 1,
+    "ROWS": 569
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "charge_runs/r1/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "run_date-RK_BEGDT:days <= 379.5",
+    "PD_INIMON@RK_BEGDT > 6",
+    "PH_FREQ@RK_BEGDT != M"
+   ],
+   "ROWS": 13092,
+   "WRONG": 315,
+   "SHARE": 0.024060494958753436
+  },
+  {
+   "ID": "charge_runs/r1/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "run_date-RK_BEGDT:days > 379.5",
+    "PH_PREMI@run_date <= 2500",
+    "PH_PREMI@RK_BEGDT <= 13750"
+   ],
+   "ROWS": 848,
+   "WRONG": 122,
+   "SHARE": 0.14386792452830188
+  },
+  {
+   "ID": "charge_runs/r1/T3",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "run_date-RK_BEGDT:days <= 379.5",
+    "PD_INIMON@RK_BEGDT > 6",
+    "PH_FREQ@RK_BEGDT = M"
+   ],
+   "ROWS": 25908,
+   "WRONG": 120,
+   "SHARE": 0.004631773969430292
+  },
+  {
+   "ID": "charge_runs/r1/T4",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "run_date-RK_BEGDT:days > 379.5",
+    "PH_PREMI@run_date > 2500",
+    "PR_RCVDT:first:holiday = Knabenschiessen"
+   ],
+   "ROWS": 1563,
+   "WRONG": 12,
+   "SHARE": 0.007677543186180422
+  },
+  {
+   "ID": "charge_runs/r1/C1",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@RK_ENDDT",
+   "BEFORE": "2011-10-31",
+   "AFTER": "2011-11-01",
+   "RATE_BEFORE": 0.0006389737839906927,
+   "RATE_AFTER": 0.001039410243868353,
+   "EXPLAINED": 0.0015057486095052745
+  },
+  {
+   "ID": "charge_runs/r1/C2",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@last",
+   "BEFORE": "2011-10-31",
+   "AFTER": "2011-11-01",
+   "RATE_BEFORE": 0.0006389737839906927,
+   "RATE_AFTER": 0.001039410243868353,
+   "EXPLAINED": 0.0015057486095052745
+  },
+  {
+   "ID": "charge_runs/r1/C3",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@RK_ENDDT",
+   "BEFORE": "2011-10-31",
+   "AFTER": "2011-11-01",
+   "RATE_BEFORE": 0.0006389737839906927,
+   "RATE_AFTER": 0.001039410243868353,
+   "EXPLAINED": 0.0015057486095052745
+  },
+  {
+   "ID": "charge_runs/r1/C4",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@last",
+   "BEFORE": "2011-10-31",
+   "AFTER": "2011-11-01",
+   "RATE_BEFORE": 0.0006389737839906927,
+   "RATE_AFTER": 0.001039410243868353,
+   "EXPLAINED": 0.0015057486095052745
+  },
+  {
+   "ID": "charge_runs/r1/C5",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@RK_ENDDT",
+   "BEFORE": "2011-09-22T14:07:57.000000",
+   "AFTER": "2011-09-25T15:40:52.000000",
+   "RATE_BEFORE": 0.0006373775087299573,
+   "RATE_AFTER": 0.001040086925700606,
+   "EXPLAINED": 0.0013993529024925243
+  },
+  {
+   "ID": "charge_runs/r1/C6",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@last",
+   "BEFORE": "2011-09-22T14:07:57.000000",
+   "AFTER": "2011-09-25T15:40:52.000000",
+   "RATE_BEFORE": 0.0006373775087299573,
+   "RATE_AFTER": 0.001040086925700606,
+   "EXPLAINED": 0.0013993529024925243
+  },
+  {
+   "ID": "charge_runs/r1/C7",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@run_date",
+   "BEFORE": "2011-10-26",
+   "AFTER": "2011-10-28",
+   "RATE_BEFORE": 0.0006278656896659562,
+   "RATE_AFTER": 0.0011866600912341266,
+   "EXPLAINED": 0.0013764677578596864
+  },
+  {
+   "ID": "charge_runs/r1/C8",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@run_date",
+   "BEFORE": "2011-10-26",
+   "AFTER": "2011-10-28",
+   "RATE_BEFORE": 0.0006278656896659562,
+   "RATE_AFTER": 0.0011866600912341266,
+   "EXPLAINED": 0.0013764677578596864
+  },
+  {
+   "ID": "charge_runs/r1/C9",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT:last",
+   "BEFORE": "2024-03-28",
+   "AFTER": "2024-04-01",
+   "RATE_BEFORE": 0.0009508743722068065,
+   "RATE_AFTER": 0.0007862485356402632,
+   "EXPLAINED": 0.0012787722083543323
+  },
+  {
+   "ID": "charge_runs/r1/C10",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@run_date",
+   "BEFORE": "2018-02-28",
+   "AFTER": "2018-03-01",
+   "RATE_BEFORE": 0.0007764783238641527,
+   "RATE_AFTER": 0.0014153168737222833,
+   "EXPLAINED": 0.0011500202317799985
+  }
+ ]
+}

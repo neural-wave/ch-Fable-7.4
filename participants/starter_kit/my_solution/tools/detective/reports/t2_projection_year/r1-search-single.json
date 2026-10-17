@@ -1,0 +1,340 @@
+{
+ "findings": [
+  {
+   "ID": "t2_projection_year/r1-search-single/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "decimal28",
+    "age": "nearest",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 7890,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 2252,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "decimal16",
+    "age": "nearest",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 7890,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 2252,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "decimal28",
+    "age": "nearest",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 7629,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 2107,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "decimal16",
+    "age": "nearest",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 7629,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 2107,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S5",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "fraction",
+    "age": "nearest",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 7238,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 2040,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S6",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "fraction",
+    "age": "nearest",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 6995,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 1911,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S7",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "decimal28",
+    "age": "completed",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 4034,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 1450,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S8",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "decimal16",
+    "age": "completed",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 4034,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 1450,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S9",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "decimal28",
+    "age": "completed",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 3829,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 1366,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S10",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "decimal16",
+    "age": "completed",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 3829,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 1366,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S11",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "fraction",
+    "age": "completed",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 3777,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 1263,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S12",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": true,
+    "growth": "fraction",
+    "age": "completed",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 3579,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 1195,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S13",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "fraction",
+    "age": "nearest",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 45,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S14",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "decimal28",
+    "age": "nearest",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 44,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S15",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "decimal16",
+    "age": "nearest",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 44,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S16",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "fraction",
+    "age": "nearest",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 41,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S17",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "decimal28",
+    "age": "nearest",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 40,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S18",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "decimal16",
+    "age": "nearest",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 40,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S19",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "fraction",
+    "age": "completed",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 29,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S20",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "decimal28",
+    "age": "completed",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 29,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S21",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "decimal16",
+    "age": "completed",
+    "parameter_day": "PH_APPDT"
+   },
+   "RIGHT": 29,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S22",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "fraction",
+    "age": "completed",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 25,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S23",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "decimal28",
+    "age": "completed",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 25,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  },
+  {
+   "ID": "t2_projection_year/r1-search-single/S24",
+   "METHOD": "search",
+   "HOLES": {
+    "half_up": false,
+    "growth": "decimal16",
+    "age": "completed",
+    "parameter_day": "PH_BEGDT"
+   },
+   "RIGHT": 25,
+   "TOTAL": 8140,
+   "RIGHT_HELD_OUT": 5,
+   "TOTAL_HELD_OUT": 2324
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+ "findings": [
+  {
+   "ID": "t4_annual_statement/r2-noise/N1",
+   "TEXT": "isolated 8 of 20 differences as anomalies, 8 of them in whole francs"
+  },
+  {
+   "ID": "t4_annual_statement/r2-noise/N2",
+   "TEXT": "NREXCP lists 16 of the differing entities: 6 isolated, 10 not"
+  }
+ ]
+}

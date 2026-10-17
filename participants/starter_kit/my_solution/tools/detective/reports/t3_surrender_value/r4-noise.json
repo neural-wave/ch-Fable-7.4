@@ -1,0 +1,12 @@
+{
+ "findings": [
+  {
+   "ID": "t3_surrender_value/r4-noise/N1",
+   "TEXT": "isolated 3 of 16 differences as anomalies, 3 of them in whole francs"
+  },
+  {
+   "ID": "t3_surrender_value/r4-noise/N2",
+   "TEXT": "NREXCP lists 11 of the differing entities: 2 isolated, 9 not"
+  }
+ ]
+}

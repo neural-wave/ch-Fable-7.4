@@ -1,0 +1,188 @@
+{
+ "rows": {
+  "right": 407469,
+  "wrong": 167
+ },
+ "differences": {
+  "amount_pc": [
+   {
+    "DIFF": 1,
+    "ROWS": 160
+   },
+   {
+    "DIFF": 0,
+    "ROWS": 5
+   },
+   {
+    "DIFF": -1,
+    "ROWS": 2
+   }
+  ],
+  "price": [
+   {
+    "DIFF": 0,
+    "ROWS": 167
+   }
+  ],
+  "units": [
+   {
+    "DIFF": 25,
+    "ROWS": 12
+   },
+   {
+    "DIFF": 11,
+    "ROWS": 12
+   },
+   {
+    "DIFF": 15,
+    "ROWS": 10
+   },
+   {
+    "DIFF": 23,
+    "ROWS": 9
+   },
+   {
+    "DIFF": 12,
+    "ROWS": 8
+   },
+   {
+    "DIFF": 13,
+    "ROWS": 7
+   },
+   {
+    "DIFF": 24,
+    "ROWS": 7
+   },
+   {
+    "DIFF": 6,
+    "ROWS": 6
+   }
+  ]
+ },
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r6/T1",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PS_BIRTH:day <= 4.5",
+    "PH_PREMI@last > 68250",
+    "PH_BEGDT@BK_RCVDT:weekday > 3.5"
+   ],
+   "ROWS": 5764,
+   "WRONG": 127,
+   "SHARE": 0.022033310201249132
+  },
+  {
+   "ID": "t3_booking_prm/r6/T2",
+   "METHOD": "decision tree",
+   "CONDITIONS": [
+    "PS_BIRTH:day > 4.5",
+    "PH_VLDFR@last:holiday = Jahrestag der Ausrufung der Republik",
+    "PS_BIRTH:day > 29.5"
+   ],
+   "ROWS": 697,
+   "WRONG": 27,
+   "SHARE": 0.03873744619799139
+  },
+  {
+   "ID": "t3_booking_prm/r6/C1",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@last",
+   "BEFORE": "2023-02-22",
+   "AFTER": "2023-02-24",
+   "RATE_BEFORE": 0.0004467462427838444,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.0027869505263307423
+  },
+  {
+   "ID": "t3_booking_prm/r6/C2",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@last",
+   "BEFORE": "2023-02-22",
+   "AFTER": "2023-02-24",
+   "RATE_BEFORE": 0.0004467462427838444,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.0027869505263307423
+  },
+  {
+   "ID": "t3_booking_prm/r6/C3",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@last",
+   "BEFORE": "2022-09-10T15:49:29.000000",
+   "AFTER": "2022-09-12T10:09:04.000000",
+   "RATE_BEFORE": 0.0004221403781063339,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.00259587549608585
+  },
+  {
+   "ID": "t3_booking_prm/r6/C4",
+   "METHOD": "change point",
+   "COLUMN": "HD_VLDFR@last",
+   "BEFORE": "2022-10-28",
+   "AFTER": "2022-10-29",
+   "RATE_BEFORE": 0.0004220251648298885,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.00253257911307154
+  },
+  {
+   "ID": "t3_booking_prm/r6/C5",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@BK_TRDDT",
+   "BEFORE": "2022-10-09T15:11:58.000000",
+   "AFTER": "2022-10-10T16:19:32.000000",
+   "RATE_BEFORE": 0.0004197551344598857,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.002465971233889213
+  },
+  {
+   "ID": "t3_booking_prm/r6/C6",
+   "METHOD": "change point",
+   "COLUMN": "PH_CHGTS@BK_RCVDT",
+   "BEFORE": "2022-10-09T15:11:58.000000",
+   "AFTER": "2022-10-10T16:19:32.000000",
+   "RATE_BEFORE": 0.00041975407940641243,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.002465896710459041
+  },
+  {
+   "ID": "t3_booking_prm/r6/C7",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_RCVDT",
+   "BEFORE": "2022-10-07T16:04:33.000000",
+   "AFTER": "2022-10-08T15:08:21.000000",
+   "RATE_BEFORE": 0.00041929879181689446,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.002436536523893624
+  },
+  {
+   "ID": "t3_booking_prm/r6/C8",
+   "METHOD": "change point",
+   "COLUMN": "HD_CHGTS@BK_TRDDT",
+   "BEFORE": "2022-10-07T16:04:33.000000",
+   "AFTER": "2022-10-08T15:08:21.000000",
+   "RATE_BEFORE": 0.00041929879181689446,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.002436536523893624
+  },
+  {
+   "ID": "t3_booking_prm/r6/C9",
+   "METHOD": "change point",
+   "COLUMN": "PH_VLDFR@BK_TRDDT",
+   "BEFORE": "2022-11-01",
+   "AFTER": "2022-11-12",
+   "RATE_BEFORE": 0.00041962962032313994,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.0024179447735849136
+  },
+  {
+   "ID": "t3_booking_prm/r6/C10",
+   "METHOD": "change point",
+   "COLUMN": "EV_EFFDT@BK_TRDDT",
+   "BEFORE": "2022-11-01",
+   "AFTER": "2022-11-12",
+   "RATE_BEFORE": 0.00041962962032313994,
+   "RATE_AFTER": 0.0,
+   "EXPLAINED": 0.0024179447735849136
+  }
+ ]
+}

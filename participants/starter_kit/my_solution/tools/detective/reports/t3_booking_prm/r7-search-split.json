@@ -1,0 +1,52 @@
+{
+ "findings": [
+  {
+   "ID": "t3_booking_prm/r7-search-split/S1",
+   "METHOD": "search",
+   "HOLES": {
+    "split": "premium",
+    "entry": "down"
+   },
+   "RIGHT": 326011,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81618,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-split/S2",
+   "METHOD": "search",
+   "HOLES": {
+    "split": "premium",
+    "entry": "net"
+   },
+   "RIGHT": 326011,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81618,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-split/S3",
+   "METHOD": "search",
+   "HOLES": {
+    "split": "net",
+    "entry": "down"
+   },
+   "RIGHT": 325878,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81591,
+   "TOTAL_HELD_OUT": 81619
+  },
+  {
+   "ID": "t3_booking_prm/r7-search-split/S4",
+   "METHOD": "search",
+   "HOLES": {
+    "split": "net",
+    "entry": "net"
+   },
+   "RIGHT": 325864,
+   "TOTAL": 326017,
+   "RIGHT_HELD_OUT": 81588,
+   "TOTAL_HELD_OUT": 81619
+  }
+ ]
+}
