@@ -6,26 +6,25 @@ booking, with the rates valid on the effective date as Neuron knew them at the p
 
 - STP: the Swiss stamp duty on the premium of its event (the single premium, event 2), converted to francs
 - VST, SOS: the taxable base of the payout (`payouts`) x the rate
-- KST: the base x the rate; a church member pays base x KST / (1 + KST x KIS), section 32d EStG. SOL and KIS:
-  the KST x their rate, KIS of the region of residence
+- KST: the base x the rate; with a KIS booking for the payout base x KST / (1 + KST x KIS), section 32d EStG.
+  SOL and KIS: the KST x their rate, KIS of the region of residence
 - BOL, BOC: the Bollo (`bollo`)
 
-Every amount is rounded once: half up, in Germany truncated (`conventions.TRUNCATED`).
+Every amount is rounded once: half up, in Germany truncated (`conventions.TRUNCATED`). A booking whose payout,
+premium or rate is missing keeps a null amount, so a check can find it (`tools/neuron/t7_check.py`).
 """
 import functools
-import math
 
 import polars as pl
 
 from bollo import bollo_bookings
-from conventions import (ANNUAL_TAXES, CHURCH_MEMBER, CHURCH_REDUCED, CHURCH_TAX, PREMIUM_STAMP, REMITTANCE,
+from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_TAX, PREMIUM_STAMP, REMITTANCE,
                          STAMP_DUTY, STAMP_DUTY_COUNTRY, SURCHARGES, TAX_CURRENCY, TAXES, TRUNCATED, WITHHELD)
 from legacy import as_date, table
-from money import RATE_UNIT, rounded
+from money import RATE_UNIT, SHARE_UNIT, rounded
 from payouts import EVENT, payouts
 from taxpayer import tax_rates, with_policies, with_tax_currency
 
-SHARE_OF_SHARE = math.prod([RATE_UNIT, RATE_UNIT])  # two rates in millionths multiplied
 BOOKING = ["TB_POLNR", "TB_EVTNR", "TB_TAXTP", "TB_EFFDT"]  # the columns of a booking besides TB_AMOUNT
 PAYOUT_AMOUNTS = {"withholding": WITHHELD, "surcharges": SURCHARGES, "stamp_duty": STAMP_DUTY}  # name -> types
 ANNUAL_AMOUNTS = {f"{TAXES[tax].lower()}_{tax.lower()}": tax for tax in ANNUAL_TAXES}  # ch_stp -> STP, ...
@@ -33,14 +32,17 @@ ANNUAL_AMOUNTS = {f"{TAXES[tax].lower()}_{tax.lower()}": tax for tax in ANNUAL_T
 
 def half_up(tax_type: pl.Expr) -> pl.Expr:
     """True where Neuron rounds the tax `tax_type` half up, false where it truncates (by its country)."""
-    return tax_type.replace_strict(TAXES).is_in(TRUNCATED).not_()
+    return tax_type.replace_strict(TAXES, default=None).is_in(TRUNCATED).not_()
 
 
 def premium_stamp_duty(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
-    """The STP `bookings` with TB_AMOUNT: the premium of their event, in francs, x the rate."""
+    """The STP `bookings` with TB_AMOUNT: the premium of their event, in francs, x the rate.
+
+    NRPREM has one item per receipt event, so the join neither copies nor, being a left join, drops a booking.
+    """
     premiums = table(legacy_dir, "NRPREM").select(TB_POLNR="PR_POLNR", TB_EVTNR="PR_EVTNR",
                                                   PREMIUM=pl.coalesce("PR_AMTRC", "PR_AMTDU"))
-    rows = with_policies(legacy_dir, bookings.join(premiums, on=EVENT))
+    rows = with_policies(legacy_dir, bookings.join(premiums, on=EVENT, how="left"))
     currency = pl.col("TB_TAXTP").replace_strict(TAXES).replace_strict(TAX_CURRENCY)
     rated = tax_rates(legacy_dir, with_tax_currency(legacy_dir, rows, currency), pl.col("TB_TAXTP"), "RATE")
     taxed = pl.col("PREMIUM").cast(pl.Int128).mul(pl.col("RP")).mul(pl.col("RATE"))
@@ -49,20 +51,26 @@ def premium_stamp_duty(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
 
 
 def capital_gains_tax() -> pl.Expr:
-    """The KST of the payout: base x KST_RATE, for a church member / (1 + KST_RATE x KIS_RATE)."""
-    church = pl.when(pl.col("AD_CHURCH").eq(CHURCH_MEMBER)).then(pl.col("KIS_RATE").fill_null(0)).otherwise(0)
+    """The KST of the payout: base x KST_RATE, with a KIS booking / (1 + KST_RATE x KIS_RATE).
+
+    The KIS booking is the label that Neuron withheld church tax; the address may say otherwise.
+    """
+    church = pl.when(pl.col("KIS_BOOKED")).then(pl.col("KIS_RATE").fill_null(0)).otherwise(0)
     taxed = pl.col("TAXABLE_BASE").cast(pl.Int128).mul(pl.col("KST_RATE")).mul(RATE_UNIT)
-    whole = pl.lit(SHARE_OF_SHARE, pl.Int128).add(pl.col("KST_RATE").mul(church))
+    whole = pl.lit(SHARE_UNIT, pl.Int128).add(pl.col("KST_RATE").mul(church))
     return rounded(taxed, whole, half_up(pl.lit(CHURCH_REDUCED)))
 
 
 def payout_taxes(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
     """The withholding taxes and surcharges of the payouts in `bookings` with TB_AMOUNT.
 
-    VST and SOS are the base x their rate, SOL and KIS the KST x their rate.
+    VST and SOS are the base x their rate, SOL and KIS the KST x their rate. A booking of no reported payout keeps
+    a null amount.
     """
-    residents = payouts(legacy_dir).select(*EVENT, "TAXABLE_BASE", "AD_REGIO", "AD_CHURCH")
-    rows = tax_rates(legacy_dir, bookings.join(residents, on=EVENT), pl.col("TB_TAXTP"), "RATE", region="AD_REGIO")
+    residents = payouts(legacy_dir).select(*EVENT, "TAXABLE_BASE", "AD_REGIO")
+    church_tax = bookings.group_by(EVENT).agg(KIS_BOOKED=pl.col("TB_TAXTP").eq(CHURCH_TAX).any())
+    booked = bookings.join(residents, on=EVENT, how="left").join(church_tax, on=EVENT, how="left")
+    rows = tax_rates(legacy_dir, booked, pl.col("TB_TAXTP"), "RATE", region="AD_REGIO")
     german = tax_rates(legacy_dir, rows, pl.lit(CHURCH_REDUCED), "KST_RATE")
     church = tax_rates(legacy_dir, german, pl.lit(CHURCH_TAX), "KIS_RATE", region="AD_REGIO")
     tax_type = pl.col("TB_TAXTP")
@@ -89,20 +97,24 @@ def remittance() -> pl.Expr:
     The country of the withholding decides, Italy for stamp duty alone; the day comes from REMITTANCE.
     """
     withheld = pl.col("withholding").add(pl.col("surcharges"))
-    country = pl.when(withheld.ne(0)).then("AD_CNTRY").otherwise(pl.lit(STAMP_DUTY_COUNTRY))
+    country = pl.when(withheld.ne(0)).then("COUNTRY").otherwise(pl.lit(STAMP_DUTY_COUNTRY))
     first = as_date("TB_EFFDT").dt.month_start().dt.offset_by("1mo")
     days = country.replace_strict(REMITTANCE, default=None, return_dtype=pl.Int64)
     return pl.when(withheld.add(pl.col("stamp_duty")).ne(0)).then(first.add(pl.duration(days=days)))
 
 
 def payout_table(legacy_dir) -> pl.DataFrame:
-    """policy_id, event_nr, country, taxable_base and the PAYOUT_AMOUNTS (cents), remittance_date of every payout."""
+    """policy_id, event_nr, country, taxable_base and the PAYOUT_AMOUNTS (cents), remittance_date of every payout.
+
+    Without withholding the base is reported as calculated, or as 0 (`conventions.BASE_WITHOUT_TAX`).
+    """
     tax_type, amount = pl.col("TB_TAXTP"), pl.col("TB_AMOUNT")
     amounts = tax_bookings(legacy_dir).group_by(EVENT).agg(
         **{name: amount.filter(tax_type.is_in(types)).sum() for name, types in PAYOUT_AMOUNTS.items()})
     rows = payouts(legacy_dir).join(amounts, on=EVENT, how="left").with_columns(pl.col(*PAYOUT_AMOUNTS).fill_null(0))
+    base = pl.when(pl.lit(BASE_WITHOUT_TAX).or_(pl.col("withholding").ne(0))).then("TAXABLE_BASE").otherwise(0)
     return rows.select(pl.col("TB_POLNR").alias("policy_id"), pl.col("TB_EVTNR").alias("event_nr"),
-                       pl.col("AD_CNTRY").fill_null("").alias("country"), pl.col("TAXABLE_BASE").alias("taxable_base"),
+                       pl.col("COUNTRY").fill_null("").alias("country"), base.alias("taxable_base"),
                        *PAYOUT_AMOUNTS, remittance().alias("remittance_date"))
 
 

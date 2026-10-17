@@ -12,7 +12,8 @@ in too.
 | t3 surrender value | 6'137 / 6'153 train rows exact (99.74 %), and every link of the diagnostics: all 5'024'847 calculated bookings (amount and units), all 23'052 holdings, all 6'153 policy values. The 16 other rows are manual corrections |
 | t4 annual statement | 34'125 / 34'145 train rows exact (99.94 %): every column of every row, except 20 admin fees. Those 20 are manual corrections |
 | t5 outlier detection | 54 outliers on the train targets: exactly the 54 rows that t0 – t4 miss, among them all 38 corrections that NREXCP lists for train policies. Without them every task scores 100 % (`scoring.accuracy` with `excluded`) |
-| Maintainability index | 100 for every file, the tools included: 100.0 for the whole folder (radon, weighted by lines) |
+| t7 tax audit | No targets. PDF example 1 (BL10000086 #121) exact on synthetic tax tables, with the rule that converts every premium on its money date; example 2 (BL10000044 2019, 616.11) matched on the real tables before these rules changed, and the change leaves every Bollo amount of the synthetic tables as it was. Before every upload `tools/neuron/t7_check.py` runs both examples and the labels of NRTAXB on the real tables, with an open-weights model |
+| Maintainability index | 97.2 for the whole folder (radon, weighted by lines): 100 for every module of the submission, 56.4 for the t7 check tool |
 
 ```
 python check.py   # from starter_kit/: all tasks and the maintainability index
@@ -40,7 +41,7 @@ my_solution/
 ├── payouts.py         t7: the payouts, the premiums they use one after another, the taxable base by country
 ├── bollo.py           t7: the Italian Bollo, accrued every year, re-priced in 2019, collected at the payouts
 ├── taxes.py           t7: the amount of every tax booking of NRTAXB, the payout and annual tables
-├── requirements.txt   polars >= 1.31 (128-bit integers), holidays; tested with polars 1.31 and 2.0
+├── requirements.txt   polars 2.0.0 and holidays 0.106, pinned: the versions tested (128-bit integers need polars 1.31+)
 └── tools/neuron/      the tools that found the rules (not used by the submission)
     ├── load.py, codes.py, policy.py   tables decoded for exploring, code texts, history of one policy
     ├── targets.py                     train targets and official scoring, for exploring only
@@ -48,7 +49,8 @@ my_solution/
     ├── solver/                        Z3 with SMT-LIB constraints: proofs (UNSAT), intervals, rate recovery (MaxSMT)
     ├── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
     ├── bisection.py                   the first step where a calculation leaves a diagnostic target (t2)
-    └── account_check.py               the unit account link by link against the diagnostics (t3, t4)
+    ├── account_check.py               the unit account link by link against the diagnostics (t3, t4)
+    └── t7_check.py                    t7 before an upload: run like the evaluator, PDF examples, NRTAXB labels
 ```
 
 ## Approach
@@ -212,34 +214,50 @@ trace of the corrected amounts, so no rule can reproduce them.
 job user); only the amounts are missing. So the rules do not decide again whether a tax was due: they calculate
 the amount of every booking (`taxes.py`) and add them up per payout and per policy and year.
 
-- residence: the holder (NRHOLD) and the address (NRADDR) valid on the effective date, among the versions entered
-  up to the processing timestamp (`legacy.valid_on` with `known_at`). The rates NRTAXR are looked up the same way,
-  so the Bollo batches of 2017 – 2019 used rate version 1 and the fix of July 2019 version 2;
+- country: the country of the taxes withheld from the payout (VST, SOS, KST), a label of NRTAXB; without them
+  the residence: the holder (NRHOLD) and the address (NRADDR) valid on the effective date, among the versions
+  entered up to the processing timestamp (`legacy.valid_on` with `known_at`). The rates NRTAXR are looked up the
+  same way, for the country of their tax type (`TX_CNTRY`), so the Bollo batches of 2017 – 2019 used rate
+  version 1 and the fix of July 2019 version 2;
 - payouts: the events 400, 410 and 500 with a tax booking or not reversed. Gross = the WDR, SUR, DTH bookings;
-  value before = gross + the value left that day (`valuation.values_on`). The premiums received (not reversed)
-  up to the payout are used one after another: a partial withdrawal uses its share gross / value before;
-- taxable base, in the tax currency, rounded once: CH the gross, IT and DE the gain over the premiums used (at
-  least 0); DE x (1 - TFS), half under HEV, 0 for contracts before 2005 held 12 years; LU none;
-- amounts: VST, SOS = base x rate; KST = base x rate / (1 + rate x KIS) for church members; SOL, KIS = KST x rate;
-  STP = the premium of event 2 in francs x rate. Rounded half up, German taxes truncated;
+  value before = gross + the value left that day (`valuation.values_on`);
+- premiums used: every premium received (not reversed) up to the payout, converted to the tax currency at the
+  rates of its own money date and rounded to the cent, truncated in DE. The payouts of a policy use them one
+  after another: a partial withdrawal uses its share gross / value before. A holder who moved (CH -> DE) has the
+  chain counted in the currency of each payout;
+- taxable base, in the tax currency, rounded once: CH the gross converted on the payout day, IT and DE the gain
+  = that gross less the premiums used (at least 0); DE x (1 - TFS), half under HEV, 0 for contracts before 2005
+  held 12 years; LU none;
+- amounts: VST, SOS = base x rate; KST = base x rate, divided by (1 + rate x KIS) when the payout has a KIS
+  booking (the label, not the address); SOL, KIS = KST x rate; STP = the premium of event 2 in francs x rate.
+  Rounded half up, German taxes truncated;
 - Bollo: BOL = value x rate x days run / days of the year; the TAXFIX19 re-pricing is the difference of the
   earlier BOL at the restated rate, **rounded once on the total**: BL10000044 2019 = 421.57 + 194.54 = 616.11, as
   in the example (rounding every year gives 194.53). BOC collects the outstanding BOL, all of it at a payout that
-  ends the policy, its share at a partial withdrawal;
-- remittance: DE the 10th of the next month (example), IT the 16th and CH 30 days after the month end (assumed).
+  ends the policy, its share at a partial withdrawal. A negative amount rounds like its positive twin;
+- remittance: DE the 10th of the next month (example), IT the 16th and CH 30 days after the month end (law),
+  no business-day shift.
 
-Open: the example payout BL10000086 #121 has base 5'628.16, the rule gives 539.30: it converts the gain on the
-payout day. Converting every premium at the rate of its money date gives 5'628.03, 13 cents away; the basis of
-the gain is not found yet. The euro has rates from 31.12.1998 only: the 12 payouts of IT and DE residents before
-take the first rate (assumption).
+Example 1 (BL10000086 #121: a USD policy, surrendered on 17.7.2006, gross 12'107.36 USD, 28 premiums of 420.00
+USD) decides the base. Every premium converted on its money date and truncated gives 5'628.16, as in the PDF;
+rounded half up 5'628.01, unrounded 5'628.02, and the whole gain converted on the payout day 539.30. The rate of
+the day before, the due dates and the reversed premium all miss. Then KST 25 % = 1'407.04 and SOL 5.5 %, truncated,
+= 77.38.
+
+Open, with no labels: each choice is one line in `conventions.py`, to be changed one per upload as the actuary
+answers: the remittance days of IT and CH (`REMITTANCE`), the rounding of the IT conversion
+(`TRUNCATED_CONVERSION`), HEV on the withholding (`HALF_INCOME_WITHHELD`), the base of a payout without tax
+(`BASE_WITHOUT_TAX`). Also assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a
+partial withdrawal (no example). `tools/neuron/t7_check.py` checks the rest on the real tables before an upload.
 
 ## Code quality
 
 As the strategy suggests: thin task functions, small modules with one job each, the conventions as data instead
-of branches, and docstrings that state the rule in business terms. Every file scores 100 in the maintainability
-index (radon, weighted by lines of code), the tools included. The arithmetic goes through polars methods
-(`.add`, `.mul`, `.floordiv`, `.eq`, ...) and `math.prod`; the Z3 tools write their constraints in SMT-LIB, the
-input language of Z3, and let Z3 parse them (`(<= low (* base rate) high)`), so no Python operators are left.
+of branches, and docstrings that state the rule in business terms. The polars expressions use its methods
+(`.add`, `.mul`, `.floordiv`, `.eq`, ...); the Z3 tools write their constraints in SMT-LIB, the input language of
+Z3, and let Z3 parse them (`(<= low (* base rate) high)`); plain Python keeps its operators where they read
+better, as in the t7 check tool. The maintainability index (radon, weighted by lines of code) is 97.2 for the
+whole folder and 100 for every module of the submission: a signal, not a target.
 
 ## Memory
 
@@ -251,7 +269,9 @@ threads (5.8 GB before):
   charges are 6.2 million rows, and the charge runs calculate them anew;
 - `legacy.valid_on` chooses the version on the keys and dates alone and joins the wide rows once;
 - `valuation.values_on` adds the units up per position and trade date once and looks up every day with an as-of
-  join, instead of copying the account for every day (the Bollo of t7 values 5'500 policy-days).
+  join, instead of copying the account for every day (the Bollo of t7 values 5'500 policy-days);
+- t0 – t4 and t7 in one process, on synthetic tax tables of that size (10'716 bookings, 7'018 of them Bollo):
+  10 s and a peak of 3.4 GB on 2 polars threads.
 
 ## Running the tools
 
@@ -261,6 +281,7 @@ PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.backtest import backtests; p
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.bisection import corrected_maturities; print(corrected_maturities())"
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.account_check import surrender_mismatches; print(surrender_mismatches())"
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.account_check import statement_mismatches; print(statement_mismatches())"
+POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_check   # tax tables: open-weights model only
 ```
 
 The tools look for the data in `$NEURON_DATA`, by default the `participants` folder that contains this

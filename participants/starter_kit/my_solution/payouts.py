@@ -5,36 +5,44 @@ was not reversed. Every one is reported, also without any tax (residents of Luxe
 the reporting, old German contracts, ...). The rows have the columns of NRTAXB: TB_EFFDT and TB_CHGTS are the
 effective date and the processing timestamp of the event, the same as those of its tax bookings.
 
+- country: the country of the taxes withheld from the payout, a label of NRTAXB; without them the residence of the
+  holder as Neuron knew it (`taxpayer`)
 - gross: the money paid out, the negative BK_AMTPC of the WDR, SUR and DTH bookings (policy currency)
 - value before: the gross plus the policy value left at the end of the day (`valuation.values_on`)
 - share PART / WHOLE: what the payout takes of the policy, gross / value before; all of it when it ends the policy
-- premiums used: the share of the premiums received up to the payout day that no earlier payout used. The
-  payouts of a policy use them one after another (`in_turn`), kept in millionths of a cent (BASIS_UNIT)
-- gain: the gross less the premiums used
+- premiums used: the share of the premiums received up to the payout day that no earlier payout used. Each premium
+  is converted to the tax currency at the rates of its money date and rounded to the cent (truncated in Germany,
+  `conventions.TRUNCATED_CONVERSION`). The payouts of a policy use them one after another (`in_turn`), kept in
+  millionths of a cent (BASIS_UNIT)
+- gain: the gross, converted on the payout day, less the premiums used
 
-The taxable base is in the currency of the country of residence (`taxpayer`), rounded once (truncated in
-Germany): in Switzerland the gross, the withholding tax VST takes the whole benefit; in Italy and Germany the gain,
-at least 0; elsewhere none. In Germany the base is the gain x (1 - TFS), the partial exemption of fund policies
-from 2018. A contract started before 2005 and held 12 years is tax free; a later one held 12 years counts half
-(HEV) from the age of 60, or 62 for contracts started from 2012.
+PDF example 1 (BL10000086 #121, a USD policy of a German holder) gives its base 5628.16 only so: rounding every
+premium half up gives 5628.01, not rounding them 5628.02, converting the whole gain on the payout day 539.30.
+
+The taxable base is in the currency of the country (`taxpayer`), rounded once (truncated in Germany): in
+Switzerland the gross, the withholding tax VST takes the whole benefit; in Italy and Germany the gain, at least 0;
+elsewhere none. In Germany the base is the gain x (1 - TFS), the partial exemption of fund policies from 2018. A
+contract started before 2005 and held 12 years is tax free; a later one held 12 years counts half (HEV) from the
+age of 60, or 62 for contracts started from 2012 (`conventions.HALF_INCOME_WITHHELD`).
 """
 import functools
-import math
 from collections.abc import Callable
 
 import polars as pl
 
 from bookings import counted_events, received_premiums, uncharged_bookings
-from conventions import (HALF_INCOME_2012, HALF_INCOME_AGE, HELD_YEARS, OLD_CONTRACT, PAID_OUT, PARTLY_TAXED,
-                         PAYOUTS, TAX_CURRENCY, TAXED_ON_GAIN, TAXED_ON_GROSS, TERMINATING, TRUNCATED)
+from conventions import (HALF_INCOME_2012, HALF_INCOME_AGE, HALF_INCOME_WITHHELD, HELD_YEARS, OLD_CONTRACT, PAID_OUT,
+                         PARTLY_TAXED, PAYOUTS, TAX_CURRENCY, TAXED_ON_GAIN, TAXED_ON_GROSS, TAXES, TERMINATING,
+                         TRUNCATED, TRUNCATED_CONVERSION, WITHHELD)
 from legacy import as_date, as_lenient_date, table
-from money import RATE_UNIT, rounded
+from money import RATE_UNIT, SHARE_UNIT, rounded
 from taxpayer import residences, tax_rates, with_policies, with_tax_currency
 from valuation import values_on
 
 BASIS_UNIT = RATE_UNIT  # the premiums used are kept in millionths of a cent, so a share loses nothing in the cents
-FACTOR_UNIT = math.prod([RATE_UNIT, RATE_UNIT])  # the German factor: two rates in millionths multiplied
+FACTOR_UNIT = SHARE_UNIT  # the German factor: two rates in millionths multiplied
 EVENT = ["TB_POLNR", "TB_EVTNR"]  # the key of an event, e.g. of a payout
+SCHEME = ["TAX_CCY", "CONVERTED_HALF_UP"]  # how the premiums of a payout are converted: currency and rounding
 
 
 def in_turn(rows: pl.DataFrame, key: str, step: Callable[[pl.DataFrame], pl.DataFrame], carried: str) -> pl.DataFrame:
@@ -42,8 +50,10 @@ def in_turn(rows: pl.DataFrame, key: str, step: Callable[[pl.DataFrame], pl.Data
 
     `step` gets the rows of one turn with EARLIER: the sum of the column `carried` that `step` added to the rows
     of the same `key` in the turns before (0 in the first). The turns are the first row of every key at once,
-    then the second, and so on, like the charge runs.
+    then the second, and so on, like the charge runs. No rows give no rows, with the column `carried`.
     """
+    if rows.is_empty():
+        return step(rows.with_columns(EARLIER=pl.lit(0, pl.Int128))).drop("EARLIER")
     turns = rows.with_columns(TURN=pl.int_range(pl.len()).over(key)).partition_by("TURN", as_dict=True)
     earlier = pl.DataFrame(schema={key: rows.schema[key], "EARLIER": pl.Int128})
     done = []
@@ -78,13 +88,34 @@ def paid_out(legacy_dir, payouts: pl.DataFrame) -> pl.DataFrame:
                                WHOLE=pl.when(whole).then(1).otherwise("BEFORE")).drop("LEFT")
 
 
-def received_until(legacy_dir, payouts: pl.DataFrame) -> pl.DataFrame:
-    """`payouts` with RECEIVED: the premiums received (and not reversed) up to the payout day, in cents."""
+def booked_countries(legacy_dir) -> pl.DataFrame:
+    """EVENT and BOOKED_CNTRY of the payouts with a tax withheld: the country of that tax (`conventions.TAXES`).
+
+    The bookings are labels: they say for which country Neuron taxed the payout, whatever the address says.
+    """
+    withheld = table(legacy_dir, "NRTAXB").filter(pl.col("TB_TAXTP").is_in(WITHHELD))
+    return withheld.group_by(EVENT).agg(BOOKED_CNTRY=pl.col("TB_TAXTP").replace_strict(TAXES).min())
+
+
+def converted_premiums(legacy_dir, schemes: pl.DataFrame) -> pl.DataFrame:
+    """TB_POLNR, SCHEME, PR_RCVDT and PREMIUM of the received premiums (not reversed) of the policies of `schemes`
+    (TB_POLNR, PH_CCY and SCHEME), once per scheme: PR_AMTRC in cents of TAX_CCY at the rates of its money date,
+    rounded to the cent as the scheme says."""
     premiums = received_premiums(legacy_dir).select(TB_POLNR="PR_POLNR", PR_RCVDT="PR_RCVDT", PR_AMTRC="PR_AMTRC")
-    paid = payouts.select(*EVENT, "TB_EFFDT").join(premiums, on="TB_POLNR").filter(
+    rated = with_tax_currency(legacy_dir, schemes.join(premiums, on="TB_POLNR"), pl.col("TAX_CCY"), "PR_RCVDT")
+    amount = pl.col("PR_AMTRC").cast(pl.Int128).mul(pl.col("RP"))
+    return rated.select("TB_POLNR", *SCHEME, "PR_RCVDT",
+                        PREMIUM=rounded(amount, pl.col("RT"), pl.col("CONVERTED_HALF_UP")))
+
+
+def received_until(legacy_dir, chains: pl.DataFrame, schemes: pl.DataFrame) -> pl.DataFrame:
+    """`chains` (payouts with a SCHEME) with RECEIVED: the premiums received up to the payout day, converted in
+    that scheme (`converted_premiums`), in cents of TAX_CCY."""
+    premiums = converted_premiums(legacy_dir, schemes)
+    paid = chains.select(*EVENT, "TB_EFFDT", *SCHEME).join(premiums, on=["TB_POLNR", *SCHEME]).filter(
         pl.col("PR_RCVDT").le(pl.col("TB_EFFDT")))
-    received = paid.group_by(EVENT).agg(RECEIVED=pl.col("PR_AMTRC").sum())
-    return payouts.join(received, on=EVENT, how="left").with_columns(pl.col("RECEIVED").fill_null(0))
+    received = paid.group_by(*EVENT, *SCHEME).agg(RECEIVED=pl.col("PREMIUM").sum())
+    return chains.join(received, on=[*EVENT, *SCHEME], how="left").with_columns(pl.col("RECEIVED").fill_null(0))
 
 
 def premiums_used(turn: pl.DataFrame) -> pl.DataFrame:
@@ -94,10 +125,19 @@ def premiums_used(turn: pl.DataFrame) -> pl.DataFrame:
 
 
 def gains(legacy_dir, payouts: pl.DataFrame) -> pl.DataFrame:
-    """`payouts` with USED and GAIN (millionths of a cent of the policy currency), in processing order."""
-    ordered = received_until(legacy_dir, payouts).sort("TB_CHGTS", "TB_EVTNR")
-    used = in_turn(ordered, "TB_POLNR", premiums_used, "USED")
-    return used.with_columns(GAIN=pl.col("GROSS").cast(pl.Int128).mul(BASIS_UNIT).sub(pl.col("USED")))
+    """`payouts` with USED: the premiums the payout uses, in millionths of a cent of its tax currency.
+
+    The payouts of a policy use the premiums one after another, in processing order. The chain runs once per
+    SCHEME of the payouts of the policy, so a holder who moved (CH -> DE) has the earlier payouts counted in the
+    currency and rounding of the later one; every payout takes the USED of its own scheme.
+    """
+    schemes = payouts.select("TB_POLNR", "PH_CCY", *SCHEME).drop_nulls().unique()
+    chains = payouts.select(*EVENT, "TB_EFFDT", "TB_CHGTS", "PART", "WHOLE").join(schemes.drop("PH_CCY"),
+                                                                                    on="TB_POLNR")
+    received = received_until(legacy_dir, chains, schemes).with_columns(
+        CHAIN=pl.concat_str("TB_POLNR", "TAX_CCY", pl.col("CONVERTED_HALF_UP").cast(pl.String)))
+    used = in_turn(received.sort("TB_CHGTS", "TB_EVTNR"), "CHAIN", premiums_used, "USED")
+    return payouts.join(used.select(*EVENT, *SCHEME, "USED"), on=[*EVENT, *SCHEME], how="left")
 
 
 def german_factor() -> pl.Expr:
@@ -106,30 +146,39 @@ def german_factor() -> pl.Expr:
     held = day.ge(start.dt.offset_by(f"{HELD_YEARS}y"))
     age = pl.when(start.ge(HALF_INCOME_2012)).then(HALF_INCOME_AGE[True]).otherwise(HALF_INCOME_AGE[False])
     aged = day.ge(as_lenient_date("PS_BIRTH").dt.offset_by(pl.format("{}y", age)))
-    half_income = pl.all_horizontal(held, start.ge(OLD_CONTRACT), aged)
+    half_income = pl.all_horizontal(held, start.ge(OLD_CONTRACT), aged, pl.lit(HALF_INCOME_WITHHELD))
     taxed = pl.lit(RATE_UNIT).sub(pl.col("TFS").fill_null(0))
     counted = pl.when(half_income).then(pl.col("HEV").fill_null(RATE_UNIT)).otherwise(RATE_UNIT)
     return pl.when(held.and_(start.lt(OLD_CONTRACT))).then(0).otherwise(taxed.mul(counted))
 
 
 def taxable_base() -> pl.Expr:
-    """The taxable base in cents of the tax currency: the gross or the gain by country, converted, rounded once."""
-    country = pl.col("AD_CNTRY")
-    taxed = pl.when(country.is_in(TAXED_ON_GROSS)).then(pl.col("GROSS").cast(pl.Int128).mul(BASIS_UNIT)).when(
-        country.is_in(TAXED_ON_GAIN)).then(pl.col("GAIN").clip(0)).otherwise(0)
+    """The taxable base in cents of the tax currency: the gross or the gain by country, rounded once.
+
+    The gross is converted on the payout day (RP / RT); the premiums USED are in the tax currency already, so they
+    join it over the same denominator RT and only the base is rounded.
+    """
+    country = pl.col("COUNTRY")
+    gross = pl.col("GROSS").cast(pl.Int128).mul(pl.col("RP")).mul(BASIS_UNIT)
+    gain = gross.sub(pl.col("USED").mul(pl.col("RT")))
+    taxed = pl.when(country.is_in(TAXED_ON_GROSS)).then(gross).when(country.is_in(TAXED_ON_GAIN)).then(
+        gain.clip(0)).otherwise(0)
     factor = pl.when(country.is_in(PARTLY_TAXED)).then(german_factor()).otherwise(FACTOR_UNIT)
-    converted = taxed.mul(pl.col("RP")).mul(factor)
     whole = pl.col("RT").cast(pl.Int128).mul(BASIS_UNIT).mul(FACTOR_UNIT)
-    return rounded(converted, whole, country.is_in(TRUNCATED).not_()).fill_null(0)
+    return rounded(taxed.mul(factor), whole, country.is_in(TRUNCATED).not_()).fill_null(0)
 
 
 @functools.cache
 def payouts(legacy_dir) -> pl.DataFrame:
-    """Every reported payout: EVENT, the dates, GROSS, BEFORE, PART / WHOLE, GAIN, the residence (`taxpayer`)
-    and TAXABLE_BASE."""
-    gained = gains(legacy_dir, paid_out(legacy_dir, payout_events(legacy_dir)))
-    resident = with_policies(legacy_dir, residences(legacy_dir, gained))
-    converted = with_tax_currency(legacy_dir, resident, pl.col("AD_CNTRY").replace_strict(TAX_CURRENCY, default=None))
-    exempt = tax_rates(legacy_dir, tax_rates(legacy_dir, converted, pl.lit("TFS"), "TFS"), pl.lit("HEV"), "HEV")
+    """Every reported payout: EVENT, the dates, GROSS, BEFORE, PART / WHOLE, the residence (`taxpayer`), COUNTRY,
+    the tax currency TAX_CCY with the rates RP / RT of the payout day, USED and TAXABLE_BASE."""
+    paid = paid_out(legacy_dir, payout_events(legacy_dir))
+    resident = with_policies(legacy_dir, residences(legacy_dir, paid)).join(booked_countries(legacy_dir), on=EVENT,
+                                                                            how="left")
+    country = pl.coalesce("BOOKED_CNTRY", "AD_CNTRY")
+    schemed = resident.with_columns(COUNTRY=country, CONVERTED_HALF_UP=country.is_in(TRUNCATED_CONVERSION).not_())
+    converted = with_tax_currency(legacy_dir, schemed, pl.col("COUNTRY").replace_strict(TAX_CURRENCY, default=None))
+    gained = gains(legacy_dir, converted)
+    exempt = tax_rates(legacy_dir, tax_rates(legacy_dir, gained, pl.lit("TFS"), "TFS"), pl.lit("HEV"), "HEV")
     births = table(legacy_dir, "NRPERS").select(HD_PERNR="PS_PERNR", PS_BIRTH="PS_BIRTH")
     return exempt.join(births, on="HD_PERNR", how="left").with_columns(TAXABLE_BASE=taxable_base())

@@ -10,11 +10,12 @@ Every function takes rows with the columns TB_POLNR, TB_EFFDT and TB_CHGTS, like
 """
 import polars as pl
 
+from conventions import TAXES
 from legacy import table, valid_on
 from market import exchange_rates, rate_of
 from tariff import signed_policies
 
-RESIDENCE = ["AD_CNTRY", "AD_REGIO", "AD_TAXST", "AD_CHURCH"]  # the address columns that the taxes read
+RESIDENCE = ["AD_CNTRY", "AD_REGIO"]  # the address columns that the taxes read
 
 
 def residences(legacy_dir, rows: pl.DataFrame) -> pl.DataFrame:
@@ -38,33 +39,38 @@ def tax_rates(legacy_dir, rows: pl.DataFrame, tax_type: pl.Expr, name: str, know
               region: str | None = None) -> pl.DataFrame:
     """`rows` with the column `name`: the rate (millionths) of `tax_type` valid on TB_EFFDT, null without one.
 
-    Only the versions entered up to the column `known_at` count. With `region`, a column of `rows`, a rate of
-    that region (KIS of Bavaria and Baden-Wuerttemberg) wins over the rate for all regions (TX_REGIO blank).
+    The rate is that of the country of the tax type (TX_CNTRY, `conventions.TAXES`), the key of NRTAXR. Only the
+    versions entered up to the column `known_at` count. With `region`, a column of `rows`, a rate of that region
+    (KIS of Bavaria and Baden-Wuerttemberg) wins over the rate for all regions (TX_REGIO blank).
     """
-    numbered = rows.with_row_index("ROW").with_columns(TX_TAXTP=tax_type,
-                                                       TX_REGIO=pl.col(region) if region else pl.lit(None, pl.String))
+    numbered = rows.with_row_index("ROW").with_columns(
+        TX_TAXTP=tax_type, TX_CNTRY=tax_type.replace_strict(TAXES, default=None),
+        TX_REGIO=pl.col(region) if region else pl.lit(None, pl.String))
     rates = table(legacy_dir, "NRTAXR")
-    regional = rate_versions(numbered, rates.drop_nulls("TX_REGIO"), ["TX_TAXTP", "TX_REGIO"], known_at)
-    general = rate_versions(numbered, rates.filter(pl.col("TX_REGIO").is_null()), ["TX_TAXTP"], known_at)
+    regional = rate_versions(numbered, rates.drop_nulls("TX_REGIO"), ["TX_CNTRY", "TX_TAXTP", "TX_REGIO"], known_at)
+    general = rate_versions(numbered, rates.filter(pl.col("TX_REGIO").is_null()), ["TX_CNTRY", "TX_TAXTP"], known_at)
     found = numbered.join(regional, on="ROW", how="left").join(general, on="ROW", how="left", suffix="_ALL")
     return found.with_columns(pl.coalesce("TX_RATE", "TX_RATE_ALL").alias(name)).drop(
-        "ROW", "TX_TAXTP", "TX_REGIO", "TX_RATE", "TX_RATE_ALL")
+        "ROW", "TX_TAXTP", "TX_CNTRY", "TX_REGIO", "TX_RATE", "TX_RATE_ALL")
 
 
 def with_policies(legacy_dir, rows: pl.DataFrame) -> pl.DataFrame:
-    """`rows` with the currency PH_CCY and the start date PH_BEGDT of the policy; no version ever changes them."""
+    """`rows` with the currency PH_CCY and the start date PH_BEGDT of the policy; no version ever changes them.
+
+    A row of an unknown policy stays, with nulls: its amounts become null instead of disappearing.
+    """
     policies = signed_policies(legacy_dir).select(TB_POLNR="PH_POLNR", PH_CCY="PH_CCY", PH_BEGDT="PH_BEGDT")
-    return rows.join(policies, on="TB_POLNR")
+    return rows.join(policies, on="TB_POLNR", how="left")
 
 
-def with_tax_currency(legacy_dir, rows: pl.DataFrame, currency: pl.Expr) -> pl.DataFrame:
-    """`rows` (with PH_CCY) with TAX_CCY = `currency` and the rates RP of PH_CCY and RT of TAX_CCY on TB_EFFDT.
+def with_tax_currency(legacy_dir, rows: pl.DataFrame, currency: pl.Expr, date: str = "TB_EFFDT") -> pl.DataFrame:
+    """`rows` (with PH_CCY) with TAX_CCY = `currency` and the rates RP of PH_CCY and RT of TAX_CCY on `date`.
 
     An amount of the policy currency is amount x RP / RT in the tax currency (`market`: francs per unit). The
-    euro has rates from 31.12.1998 on; for the payouts before, the first rate stands in (an assumption).
+    euro has rates from 31.12.1998 on; for the days before, the first rate stands in (an assumption).
     """
-    policy = rate_of(legacy_dir, rows.with_columns(TAX_CCY=currency), "PH_CCY", "TB_EFFDT", "RP", same_day=True)
-    tax = rate_of(legacy_dir, policy, "TAX_CCY", "TB_EFFDT", "RT", same_day=True)
+    policy = rate_of(legacy_dir, rows.with_columns(TAX_CCY=currency), "PH_CCY", date, "RP", same_day=True)
+    tax = rate_of(legacy_dir, policy, "TAX_CCY", date, "RT", same_day=True)
     firsts = exchange_rates(legacy_dir).group_by(TAX_CCY="FX_CCY").agg(
         FIRST=pl.col("FX_RATE").sort_by("FX_RATDT").first())
     return tax.join(firsts, on="TAX_CCY", how="left").with_columns(RT=pl.coalesce("RT", "FIRST")).drop("FIRST")

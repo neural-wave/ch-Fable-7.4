@@ -11,14 +11,15 @@
   left Italy: the BOL booked up to it less the BOC before it. A payout that ends the policy collects all of it, a
   partial withdrawal its share PART / WHOLE (`payouts`), so the BOC of a policy follow one another (`in_turn`).
 
-Amounts in euro cents, rounded half up once; the value is converted from the policy currency on the day.
+Amounts in euro cents, rounded half up once, a negative difference like its positive twin (`money.rounded_signed`);
+the value is converted from the policy currency on the day.
 """
 import polars as pl
 
 from conventions import BOLLO_FIX, STAMP_DUTY, TAX_CURRENCY, TAXES
 from dates import days_between
 from legacy import as_date
-from money import RATE_UNIT, rounded
+from money import RATE_UNIT, rounded_signed
 from payouts import EVENT, in_turn, payouts
 from taxpayer import tax_rates, with_policies, with_tax_currency
 from valuation import values_on
@@ -43,7 +44,7 @@ def bollo(rate: pl.Expr, parts: int = 1) -> pl.Expr:
     """The Bollo at `rate` of the policy VALUE of the row, for its share of the year, in 1 / `parts` euro cents."""
     taxed = pl.col("VALUE").cast(pl.Int128).mul(pl.col("RP")).mul(pl.col("RUN_DAYS")).mul(rate).mul(parts)
     whole = pl.col("RT").cast(pl.Int128).mul(RATE_UNIT).mul(pl.col("YEAR_DAYS"))
-    return rounded(taxed, whole, pl.lit(True))
+    return rounded_signed(taxed, whole, pl.lit(True))
 
 
 def accrued_bollo(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
@@ -67,22 +68,25 @@ def fixed_bollo(legacy_dir, fixes: pl.DataFrame, accrued: pl.DataFrame) -> pl.Da
     differences = restated.group_by("FIX_BOOKID").agg(
         DIFFERENCE=bollo(pl.col("RESTATED").sub(pl.col("RATE")), RATE_UNIT).sum())
     return fixes.join(differences, left_on="TB_BOOKID", right_on="FIX_BOOKID", how="left").with_columns(
-        TB_AMOUNT=rounded(pl.col("DIFFERENCE").fill_null(0), RATE_UNIT, pl.lit(True))).drop("DIFFERENCE")
+        TB_AMOUNT=rounded_signed(pl.col("DIFFERENCE").fill_null(0), RATE_UNIT, pl.lit(True))).drop("DIFFERENCE")
 
 
 def collected(turn: pl.DataFrame) -> pl.DataFrame:
     """The BOC of one turn with TB_AMOUNT: the share PART / WHOLE of the Bollo that the EARLIER BOC left over."""
     outstanding = pl.col("ACCRUED").cast(pl.Int128).sub(pl.col("EARLIER"))
-    return turn.with_columns(TB_AMOUNT=rounded(outstanding.mul(pl.col("PART")), pl.col("WHOLE"), pl.lit(True)))
+    return turn.with_columns(TB_AMOUNT=rounded_signed(outstanding.mul(pl.col("PART")), pl.col("WHOLE"), pl.lit(True)))
 
 
 def collected_bollo(legacy_dir, collections: pl.DataFrame, accrued: pl.DataFrame) -> pl.DataFrame:
-    """The BOC `collections` with ACCRUED, the BOL `accrued` (fixes included) booked up to each, and TB_AMOUNT."""
+    """The BOC `collections` with ACCRUED, the BOL `accrued` (fixes included) booked up to each, and TB_AMOUNT.
+
+    A BOC of no reported payout has no share and keeps a null amount.
+    """
     booked = collections.select("TB_BOOKID", "TB_POLNR", "TB_CHGTS").join(
         accrued.select("TB_POLNR", BOL_CHGTS="TB_CHGTS", BOL_AMOUNT="TB_AMOUNT"), on="TB_POLNR").filter(
         pl.col("BOL_CHGTS").le(pl.col("TB_CHGTS"))).group_by("TB_BOOKID").agg(ACCRUED=pl.col("BOL_AMOUNT").sum())
     shares = payouts(legacy_dir).select(*EVENT, "PART", "WHOLE")
-    ordered = collections.join(booked, on="TB_BOOKID", how="left").join(shares, on=EVENT).with_columns(
+    ordered = collections.join(booked, on="TB_BOOKID", how="left").join(shares, on=EVENT, how="left").with_columns(
         pl.col("ACCRUED").fill_null(0)).sort("TB_CHGTS", "TB_BOOKID")
     return in_turn(ordered, "TB_POLNR", collected, "TB_AMOUNT")
 

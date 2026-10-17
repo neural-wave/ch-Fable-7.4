@@ -12,6 +12,7 @@ from decimal import ROUND_DOWN, ROUND_HALF_UP, Decimal
 import polars as pl
 
 RATE_UNIT = 1_000_000  # rates are stored in millionths: 0.03 is 30000; so are units, prices and exchange rates
+SHARE_UNIT = 1_000_000_000_000  # two rates in millionths multiplied: 1e6 x 1e6
 VALUE_UNIT = 10_000_000_000  # units x price, both in millionths, per cent: 1e12 / 100
 MONTHLY_UNIT = 12_000_000  # a yearly rate in millionths taken every month: amount x rate / 12 / RATE_UNIT
 CENT = Decimal("0.01")
@@ -30,6 +31,15 @@ def rounded(numerator: pl.Expr, denominator, half_up: pl.Expr) -> pl.Expr:
     divisor = denominator if isinstance(denominator, pl.Expr) else pl.lit(denominator)
     half = pl.when(half_up).then(divisor.floordiv(2)).otherwise(divisor.mul(0))
     return numerator.add(half).floordiv(divisor)
+
+
+def rounded_signed(numerator: pl.Expr, denominator, half_up: pl.Expr) -> pl.Expr:
+    """`rounded` for a numerator of either sign: the size is rounded and the sign kept, as Java rounds half up.
+
+    A negative amount, e.g. the Bollo re-priced at a lower rate, then rounds like its positive twin.
+    """
+    sign = numerator.sign()
+    return rounded(numerator.mul(sign), denominator, half_up).mul(sign)
 
 
 def share(amount: pl.Expr, rate: pl.Expr) -> pl.Expr:

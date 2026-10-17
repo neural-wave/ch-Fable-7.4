@@ -193,10 +193,10 @@ def t7_tax_payout(legacy_dir) -> dict[tuple[str, int], tuple]:
     """{(policy_id, event_nr): (country, taxable_base, withholding, surcharges, stamp_duty, remittance_date)}
 
     Every payout (events 400, 410, 500) with a tax booking or not reversed. NRTAXB names the tax bookings of
-    Neuron, so the rules calculate their amounts (`taxes`): the country is the residence of the holder valid on
-    the payout day as Neuron knew it then (`taxpayer`), the base the gross (CH) or the gain over the premiums
-    used (IT, DE) of the payout (`payouts`), the stamp duty the Bollo collected (`bollo`). remittance_date is None
-    without tax.
+    Neuron, so the rules calculate their amounts (`taxes`): the country is that of the taxes withheld, else the
+    residence of the holder valid on the payout day as Neuron knew it then (`taxpayer`); the base the gross (CH)
+    or the gain over the premiums used, each premium converted on its money date (IT, DE) (`payouts`); the stamp
+    duty the Bollo collected (`bollo`). remittance_date is None without tax.
     """
     amounts = ["taxable_base", *PAYOUT_AMOUNTS]
     rows = payout_table(legacy_dir).with_columns(map(francs, map(pl.col, amounts)))

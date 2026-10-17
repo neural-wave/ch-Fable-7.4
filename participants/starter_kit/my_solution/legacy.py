@@ -68,7 +68,8 @@ def valid_on(rows: pl.DataFrame, versions: pl.DataFrame, on: dict[str, str], dat
     `on` maps the key columns of `rows` to those of `versions`. A version is valid from `<prefix>_VLDFR` to
     `<prefix>_VLDTO`, both days included. If several versions are valid, the one with the highest
     `<prefix>_<newest>` wins: the version number, so a change counts from its validity date even when it
-    was entered later.
+    was entered later. On a tie the latest `<prefix>_VLDFR` wins, then the later row of the table: NRTAXR numbers
+    its versions per validity start, so two valid rates can share a number.
 
     With `known_at`, a column of timestamps of `rows`, only the versions entered by then count (timestamp
     `<prefix>_CHGTS`): the versions as Neuron knew them when it processed the row.
@@ -81,7 +82,8 @@ def valid_on(rows: pl.DataFrame, versions: pl.DataFrame, on: dict[str, str], dat
     candidates = keys.join(indexed, left_on=list(on), right_on=list(on.values()))
     known = pl.col(f"{prefix}_CHGTS").le(pl.col(known_at)) if known_at else pl.lit(True)
     valid = candidates.filter(pl.col(date).is_between(pl.col(f"{prefix}_VLDFR"), pl.col(f"{prefix}_VLDTO")), known)
-    chosen = valid.sort(f"{prefix}_{newest}").unique("row", keep="last").select("row", "version")
+    order = list(dict.fromkeys([f"{prefix}_{newest}", f"{prefix}_VLDFR", "version"]))
+    chosen = valid.sort(order).unique("row", keep="last").select("row", "version")
     joined = numbered.join(chosen, on="row").join(indexed.drop(*on.values()), on="version")
     return joined.drop("row", "version")
 

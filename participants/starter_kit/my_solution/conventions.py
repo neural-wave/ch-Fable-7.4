@@ -45,25 +45,33 @@ AGREED_ENTRY, AGREED_MANAGEMENT = "ENT", "AMC"  # AG_FEETP: individual rates (NR
 COBOL_MONTH = 360  # COBOL: the management charge of a month is its days / 360 of the yearly rate
 JAVA_MONTH = 12  # Neuron NG: a twelfth of the yearly rate, whatever the days of the month
 
-# Taxes (t7): NRTAXB names every tax booking of Neuron (type, event, dates); only the amounts are calculated
-PAYOUTS = [400, 410, 500]  # EV_EVTTP of a payout: partial withdrawal, full surrender, death claim
+# Taxes (t7): NRTAXB names every tax booking of Neuron (type, event, dates); only the amounts are calculated.
+# The evidence of each rule is in its comment: "example" = an example of the task PDF, "law" = a prior from the
+# law that no data confirms yet, "assumption" = a choice the data cannot settle (to be decided by the actuary).
+PAYOUTS = [400, 410, 500]  # EV_EVTTP of a payout: partial withdrawal, full surrender, death claim (NRCODE)
 TERMINATING = [410, 500]  # payouts that end the policy: they pay out all of it
 PAID_OUT = ["WDR", "SUR", "DTH"]  # BK_BKTYP of the money of a payout: its BK_AMTPC is negative
-TAXES = {"STP": "CH", "VST": "CH", "SOS": "IT", "BOL": "IT", "BOC": "IT", "KST": "DE", "SOL": "DE", "KIS": "DE"}
+TAXES = {"STP": "CH", "VST": "CH", "SOS": "IT", "BOL": "IT", "BOC": "IT", "KST": "DE", "SOL": "DE", "KIS": "DE",
+         "HEV": "DE", "TFS": "DE"}  # every TAXTP of NRCODE -> its country, TX_CNTRY of its rates in NRTAXR
 ANNUAL_TAXES = ["STP", "VST", "SOS", "BOL", "KST", "SOL", "KIS"]  # the columns of t7_tax_annual; BOC is not reported
 WITHHELD, SURCHARGES, STAMP_DUTY = ["VST", "SOS", "KST"], ["SOL", "KIS"], ["BOC"]  # the amounts of a payout
 TAX_CURRENCY = {"CH": "CHF", "IT": "EUR", "DE": "EUR", "LU": "EUR"}  # country -> currency of its taxes
-TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent: 1407.04 x 5.5 % = 77.3872 -> 77.38
-TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere (LU)
-REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month: DE the 10th (2006-07-17 ->
-# 2006-08-10), IT the 16th (F24) and CH 30 days after the end of the month (VStG) are assumptions
+TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent (example: 1407.04 x 5.5 % = 77.3872 -> 77.38)
+TRUNCATED_CONVERSION = ["DE"]  # countries whose premiums are truncated to the cent when converted to the tax
+# currency (example: only this gives 5628.16); IT rounds them half up like its taxes (assumption)
+TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
+BASE_WITHOUT_TAX = True  # the base is reported also for a payout without withholding; False reports 0 (assumption)
+REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month, no business-day shift. DE the
+# 10th (example: 2006-07-17 -> 2006-08-10, a Thursday); IT the 16th, F24 (law); CH 30 days after the month (law)
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
-CHURCH_MEMBER = "J"  # AD_CHURCH of a church member
-CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: a church member pays KST / (1 + KST x KIS), section 32d EStG
+CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
+# section 32d EStG (law); the KIS booking of the payout is the label, not the address
 PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
-BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019
+BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019 (NRTAXB)
 PARTLY_TAXED = ["DE"]  # countries whose gain is taxed only in part: TFS, HEV and the old contracts
-OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS
-HELD_YEARS = 12  # DE: years held for the old exemption and the half-income rule (HEV)
-HALF_INCOME_AGE = {False: 60, True: 62}  # DE: age for HEV by "started on or after HALF_INCOME_2012"
-HALF_INCOME_2012 = dt.date(2012, 1, 1)
+OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS (law)
+HELD_YEARS = 12  # DE: years held for the old exemption and for HEV, section 20 (1) no. 6 EStG (law)
+HALF_INCOME_AGE = {False: 60, True: 62}  # DE: age for HEV by "started on or after HALF_INCOME_2012" (law)
+HALF_INCOME_2012 = dt.date(2012, 1, 1)  # DE: contracts from then need the higher age (law)
+HALF_INCOME_WITHHELD = True  # DE: HEV halves the base of the withholding (assumption: NRTAXR has HEV rates, while
+# the law, as far as we know, leaves HEV out of the KapESt)
