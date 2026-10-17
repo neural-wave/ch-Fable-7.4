@@ -2,33 +2,43 @@
 
 `submission.py` computes every task from the files in `legacy_dir` only; it never reads a target
 file. Every hidden rule of Neuron is written down once, in the module of its business concept, with
-the evidence that fixed it.
+the evidence that fixed it. [ARCHITECTURE.md](ARCHITECTURE.md) is the map of the code: packages,
+layers, the path of each task and where each rule lives.
 
-## Results on the train targets (official `check.py`)
+## Results on the train targets (official `check.py`, Python 3.14)
 
 | Task | Exact rows | Local ceiling | Rows missed | Time |
 |---|---|---|---|---|
-| t0 commissions | 225,848 / 225,858 = 99.9956 % | 99.9956 % | 10, all changed by hand | 1 s |
+| t0 commissions | 225,848 / 225,858 = 99.9956 % | 99.9956 % | 10, all changed by hand | 2 s |
 | t1 next due dates | 15,028 / 15,028 = 100.0000 % | 100 % | 0 | 1 s |
 | t2 projected maturity value | 3,011 / 3,019 = 99.7350 % | 99.7350 % | 8, all changed by hand | 4 s |
-| t3 surrender value | 6,137 / 6,153 = 99.7400 % | 99.7400 % | 16, all changed by hand | 26 s |
-| t4 annual statement | 34,125 / 34,145 = 99.9414 % | 99.9414 % | 20, all changed by hand | 25 s |
+| t3 surrender value | 6,137 / 6,153 = 99.7400 % | 99.7400 % | 16, all changed by hand | 32 s |
+| t4 annual statement | 34,125 / 34,145 = 99.9414 % | 99.9414 % | 20, all changed by hand | 30 s |
 
 The train targets still hold the 54 values that were changed by hand (task t5), and every row we
 miss is one of them: target and rule differ by a whole amount of francs. The official evaluation
 does not score those rows, so the five tasks are exact on every scored row. On top of the scored
-values, the unit accounting reproduces every PRM, ADM, AMC and RSK booking of `t3_booking` and
-every yearly value of `t2_projection_year` (79,040 / 79,040).
+values:
+
+- the unit accounting reproduces every PRM, ADM, AMC and RSK booking of `t3_booking`, amount and
+  units (5,024,847 bookings), and every yearly value of `t2_projection_year` (79,040 / 79,040);
+- for all 4,011 policies of the export, public ones included, the bookings have exactly the
+  skeleton that NRBOOK keeps (type, fund, pot, trade and price date): this is how the tie rule of
+  the charge split was found on a public policy.
 
 Maintainability index (radon, as `scoring.py`): **97.1**.
 
 ## How to run
 
+From the repository root, with Python 3.14 (`.python-version`):
+
 ```bash
-export DATI=~/Downloads/LifewareChallenge/participants     # the challenge data (adapt)
-pip install -r requirements.txt radon                      # Python >= 3.10
-python -B $DATI/starter_kit/check.py --submission . --legacy $DATI/legacy --targets $DATI/targets
-python -B ../verifica_dati/mi_report.py .                  # the MI, file by file and term by term
+export DATA=~/Downloads/LifewareChallenge/participants      # the challenge data (adapt)
+python3.14 -m venv .venv && . .venv/bin/activate
+pip install -r my_solution/requirements.txt radon
+python -B $DATA/starter_kit/check.py --submission my_solution --legacy $DATA/legacy --targets $DATA/targets
+python -B tools/ledger_checks.py --data $DATA               # bookings against NRBOOK and t3_booking
+python -B tools/mi_report.py my_solution                    # the MI, file by file and term by term
 ```
 
 ## The rules we found
@@ -72,7 +82,8 @@ at the pot-2 rate / 12, less the risk charge, then growth by rate / 12; everythi
   - RSK: sum at risk (A 1 % of the value, B the sum insured above it, C the sum insured) times qx,
     times 1 + loading, times the smoker factor for smokers, / 12. It is computed on the value
     left after ADM and AMC, capped at it, and split by what is left in each position.
-  - Splits give the rounding difference to the largest position and drop pieces of zero or less.
+  - Splits give the rounding difference to the largest position, on equal values to the first by
+    fund and pot, and drop pieces of zero or less.
 - *Insurance age.* COBOL: days lived / 365 to the nearest year, so leap days do not count.
   Neuron NG: completed months to the nearest year. Then plus the completed policy years.
 - *Valuation.* Units traded up to the valuation date, at the bid price and in the policy currency
@@ -84,20 +95,26 @@ less invested amount) by trade date, ADM, AMC and RSK by run date. There is one 
 year, from the start to the exit, maturity or closing year, at most up to the last full year
 before the extract.
 
-## How the code is organised for maintainability
+## How the code is organised
 
-Two kinds of modules, one business concept each:
+Seven packages, one business area each, and three modules at the top
+([ARCHITECTURE.md](ARCHITECTURE.md) has the full map):
 
-- **Flow modules** apply the rules and carry no arithmetic at all: `submission`, `export`
-  (tables and contract of a policy), `market` (prices and rates), `account` (bookings and
-  positions), `ledger` (all bookings of a policy), `investment`, `orders`, `charges` (the monthly
-  run), `statement`, `valuation` and `offer`.
-- **Formula modules** each hold one family of formulas, with its evidence:
-  - `money` and `sharing` (rounding by era, pro-rata splits);
-  - `conversion` and `trades` (values and units);
-  - `purchase`, `fees` (AMC), `cover` and `risk` (RSK);
-  - `ages` and `age_rules`;
-  - `runs` (calendar), `surrender`, `instalments` and `illustration` (t2);
-  - t0/t1: `commission`, `schedule`, `collection`, `business_days`, `months`.
+| Package | Business area | Tasks |
+|---|---|---|
+| `core/` | money by era, months, validity lookups | all |
+| `legacy/` | reading the export: tables, formats, policy versions, premium items, market | all |
+| `insurance/` | insurance age, sum at risk, risk charge | t2, t3, t4 |
+| `accounting/` | the unit account: premiums, orders, monthly charge runs, ledger | t3, t4 |
+| `reports/` | surrender value and annual statement, read from the ledger | t3, t4 |
+| `billing/` | commissions, due dates, collection days | t0, t1 |
+| `maturity/` | the projection of the offer | t2 |
 
-Every constant of Neuron lives in `conventions.py`, next to the evidence that fixed it.
+`submission.py` is the entry point, `conventions.py` holds every constant of Neuron next to its
+evidence, and `export.py` groups the export by policy. A package imports only the packages below
+it (`tools/import_map.py` checks it).
+
+Inside the packages there are two kinds of modules. **Flow modules** apply the rules and carry no
+arithmetic at all, **formula modules** each hold one small family of formulas with its evidence.
+That keeps every file short, simple and documented, which is what the maintainability index
+measures.
