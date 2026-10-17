@@ -248,7 +248,8 @@ the day before, the due dates and the reversed premium all miss. Then KST 25 % =
 Open, with no labels: each choice is one line in `conventions.py`, to be changed one per upload as the actuary
 answers: the remittance days of IT and CH (`REMITTANCE`), the rounding of the IT conversion
 (`TRUNCATED_CONVERSION`), HEV on the withholding (`HALF_INCOME_WITHHELD`), the base of a payout without tax
-(`BASE_WITHOUT_TAX`). Also assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a
+(`BASE_WITHOUT_TAX`), the VST of holders who chose the reporting (`REPORTED_WITHHELD`: withheld, or only reported
+in the annual table) and the move of a remittance day to a business day (`REMITTANCE_SHIFTED`). Also assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a
 partial withdrawal (no example). `tools/neuron/t7_check.py` checks the rest on the real tables before an upload.
 
 ## Code quality

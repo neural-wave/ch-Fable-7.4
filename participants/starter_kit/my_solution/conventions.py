@@ -61,8 +61,17 @@ TRUNCATED_CONVERSION = ["DE"]  # countries whose premiums are truncated to the c
 # currency (example: only this gives 5628.16); IT rounds them half up like its taxes (assumption)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
 BASE_WITHOUT_TAX = True  # the base is reported also for a payout without withholding; False reports 0 (assumption)
-REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month, no business-day shift. DE the
-# 10th (example: 2006-07-17 -> 2006-08-10, a Thursday); IT the 16th, F24 (law); CH 30 days after the month (law)
+REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month. DE the 10th (example: 2006-07-17
+# -> 2006-08-10, a Thursday); IT the 16th, F24 (law); CH 30 days after the month (law)
+REMITTANCE_SHIFTED = []  # countries whose remittance day moves to the next business day of its calendar (assumption:
+# none; the law moves a deadline that falls on a weekend or holiday, about 30 % of the days)
+REMITTANCE_CALENDARS = {"DE": {"country": "DE", "years": range(1994, 2100)},
+                        "IT": {"country": "IT", "years": range(1994, 2100)}, "CH": CALENDAR}
+REPORTED_STATUS, REPORTED_TAX = "M", "VST"  # CH: AD_TAXST of a holder whose payouts Neuron reports to the tax office
+# instead of withholding (NRCODE TAXST: M reported, E objection), and the tax so reported
+REPORTED_WITHHELD = True  # a VST booked for a reported holder counts as withheld (assumption). False: it is only
+# reported, so it stays in the annual table and the payout shows no withholding and no remittance day. The CH
+# cross-tab of tools/neuron/t7_labels.py decides it
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address

@@ -19,7 +19,9 @@ import polars as pl
 
 from bollo import bollo_bookings
 from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_TAX, PREMIUM_STAMP, REMITTANCE,
-                         STAMP_DUTY, STAMP_DUTY_COUNTRY, SURCHARGES, TAX_CURRENCY, TAXES, TRUNCATED, WITHHELD)
+                         REMITTANCE_SHIFTED, REPORTED_STATUS, REPORTED_TAX, REPORTED_WITHHELD, STAMP_DUTY,
+                         STAMP_DUTY_COUNTRY, SURCHARGES, TAX_CURRENCY, TAXES, TRUNCATED, WITHHELD)
+from dates import tax_office_holidays
 from legacy import as_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
 from payouts import EVENT, payouts
@@ -91,16 +93,41 @@ def tax_bookings(legacy_dir) -> pl.DataFrame:
     return pl.concat([part.select(*BOOKING, pl.col("TB_AMOUNT").cast(pl.Int64)) for part in calculated])
 
 
+def shifted(day: pl.Expr, country: pl.Expr) -> pl.Expr:
+    """`day`, moved to the next business day of the tax office for the countries of REMITTANCE_SHIFTED."""
+    moved = day
+    for name in REMITTANCE_SHIFTED:
+        business_day = day.dt.add_business_days(0, holidays=tax_office_holidays(name), roll="forward")
+        moved = pl.when(country.eq(name)).then(business_day).otherwise(moved)
+    return moved
+
+
 def remittance() -> pl.Expr:
     """The day Neuron paid the taxes of a payout to the tax office, null without tax.
 
-    The country of the withholding decides, Italy for stamp duty alone; the day comes from REMITTANCE.
+    The country of the withholding decides, Italy for stamp duty alone; the day comes from REMITTANCE, moved to a
+    business day for the countries of REMITTANCE_SHIFTED.
     """
     withheld = pl.col("withholding").add(pl.col("surcharges"))
     country = pl.when(withheld.ne(0)).then("COUNTRY").otherwise(pl.lit(STAMP_DUTY_COUNTRY))
     first = as_date("TB_EFFDT").dt.month_start().dt.offset_by("1mo")
     days = country.replace_strict(REMITTANCE, default=None, return_dtype=pl.Int64)
-    return pl.when(withheld.add(pl.col("stamp_duty")).ne(0)).then(first.add(pl.duration(days=days)))
+    return pl.when(withheld.add(pl.col("stamp_duty")).ne(0)).then(shifted(first.add(pl.duration(days=days)), country))
+
+
+def withheld_amounts(legacy_dir) -> pl.DataFrame:
+    """EVENT and the PAYOUT_AMOUNTS (cents) withheld from every payout with a tax booking.
+
+    A VST of a holder who chose the reporting (`conventions.REPORTED_STATUS`) is reported, not withheld, unless
+    REPORTED_WITHHELD: then it counts in the annual table only.
+    """
+    tax_type, amount = pl.col("TB_TAXTP"), pl.col("TB_AMOUNT")
+    statuses = payouts(legacy_dir).select(*EVENT, "AD_TAXST")
+    reported = tax_type.eq(REPORTED_TAX).and_(pl.col("AD_TAXST").eq_missing(REPORTED_STATUS)).and_(
+        pl.lit(REPORTED_WITHHELD).not_())
+    return tax_bookings(legacy_dir).join(statuses, on=EVENT, how="left").group_by(EVENT).agg(
+        **{name: amount.filter(tax_type.is_in(types).and_(reported.not_())).sum()
+           for name, types in PAYOUT_AMOUNTS.items()})
 
 
 def payout_table(legacy_dir) -> pl.DataFrame:
@@ -108,9 +135,7 @@ def payout_table(legacy_dir) -> pl.DataFrame:
 
     Without withholding the base is reported as calculated, or as 0 (`conventions.BASE_WITHOUT_TAX`).
     """
-    tax_type, amount = pl.col("TB_TAXTP"), pl.col("TB_AMOUNT")
-    amounts = tax_bookings(legacy_dir).group_by(EVENT).agg(
-        **{name: amount.filter(tax_type.is_in(types)).sum() for name, types in PAYOUT_AMOUNTS.items()})
+    amounts = withheld_amounts(legacy_dir)
     rows = payouts(legacy_dir).join(amounts, on=EVENT, how="left").with_columns(pl.col(*PAYOUT_AMOUNTS).fill_null(0))
     base = pl.when(pl.lit(BASE_WITHOUT_TAX).or_(pl.col("withholding").ne(0))).then("TAXABLE_BASE").otherwise(0)
     return rows.select(pl.col("TB_POLNR").alias("policy_id"), pl.col("TB_EVTNR").alias("event_nr"),

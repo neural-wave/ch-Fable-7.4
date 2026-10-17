@@ -10,7 +10,9 @@ rule explains the labels. They come from the tax tables, so run this with an ope
   VST booked for M holders means Neuron booked the reported VST too: reported, not withheld from the payout;
 - DE: KST booked by old contract held 12 years, by base above 0 and by event type (500 is a death claim);
 - IT: SOS booked by base above 0;
-- BOC booked by the country of the payout, KIS booked by church membership AD_CHURCH.
+- BOC booked by the country of the payout, KIS booked by church membership AD_CHURCH;
+- the bookings by tax type and job user TB_USRID (online users grouped): a job of its own may mark the reported
+  VST, or a remittance run.
 """
 import polars as pl
 
@@ -48,10 +50,16 @@ def labelled_payouts() -> pl.DataFrame:
                                          ABOVE_THRESHOLD=pl.col("TAXABLE_BASE").gt(pl.col("THRESHOLD").fill_null(0)))
 
 
-def show(title: str, rows: pl.DataFrame, *by: str):
-    """Print the number of payouts of `rows` per combination of the columns `by`."""
+def show(title: str, rows: pl.DataFrame, *by: str, counted: str = "payouts"):
+    """Print the number of rows of `rows` (`counted`) per combination of the columns `by`."""
     print(f"\n{title}")
-    print(rows.group_by(*by).agg(pl.len().alias("payouts")).sort(*by))
+    print(rows.group_by(*by).agg(pl.len().alias(counted)).sort(*by))
+
+
+def job_users() -> pl.DataFrame:
+    """The bookings of NRTAXB with JOB: their TB_USRID, or "online" for the users U<number> of the online system."""
+    online = pl.col("TB_USRID").str.contains(r"^U\d+$")
+    return table(LEGACY, "NRTAXB").with_columns(JOB=pl.when(online).then(pl.lit("online")).otherwise("TB_USRID"))
 
 
 def main():
@@ -65,6 +73,7 @@ def main():
         show("IT: SOS booked by base above 0", rows.filter(pl.col("COUNTRY").eq("IT")), "BASE_ABOVE_0", "SOS")
         show("BOC booked by country", rows, "COUNTRY", "BOC")
         show("DE: KIS booked by church membership", rows.filter(pl.col("COUNTRY").eq("DE")), "AD_CHURCH", "KIS")
+        show("Bookings by tax type and job user", job_users(), "TB_TAXTP", "JOB", counted="bookings")
 
 
 if __name__ == "__main__":

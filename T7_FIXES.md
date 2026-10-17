@@ -80,6 +80,12 @@ its evidence in the comment:
 - **taxable_base of payouts without withholding** (`BASE_WITHOUT_TAX = True`). The base is reported as
   calculated: for CH the gross, even when the payout was only reported or below a threshold. `False` reports 0.
 - **Rounding of the IT conversion** (`TRUNCATED_CONVERSION`, see P0, open point 1).
+- **VST of holders who chose the reporting** (`REPORTED_WITHHELD = True`). NRCODE: AD_TAXST M = reported to the
+  tax office, E = objection. If NRTAXB books VST for M holders too, that VST was reported, not withheld: `False`
+  keeps it in the annual `ch_vst` and gives the payout no withholding and no remittance day. The CH cross-tab of
+  `tools/neuron/t7_labels.py` decides it.
+- **Remittance day on a weekend or holiday** (`REMITTANCE_SHIFTED = []`). About 30 % of the days of each rule
+  fall on one; listing a country moves its days to the next business day of `REMITTANCE_CALENDARS`.
 
 ## P1: wrong amounts without an error — fixed
 

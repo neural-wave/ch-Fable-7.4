@@ -9,7 +9,7 @@ import functools
 import holidays
 import polars as pl
 
-from conventions import CALENDAR
+from conventions import CALENDAR, REMITTANCE_CALENDARS
 
 
 def completed_months(start: pl.Expr, end: pl.Expr) -> pl.Expr:
@@ -55,6 +55,12 @@ def every_months(start: str, end: str, months: int) -> pl.Expr:
 def public_holidays() -> list:
     """The public holidays of the local calendar, generated offline by the library `holidays`."""
     return sorted(holidays.country_holidays(**CALENDAR))
+
+
+@functools.cache
+def tax_office_holidays(country: str) -> list:
+    """The public holidays of the calendar of the tax office of `country` (`conventions.REMITTANCE_CALENDARS`)."""
+    return sorted(holidays.country_holidays(**REMITTANCE_CALENDARS[country]))
 
 
 def business_day(day: pl.Expr) -> pl.Expr:
