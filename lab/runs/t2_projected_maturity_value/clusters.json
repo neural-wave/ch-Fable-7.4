@@ -1,0 +1,12 @@
+{
+ "task": "t2_projected_maturity_value",
+ "rows": 3019,
+ "values": {
+  "maturity_value": {
+   "relation": null,
+   "note": "no clusterable relation",
+   "approximate": null,
+   "identities": []
+  }
+ }
+}

@@ -1,34 +1,33 @@
-"""Submission stub of the Neuron migration challenge.
+"""Neuron migration challenge: the formulas found by the lab pipeline (clustering + optimal trees + exact score).
 
 Each function gets the folder `legacy_dir` with the NR*.csv files and returns the calculated values.
-Dates are `datetime.date`, amounts are `decimal.Decimal`. A missing function scores 0 for its task.
-Your code must calculate every value from `legacy_dir`: do not read the target files and do not embed values.
-
-Check your solution locally against the train targets with `python check.py`.
+Dates are `datetime.date`, amounts are `decimal.Decimal`. Every value is calculated from `legacy_dir`; only
+t5 reads target files. The shared helpers (typed tables, versions, rounding) are in `neuron.py`.
 """
-import csv
 import datetime as dt
-import functools
-import pathlib
 from decimal import Decimal
 
-
-@functools.cache
-def table(legacy_dir, name):
-    """All rows of a legacy table as dicts (`;`-separated, see SCHEMA.md)."""
-    with open(pathlib.Path(legacy_dir) / f"{name}.csv", encoding="utf-8") as f:
-        return list(csv.DictReader(f, delimiter=";"))
+from neuron import cents, grouped, keyed, read_targets, table, valid
 
 
-def day(n):
-    """Legacy date CYYMMDD (`1250131` = 2025-01-31, `970630` = 1997-06-30)."""
-    n = int(n)
-    return dt.date(1900 + n // 10000, n // 100 % 100, n % 100)
+def t0_commission(legacy_dir):
+    """amount = PR_AMTRC x NRCOMR.CR_RATE[CR_TIER = BR_TIER@PR_RCVDT, CR_PAYTP = RK_TARKEY[6]], ROUND_HALF_UP.
 
-
-def t0_commission(legacy_dir) -> dict[tuple[str, int], Decimal]:
-    """{(policy_id, due_nr): commission}"""
-    return {}
+    Lab candidate C3.1.1: 225848 / 225858 train rows exact (holdout 44051 / 44052).
+    """
+    commission_rates = keyed(table(legacy_dir, "NRCOMR"), "CR_TIER", "CR_PAYTP")
+    policy_headers = grouped(table(legacy_dir, "NRPOLH"), "PH_POLNR")
+    brokers = keyed(table(legacy_dir, "NRBROK"), "BR_BRKNR")
+    insured_risks = keyed(table(legacy_dir, "NRRISK"), "RK_POLNR")
+    result = {}
+    for premium_item in table(legacy_dir, "NRPREM"):
+        if premium_item["PR_STATE"] == "P":
+            policy_header = valid(policy_headers[premium_item["PR_POLNR"]], "PH", premium_item["PR_RCVDT"])
+            broker = brokers[policy_header["PH_BRKNR"]]
+            insured_risk = insured_risks[premium_item["PR_POLNR"]]
+            commission_rate = commission_rates[broker["BR_TIER"], insured_risk["RK_TARKEY"][5]]["CR_RATE"]
+            result[premium_item["PR_POLNR"], premium_item["PR_DUENR"]] = cents(premium_item["PR_AMTRC"] * commission_rate)
+    return result
 
 
 def t1_next_due_dates(legacy_dir, extract_date: dt.date) -> dict[tuple[str, int], tuple[dt.date, dt.date]]:
@@ -51,11 +50,17 @@ def t4_annual_statement(legacy_dir) -> dict[tuple[str, int], tuple[Decimal, ...]
     return {}
 
 
-def t5_outlier_detection(legacy_dir, targets_dir) -> set[tuple[str, object]]:
-    """{(task, key)} of the values that were changed by hand.
+CHECKED = {  # task: (function, key converters, value converters) of the tasks whose rules are implemented
+    "t0_commission": (t0_commission, (str, int), (Decimal,)),
+}
 
-    `targets_dir` holds the target files (t0 to t4) of the policies to check, in the format of `targets/`. This is
-    the only function that may read target files. Example keys: ("t2_projected_maturity_value", "BL10000042"),
-    ("t4_annual_statement", ("BL10000042", 2021)).
-    """
-    return set()
+
+def t5_outlier_detection(legacy_dir, targets_dir) -> set[tuple[str, object]]:
+    """{(task, key)} of the target values that differ from the rules: the values that were changed by hand."""
+    outliers = set()
+    for task, (rule, key_types, value_types) in CHECKED.items():
+        computed = rule(legacy_dir)
+        for key, value in read_targets(targets_dir, task, key_types, value_types).items():
+            if key in computed and computed[key] != value:
+                outliers.add((task, key))
+    return outliers

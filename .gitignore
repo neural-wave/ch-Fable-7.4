@@ -1,2 +1,11 @@
 legacy/
 targets/
+.DS_Store
+.env.llm
+__pycache__/
+.pytest_cache/
+.venv/
+lab/.venv/
+lab/.cache/
+lab/runs/**/*.parquet
+lab/runs/*~*/

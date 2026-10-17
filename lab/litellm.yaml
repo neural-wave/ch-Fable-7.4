@@ -1,0 +1,11 @@
+# Profile C only: LiteLLM translates Claude Code's Anthropic Messages requests for an OpenAI-only endpoint.
+#   OPEN_LLM_API_KEY=... litellm --config lab/litellm.yaml --port 4000
+# then in .env.llm: ANTHROPIC_BASE_URL=http://localhost:4000 and OPEN_MODEL=open-model.
+model_list:
+  - model_name: open-model
+    litellm_params:
+      model: openai/REPLACE_ME            # model id on the endpoint, e.g. a Llama served with the OpenAI API
+      api_base: https://REPLACE_ME/v1     # URL of the OpenAI-compatible endpoint
+      api_key: os.environ/OPEN_LLM_API_KEY
+litellm_settings:
+  drop_params: true                       # drop parameters the backend does not know (e.g. output_config)

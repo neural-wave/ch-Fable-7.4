@@ -1,0 +1,37 @@
+{
+ "task": "t3_booking",
+ "rows": 1012261,
+ "values": {
+  "amount_pc": {
+   "relation": null,
+   "note": "no clusterable relation",
+   "approximate": {
+    "relation": "value / BK_EVTNR",
+    "centers": [
+     "0.02",
+     "0.210616",
+     "0.214",
+     "0.218",
+     "0.22214",
+     "0.226",
+     "0.22925",
+     "0.232242"
+    ],
+    "covered": 0.94
+   },
+   "identities": []
+  },
+  "price": {
+   "relation": null,
+   "note": "no clusterable relation",
+   "approximate": null,
+   "identities": []
+  },
+  "units": {
+   "relation": null,
+   "note": "no clusterable relation",
+   "approximate": null,
+   "identities": []
+  }
+ }
+}

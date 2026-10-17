@@ -1,0 +1,6409 @@
+{
+ "task": "t3_surrender_value",
+ "values": {
+  "surrender_value": {
+   "relation": {
+    "kind": "ratio",
+    "input": "policy_value"
+   },
+   "best": "C2.2/DOWN",
+   "ties": [
+    "C2.2/FLOOR",
+    "C2.1/DOWN",
+    "C2.1/FLOOR"
+   ],
+   "cards": [
+    {
+     "id": "L1",
+     "when": [
+      [
+       "RK_TARKEY[5]",
+       "=",
+       "2"
+      ],
+      [
+       "weekday(valuation_date)",
+       "=",
+       "7"
+      ],
+      [
+       "PH_STATE@RK_ENDDT",
+       "=",
+       "10"
+      ]
+     ],
+     "then": {
+      "relation": "value / policy_value",
+      "center": "0.98"
+     },
+     "rounding": [
+      "DOWN",
+      "FLOOR"
+     ],
+     "support_rows": 43,
+     "purity": 0.511628,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "weekday(valuation_date)": [],
+      "PH_STATE@RK_ENDDT": []
+     },
+     "examples": [
+      [
+       "BL10000012",
+       "2006-12-31"
+      ],
+      [
+       "BL10000089",
+       "2006-12-31"
+      ]
+     ]
+    },
+    {
+     "id": "L2",
+     "when": [
+      [
+       "RK_TARKEY[5]",
+       "=",
+       "2"
+      ],
+      [
+       "weekday(valuation_date)",
+       "=",
+       "7"
+      ],
+      [
+       "PH_STATE@RK_ENDDT",
+       "!=",
+       "10"
+      ]
+     ],
+     "then": {
+      "relation": "value / policy_value",
+      "center": "0.99"
+     },
+     "rounding": [
+      "DOWN",
+      "FLOOR"
+     ],
+     "support_rows": 28,
+     "purity": 0.464286,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "weekday(valuation_date)": [],
+      "PH_STATE@RK_ENDDT": []
+     },
+     "examples": [
+      [
+       "BL10000168",
+       "2006-12-31"
+      ],
+      [
+       "BL10001129",
+       "2006-12-31"
+      ]
+     ]
+    },
+    {
+     "id": "L3",
+     "when": [
+      [
+       "RK_TARKEY[5]",
+       "=",
+       "2"
+      ],
+      [
+       "weekday(valuation_date)",
+       "!=",
+       "7"
+      ]
+     ],
+     "then": {
+      "relation": "value / policy_value",
+      "center": "1"
+     },
+     "rounding": [
+      "HALF_UP",
+      "HALF_EVEN",
+      "HALF_DOWN",
+      "DOWN",
+      "UP",
+      "FLOOR",
+      "CEILING"
+     ],
+     "support_rows": 1290,
+     "purity": 1.0,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "weekday(valuation_date)": [],
+      "PH_STATE@RK_ENDDT": []
+     },
+     "examples": [
+      [
+       "BL10000001",
+       "2020-04-30"
+      ],
+      [
+       "BL10000001",
+       "2025-12-31"
+      ]
+     ]
+    },
+    {
+     "id": "L4",
+     "when": [
+      [
+       "RK_TARKEY[5]",
+       "!=",
+       "2"
+      ],
+      [
+       "RK_TARKEY[5]",
+       "=",
+       "3"
+      ]
+     ],
+     "then": {
+      "relation": "value / policy_value",
+      "center": "1"
+     },
+     "rounding": [
+      "HALF_UP",
+      "HALF_EVEN",
+      "HALF_DOWN",
+      "DOWN",
+      "UP",
+      "FLOOR",
+      "CEILING"
+     ],
+     "support_rows": 1273,
+     "purity": 1.0,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "weekday(valuation_date)": [],
+      "PH_STATE@RK_ENDDT": []
+     },
+     "examples": [
+      [
+       "BL10000013",
+       "2020-04-30"
+      ],
+      [
+       "BL10000013",
+       "2025-12-31"
+      ]
+     ]
+    },
+    {
+     "id": "L5",
+     "when": [
+      [
+       "RK_TARKEY[5]",
+       "!=",
+       "2"
+      ],
+      [
+       "RK_TARKEY[5]",
+       "!=",
+       "3"
+      ],
+      [
+       "PH_STATE@RK_ENDDT",
+       "=",
+       "30"
+      ]
+     ],
+     "then": {
+      "relation": "value / policy_value",
+      "center": "0.99"
+     },
+     "rounding": [
+      "HALF_UP",
+      "HALF_EVEN",
+      "HALF_DOWN",
+      "DOWN",
+      "FLOOR"
+     ],
+     "support_rows": 1,
+     "purity": 1.0,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "weekday(valuation_date)": [],
+      "PH_STATE@RK_ENDDT": []
+     },
+     "examples": [
+      [
+       "BL10001863",
+       "2025-12-31"
+      ]
+     ]
+    },
+    {
+     "id": "L6",
+     "when": [
+      [
+       "RK_TARKEY[5]",
+       "!=",
+       "2"
+      ],
+      [
+       "RK_TARKEY[5]",
+       "!=",
+       "3"
+      ],
+      [
+       "PH_STATE@RK_ENDDT",
+       "!=",
+       "30"
+      ]
+     ],
+     "then": {
+      "relation": "value / policy_value",
+      "center": "1"
+     },
+     "rounding": [
+      "HALF_UP",
+      "HALF_EVEN",
+      "HALF_DOWN",
+      "DOWN",
+      "UP",
+      "FLOOR",
+      "CEILING"
+     ],
+     "support_rows": 1719,
+     "purity": 0.832461,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "weekday(valuation_date)": [],
+      "PH_STATE@RK_ENDDT": []
+     },
+     "examples": [
+      [
+       "BL10000022",
+       "2006-12-31"
+      ],
+      [
+       "BL10000022",
+       "2020-04-30"
+      ]
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "id": "C2.2/DOWN",
+     "origin": "C2.2 with ROUND_DOWN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_DOWN",
+     "score": {
+      "discovery": [
+       4430,
+       4912
+      ],
+      "holdout": [
+       1118,
+       1241
+      ],
+      "total": [
+       5548,
+       6153
+      ],
+      "fingerprint": "da31f728e3c0"
+     },
+     "features": [
+      "PH_STATE",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.2/FLOOR",
+     "origin": "C2.2 with ROUND_FLOOR",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_FLOOR",
+     "score": {
+      "discovery": [
+       4430,
+       4912
+      ],
+      "holdout": [
+       1118,
+       1241
+      ],
+      "total": [
+       5548,
+       6153
+      ],
+      "fingerprint": "da31f728e3c0"
+     },
+     "features": [
+      "PH_STATE",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1/DOWN",
+     "origin": "C2.1 with ROUND_DOWN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_DOWN",
+     "score": {
+      "discovery": [
+       4430,
+       4912
+      ],
+      "holdout": [
+       1118,
+       1241
+      ],
+      "total": [
+       5548,
+       6153
+      ],
+      "fingerprint": "da31f728e3c0"
+     },
+     "features": [
+      "PH_STATE@RK_ENDDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1/FLOOR",
+     "origin": "C2.1 with ROUND_FLOOR",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_FLOOR",
+     "score": {
+      "discovery": [
+       4430,
+       4912
+      ],
+      "holdout": [
+       1118,
+       1241
+      ],
+      "total": [
+       5548,
+       6153
+      ],
+      "fingerprint": "da31f728e3c0"
+     },
+     "features": [
+      "PH_STATE@RK_ENDDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/DOWN",
+     "origin": "C1 with ROUND_DOWN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_DOWN",
+     "score": {
+      "discovery": [
+       4428,
+       4912
+      ],
+      "holdout": [
+       1117,
+       1241
+      ],
+      "total": [
+       5545,
+       6153
+      ],
+      "fingerprint": "3e736c3edccf"
+     },
+     "features": [
+      "EC_RATE@RK_BEGDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/FLOOR",
+     "origin": "C1 with ROUND_FLOOR",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_FLOOR",
+     "score": {
+      "discovery": [
+       4428,
+       4912
+      ],
+      "holdout": [
+       1117,
+       1241
+      ],
+      "total": [
+       5545,
+       6153
+      ],
+      "fingerprint": "3e736c3edccf"
+     },
+     "features": [
+      "EC_RATE@RK_BEGDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.2/HALF_EVEN",
+     "origin": "C2.2 with ROUND_HALF_EVEN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_EVEN",
+     "score": {
+      "discovery": [
+       4412,
+       4912
+      ],
+      "holdout": [
+       1116,
+       1241
+      ],
+      "total": [
+       5528,
+       6153
+      ],
+      "fingerprint": "4377bd1faf7b"
+     },
+     "features": [
+      "PH_STATE",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.2/HALF_DOWN",
+     "origin": "C2.2 with ROUND_HALF_DOWN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_DOWN",
+     "score": {
+      "discovery": [
+       4412,
+       4912
+      ],
+      "holdout": [
+       1116,
+       1241
+      ],
+      "total": [
+       5528,
+       6153
+      ],
+      "fingerprint": "4377bd1faf7b"
+     },
+     "features": [
+      "PH_STATE",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1/HALF_EVEN",
+     "origin": "C2.1 with ROUND_HALF_EVEN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_EVEN",
+     "score": {
+      "discovery": [
+       4412,
+       4912
+      ],
+      "holdout": [
+       1116,
+       1241
+      ],
+      "total": [
+       5528,
+       6153
+      ],
+      "fingerprint": "4377bd1faf7b"
+     },
+     "features": [
+      "PH_STATE@RK_ENDDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1/HALF_DOWN",
+     "origin": "C2.1 with ROUND_HALF_DOWN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_DOWN",
+     "score": {
+      "discovery": [
+       4412,
+       4912
+      ],
+      "holdout": [
+       1116,
+       1241
+      ],
+      "total": [
+       5528,
+       6153
+      ],
+      "fingerprint": "4377bd1faf7b"
+     },
+     "features": [
+      "PH_STATE@RK_ENDDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.2",
+     "origin": "optimal tree on ['RK_TARKEY[5]', 'weekday(valuation_date)', 'PH_STATE']",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       4412,
+       4912
+      ],
+      "holdout": [
+       1115,
+       1241
+      ],
+      "total": [
+       5527,
+       6153
+      ],
+      "fingerprint": "595df88593cb"
+     },
+     "features": [
+      "PH_STATE",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1",
+     "origin": "optimal tree on ['RK_TARKEY[5]', 'weekday(valuation_date)', 'PH_STATE@RK_ENDDT']",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       4412,
+       4912
+      ],
+      "holdout": [
+       1115,
+       1241
+      ],
+      "total": [
+       5527,
+       6153
+      ],
+      "fingerprint": "595df88593cb"
+     },
+     "features": [
+      "PH_STATE@RK_ENDDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/HALF_DOWN",
+     "origin": "C1 with ROUND_HALF_DOWN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_DOWN",
+     "score": {
+      "discovery": [
+       4412,
+       4912
+      ],
+      "holdout": [
+       1115,
+       1241
+      ],
+      "total": [
+       5527,
+       6153
+      ],
+      "fingerprint": "02cf6df9a223"
+     },
+     "features": [
+      "EC_RATE@RK_BEGDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/HALF_EVEN",
+     "origin": "C1 with ROUND_HALF_EVEN",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_EVEN",
+     "score": {
+      "discovery": [
+       4411,
+       4912
+      ],
+      "holdout": [
+       1115,
+       1241
+      ],
+      "total": [
+       5526,
+       6153
+      ],
+      "fingerprint": "3782b7fe69e9"
+     },
+     "features": [
+      "EC_RATE@RK_BEGDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/EC_RATE",
+     "origin": "C1 with EC_RATE instead of EC_RATE@RK_BEGDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       4411,
+       4912
+      ],
+      "holdout": [
+       1114,
+       1241
+      ],
+      "total": [
+       5525,
+       6153
+      ],
+      "fingerprint": "c24c41d4103a"
+     },
+     "features": [
+      "EC_RATE",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1",
+     "origin": "CART tree as is",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       4411,
+       4912
+      ],
+      "holdout": [
+       1114,
+       1241
+      ],
+      "total": [
+       5525,
+       6153
+      ],
+      "fingerprint": "c24c41d4103a"
+     },
+     "features": [
+      "EC_RATE@RK_BEGDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/EC_RATE@RK_ENDDT",
+     "origin": "C1 with EC_RATE@RK_ENDDT instead of EC_RATE@RK_BEGDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_ENDDT",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_ENDDT",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       4411,
+       4912
+      ],
+      "holdout": [
+       1114,
+       1241
+      ],
+      "total": [
+       5525,
+       6153
+      ],
+      "fingerprint": "c24c41d4103a"
+     },
+     "features": [
+      "EC_RATE@RK_ENDDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/EC_RATE@valuation_date",
+     "origin": "C1 with EC_RATE@valuation_date instead of EC_RATE@RK_BEGDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@valuation_date",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@valuation_date",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       4411,
+       4912
+      ],
+      "holdout": [
+       1114,
+       1241
+      ],
+      "total": [
+       5525,
+       6153
+      ],
+      "fingerprint": "c24c41d4103a"
+     },
+     "features": [
+      "EC_RATE@valuation_date",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1/PH_STATE@RK_BEGDT",
+     "origin": "C2.1 with PH_STATE@RK_BEGDT instead of PH_STATE@RK_ENDDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_BEGDT",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_BEGDT",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_BEGDT",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_BEGDT",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       4411,
+       4912
+      ],
+      "holdout": [
+       1114,
+       1241
+      ],
+      "total": [
+       5525,
+       6153
+      ],
+      "fingerprint": "c24c41d4103a"
+     },
+     "features": [
+      "PH_STATE@RK_BEGDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1/PH_STATE@valuation_date",
+     "origin": "C2.1 with PH_STATE@valuation_date instead of PH_STATE@RK_ENDDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@valuation_date",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@valuation_date",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@valuation_date",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@valuation_date",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       4408,
+       4912
+      ],
+      "holdout": [
+       1114,
+       1241
+      ],
+      "total": [
+       5522,
+       6153
+      ],
+      "fingerprint": "e37d568cb4d3"
+     },
+     "features": [
+      "PH_STATE@valuation_date",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.2/UP",
+     "origin": "C2.2 with ROUND_UP",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_UP",
+     "score": {
+      "discovery": [
+       4402,
+       4912
+      ],
+      "holdout": [
+       1111,
+       1241
+      ],
+      "total": [
+       5513,
+       6153
+      ],
+      "fingerprint": "eb6f00713ede"
+     },
+     "features": [
+      "PH_STATE",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.2/CEILING",
+     "origin": "C2.2 with ROUND_CEILING",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_CEILING",
+     "score": {
+      "discovery": [
+       4402,
+       4912
+      ],
+      "holdout": [
+       1111,
+       1241
+      ],
+      "total": [
+       5513,
+       6153
+      ],
+      "fingerprint": "eb6f00713ede"
+     },
+     "features": [
+      "PH_STATE",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1/UP",
+     "origin": "C2.1 with ROUND_UP",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_UP",
+     "score": {
+      "discovery": [
+       4402,
+       4912
+      ],
+      "holdout": [
+       1111,
+       1241
+      ],
+      "total": [
+       5513,
+       6153
+      ],
+      "fingerprint": "eb6f00713ede"
+     },
+     "features": [
+      "PH_STATE@RK_ENDDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C2.1/CEILING",
+     "origin": "C2.1 with ROUND_CEILING",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "10"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "10"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "=",
+         "30"
+        ]
+       ],
+       "then": "0.99"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "3"
+        ],
+        [
+         "PH_STATE@RK_ENDDT",
+         "!=",
+         "30"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_CEILING",
+     "score": {
+      "discovery": [
+       4402,
+       4912
+      ],
+      "holdout": [
+       1111,
+       1241
+      ],
+      "total": [
+       5513,
+       6153
+      ],
+      "fingerprint": "eb6f00713ede"
+     },
+     "features": [
+      "PH_STATE@RK_ENDDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/UP",
+     "origin": "C1 with ROUND_UP",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_UP",
+     "score": {
+      "discovery": [
+       4401,
+       4912
+      ],
+      "holdout": [
+       1111,
+       1241
+      ],
+      "total": [
+       5512,
+       6153
+      ],
+      "fingerprint": "9d4bd41116d1"
+     },
+     "features": [
+      "EC_RATE@RK_BEGDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    },
+    {
+     "id": "C1/CEILING",
+     "origin": "C1 with ROUND_CEILING",
+     "rules": [
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "3"
+        ],
+        [
+         "EC_RATE@RK_BEGDT",
+         "!=",
+         "0.040000"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "3"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "1"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "=",
+         "7"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "0.98"
+      },
+      {
+       "when": [
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "4"
+        ],
+        [
+         "weekday(valuation_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "then": "1"
+      }
+     ],
+     "relation": {
+      "kind": "ratio",
+      "input": "policy_value"
+     },
+     "value": "surrender_value",
+     "rounding": "ROUND_CEILING",
+     "score": {
+      "discovery": [
+       4401,
+       4912
+      ],
+      "holdout": [
+       1111,
+       1241
+      ],
+      "total": [
+       5512,
+       6153
+      ],
+      "fingerprint": "9d4bd41116d1"
+     },
+     "features": [
+      "EC_RATE@RK_BEGDT",
+      "RK_TARKEY[5]",
+      "weekday(valuation_date)"
+     ]
+    }
+   ],
+   "residuals": [
+    [
+     "BL10000007",
+     "2006-12-31"
+    ],
+    [
+     "BL10000010",
+     "2025-12-31"
+    ],
+    [
+     "BL10000018",
+     "2025-12-31"
+    ],
+    [
+     "BL10000034",
+     "2025-12-31"
+    ],
+    [
+     "BL10000055",
+     "2006-12-31"
+    ],
+    [
+     "BL10000065",
+     "2025-12-31"
+    ],
+    [
+     "BL10000076",
+     "2006-12-31"
+    ],
+    [
+     "BL10000082",
+     "2025-12-31"
+    ],
+    [
+     "BL10000095",
+     "2006-12-31"
+    ],
+    [
+     "BL10000100",
+     "2006-12-31"
+    ],
+    [
+     "BL10000120",
+     "2025-12-31"
+    ],
+    [
+     "BL10000141",
+     "2006-12-31"
+    ],
+    [
+     "BL10000150",
+     "2025-12-31"
+    ],
+    [
+     "BL10000155",
+     "2025-12-31"
+    ],
+    [
+     "BL10000161",
+     "2025-12-31"
+    ],
+    [
+     "BL10000177",
+     "2006-12-31"
+    ],
+    [
+     "BL10000186",
+     "2025-12-31"
+    ],
+    [
+     "BL10000191",
+     "2006-12-31"
+    ],
+    [
+     "BL10000196",
+     "2006-12-31"
+    ],
+    [
+     "BL10000202",
+     "2025-12-31"
+    ],
+    [
+     "BL10000207",
+     "2006-12-31"
+    ],
+    [
+     "BL10000230",
+     "2025-12-31"
+    ],
+    [
+     "BL10000234",
+     "2025-12-31"
+    ],
+    [
+     "BL10000240",
+     "2025-12-31"
+    ],
+    [
+     "BL10000248",
+     "2025-12-31"
+    ],
+    [
+     "BL10000251",
+     "2025-12-31"
+    ],
+    [
+     "BL10000267",
+     "2006-12-31"
+    ],
+    [
+     "BL10000270",
+     "2025-12-31"
+    ],
+    [
+     "BL10000286",
+     "2025-12-31"
+    ],
+    [
+     "BL10000292",
+     "2025-12-31"
+    ],
+    [
+     "BL10000299",
+     "2025-12-31"
+    ],
+    [
+     "BL10000309",
+     "2006-12-31"
+    ],
+    [
+     "BL10000319",
+     "2025-12-31"
+    ],
+    [
+     "BL10000321",
+     "2025-12-31"
+    ],
+    [
+     "BL10000327",
+     "2006-12-31"
+    ],
+    [
+     "BL10000334",
+     "2025-12-31"
+    ],
+    [
+     "BL10000340",
+     "2025-12-31"
+    ],
+    [
+     "BL10000343",
+     "2025-12-31"
+    ],
+    [
+     "BL10000345",
+     "2025-12-31"
+    ],
+    [
+     "BL10000352",
+     "2006-12-31"
+    ],
+    [
+     "BL10000366",
+     "2006-12-31"
+    ],
+    [
+     "BL10000370",
+     "2006-12-31"
+    ],
+    [
+     "BL10000375",
+     "2025-12-31"
+    ],
+    [
+     "BL10000382",
+     "2006-12-31"
+    ],
+    [
+     "BL10000388",
+     "2025-12-31"
+    ],
+    [
+     "BL10000391",
+     "2006-12-31"
+    ],
+    [
+     "BL10000403",
+     "2025-12-31"
+    ],
+    [
+     "BL10000407",
+     "2025-12-31"
+    ],
+    [
+     "BL10000430",
+     "2025-12-31"
+    ],
+    [
+     "BL10000438",
+     "2006-12-31"
+    ],
+    [
+     "BL10000439",
+     "2025-12-31"
+    ],
+    [
+     "BL10000444",
+     "2006-12-31"
+    ],
+    [
+     "BL10000452",
+     "2025-12-31"
+    ],
+    [
+     "BL10000453",
+     "2025-12-31"
+    ],
+    [
+     "BL10000457",
+     "2025-12-31"
+    ],
+    [
+     "BL10000473",
+     "2025-12-31"
+    ],
+    [
+     "BL10000495",
+     "2006-12-31"
+    ],
+    [
+     "BL10000503",
+     "2025-12-31"
+    ],
+    [
+     "BL10000504",
+     "2006-12-31"
+    ],
+    [
+     "BL10000506",
+     "2006-12-31"
+    ],
+    [
+     "BL10000508",
+     "2025-12-31"
+    ],
+    [
+     "BL10000522",
+     "2025-12-31"
+    ],
+    [
+     "BL10000531",
+     "2006-12-31"
+    ],
+    [
+     "BL10000535",
+     "2006-12-31"
+    ],
+    [
+     "BL10000538",
+     "2025-12-31"
+    ],
+    [
+     "BL10000558",
+     "2025-12-31"
+    ],
+    [
+     "BL10000563",
+     "2025-12-31"
+    ],
+    [
+     "BL10000565",
+     "2006-12-31"
+    ],
+    [
+     "BL10000583",
+     "2025-12-31"
+    ],
+    [
+     "BL10000585",
+     "2025-12-31"
+    ],
+    [
+     "BL10000603",
+     "2025-12-31"
+    ],
+    [
+     "BL10000618",
+     "2006-12-31"
+    ],
+    [
+     "BL10000619",
+     "2006-12-31"
+    ],
+    [
+     "BL10000620",
+     "2025-12-31"
+    ],
+    [
+     "BL10000625",
+     "2025-12-31"
+    ],
+    [
+     "BL10000632",
+     "2006-12-31"
+    ],
+    [
+     "BL10000633",
+     "2025-12-31"
+    ],
+    [
+     "BL10000680",
+     "2006-12-31"
+    ],
+    [
+     "BL10000686",
+     "2006-12-31"
+    ],
+    [
+     "BL10000689",
+     "2006-12-31"
+    ],
+    [
+     "BL10000693",
+     "2025-12-31"
+    ],
+    [
+     "BL10000694",
+     "2025-12-31"
+    ],
+    [
+     "BL10000706",
+     "2025-12-31"
+    ],
+    [
+     "BL10000708",
+     "2025-12-31"
+    ],
+    [
+     "BL10000721",
+     "2006-12-31"
+    ],
+    [
+     "BL10000732",
+     "2006-12-31"
+    ],
+    [
+     "BL10000744",
+     "2025-12-31"
+    ],
+    [
+     "BL10000745",
+     "2025-12-31"
+    ],
+    [
+     "BL10000762",
+     "2025-12-31"
+    ],
+    [
+     "BL10000768",
+     "2020-04-30"
+    ],
+    [
+     "BL10000777",
+     "2006-12-31"
+    ],
+    [
+     "BL10000781",
+     "2025-12-31"
+    ],
+    [
+     "BL10000797",
+     "2025-12-31"
+    ],
+    [
+     "BL10000823",
+     "2006-12-31"
+    ],
+    [
+     "BL10000829",
+     "2025-12-31"
+    ],
+    [
+     "BL10000834",
+     "2025-12-31"
+    ],
+    [
+     "BL10000846",
+     "2006-12-31"
+    ],
+    [
+     "BL10000848",
+     "2025-12-31"
+    ],
+    [
+     "BL10000849",
+     "2025-12-31"
+    ],
+    [
+     "BL10000880",
+     "2025-12-31"
+    ],
+    [
+     "BL10000896",
+     "2006-12-31"
+    ],
+    [
+     "BL10000899",
+     "2006-12-31"
+    ],
+    [
+     "BL10000901",
+     "2025-12-31"
+    ],
+    [
+     "BL10000908",
+     "2025-12-31"
+    ],
+    [
+     "BL10000912",
+     "2006-12-31"
+    ],
+    [
+     "BL10000921",
+     "2006-12-31"
+    ],
+    [
+     "BL10000928",
+     "2025-12-31"
+    ],
+    [
+     "BL10000932",
+     "2025-12-31"
+    ],
+    [
+     "BL10000948",
+     "2025-12-31"
+    ],
+    [
+     "BL10000949",
+     "2006-12-31"
+    ],
+    [
+     "BL10000954",
+     "2006-12-31"
+    ],
+    [
+     "BL10000963",
+     "2025-12-31"
+    ],
+    [
+     "BL10000969",
+     "2025-12-31"
+    ],
+    [
+     "BL10000974",
+     "2006-12-31"
+    ],
+    [
+     "BL10000979",
+     "2025-12-31"
+    ],
+    [
+     "BL10000991",
+     "2025-12-31"
+    ],
+    [
+     "BL10000997",
+     "2006-12-31"
+    ],
+    [
+     "BL10001000",
+     "2006-12-31"
+    ],
+    [
+     "BL10001004",
+     "2006-12-31"
+    ],
+    [
+     "BL10001005",
+     "2025-12-31"
+    ],
+    [
+     "BL10001010",
+     "2006-12-31"
+    ],
+    [
+     "BL10001023",
+     "2025-12-31"
+    ],
+    [
+     "BL10001025",
+     "2006-12-31"
+    ],
+    [
+     "BL10001031",
+     "2006-12-31"
+    ],
+    [
+     "BL10001035",
+     "2006-12-31"
+    ],
+    [
+     "BL10001054",
+     "2006-12-31"
+    ],
+    [
+     "BL10001061",
+     "2025-12-31"
+    ],
+    [
+     "BL10001063",
+     "2020-04-30"
+    ],
+    [
+     "BL10001067",
+     "2025-12-31"
+    ],
+    [
+     "BL10001075",
+     "2025-12-31"
+    ],
+    [
+     "BL10001080",
+     "2020-04-30"
+    ],
+    [
+     "BL10001098",
+     "2025-12-31"
+    ],
+    [
+     "BL10001123",
+     "2006-12-31"
+    ],
+    [
+     "BL10001146",
+     "2025-12-31"
+    ],
+    [
+     "BL10001152",
+     "2006-12-31"
+    ],
+    [
+     "BL10001153",
+     "2025-12-31"
+    ],
+    [
+     "BL10001157",
+     "2006-12-31"
+    ],
+    [
+     "BL10001168",
+     "2025-12-31"
+    ],
+    [
+     "BL10001170",
+     "2006-12-31"
+    ],
+    [
+     "BL10001173",
+     "2006-12-31"
+    ],
+    [
+     "BL10001176",
+     "2006-12-31"
+    ],
+    [
+     "BL10001184",
+     "2025-12-31"
+    ],
+    [
+     "BL10001189",
+     "2025-12-31"
+    ],
+    [
+     "BL10001191",
+     "2025-12-31"
+    ],
+    [
+     "BL10001203",
+     "2025-12-31"
+    ],
+    [
+     "BL10001234",
+     "2006-12-31"
+    ],
+    [
+     "BL10001246",
+     "2025-12-31"
+    ],
+    [
+     "BL10001249",
+     "2006-12-31"
+    ],
+    [
+     "BL10001296",
+     "2006-12-31"
+    ],
+    [
+     "BL10001299",
+     "2006-12-31"
+    ],
+    [
+     "BL10001305",
+     "2025-12-31"
+    ],
+    [
+     "BL10001325",
+     "2006-12-31"
+    ],
+    [
+     "BL10001327",
+     "2025-12-31"
+    ],
+    [
+     "BL10001329",
+     "2006-12-31"
+    ],
+    [
+     "BL10001330",
+     "2006-12-31"
+    ],
+    [
+     "BL10001342",
+     "2025-12-31"
+    ],
+    [
+     "BL10001351",
+     "2025-12-31"
+    ],
+    [
+     "BL10001362",
+     "2025-12-31"
+    ],
+    [
+     "BL10001388",
+     "2025-12-31"
+    ],
+    [
+     "BL10001389",
+     "2006-12-31"
+    ],
+    [
+     "BL10001402",
+     "2006-12-31"
+    ],
+    [
+     "BL10001403",
+     "2006-12-31"
+    ],
+    [
+     "BL10001406",
+     "2006-12-31"
+    ],
+    [
+     "BL10001412",
+     "2006-12-31"
+    ],
+    [
+     "BL10001424",
+     "2025-12-31"
+    ],
+    [
+     "BL10001432",
+     "2025-12-31"
+    ],
+    [
+     "BL10001441",
+     "2006-12-31"
+    ],
+    [
+     "BL10001445",
+     "2025-12-31"
+    ],
+    [
+     "BL10001451",
+     "2025-12-31"
+    ],
+    [
+     "BL10001457",
+     "2025-12-31"
+    ],
+    [
+     "BL10001466",
+     "2025-12-31"
+    ],
+    [
+     "BL10001469",
+     "2025-12-31"
+    ],
+    [
+     "BL10001475",
+     "2025-12-31"
+    ],
+    [
+     "BL10001495",
+     "2025-12-31"
+    ],
+    [
+     "BL10001499",
+     "2025-12-31"
+    ],
+    [
+     "BL10001509",
+     "2025-12-31"
+    ],
+    [
+     "BL10001515",
+     "2025-12-31"
+    ],
+    [
+     "BL10001523",
+     "2025-12-31"
+    ],
+    [
+     "BL10001525",
+     "2025-12-31"
+    ],
+    [
+     "BL10001530",
+     "2006-12-31"
+    ],
+    [
+     "BL10001534",
+     "2025-12-31"
+    ],
+    [
+     "BL10001536",
+     "2006-12-31"
+    ],
+    [
+     "BL10001537",
+     "2006-12-31"
+    ],
+    [
+     "BL10001543",
+     "2025-12-31"
+    ],
+    [
+     "BL10001548",
+     "2006-12-31"
+    ],
+    [
+     "BL10001553",
+     "2025-12-31"
+    ],
+    [
+     "BL10001564",
+     "2025-12-31"
+    ],
+    [
+     "BL10001566",
+     "2025-12-31"
+    ],
+    [
+     "BL10001567",
+     "2025-12-31"
+    ],
+    [
+     "BL10001576",
+     "2025-12-31"
+    ],
+    [
+     "BL10001581",
+     "2006-12-31"
+    ],
+    [
+     "BL10001597",
+     "2006-12-31"
+    ],
+    [
+     "BL10001607",
+     "2006-12-31"
+    ],
+    [
+     "BL10001616",
+     "2025-12-31"
+    ],
+    [
+     "BL10001646",
+     "2006-12-31"
+    ],
+    [
+     "BL10001654",
+     "2025-12-31"
+    ],
+    [
+     "BL10001661",
+     "2006-12-31"
+    ],
+    [
+     "BL10001664",
+     "2025-12-31"
+    ],
+    [
+     "BL10001669",
+     "2025-12-31"
+    ],
+    [
+     "BL10001687",
+     "2025-12-31"
+    ],
+    [
+     "BL10001696",
+     "2025-12-31"
+    ],
+    [
+     "BL10001720",
+     "2006-12-31"
+    ],
+    [
+     "BL10001726",
+     "2025-12-31"
+    ],
+    [
+     "BL10001730",
+     "2025-12-31"
+    ],
+    [
+     "BL10001736",
+     "2025-12-31"
+    ],
+    [
+     "BL10001745",
+     "2006-12-31"
+    ],
+    [
+     "BL10001747",
+     "2025-12-31"
+    ],
+    [
+     "BL10001756",
+     "2025-12-31"
+    ],
+    [
+     "BL10001757",
+     "2006-12-31"
+    ],
+    [
+     "BL10001790",
+     "2006-12-31"
+    ],
+    [
+     "BL10001798",
+     "2025-12-31"
+    ],
+    [
+     "BL10001800",
+     "2006-12-31"
+    ],
+    [
+     "BL10001805",
+     "2025-12-31"
+    ],
+    [
+     "BL10001810",
+     "2006-12-31"
+    ],
+    [
+     "BL10001811",
+     "2006-12-31"
+    ],
+    [
+     "BL10001815",
+     "2006-12-31"
+    ],
+    [
+     "BL10001818",
+     "2006-12-31"
+    ],
+    [
+     "BL10001820",
+     "2025-12-31"
+    ],
+    [
+     "BL10001823",
+     "2025-12-31"
+    ],
+    [
+     "BL10001829",
+     "2025-12-31"
+    ],
+    [
+     "BL10001830",
+     "2006-12-31"
+    ],
+    [
+     "BL10001839",
+     "2025-12-31"
+    ],
+    [
+     "BL10001848",
+     "2025-12-31"
+    ],
+    [
+     "BL10001855",
+     "2006-12-31"
+    ],
+    [
+     "BL10001858",
+     "2025-12-31"
+    ],
+    [
+     "BL10001864",
+     "2025-12-31"
+    ],
+    [
+     "BL10001884",
+     "2025-12-31"
+    ],
+    [
+     "BL10001885",
+     "2025-12-31"
+    ],
+    [
+     "BL10001890",
+     "2025-12-31"
+    ],
+    [
+     "BL10001893",
+     "2025-12-31"
+    ],
+    [
+     "BL10001895",
+     "2025-12-31"
+    ],
+    [
+     "BL10001897",
+     "2020-04-30"
+    ],
+    [
+     "BL10001900",
+     "2006-12-31"
+    ],
+    [
+     "BL10001903",
+     "2006-12-31"
+    ],
+    [
+     "BL10001904",
+     "2025-12-31"
+    ],
+    [
+     "BL10001908",
+     "2025-12-31"
+    ],
+    [
+     "BL10001915",
+     "2006-12-31"
+    ],
+    [
+     "BL10001921",
+     "2025-12-31"
+    ],
+    [
+     "BL10001931",
+     "2006-12-31"
+    ],
+    [
+     "BL10001937",
+     "2025-12-31"
+    ],
+    [
+     "BL10001948",
+     "2025-12-31"
+    ],
+    [
+     "BL10001961",
+     "2006-12-31"
+    ],
+    [
+     "BL10001969",
+     "2006-12-31"
+    ],
+    [
+     "BL10001977",
+     "2025-12-31"
+    ],
+    [
+     "BL10001980",
+     "2025-12-31"
+    ],
+    [
+     "BL10001984",
+     "2006-12-31"
+    ],
+    [
+     "BL10001986",
+     "2025-12-31"
+    ],
+    [
+     "BL10001991",
+     "2025-12-31"
+    ],
+    [
+     "BL10002010",
+     "2025-12-31"
+    ],
+    [
+     "BL10002011",
+     "2006-12-31"
+    ],
+    [
+     "BL10002014",
+     "2025-12-31"
+    ],
+    [
+     "BL10002030",
+     "2025-12-31"
+    ],
+    [
+     "BL10002050",
+     "2025-12-31"
+    ],
+    [
+     "BL10002056",
+     "2025-12-31"
+    ],
+    [
+     "BL10002057",
+     "2006-12-31"
+    ],
+    [
+     "BL10002085",
+     "2025-12-31"
+    ],
+    [
+     "BL10002092",
+     "2006-12-31"
+    ],
+    [
+     "BL10002110",
+     "2025-12-31"
+    ],
+    [
+     "BL10002116",
+     "2006-12-31"
+    ],
+    [
+     "BL10002124",
+     "2006-12-31"
+    ],
+    [
+     "BL10002128",
+     "2025-12-31"
+    ],
+    [
+     "BL10002136",
+     "2025-12-31"
+    ],
+    [
+     "BL10002137",
+     "2006-12-31"
+    ],
+    [
+     "BL10002158",
+     "2025-12-31"
+    ],
+    [
+     "BL10002163",
+     "2025-12-31"
+    ],
+    [
+     "BL10002170",
+     "2006-12-31"
+    ],
+    [
+     "BL10002172",
+     "2025-12-31"
+    ],
+    [
+     "BL10002187",
+     "2025-12-31"
+    ],
+    [
+     "BL10002188",
+     "2025-12-31"
+    ],
+    [
+     "BL10002199",
+     "2025-12-31"
+    ],
+    [
+     "BL10002207",
+     "2025-12-31"
+    ],
+    [
+     "BL10002209",
+     "2025-12-31"
+    ],
+    [
+     "BL10002217",
+     "2006-12-31"
+    ],
+    [
+     "BL10002227",
+     "2025-12-31"
+    ],
+    [
+     "BL10002234",
+     "2025-12-31"
+    ],
+    [
+     "BL10002243",
+     "2025-12-31"
+    ],
+    [
+     "BL10002246",
+     "2006-12-31"
+    ],
+    [
+     "BL10002250",
+     "2006-12-31"
+    ],
+    [
+     "BL10002269",
+     "2025-12-31"
+    ],
+    [
+     "BL10002281",
+     "2006-12-31"
+    ],
+    [
+     "BL10002291",
+     "2025-12-31"
+    ],
+    [
+     "BL10002292",
+     "2025-12-31"
+    ],
+    [
+     "BL10002314",
+     "2006-12-31"
+    ],
+    [
+     "BL10002322",
+     "2025-12-31"
+    ],
+    [
+     "BL10002328",
+     "2020-04-30"
+    ],
+    [
+     "BL10002333",
+     "2006-12-31"
+    ],
+    [
+     "BL10002351",
+     "2025-12-31"
+    ],
+    [
+     "BL10002371",
+     "2006-12-31"
+    ],
+    [
+     "BL10002372",
+     "2006-12-31"
+    ],
+    [
+     "BL10002377",
+     "2006-12-31"
+    ],
+    [
+     "BL10002384",
+     "2006-12-31"
+    ],
+    [
+     "BL10002393",
+     "2025-12-31"
+    ],
+    [
+     "BL10002405",
+     "2025-12-31"
+    ],
+    [
+     "BL10002413",
+     "2006-12-31"
+    ],
+    [
+     "BL10002436",
+     "2025-12-31"
+    ],
+    [
+     "BL10002439",
+     "2025-12-31"
+    ],
+    [
+     "BL10002441",
+     "2025-12-31"
+    ],
+    [
+     "BL10002446",
+     "2025-12-31"
+    ],
+    [
+     "BL10002465",
+     "2025-12-31"
+    ],
+    [
+     "BL10002480",
+     "2006-12-31"
+    ],
+    [
+     "BL10002489",
+     "2025-12-31"
+    ],
+    [
+     "BL10002492",
+     "2006-12-31"
+    ],
+    [
+     "BL10002497",
+     "2025-12-31"
+    ],
+    [
+     "BL10002512",
+     "2006-12-31"
+    ],
+    [
+     "BL10002521",
+     "2006-12-31"
+    ],
+    [
+     "BL10002527",
+     "2025-12-31"
+    ],
+    [
+     "BL10002529",
+     "2006-12-31"
+    ],
+    [
+     "BL10002536",
+     "2006-12-31"
+    ],
+    [
+     "BL10002544",
+     "2025-12-31"
+    ],
+    [
+     "BL10002550",
+     "2025-12-31"
+    ],
+    [
+     "BL10002553",
+     "2025-12-31"
+    ],
+    [
+     "BL10002566",
+     "2025-12-31"
+    ],
+    [
+     "BL10002574",
+     "2025-12-31"
+    ],
+    [
+     "BL10002580",
+     "2025-12-31"
+    ],
+    [
+     "BL10002581",
+     "2025-12-31"
+    ],
+    [
+     "BL10002590",
+     "2025-12-31"
+    ],
+    [
+     "BL10002592",
+     "2025-12-31"
+    ],
+    [
+     "BL10002596",
+     "2006-12-31"
+    ],
+    [
+     "BL10002605",
+     "2025-12-31"
+    ],
+    [
+     "BL10002620",
+     "2006-12-31"
+    ],
+    [
+     "BL10002631",
+     "2025-12-31"
+    ],
+    [
+     "BL10002639",
+     "2025-12-31"
+    ],
+    [
+     "BL10002641",
+     "2006-12-31"
+    ],
+    [
+     "BL10002671",
+     "2025-12-31"
+    ],
+    [
+     "BL10002675",
+     "2006-12-31"
+    ],
+    [
+     "BL10002676",
+     "2006-12-31"
+    ],
+    [
+     "BL10002678",
+     "2006-12-31"
+    ],
+    [
+     "BL10002683",
+     "2006-12-31"
+    ],
+    [
+     "BL10002690",
+     "2006-12-31"
+    ],
+    [
+     "BL10002704",
+     "2025-12-31"
+    ],
+    [
+     "BL10002706",
+     "2025-12-31"
+    ],
+    [
+     "BL10002707",
+     "2025-12-31"
+    ],
+    [
+     "BL10002718",
+     "2025-12-31"
+    ],
+    [
+     "BL10002722",
+     "2025-12-31"
+    ],
+    [
+     "BL10002731",
+     "2025-12-31"
+    ],
+    [
+     "BL10002732",
+     "2006-12-31"
+    ],
+    [
+     "BL10002741",
+     "2006-12-31"
+    ],
+    [
+     "BL10002743",
+     "2006-12-31"
+    ],
+    [
+     "BL10002758",
+     "2025-12-31"
+    ],
+    [
+     "BL10002759",
+     "2025-12-31"
+    ],
+    [
+     "BL10002766",
+     "2025-12-31"
+    ],
+    [
+     "BL10002787",
+     "2006-12-31"
+    ],
+    [
+     "BL10002795",
+     "2006-12-31"
+    ],
+    [
+     "BL10002811",
+     "2006-12-31"
+    ],
+    [
+     "BL10002828",
+     "2025-12-31"
+    ],
+    [
+     "BL10002830",
+     "2025-12-31"
+    ],
+    [
+     "BL10002836",
+     "2025-12-31"
+    ],
+    [
+     "BL10002839",
+     "2025-12-31"
+    ],
+    [
+     "BL10002843",
+     "2006-12-31"
+    ],
+    [
+     "BL10002844",
+     "2025-12-31"
+    ],
+    [
+     "BL10002858",
+     "2025-12-31"
+    ],
+    [
+     "BL10002859",
+     "2006-12-31"
+    ],
+    [
+     "BL10002860",
+     "2006-12-31"
+    ],
+    [
+     "BL10002866",
+     "2025-12-31"
+    ],
+    [
+     "BL10002875",
+     "2025-12-31"
+    ],
+    [
+     "BL10002882",
+     "2006-12-31"
+    ],
+    [
+     "BL10002883",
+     "2006-12-31"
+    ],
+    [
+     "BL10002884",
+     "2006-12-31"
+    ],
+    [
+     "BL10002894",
+     "2025-12-31"
+    ],
+    [
+     "BL10002899",
+     "2006-12-31"
+    ],
+    [
+     "BL10002912",
+     "2006-12-31"
+    ],
+    [
+     "BL10002921",
+     "2006-12-31"
+    ],
+    [
+     "BL10002933",
+     "2025-12-31"
+    ],
+    [
+     "BL10002945",
+     "2006-12-31"
+    ],
+    [
+     "BL10002947",
+     "2006-12-31"
+    ],
+    [
+     "BL10002982",
+     "2025-12-31"
+    ],
+    [
+     "BL10002984",
+     "2025-12-31"
+    ],
+    [
+     "BL10003009",
+     "2025-12-31"
+    ],
+    [
+     "BL10003012",
+     "2025-12-31"
+    ],
+    [
+     "BL10003026",
+     "2025-12-31"
+    ],
+    [
+     "BL10003042",
+     "2006-12-31"
+    ],
+    [
+     "BL10003047",
+     "2006-12-31"
+    ],
+    [
+     "BL10003050",
+     "2025-12-31"
+    ],
+    [
+     "BL10003062",
+     "2025-12-31"
+    ],
+    [
+     "BL10003063",
+     "2025-12-31"
+    ],
+    [
+     "BL10003081",
+     "2025-12-31"
+    ],
+    [
+     "BL10003083",
+     "2025-12-31"
+    ],
+    [
+     "BL10003085",
+     "2025-12-31"
+    ],
+    [
+     "BL10003088",
+     "2006-12-31"
+    ],
+    [
+     "BL10003090",
+     "2006-12-31"
+    ],
+    [
+     "BL10003112",
+     "2025-12-31"
+    ],
+    [
+     "BL10003115",
+     "2006-12-31"
+    ],
+    [
+     "BL10003127",
+     "2025-12-31"
+    ],
+    [
+     "BL10003138",
+     "2025-12-31"
+    ],
+    [
+     "BL10003151",
+     "2006-12-31"
+    ],
+    [
+     "BL10003160",
+     "2025-12-31"
+    ],
+    [
+     "BL10003161",
+     "2025-12-31"
+    ],
+    [
+     "BL10003173",
+     "2025-12-31"
+    ],
+    [
+     "BL10003182",
+     "2025-12-31"
+    ],
+    [
+     "BL10003183",
+     "2006-12-31"
+    ],
+    [
+     "BL10003195",
+     "2025-12-31"
+    ],
+    [
+     "BL10003201",
+     "2006-12-31"
+    ],
+    [
+     "BL10003208",
+     "2006-12-31"
+    ],
+    [
+     "BL10003225",
+     "2006-12-31"
+    ],
+    [
+     "BL10003244",
+     "2006-12-31"
+    ],
+    [
+     "BL10003260",
+     "2006-12-31"
+    ],
+    [
+     "BL10003274",
+     "2006-12-31"
+    ],
+    [
+     "BL10003277",
+     "2025-12-31"
+    ],
+    [
+     "BL10003289",
+     "2025-12-31"
+    ],
+    [
+     "BL10003294",
+     "2025-12-31"
+    ],
+    [
+     "BL10003304",
+     "2025-12-31"
+    ],
+    [
+     "BL10003307",
+     "2006-12-31"
+    ],
+    [
+     "BL10003312",
+     "2025-12-31"
+    ],
+    [
+     "BL10003314",
+     "2006-12-31"
+    ],
+    [
+     "BL10003315",
+     "2006-12-31"
+    ],
+    [
+     "BL10003323",
+     "2025-12-31"
+    ],
+    [
+     "BL10003328",
+     "2025-12-31"
+    ],
+    [
+     "BL10003331",
+     "2025-12-31"
+    ],
+    [
+     "BL10003332",
+     "2025-12-31"
+    ],
+    [
+     "BL10003337",
+     "2025-12-31"
+    ],
+    [
+     "BL10003345",
+     "2025-12-31"
+    ],
+    [
+     "BL10003360",
+     "2006-12-31"
+    ],
+    [
+     "BL10003364",
+     "2025-12-31"
+    ],
+    [
+     "BL10003375",
+     "2006-12-31"
+    ],
+    [
+     "BL10003393",
+     "2025-12-31"
+    ],
+    [
+     "BL10003402",
+     "2006-12-31"
+    ],
+    [
+     "BL10003404",
+     "2006-12-31"
+    ],
+    [
+     "BL10003407",
+     "2025-12-31"
+    ],
+    [
+     "BL10003408",
+     "2006-12-31"
+    ],
+    [
+     "BL10003411",
+     "2025-12-31"
+    ],
+    [
+     "BL10003427",
+     "2025-12-31"
+    ],
+    [
+     "BL10003429",
+     "2020-04-30"
+    ],
+    [
+     "BL10003442",
+     "2006-12-31"
+    ],
+    [
+     "BL10003452",
+     "2006-12-31"
+    ],
+    [
+     "BL10003467",
+     "2025-12-31"
+    ],
+    [
+     "BL10003481",
+     "2006-12-31"
+    ],
+    [
+     "BL10003515",
+     "2025-12-31"
+    ],
+    [
+     "BL10003519",
+     "2025-12-31"
+    ],
+    [
+     "BL10003521",
+     "2025-12-31"
+    ],
+    [
+     "BL10003527",
+     "2025-12-31"
+    ],
+    [
+     "BL10003534",
+     "2025-12-31"
+    ],
+    [
+     "BL10003553",
+     "2025-12-31"
+    ],
+    [
+     "BL10003560",
+     "2025-12-31"
+    ],
+    [
+     "BL10003561",
+     "2006-12-31"
+    ],
+    [
+     "BL10003576",
+     "2025-12-31"
+    ],
+    [
+     "BL10003579",
+     "2025-12-31"
+    ],
+    [
+     "BL10003583",
+     "2025-12-31"
+    ],
+    [
+     "BL10003584",
+     "2025-12-31"
+    ],
+    [
+     "BL10003589",
+     "2025-12-31"
+    ],
+    [
+     "BL10003591",
+     "2006-12-31"
+    ],
+    [
+     "BL10003596",
+     "2025-12-31"
+    ],
+    [
+     "BL10003599",
+     "2006-12-31"
+    ],
+    [
+     "BL10003599",
+     "2025-12-31"
+    ],
+    [
+     "BL10003604",
+     "2025-12-31"
+    ],
+    [
+     "BL10003616",
+     "2006-12-31"
+    ],
+    [
+     "BL10003635",
+     "2025-12-31"
+    ],
+    [
+     "BL10003641",
+     "2025-12-31"
+    ],
+    [
+     "BL10003642",
+     "2006-12-31"
+    ],
+    [
+     "BL10003657",
+     "2025-12-31"
+    ],
+    [
+     "BL10003664",
+     "2025-12-31"
+    ],
+    [
+     "BL10003665",
+     "2006-12-31"
+    ],
+    [
+     "BL10003672",
+     "2006-12-31"
+    ],
+    [
+     "BL10003678",
+     "2025-12-31"
+    ],
+    [
+     "BL10003712",
+     "2025-12-31"
+    ],
+    [
+     "BL10003727",
+     "2025-12-31"
+    ],
+    [
+     "BL10003732",
+     "2025-12-31"
+    ],
+    [
+     "BL10003735",
+     "2025-12-31"
+    ],
+    [
+     "BL10003739",
+     "2025-12-31"
+    ],
+    [
+     "BL10003745",
+     "2025-12-31"
+    ],
+    [
+     "BL10003747",
+     "2006-12-31"
+    ],
+    [
+     "BL10003752",
+     "2025-12-31"
+    ],
+    [
+     "BL10003755",
+     "2025-12-31"
+    ],
+    [
+     "BL10003756",
+     "2025-12-31"
+    ],
+    [
+     "BL10003773",
+     "2025-12-31"
+    ],
+    [
+     "BL10003795",
+     "2025-12-31"
+    ],
+    [
+     "BL10003801",
+     "2025-12-31"
+    ],
+    [
+     "BL10003823",
+     "2025-12-31"
+    ],
+    [
+     "BL10003827",
+     "2025-12-31"
+    ],
+    [
+     "BL10003829",
+     "2025-12-31"
+    ],
+    [
+     "BL10003834",
+     "2025-12-31"
+    ],
+    [
+     "BL10003837",
+     "2025-12-31"
+    ],
+    [
+     "BL10003839",
+     "2025-12-31"
+    ],
+    [
+     "BL10003844",
+     "2025-12-31"
+    ],
+    [
+     "BL10003848",
+     "2025-12-31"
+    ],
+    [
+     "BL10003852",
+     "2025-12-31"
+    ],
+    [
+     "BL10003866",
+     "2006-12-31"
+    ],
+    [
+     "BL10003881",
+     "2025-12-31"
+    ],
+    [
+     "BL10003885",
+     "2025-12-31"
+    ],
+    [
+     "BL10003887",
+     "2025-12-31"
+    ],
+    [
+     "BL10003892",
+     "2025-12-31"
+    ],
+    [
+     "BL10003905",
+     "2006-12-31"
+    ],
+    [
+     "BL10003906",
+     "2025-12-31"
+    ],
+    [
+     "BL10003914",
+     "2006-12-31"
+    ],
+    [
+     "BL10003922",
+     "2025-12-31"
+    ],
+    [
+     "BL10003941",
+     "2025-12-31"
+    ],
+    [
+     "BL10003978",
+     "2006-12-31"
+    ],
+    [
+     "BL10003980",
+     "2025-12-31"
+    ],
+    [
+     "BL10003981",
+     "2025-12-31"
+    ],
+    [
+     "BL10003982",
+     "2025-12-31"
+    ],
+    [
+     "BL10003994",
+     "2025-12-31"
+    ],
+    [
+     "BL10003997",
+     "2025-12-31"
+    ],
+    [
+     "BL10004005",
+     "2006-12-31"
+    ],
+    [
+     "BL10004014",
+     "2025-12-31"
+    ],
+    [
+     "BL10004016",
+     "2025-12-31"
+    ],
+    [
+     "BL10004029",
+     "2006-12-31"
+    ],
+    [
+     "BL10004036",
+     "2025-12-31"
+    ],
+    [
+     "BL10004060",
+     "2006-12-31"
+    ],
+    [
+     "BL10004069",
+     "2025-12-31"
+    ],
+    [
+     "BL10004072",
+     "2025-12-31"
+    ],
+    [
+     "BL10004077",
+     "2025-12-31"
+    ],
+    [
+     "BL10004078",
+     "2025-12-31"
+    ],
+    [
+     "BL10004081",
+     "2025-12-31"
+    ],
+    [
+     "BL10004099",
+     "2025-12-31"
+    ],
+    [
+     "BL10004134",
+     "2025-12-31"
+    ],
+    [
+     "BL10004137",
+     "2025-12-31"
+    ],
+    [
+     "BL10004160",
+     "2025-12-31"
+    ],
+    [
+     "BL10004172",
+     "2006-12-31"
+    ],
+    [
+     "BL10004181",
+     "2025-12-31"
+    ],
+    [
+     "BL10004206",
+     "2025-12-31"
+    ],
+    [
+     "BL10004210",
+     "2025-12-31"
+    ],
+    [
+     "BL10004214",
+     "2006-12-31"
+    ],
+    [
+     "BL10004216",
+     "2006-12-31"
+    ],
+    [
+     "BL10004226",
+     "2006-12-31"
+    ],
+    [
+     "BL10004243",
+     "2025-12-31"
+    ],
+    [
+     "BL10004250",
+     "2006-12-31"
+    ],
+    [
+     "BL10004259",
+     "2025-12-31"
+    ],
+    [
+     "BL10004264",
+     "2025-12-31"
+    ],
+    [
+     "BL10004268",
+     "2006-12-31"
+    ],
+    [
+     "BL10004275",
+     "2006-12-31"
+    ],
+    [
+     "BL10004276",
+     "2025-12-31"
+    ],
+    [
+     "BL10004280",
+     "2025-12-31"
+    ],
+    [
+     "BL10004292",
+     "2025-12-31"
+    ],
+    [
+     "BL10004295",
+     "2025-12-31"
+    ],
+    [
+     "BL10004312",
+     "2006-12-31"
+    ],
+    [
+     "BL10004345",
+     "2025-12-31"
+    ],
+    [
+     "BL10004363",
+     "2025-12-31"
+    ],
+    [
+     "BL10004367",
+     "2025-12-31"
+    ],
+    [
+     "BL10004378",
+     "2006-12-31"
+    ],
+    [
+     "BL10004385",
+     "2025-12-31"
+    ],
+    [
+     "BL10004398",
+     "2025-12-31"
+    ],
+    [
+     "BL10004402",
+     "2025-12-31"
+    ],
+    [
+     "BL10004411",
+     "2025-12-31"
+    ],
+    [
+     "BL10004422",
+     "2025-12-31"
+    ],
+    [
+     "BL10004431",
+     "2025-12-31"
+    ],
+    [
+     "BL10004444",
+     "2025-12-31"
+    ],
+    [
+     "BL10004479",
+     "2006-12-31"
+    ],
+    [
+     "BL10004481",
+     "2025-12-31"
+    ],
+    [
+     "BL10004485",
+     "2025-12-31"
+    ],
+    [
+     "BL10004489",
+     "2025-12-31"
+    ],
+    [
+     "BL10004500",
+     "2025-12-31"
+    ],
+    [
+     "BL10004533",
+     "2025-12-31"
+    ],
+    [
+     "BL10004534",
+     "2006-12-31"
+    ],
+    [
+     "BL10004538",
+     "2025-12-31"
+    ],
+    [
+     "BL10004541",
+     "2025-12-31"
+    ],
+    [
+     "BL10004542",
+     "2006-12-31"
+    ],
+    [
+     "BL10004557",
+     "2006-12-31"
+    ],
+    [
+     "BL10004559",
+     "2006-12-31"
+    ],
+    [
+     "BL10004571",
+     "2025-12-31"
+    ],
+    [
+     "BL10004573",
+     "2025-12-31"
+    ],
+    [
+     "BL10004575",
+     "2025-12-31"
+    ],
+    [
+     "BL10004580",
+     "2025-12-31"
+    ],
+    [
+     "BL10004585",
+     "2025-12-31"
+    ],
+    [
+     "BL10004602",
+     "2025-12-31"
+    ],
+    [
+     "BL10004604",
+     "2025-12-31"
+    ],
+    [
+     "BL10004617",
+     "2006-12-31"
+    ],
+    [
+     "BL10004620",
+     "2025-12-31"
+    ],
+    [
+     "BL10004626",
+     "2025-12-31"
+    ],
+    [
+     "BL10004628",
+     "2025-12-31"
+    ],
+    [
+     "BL10004636",
+     "2025-12-31"
+    ],
+    [
+     "BL10004641",
+     "2025-12-31"
+    ],
+    [
+     "BL10004642",
+     "2006-12-31"
+    ],
+    [
+     "BL10004643",
+     "2025-12-31"
+    ],
+    [
+     "BL10004646",
+     "2025-12-31"
+    ],
+    [
+     "BL10004653",
+     "2025-12-31"
+    ],
+    [
+     "BL10004657",
+     "2025-12-31"
+    ],
+    [
+     "BL10004666",
+     "2025-12-31"
+    ],
+    [
+     "BL10004684",
+     "2025-12-31"
+    ],
+    [
+     "BL10004685",
+     "2025-12-31"
+    ],
+    [
+     "BL10004711",
+     "2025-12-31"
+    ],
+    [
+     "BL10004721",
+     "2025-12-31"
+    ],
+    [
+     "BL10004731",
+     "2025-12-31"
+    ],
+    [
+     "BL10004736",
+     "2006-12-31"
+    ],
+    [
+     "BL10004738",
+     "2025-12-31"
+    ],
+    [
+     "BL10004751",
+     "2006-12-31"
+    ],
+    [
+     "BL10004753",
+     "2025-12-31"
+    ],
+    [
+     "BL10004767",
+     "2025-12-31"
+    ],
+    [
+     "BL10004769",
+     "2006-12-31"
+    ],
+    [
+     "BL10004778",
+     "2006-12-31"
+    ],
+    [
+     "BL10004785",
+     "2025-12-31"
+    ],
+    [
+     "BL10004789",
+     "2025-12-31"
+    ],
+    [
+     "BL10004804",
+     "2006-12-31"
+    ],
+    [
+     "BL10004820",
+     "2025-12-31"
+    ],
+    [
+     "BL10004828",
+     "2006-12-31"
+    ],
+    [
+     "BL10004830",
+     "2006-12-31"
+    ],
+    [
+     "BL10004831",
+     "2025-12-31"
+    ],
+    [
+     "BL10004837",
+     "2025-12-31"
+    ],
+    [
+     "BL10004839",
+     "2006-12-31"
+    ],
+    [
+     "BL10004848",
+     "2025-12-31"
+    ],
+    [
+     "BL10004852",
+     "2006-12-31"
+    ],
+    [
+     "BL10004862",
+     "2025-12-31"
+    ],
+    [
+     "BL10004863",
+     "2025-12-31"
+    ],
+    [
+     "BL10004865",
+     "2006-12-31"
+    ],
+    [
+     "BL10004871",
+     "2025-12-31"
+    ],
+    [
+     "BL10004884",
+     "2025-12-31"
+    ],
+    [
+     "BL10004896",
+     "2025-12-31"
+    ],
+    [
+     "BL10004914",
+     "2020-04-30"
+    ],
+    [
+     "BL10004916",
+     "2006-12-31"
+    ],
+    [
+     "BL10004925",
+     "2025-12-31"
+    ],
+    [
+     "BL10004938",
+     "2006-12-31"
+    ],
+    [
+     "BL10004943",
+     "2025-12-31"
+    ],
+    [
+     "BL10004958",
+     "2025-12-31"
+    ],
+    [
+     "BL10004978",
+     "2025-12-31"
+    ],
+    [
+     "BL10004981",
+     "2025-12-31"
+    ],
+    [
+     "BL10004983",
+     "2025-12-31"
+    ],
+    [
+     "BL10004994",
+     "2025-12-31"
+    ]
+   ]
+  }
+ }
+}

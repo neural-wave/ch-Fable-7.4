@@ -1,0 +1,690 @@
+{
+ "task": "t1_next_due_dates",
+ "values": {
+  "due_date": {
+   "rows": 13114,
+   "screened": [
+    "PH_FREQ",
+    "RK_TARKEY",
+    "PH_PRDCD",
+    "BR_REGIO@RK_BEGDT",
+    "BR_REGIO@RK_BEGDT[2]",
+    "RK_LOAD",
+    "BR_REGIO@RK_ENDDT",
+    "BR_REGIO@RK_ENDDT[2]",
+    "BR_REGIO",
+    "RK_TARKEY[7]"
+   ],
+   "best": {
+    "errors": 0,
+    "leaves": 3
+   },
+   "conflicts": [],
+   "minimal_sets": [
+    {
+     "features": [
+      "PH_FREQ"
+     ],
+     "errors": 0,
+     "leaves": 3,
+     "optimal_trees": 6,
+     "vectors": 3,
+     "conflicting_vectors": 0,
+     "tree": {
+      "split": [
+       "PH_FREQ",
+       "H"
+      ],
+      "yes": {
+       "leaf": "6",
+       "rows": 40,
+       "errors": 0
+      },
+      "no": {
+       "split": [
+        "PH_FREQ",
+        "M"
+       ],
+       "yes": {
+        "leaf": "1",
+        "rows": 12042,
+        "errors": 0
+       },
+       "no": {
+        "leaf": "3",
+        "rows": 1032,
+        "errors": 0
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "PH_FREQ",
+         "=",
+         "H"
+        ]
+       ],
+       "label": "6",
+       "rows": 40,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "PH_FREQ",
+         "!=",
+         "H"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "label": "1",
+       "rows": 12042,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "PH_FREQ",
+         "!=",
+         "H"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "label": "3",
+       "rows": 1032,
+       "errors": 0
+      }
+     ],
+     "equivalents": {
+      "PH_FREQ": [
+       "PH_FREQ@RK_BEGDT",
+       "PH_FREQ@RK_ENDDT"
+      ]
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "PH_FREQ",
+     "RK_TARKEY",
+     "PH_PRDCD",
+     "BR_REGIO@RK_BEGDT",
+     "BR_REGIO@RK_BEGDT[2]",
+     "RK_LOAD"
+    ],
+    "errors": 0,
+    "leaves": 3,
+    "optimal_trees": 6
+   },
+   "cart": {
+    "features": [
+     "PH_FREQ"
+    ],
+    "errors": 0,
+    "leaves": 3,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "PH_FREQ",
+        "=",
+        "M"
+       ]
+      ],
+      "label": "1",
+      "rows": 12042
+     },
+     {
+      "path": [
+       [
+        "PH_FREQ",
+        "!=",
+        "M"
+       ],
+       [
+        "PH_FREQ",
+        "=",
+        "Q"
+       ]
+      ],
+      "label": "3",
+      "rows": 1032
+     },
+     {
+      "path": [
+       [
+        "PH_FREQ",
+        "!=",
+        "M"
+       ],
+       [
+        "PH_FREQ",
+        "!=",
+        "Q"
+       ]
+      ],
+      "label": "6",
+      "rows": 40
+     }
+    ]
+   }
+  },
+  "collection_date": {
+   "rows": 15028,
+   "screened": [
+    "weekday(due_date)",
+    "PH_PAYMT",
+    "month(due_date)",
+    "day(due_date)",
+    "RK_TARKEY",
+    "month_end(due_date)",
+    "PH_FREQ",
+    "PS_LANG@RK_BEGDT",
+    "RK_TARKEY[5]",
+    "PS_LANG"
+   ],
+   "best": {
+    "errors": 357,
+    "leaves": 7
+   },
+   "conflicts": [
+    {
+     "vector": {
+      "weekday(due_date)": "7",
+      "PH_PAYMT": "LS",
+      "day(due_date)": "28"
+     },
+     "clusters": {
+      "1": 125,
+      "2": 31
+     },
+     "example": [
+      "BL10000339",
+      9
+     ]
+    },
+    {
+     "vector": {
+      "weekday(due_date)": "2",
+      "PH_PAYMT": "LS",
+      "day(due_date)": "29"
+     },
+     "clusters": {
+      "0": 15,
+      "1": 7
+     },
+     "example": [
+      "BL10000198",
+      12
+     ]
+    },
+    {
+     "vector": {
+      "weekday(due_date)": "5",
+      "PH_PAYMT": "LS",
+      "day(due_date)": "19"
+     },
+     "clusters": {
+      "3": 8,
+      "0": 7
+     },
+     "example": [
+      "BL10000206",
+      8
+     ]
+    },
+    {
+     "vector": {
+      "weekday(due_date)": "5",
+      "PH_PAYMT": "LS",
+      "day(due_date)": "25"
+     },
+     "clusters": {
+      "0": 8,
+      "3": 4
+     },
+     "example": [
+      "BL10001207",
+      6
+     ]
+    },
+    {
+     "vector": {
+      "weekday(due_date)": "6",
+      "PH_PAYMT": "LS",
+      "day(due_date)": "15"
+     },
+     "clusters": {
+      "2": 5,
+      "3": 5
+     },
+     "example": [
+      "BL10001874",
+      4
+     ]
+    }
+   ],
+   "minimal_sets": [
+    {
+     "features": [
+      "weekday(due_date)",
+      "PH_PAYMT",
+      "day(due_date)"
+     ],
+     "errors": 357,
+     "leaves": 7,
+     "optimal_trees": 8,
+     "vectors": 393,
+     "conflicting_vectors": 11,
+     "tree": {
+      "split": [
+       "weekday(due_date)",
+       "5"
+      ],
+      "yes": {
+       "split": [
+        "PH_PAYMT",
+        "LS"
+       ],
+       "yes": {
+        "split": [
+         "day(due_date)",
+         "1"
+        ],
+        "yes": {
+         "leaf": "3",
+         "rows": 652,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "0",
+         "rows": 751,
+         "errors": 12
+        }
+       },
+       "no": {
+        "leaf": "0",
+        "rows": 274,
+        "errors": 0
+       }
+      },
+      "no": {
+       "split": [
+        "weekday(due_date)",
+        "6"
+       ],
+       "yes": {
+        "split": [
+         "PH_PAYMT",
+         "LS"
+        ],
+        "yes": {
+         "leaf": "2",
+         "rows": 2096,
+         "errors": 9
+        },
+        "no": {
+         "leaf": "0",
+         "rows": 399,
+         "errors": 0
+        }
+       },
+       "no": {
+        "split": [
+         "weekday(due_date)",
+         "7"
+        ],
+        "yes": {
+         "leaf": "1",
+         "rows": 1551,
+         "errors": 309
+        },
+        "no": {
+         "leaf": "0",
+         "rows": 9305,
+         "errors": 27
+        }
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "weekday(due_date)",
+         "=",
+         "5"
+        ],
+        [
+         "PH_PAYMT",
+         "=",
+         "LS"
+        ],
+        [
+         "day(due_date)",
+         "=",
+         "1"
+        ]
+       ],
+       "label": "3",
+       "rows": 652,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "weekday(due_date)",
+         "=",
+         "5"
+        ],
+        [
+         "PH_PAYMT",
+         "=",
+         "LS"
+        ],
+        [
+         "day(due_date)",
+         "!=",
+         "1"
+        ]
+       ],
+       "label": "0",
+       "rows": 751,
+       "errors": 12
+      },
+      {
+       "path": [
+        [
+         "weekday(due_date)",
+         "=",
+         "5"
+        ],
+        [
+         "PH_PAYMT",
+         "!=",
+         "LS"
+        ]
+       ],
+       "label": "0",
+       "rows": 274,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "weekday(due_date)",
+         "!=",
+         "5"
+        ],
+        [
+         "weekday(due_date)",
+         "=",
+         "6"
+        ],
+        [
+         "PH_PAYMT",
+         "=",
+         "LS"
+        ]
+       ],
+       "label": "2",
+       "rows": 2096,
+       "errors": 9
+      },
+      {
+       "path": [
+        [
+         "weekday(due_date)",
+         "!=",
+         "5"
+        ],
+        [
+         "weekday(due_date)",
+         "=",
+         "6"
+        ],
+        [
+         "PH_PAYMT",
+         "!=",
+         "LS"
+        ]
+       ],
+       "label": "0",
+       "rows": 399,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "weekday(due_date)",
+         "!=",
+         "5"
+        ],
+        [
+         "weekday(due_date)",
+         "!=",
+         "6"
+        ],
+        [
+         "weekday(due_date)",
+         "=",
+         "7"
+        ]
+       ],
+       "label": "1",
+       "rows": 1551,
+       "errors": 309
+      },
+      {
+       "path": [
+        [
+         "weekday(due_date)",
+         "!=",
+         "5"
+        ],
+        [
+         "weekday(due_date)",
+         "!=",
+         "6"
+        ],
+        [
+         "weekday(due_date)",
+         "!=",
+         "7"
+        ]
+       ],
+       "label": "0",
+       "rows": 9305,
+       "errors": 27
+      }
+     ],
+     "equivalents": {
+      "weekday(due_date)": [],
+      "PH_PAYMT": [
+       "PH_PAYMT@RK_BEGDT",
+       "PH_PAYMT@RK_ENDDT"
+      ],
+      "day(due_date)": []
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "weekday(due_date)",
+     "PH_PAYMT",
+     "month(due_date)",
+     "day(due_date)",
+     "RK_TARKEY",
+     "month_end(due_date)"
+    ],
+    "errors": 357,
+    "leaves": 7,
+    "optimal_trees": 8
+   },
+   "cart": {
+    "features": [
+     "PH_PAYMT",
+     "day(due_date)",
+     "month(due_date)",
+     "weekday(due_date)"
+    ],
+    "errors": 525,
+    "leaves": 7,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "weekday(due_date)",
+        "=",
+        "6"
+       ],
+       [
+        "PH_PAYMT",
+        "=",
+        "LS"
+       ],
+       [
+        "day(due_date)",
+        "=",
+        "15"
+       ]
+      ],
+      "label": "2",
+      "rows": 10
+     },
+     {
+      "path": [
+       [
+        "weekday(due_date)",
+        "=",
+        "6"
+       ],
+       [
+        "PH_PAYMT",
+        "=",
+        "LS"
+       ],
+       [
+        "day(due_date)",
+        "!=",
+        "15"
+       ]
+      ],
+      "label": "2",
+      "rows": 2086
+     },
+     {
+      "path": [
+       [
+        "weekday(due_date)",
+        "=",
+        "6"
+       ],
+       [
+        "PH_PAYMT",
+        "!=",
+        "LS"
+       ]
+      ],
+      "label": "0",
+      "rows": 399
+     },
+     {
+      "path": [
+       [
+        "weekday(due_date)",
+        "!=",
+        "6"
+       ],
+       [
+        "weekday(due_date)",
+        "=",
+        "7"
+       ],
+       [
+        "PH_PAYMT",
+        "=",
+        "UB"
+       ]
+      ],
+      "label": "0",
+      "rows": 276
+     },
+     {
+      "path": [
+       [
+        "weekday(due_date)",
+        "!=",
+        "6"
+       ],
+       [
+        "weekday(due_date)",
+        "=",
+        "7"
+       ],
+       [
+        "PH_PAYMT",
+        "!=",
+        "UB"
+       ]
+      ],
+      "label": "1",
+      "rows": 1275
+     },
+     {
+      "path": [
+       [
+        "weekday(due_date)",
+        "!=",
+        "6"
+       ],
+       [
+        "weekday(due_date)",
+        "!=",
+        "7"
+       ],
+       [
+        "month(due_date)",
+        "=",
+        "1"
+       ]
+      ],
+      "label": "3",
+      "rows": 1099
+     },
+     {
+      "path": [
+       [
+        "weekday(due_date)",
+        "!=",
+        "6"
+       ],
+       [
+        "weekday(due_date)",
+        "!=",
+        "7"
+       ],
+       [
+        "month(due_date)",
+        "!=",
+        "1"
+       ]
+      ],
+      "label": "0",
+      "rows": 9883
+     }
+    ]
+   }
+  }
+ }
+}
