@@ -53,7 +53,7 @@ my_solution/
 ```
 
 Next to the folder, `../t7lab/` holds the tools that read the real tax tables for t7 (`t7_check`, `t7_labels`,
-`t7_variants`, `t7_discover`, `base_split`, `tax_join`); they run from here with `PYTHONPATH="$PWD:$PWD/tools:$PWD/.."`.
+`t7_variants`); they run from here with `PYTHONPATH="$PWD:$PWD/tools:$PWD/.."`.
 
 ## Approach
 

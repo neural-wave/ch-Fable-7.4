@@ -9,15 +9,14 @@ the PDF requires custom or open-weights models for the tax data. The fixes were 
 (invented from the schema, 10'716 bookings, with the real non-tax tables). **Before the next upload, an
 open-weights model runs `t7lab/t7_check.py` on the real tables** (command at the end).
 
-Status:
+Status now, after the checks on the real tables:
 
 - t0–t5 are unchanged. With Python 3.13, polars 2.0.0 and 2 threads they score 225848/225858, 15028/15028,
-  3011/3019, 6137/6153, 34125/34145 and 54 outliers, in 13 s with a peak of 2.9 to 3.3 GB across runs.
-- t0–t4 and t7 run in one process in 10 s, with a peak of 3.4 GB (synthetic tax tables).
-- PDF example 1 (`BL10000086,121`) is exact on the synthetic tables. Example 2 (`BL10000044,2019`, 616.11)
-  needs the real Bollo rates: `t7_check.py` checks it.
-- Maintainability index: 96.7 for the whole folder, 100 for every module of the submission, 55.4 and 83.3
-  for the two new tools (`t7_check.py`, `t7_labels.py`).
+  3011/3019, 6137/6153, 34125/34145 and 54 outliers, in 14 s with a peak of 3.2 GB.
+- t0–t4 and t7 run in one process in 10 s, with a peak of 2.8 GB, and `t7lab/t7_check.py` passes every check.
+- Both PDF examples are exact on the real tables, also with the official `scoring_t7.py`.
+- Maintainability index: 100.0 for the hand-in, the whole folder and every file. The t7 lab is next to it, not in
+  it.
 
 ## P0: the taxable base of DE and IT payouts — fixed
 
@@ -64,7 +63,9 @@ two-payout policies, including one where the holder moves.
    Up to 383 payouts of non-EUR policies have such premiums (an upper bound: residence not looked at). The first
    EUR rate stands in, which is an assumption.
 3. Partial withdrawals have no example, and 425 policies have more than one payout: the pro-rata share of the
-   premiums is unverified.
+   premiums is unverified. The labels of NRTAXB support it: in Germany and Italy its base is positive on every
+   payout with a withholding booked, partial withdrawals included, while the gain in the policy currency converted
+   on the payout day (pro rata, or premiums first) misses many of them. The amount stays unverified.
 
 ## P1: choices without labels — named in `conventions.py`, to be decided one per upload
 
