@@ -1,6 +1,6 @@
 # score of t4_annual_statement (code:cfa0ae747512)
 
-Exact rows: 34122 / 34145 (holdout 6735 / 6737); keys computed for target policies but not in the target: 0; 31.1 s
+Exact rows: 34122 / 34145 (holdout 6735 / 6737); keys computed for target policies but not in the target: 0; 182.9 s
 
 ## premiums
 

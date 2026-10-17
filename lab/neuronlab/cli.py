@@ -8,11 +8,14 @@
     lab pool eval <task> <file.json> score a candidate written by hand or by the LLM
     lab freeze <task> [candidate]    generate the function in submission.py and check it
     lab score <task> [name=expr ...] exact score of the function in submission.py and where it is wrong
+    lab ablate <task> [card ...]     switch each rule of lab/rules/<task>.json off in a scratch copy, score again
     lab suggest <task> [--ablate C]  step 5 in batch: JSON proposals of Claude Code (claude -p), validated, scored
     lab feature <task> <name> <expr> step 5 by hand: one feature in the DSL (e.g. "at(BR_TIER, PR_RCVDT)")
     lab llm ping                     check that Claude Code answers for step 5
     lab show <table> [COL=VALUE ...] typed rows of a legacy table or target file, e.g. NRPOLH PH_POLNR=BL10000001
-    lab viz [task ...]               runs/atlas.html: the charts of the scored tasks, offline
+    lab viz [task ...]               runs/atlas.html: before / after, policy timelines and the story, offline
+    lab viz policy <id> [id ...]     runs/policies/<id>.json: one policy month by month against the files
+    lab viz story                    runs/story.json: the journey of 100 francs, on a policy picked by the rules
 """
 import argparse
 import json
@@ -118,8 +121,20 @@ def main(argv=None):
     elif cmd == "score":
         from . import score
         print(score.score(rest[0], dict(item.split("=", 1) for item in rest[1:]), args.submission))
+    elif cmd == "ablate":
+        from . import ablate
+        ablate.ablate(rest[0], rest[1:])
     elif cmd == "show":
         show(rest[0], rest[1:])
+    elif cmd == "viz" and rest[:1] == ["policy"]:
+        from . import trace, viz
+        for path in trace.build(rest[1:], args.submission or paths.SUBMISSION):
+            print(path)
+        print(viz.atlas())
+    elif cmd == "viz" and rest[:1] == ["story"]:
+        from . import story, viz
+        print(story.build())
+        print(viz.atlas())
     elif cmd == "viz":
         from . import viz
         print(viz.atlas(rest or None))

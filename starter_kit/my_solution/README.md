@@ -78,7 +78,11 @@ differ. Today this covers t0: 10 outliers.
 | Folder | Content |
 |---|---|
 | `tools/lab/` | the rule-discovery pipeline, a uv project (Python 3.12, polars, desbordante, scikit-learn), with its tests |
-| `tools/lab/runs/<task>/` | the artifacts of every task: `profile.json`, `clusters.json`, `trees.json`, `pool.json`, `ledger.jsonl` with every scored candidate, `report.md` (the summary that the language model reads), `score.md` |
+| `tools/lab/runs/<task>/` | the artifacts of every task: `profile.json`, `clusters.json`, `trees.json`, `pool.json`, `ledger.jsonl` with every scored candidate, `report.md` (the summary that the language model reads), `score.md`, `ablation.json` (each rule switched off) |
+| `tools/lab/runs/atlas.html` | **the visualizations: open it in a browser, it works offline** |
+| `tools/lab/rules/<task>.json` | the rule cards: each one names a rule and the change that switches it off |
+| `tools/lab/runs/policies/`, `tools/lab/runs/story.json` | the policy timelines and the numbers of the story |
+| `tools/docs/t6/` | screenshots of the atlas |
 | `tools/scripts/` | `claude-tasks.sh`: Claude Code works through the tasks with the skill `rule-discovery`, one headless session per task; `package.sh`: builds this folder and runs `check.py` on it |
 | `tools/.claude/skills/rule-discovery/SKILL.md` | the protocol the agent follows |
 | `tools/docs/examples/` | stand-alone scripts of the method on t0 (standard library only) |
@@ -92,6 +96,41 @@ The agent is Claude Code, started with `claude` in the root of the repository, o
 `scripts/claude-tasks.sh [task ...]` (one headless session per task). It follows the protocol in
 `.claude/skills/rule-discovery/SKILL.md` (the skill `rule-discovery`). Step 5 of the lab (`lab suggest`) asks
 Claude Code too, in headless mode (`claude -p`).
+
+### Visualizations: `tools/lab/runs/atlas.html`
+
+One offline page (`lab viz`) with three views. They read only the artifacts of the pipeline, so they work for a new
+target too.
+
+**1. Before / after: is a rule real?** A rule card (`lab ablate`) switches one rule off in a scratch copy of the
+submission and scores it again; the submission itself never changes, so neither does its maintainability index. A
+real rule breaks exactly the rows it explains and nothing else: for every card the page shows the wrong rows with
+and without the rule, and where the broken rows are. Switching off the broker tier on the money date breaks 1,430
+commissions, 1,422 of them received before the latest version of the policy began; Good Friday as a holiday breaks
+158 collection dates, all on Good Friday 2027; the age at the last birthday instead of the nearest one breaks 1,053
+projections, each with the next birthday within six months of the begin date; the system change breaks the due
+dates of policies begun on the 29th to the 31st only. No card makes a single row right that the rule gets wrong. One
+chart per task ranks the rules by the rows they make right (leave one out).
+
+![Before / after of the tier on the money date](tools/docs/t6/rules.png)
+
+**2. Policy timeline: where does a policy go wrong?** A subclass of the submission's `FundAccounting` replays one
+policy with the submission's own code and writes down every booking. They are matched with NRBOOK and t3_booking,
+the units with t3_holding, the values with t3_surrender_value, the projection of the offer with t2_projection_year,
+and the rows of every task with what `lab score` computed. A red line marks the first value that differs: none for
+BL10000001 (4,298 bookings, 285 values), 2025-12-31 for BL10000321, where every booking matches and only the
+surrender value is off, by exactly 175.00 francs: a value typed by hand.
+
+![Policy timeline of BL10000321](tools/docs/t6/policy.png)
+
+**3. The journey of 100 francs.** A story in nine chapters for a reader who knows nothing about computers or
+insurance, in English with an Italian switch. The policy is picked by the rules themselves: it crosses the system
+change of 2007, pays monthly by direct debit, has a premium that a holiday moves, and every one of its values is exact.
+Chapters 1-7 follow its money (due date, entry charge, commission, units, monthly charges, the two programs, the
+annual statement and the surrender value); 8 and 9 tell how the rules were found and what the values typed by hand
+are. A test keeps the words of the trade out and every term in bold in the glossary.
+
+![The journey of 100 francs, on a phone, in Italian](tools/docs/t6/story.png)
 
 ## Data quirks found by the audit
 

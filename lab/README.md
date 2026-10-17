@@ -21,6 +21,11 @@ uv run lab ingest       # typed Parquet copies of legacy/*.csv and targets/*.csv
 uv run lab audit        # data quality findings
 ```
 
+On Windows, Desbordante has no wheels (only cp312 for Linux and macOS): install the locked packages without it
+(`uv export --frozen --all-groups --no-emit-project | grep -v desbordante > req.txt`, then `uv venv`,
+`uv pip install -r req.txt` and `uv pip install --no-deps -e .`). Every step but `lab profile` works then, with the
+`frame.parquet` files of a run made elsewhere.
+
 The data folders are `../legacy` and `../targets`. The environment variables `NEURON_LEGACY` and `NEURON_TARGETS`
 point elsewhere.
 
@@ -37,6 +42,10 @@ point elsewhere.
 | `lab freeze <run> [candidate]` | writes the function of the winner into `submission.py` and runs `check.py` |
 | `lab score <task> [name=expr ...] [--submission DIR]` | runs the task function of `submission.py` behind a firewall on the target files, gives its exact score and explains its wrong rows with the optimal trees (`score.md`) |
 | `lab show <table> COL=VALUE ...` | at most 40 typed rows of a legacy table or target file |
+| `lab ablate <task> [card ...]` | switches each rule card of `rules/<task>.json` off in a scratch copy of the submission and scores it with `lab score --submission`: how many rows each rule makes right, and where they are (`ablation.json`) |
+| `lab viz [task ...]` | `runs/atlas.html`, one offline page with the three views below |
+| `lab viz policy <id> ... [--submission DIR]` | `runs/policies/<id>.json`: one policy month by month, replayed by the submission and compared with the diagnostic files |
+| `lab viz story` | `runs/story.json`: the journey of 100 francs, on a policy the rules pick themselves |
 | `lab llm ping` | checks that Claude Code answers for step 5 |
 
 ## Artifacts of a task (`runs/<task>/`)
@@ -53,6 +62,8 @@ point elsewhere.
 | `report.md` | – | the summary that a person or the language model reads |
 | `score.md` | 6 | `lab score`: exact score of the written function, labels of its wrong rows, where it is wrong |
 | `llm/*.json` | 5 | prompt hash, raw answers, validated proposals, score before and after |
+| `diffs.parquet` | 6 | `lab score`: per target row the keys, the target, the computed value and their difference |
+| `ablation.json`, `ablation.parquet` | 6 | `lab ablate`: per rule card the wrong rows with and without the rule, the rows it makes right per value, examples, what the trees say; per target row whether it is exact with and without each rule and the card's `where` feature |
 
 Each artifact depends only on the ones before it.
 
@@ -64,6 +75,45 @@ Relations: ratio and difference with an amount, days and months with a date, a c
 before it in the target file are inputs too. When nothing gives dense clusters, the value is related to
 `previous(value)`, the value of the same policy one step before. The report also lists exact sums among the values,
 and approximate relations that no constant reproduces to the cent.
+
+## Visualizations (t6): `lab viz`
+
+`runs/atlas.html` is one offline page; plotly.js is embedded once, gzip-compressed, and the browser unpacks it. Every
+view reads only the artifacts of the pipeline, so it works for a new target too. Charts follow the light and dark
+theme of the system, with a switch.
+
+1. **Before / after.** A rule card switches one rule off. The page shows the wrong rows without the rule and with it,
+   the rows the rule makes right, and where those rows are on the card's `where` axis: every row of the task above,
+   the rows that go wrong without the rule below. The optimal trees of `lab score` on the wrong rows, the examples and
+   the change itself are one click away. One chart per task gives the contribution of each rule (leave one out).
+2. **Policy timeline.** `neuronlab/trace.py` subclasses the `FundAccounting` of the submission: its replay is the
+   submission's own code, and the subclass writes down every booking. The bookings are matched with NRBOOK and
+   t3_booking on (event, type, fund, pot); the units with t3_holding; the policy values with t3_surrender_value; the
+   projection of the offer with t2_projection_year; and the rows of every task with their `diffs.parquet`. Value,
+   money in and out, and the differences share one time axis; a red line marks the first divergence. BL10000001 has
+   none; on BL10000321 every booking matches, and the line falls on 2025-12-31, where the surrender value is 175.00
+   francs off: a value typed by hand.
+3. **The journey of 100 francs.** A story in nine chapters, in English with an Italian switch, for a reader who knows
+   nothing about computers or insurance. Chapters 1-7 follow one real policy (picked automatically: it crosses the
+   system change of 2007, pays monthly by direct debit, has a premium a holiday moves, and every value of it is exact);
+   8 and 9 explain how the rules were found and what the values typed by hand are. `tests/test_story.py` checks that
+   no word of the trade appears and that every term in bold is in the glossary.
+
+A rule card in `rules/<task>.json`:
+
+```json
+{"id": "nearest-birthday",
+ "rule": "Neuron NG takes the age at the nearest birthday",
+ "off": "the age at the last birthday",
+ "edits": [{"file": "policies/insured.py", "old": "return age(self.birth, add_months(start, 6))",
+            "new": "return age(self.birth, start)"}],
+ "where": "birthday_days(PS_BIRTH, PH_BEGDT)",
+ "where_label": "days from the begin date to the next birthday"}
+```
+
+`old` must be found exactly once in the file of the submission (`tests/test_ablate.py` checks every card), and
+`where` is an expression of the DSL of step 5 on the frame of the task. The scratch copies live in `.cache/ablate/`
+and the scored runs in `runs/<task>~on` and `runs/<task>~off-<card>` (not versioned).
 
 ## Exactness
 
@@ -95,8 +145,10 @@ NEURON_FULL=1 uv run pytest -q    # also compares the two loaders on NRBOOK (6.8
 NEURON_LLM=1 uv run pytest -q tests/test_suggest.py   # the acceptance test of step 5 with Claude Code (metered)
 ```
 
-The tests cover four things:
+The tests cover five things:
 - the parity of the stdlib loader of the submission with the Polars loader;
 - the t0 pipeline from grain to residuals;
 - the submission against `scoring.accuracy`, with a firewall check that no task function reads target files;
-- step 5 with a scripted model, and with Claude Code when `NEURON_LLM=1`.
+- step 5 with a scripted model, and with Claude Code when `NEURON_LLM=1`;
+- the rule cards (each still applies to the submission, one is scored), the trace of an exact policy and of one with
+  a value typed by hand, the atlas offline in both themes, and the words of the story.
