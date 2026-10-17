@@ -243,8 +243,9 @@ the amount of every booking (`taxes.py`) and add them up per payout and per poli
   in the example (rounding every year gives 194.53). BOC collects the outstanding BOL, all of it at a payout that
   ends the policy, its share at a partial withdrawal. A negative amount rounds like its positive twin;
 - remittance: in the month after the payment day, the effective date + the payout business days `PD_PAYDAY` of
-  the product (`REMITTED_FROM_PAYMENT`): DE the 10th (example), IT the 16th and CH 30 days after the month end
-  (law), no business-day shift.
+  the product (`REMITTED_FROM_PAYMENT`), on the 10th everywhere, the day of Neuron's tax batch and of example 1
+  (`REMITTANCE`; the laws, IT the 16th and CH 30 days after the month end, are the other variant), no business-day
+  shift.
 
 Example 1 (BL10000086 #121: a USD policy, surrendered on 17.7.2006, gross 12'107.36 USD, 28 premiums of 420.00
 USD) decides the base. Every premium converted on its money date and truncated gives 5'628.16, as in the PDF;
@@ -257,8 +258,9 @@ E) with a gross above TX_THRSH (257 of 259; never for the 1'275 payouts of repor
 the gain is above 0, no SOS on Italian death claims, and the country of every payout with tax is its residence.
 
 Open, with no labels: each choice is one line in `conventions.py`, to be changed one per upload as the actuary
-answers: the base of a payout without tax (`BASE_WITHOUT_TAX`: 0 since the upload after the 5 % of 19:30), the
+answers: the base of a payout without tax (`BASE_WITHOUT_TAX`: as calculated again, 0 scored 0 of 40), the
 base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`: back to the policy value after 8 of 30 with the surrender value),
+the rounding of the 2019 fix (`BOLLO_FIX_PER_YEAR`: per earlier BOL, as booked),
 the rounding by system instead of by country (`ROUNDED_BY_SYSTEM`, on: set by the targets of t0, t2, t3, too few
 rows for the actuary), the remittance day of a payout with stamp duty
 alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`), the month of the payment day

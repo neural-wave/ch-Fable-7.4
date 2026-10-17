@@ -6,8 +6,10 @@
   1 January or from its start date) / the days of the year. A payout that ends the policy accrues the Bollo of the
   year so far on the value before it, taken the same way (a BOL with the event number of the payout).
 - BOL re-priced: the rate of 2017 to June 2019 was restated in July 2019 (version 2 of NRTAXR). The fix
-  (TB_USRID TAXFIX19) booked per policy the difference of every BOL before it at the new rate, rounded once on
-  the total: BL10000044 has 421.57 + 194.54 = 616.11 in 2019, as in the example; rounding every year gives 194.53.
+  (TB_USRID TAXFIX19) booked per policy, for every BOL before it, the Bollo at the new rate less the amount booked,
+  each rounded as booked (`fix_difference`; with `conventions.BOLLO_FIX_PER_YEAR` off, the difference of the rates
+  rounded once on the total). Both give BL10000044 421.57 + 194.54 = 616.11 in 2019, as in the example; rounding
+  the difference of the rates year by year gives 194.53.
 - BOC collected: every payout of a policy that accrued Bollo collects the outstanding Bollo, also after the holder
   left Italy: the BOL booked up to it less the BOC before it. A payout that ends the policy collects all of it, a
   partial withdrawal its share PART / WHOLE (`payouts`), so the BOC of a policy follow one another (`in_turn`).
@@ -17,7 +19,8 @@ the value is converted from the policy currency on the day.
 """
 import polars as pl
 
-from conventions import BOLLO_FIX, BOLLO_ON_SURRENDER_VALUE, CONVERSION, STAMP_DUTY, TAX_CURRENCY, TAXES
+from conventions import (BOLLO_FIX, BOLLO_FIX_PER_YEAR, BOLLO_ON_SURRENDER_VALUE, CONVERSION, STAMP_DUTY,
+                         TAX_CURRENCY, TAXES)
 from dates import days_between
 from legacy import as_date
 from money import RATE_UNIT, rounded, rounded_signed
@@ -75,14 +78,22 @@ def accrued_bollo(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
     return rated.with_columns(TB_AMOUNT=bollo(pl.col("RATE")))
 
 
+def fix_difference() -> pl.Expr:
+    """What a fix books for one earlier BOL, in millionths of a cent: the Bollo at the RESTATED rate less the
+    TB_AMOUNT booked, both in cents as a fix job finds them; without `conventions.BOLLO_FIX_PER_YEAR` the
+    difference of the rates, not rounded, so that the total is rounded once."""
+    per_year = bollo(pl.col("RESTATED")).sub(pl.col("TB_AMOUNT")).mul(RATE_UNIT)
+    once = bollo(pl.col("RESTATED").sub(pl.col("RATE")), RATE_UNIT)
+    return pl.when(pl.lit(BOLLO_FIX_PER_YEAR)).then(per_year).otherwise(once)
+
+
 def fixed_bollo(legacy_dir, fixes: pl.DataFrame, accrued: pl.DataFrame) -> pl.DataFrame:
     """The BOL `fixes` with TB_AMOUNT: the BOL `accrued` before each fix again at the rate known at the fix,
-    less what they booked, rounded once."""
+    less what they booked (`fix_difference`), in cents."""
     earlier = fixes.select(FIX_BOOKID="TB_BOOKID", TB_POLNR="TB_POLNR", FIX_CHGTS="TB_CHGTS").join(
         accrued, on="TB_POLNR").filter(pl.col("TB_CHGTS").lt(pl.col("FIX_CHGTS")))
     restated = tax_rates(legacy_dir, earlier, pl.lit(BOLLO), "RESTATED", known_at="FIX_CHGTS")
-    differences = restated.group_by("FIX_BOOKID").agg(
-        DIFFERENCE=bollo(pl.col("RESTATED").sub(pl.col("RATE")), RATE_UNIT).sum())
+    differences = restated.group_by("FIX_BOOKID").agg(DIFFERENCE=fix_difference().sum())
     return fixes.join(differences, left_on="TB_BOOKID", right_on="FIX_BOOKID", how="left").with_columns(
         TB_AMOUNT=rounded_signed(pl.col("DIFFERENCE").fill_null(0), RATE_UNIT, pl.lit(True))).drop("DIFFERENCE")
 

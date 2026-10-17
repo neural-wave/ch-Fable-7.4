@@ -20,13 +20,15 @@ from neuron.load import LEGACY
 
 NEURON_CALENDAR = dict(CALENDAR, years=list(CALENDAR["years"]))  # Neuron's own calendar, as a literal for the worker
 VARIANTS = {  # name -> {convention: value} to flip
-    "base as calculated without withholding": {"BASE_WITHOUT_TAX": True},
+    "base 0 without withholding": {"BASE_WITHOUT_TAX": False},
+    "Bollo fix rounded once on the total": {"BOLLO_FIX_PER_YEAR": False},
     "no remittance for stamp duty alone": {"STAMP_DUTY_REMITTED": False},
     "remittance on a business day of the tax office": {"REMITTANCE_SHIFTED": ["DE", "IT", "CH"]},
     "remittance on a business day of Neuron": {
         "REMITTANCE_SHIFTED": ["DE", "IT", "CH"],
         "REMITTANCE_CALENDARS": dict.fromkeys(["DE", "IT", "CH"], NEURON_CALENDAR)},
-    "remittance on the 10th everywhere": {"REMITTANCE": {"DE": 9, "IT": 9, "CH": 9}},
+    "remittance on the days of the law (IT the 16th, CH 30 days after the month)": {
+        "REMITTANCE": {"DE": 9, "IT": 15, "CH": 29}},
     "rounding by system, not by country": {"ROUNDED_BY_SYSTEM": True},
     "HEV not in the withholding": {"HALF_INCOME_WITHHELD": False},
     "Bollo on the policy value, without the penalty": {"BOLLO_ON_SURRENDER_VALUE": False},
