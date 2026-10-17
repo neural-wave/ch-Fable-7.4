@@ -74,13 +74,13 @@ and approximate relations that no constant reproduces to the cent.
 
 ## Step 5 with an open-weights model
 
-The endpoint, key and model are in `../.env.llm` (template: `../.env.llm.example`). The default is a hosted endpoint
-that speaks the Anthropic Messages API, such as Ollama Cloud. `llm.py` speaks that protocol, or the OpenAI one with
-`LLM_PROTOCOL=openai`. The model can only propose expressions of the DSL in `neuronlab/dsl.py`. They are parsed
-with a restricted `ast`, never evaluated as Python.
+The protocol, endpoint, key and model are in `../.env.llm` (template: `../.env.llm.example`). The default is an
+endpoint with the OpenAI API, such as vLLM on a vast.ai instance. `llm.py` speaks that protocol, or the Anthropic
+Messages API with `OPEN_PROTOCOL=anthropic`. The model can only propose expressions of the DSL in
+`neuronlab/dsl.py`. They are parsed with a restricted `ast`, never evaluated as Python.
 
-Claude Code itself runs on the same model with `../scripts/claude-open.sh`. It follows the protocol in
-`../.claude/skills/rule-discovery/SKILL.md`.
+OpenCode runs on the same model with `../scripts/opencode-open.sh`. It finds the protocol in
+`../.claude/skills/rule-discovery/SKILL.md` as the skill `rule-discovery`.
 
 ## Tests
 

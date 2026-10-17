@@ -87,7 +87,7 @@ def validate(answer, df, full):
 
 
 def add_feature(task, name, expr):
-    """One feature written by hand (or by the agent in Claude Code), same validation and scoring as `suggest`."""
+    """One feature written by hand (or by the agent in OpenCode), same validation and scoring as `suggest`."""
     run = f"{task}~llm"
     if not (paths.run_dir(run) / "frame.parquet").exists():
         variant(task, None)

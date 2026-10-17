@@ -78,8 +78,8 @@ artifact in `lab/runs/<task>/` that can be inspected:
 Main commands: `lab run <task>`, `lab pool show <task>`, `lab feature <task> <name> <expr>`, `lab suggest <task>`,
 `lab freeze <task>`, `lab show <table> COL=VALUE`, `lab audit`.
 
-The interactive agent is Claude Code running on an open-weights model through an Anthropic-compatible endpoint
-(`scripts/claude-open.sh`, configured by `.env.llm`). It follows the protocol in
+The interactive agent is OpenCode running on an open-weights model, served by vLLM on vast.ai through the OpenAI
+API (`scripts/opencode-open.sh`, configured by `.env.llm`). It follows the protocol in
 `.claude/skills/rule-discovery/SKILL.md`.
 
 ## Data quirks found by the audit
