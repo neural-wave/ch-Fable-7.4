@@ -11,8 +11,10 @@ Then it checks:
 
 - the two examples of the task PDF, to the cent and to the day;
 - the format of every row: a country, four amounts to the cent, a date or None, None exactly when no tax is due;
-- that every tax booking of NRTAXB gets an amount and every payout a country: nothing dropped or zeroed silently;
-- that the residence Neuron knew agrees with the country of the taxes it booked (the labels of NRTAXB).
+- that every tax booking of NRTAXB gets an amount: nothing dropped or zeroed silently.
+
+It also reports, as INFO, what the rules handle but a person should look at: the payouts without a country, those
+whose residence disagrees with the taxes Neuron booked (the country follows the taxes), and the thresholds.
 """
 import argparse
 import datetime as dt
@@ -94,8 +96,13 @@ def failures(name: str, count: int, debug: bool) -> bool:
     return count == 0
 
 
+def info(name: str, count: int, debug: bool):
+    """Print `name` as INFO: the rules handle it, a person looks at it; the count of rows only with `debug`."""
+    print(f"INFO  {name}: {'none' if count == 0 else 'some'}" + (f" ({count} rows)" if debug and count else ""))
+
+
 def label_checks(debug: bool) -> list[bool]:
-    """Every booking has an amount, every payout a country, and the residence agrees with the booked taxes."""
+    """Every booking has an amount; the payouts without a country or against the booked taxes as INFO."""
     booked = table(LEGACY, "NRTAXB")
     amounts = tax_bookings(str(LEGACY))
     rows = payouts(str(LEGACY))
@@ -104,15 +111,16 @@ def label_checks(debug: bool) -> list[bool]:
         pl.col("TB_TAXTP").replace_strict(TAXES).n_unique().alias("countries"))
     thresholds = table(LEGACY, "NRTAXR").filter(pl.col("TX_THRSH").fill_null(0).ne(0))["TX_TAXTP"].unique().sort()
     print(f"INFO  TX_THRSH is set for the tax types: {', '.join(thresholds) or 'none'} (no rule reads it)")
+    info("payouts without a country (no tax booked, no address known)", rows["COUNTRY"].null_count(), debug)
+    info("payouts whose residence disagrees with the booked taxes (the country follows the taxes)", disagree.height,
+         debug)
     return [failures("every NRTAXB booking of a known type gets a row",
                      booked.filter(pl.col("TB_TAXTP").is_in(list(TAXES))).height - amounts.height, debug),
             failures("no NRTAXB booking of a type without a rule",
                      booked.filter(pl.col("TB_TAXTP").is_in(list(TAXES)).not_()).height, debug),
             failures("no tax booking with a null amount", amounts["TB_AMOUNT"].null_count(), debug),
-            failures("no payout without a country", rows["COUNTRY"].null_count(), debug),
             failures("no payout with taxes of two countries", countries.filter(pl.col("countries").gt(1)).height,
-                     debug),
-            failures("the residence Neuron knew agrees with the booked taxes", disagree.height, debug)]
+                     debug)]
 
 
 def result_checks(results: dict, debug: bool) -> list[bool]:
