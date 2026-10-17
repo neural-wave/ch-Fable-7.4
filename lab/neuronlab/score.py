@@ -41,8 +41,10 @@ SHOWN = 8
 def load_submission(folder=paths.SUBMISSION):
     """The submission module, loaded like check.py loads it: fresh, with its folder first on sys.path."""
     sys.path.insert(0, str(folder))
-    for helper in pathlib.Path(folder).glob("*.py"):
-        sys.modules.pop(helper.stem, None)  # a helper module loaded from another folder must not be reused
+    helpers = {path.stem for path in pathlib.Path(folder).glob("*.py")}
+    helpers |= {path.parent.name for path in pathlib.Path(folder).glob("*/__init__.py")}
+    for name in [name for name in sys.modules if name.split(".")[0] in helpers]:
+        sys.modules.pop(name)  # a helper module or package loaded from another folder must not be reused
     spec = importlib.util.spec_from_file_location("submission", pathlib.Path(folder) / "submission.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -112,6 +114,34 @@ def compare(task, targets, predictions):
         out[value] = column_labels([(k[0] if isinstance(k, tuple) else k, part(t), part(predictions.get(k)))
                                     for k, t in targets.items()])
     return out
+
+
+def difference(target, computed):
+    """target - computed as a number: whole days for dates, currency units for amounts, None if not comparable."""
+    if computed is None or target is None:
+        return None
+    if isinstance(target, dt.date):
+        return float((target - computed).days)
+    if isinstance(target, Decimal):
+        return float(target - computed)
+    return None
+
+
+def differences(task, targets, predictions, keys, dtypes):
+    """One row per target row: the keys and, per value column, the target, the computed value and their difference.
+
+    The values are kept as text, so that they stay exact; the difference is a float, for the charts of `lab viz`.
+    """
+    _, values = store.target_columns(task)
+    columns = {}
+    for i, value in enumerate(values):
+        def part(v):
+            return v if v is None or len(values) == 1 else v[i]
+        pairs = [(part(t), part(predictions.get(k))) for k, t in targets.items()]
+        columns[f"target:{value}"] = pl.Series([None if t is None else str(t) for t, _ in pairs], dtype=pl.String)
+        columns[f"computed:{value}"] = pl.Series([None if c is None else str(c) for _, c in pairs], dtype=pl.String)
+        columns[f"diff:{value}"] = pl.Series([difference(t, c) for t, c in pairs], dtype=pl.Float64)
+    return key_frame(targets, keys, dtypes).with_columns(**columns)
 
 
 def key_frame(targets, keys, dtypes):
@@ -192,7 +222,7 @@ def record(task, source, ok, held, wrong):
 
 
 def score(task, extra=None, folder=None):
-    """Score the task function of submission.py, explain its wrong rows, write runs/<task>/score.md.
+    """Score the task function of submission.py, explain its wrong rows, write runs/<task>/score.md and diffs.parquet.
 
     `folder` scores another submission folder (a scratch copy): nothing is written to the ledger then.
     """
@@ -207,6 +237,7 @@ def score(task, extra=None, folder=None):
     df, meta = frames.load(task)
     keys = meta["keys"]
     per_value = compare(task, targets, predictions)
+    differences(task, targets, predictions, keys, df.schema).write_parquet(paths.run_dir(task) / "diffs.parquet")
     labels = key_frame(targets, keys, df.schema).with_columns(
         pl.Series(f"label:{v}", per_value[v]) for v in per_value)
     df = df.with_row_index("_order").join(labels, on=keys, how="left").sort("_order").drop("_order")

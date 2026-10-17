@@ -18,8 +18,7 @@ def pipeline():
 
 def scratch(tmp_path, replace=None):
     """A copy of the submission folder, with one piece of t0_commission replaced."""
-    for name in ("submission.py", "neuron.py"):
-        shutil.copy(paths.SUBMISSION / name, tmp_path / name)
+    shutil.copytree(paths.SUBMISSION, tmp_path, dirs_exist_ok=True, ignore=shutil.ignore_patterns("__pycache__"))
     if replace:
         source = (tmp_path / "submission.py").read_text(encoding="utf-8")
         assert replace[0] in source
@@ -32,6 +31,17 @@ def test_the_frozen_rule_leaves_only_noise(tmp_path):
     assert "Exact rows: 225848 / 225858 (holdout 44051 / 44052)" in text
     assert "noise 10 (policies listed in NREXCP: 6)" in text
     assert "one cluster only" in text
+
+
+def test_the_differences_are_saved_for_the_charts(tmp_path):
+    """diffs.parquet: one row per target row, difference 0 exactly on the right rows, whole units on the others."""
+    import polars as pl
+    score.score(TASK, folder=scratch(tmp_path))
+    diffs = pl.read_parquet(paths.run_dir(TASK) / "diffs.parquet")
+    assert diffs.height == 225858
+    assert (diffs["target:amount"] == diffs["computed:amount"]).sum() == 225848
+    wrong = diffs.filter(pl.col("diff:amount") != 0)
+    assert wrong.height == 10 and (wrong["diff:amount"] % 1 == 0).all()
 
 
 def test_a_wrong_rule_is_explained_by_the_missing_feature(tmp_path):

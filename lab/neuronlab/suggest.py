@@ -1,4 +1,4 @@
-"""Step 5 in batch (`lab suggest`): one request to the open-weights model, a constrained answer, an exact score.
+"""Step 5 in batch (`lab suggest`): one request to Claude Code (`claude -p`), a constrained answer, an exact score.
 
 The model reads report.md and the feature vocabulary (dsl.py) and answers with at most 3 features in JSON. The
 harness validates them (known primitives, existing columns, at most two levels), retries once with the
@@ -87,7 +87,7 @@ def validate(answer, df, full):
 
 
 def add_feature(task, name, expr):
-    """One feature written by hand (or by the agent in OpenCode), same validation and scoring as `suggest`."""
+    """One feature written by hand or by the agent in Claude Code, same validation and scoring as `suggest`."""
     run = f"{task}~llm"
     if not (paths.run_dir(run) / "frame.parquet").exists():
         variant(task, None)
@@ -128,7 +128,7 @@ def suggest(task, ablate=None, dry_run=False):
         (paths.run_dir(run) / "frame.json").write_text(json.dumps(meta, indent=1, default=str))
         rerun(run)
     after = best_score(run)
-    log = {"time": dt.datetime.now().isoformat(timespec="seconds"), "model": llm.settings()[3],
+    log = {"time": dt.datetime.now().isoformat(timespec="seconds"), "model": llm.settings()[1] or "claude-code",
            "prompt_sha": hashlib.sha1(prompt.encode()).hexdigest()[:12], "answers": answers,
            "proposals": [{k: v for k, v in p.items() if k != "node"} for p in proposals], "errors": errors,
            "before": before, "after": after}

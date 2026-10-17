@@ -1,7 +1,7 @@
 """Step 5 (`lab suggest`): the harness side with a scripted model, and the real model when one is configured.
 
 The scripted tests check that a valid proposal reaches the exact score and that a bad one is rejected; the last
-test asks the configured open-weights model (skipped when .env.llm has no endpoint).
+test asks Claude Code (`claude -p`, skipped when the CLI is not on PATH).
 """
 import json
 import os
@@ -21,13 +21,13 @@ def pipeline():
 
 
 def scripted(answer):
-    return lambda prompt, system="", max_tokens=2048: answer
+    return lambda prompt, system="": answer
 
 
 def test_right_feature_recovers_the_score(monkeypatch):
     answer = json.dumps([{"name": "tier_at_receipt", "expr": "at(BR_TIER, PR_RCVDT)", "why": "rate follows the tier"}])
     monkeypatch.setattr(llm, "complete", scripted(answer))
-    monkeypatch.setattr(llm, "settings", lambda: ("scripted", "", "", "scripted-model"))
+    monkeypatch.setattr(llm, "settings", lambda: ("scripted", "scripted-model"))
     text = suggest.suggest(TASK, ablate=ABLATE)
     assert "best before: C2.1 224418" in text
     assert text.rstrip().endswith("225848 rows exact")
@@ -36,13 +36,13 @@ def test_right_feature_recovers_the_score(monkeypatch):
 def test_invalid_proposals_are_rejected(monkeypatch):
     answer = '[{"name": "x", "expr": "__import__(\'os\').system(\'ls\')"}, {"name": "y", "expr": "at(BR_TIER, NOPE)"}]'
     monkeypatch.setattr(llm, "complete", scripted(answer))
-    monkeypatch.setattr(llm, "settings", lambda: ("scripted", "", "", "scripted-model"))
+    monkeypatch.setattr(llm, "settings", lambda: ("scripted", "scripted-model"))
     text = suggest.suggest(TASK, ablate=ABLATE)
     assert "0 valid proposals" in text and "224418 rows exact; after: C2.1 224418" in text
 
 
 def configured():
-    """True when .env.llm (or the environment) names an endpoint, a key and a model without placeholders."""
+    """True when the claude CLI is on PATH."""
     paths.load_env()
     try:
         llm.settings()
@@ -52,8 +52,8 @@ def configured():
 
 
 @pytest.mark.skipif(not (os.environ.get("NEURON_LLM") and configured()),
-                    reason="calls the open-weights model: set NEURON_LLM=1 and fill in .env.llm")
-def test_open_weights_model_finds_the_missing_feature():
+                    reason="calls Claude Code: set NEURON_LLM=1 and install the claude CLI")
+def test_claude_code_finds_the_missing_feature():
     text = suggest.suggest(TASK, ablate=ABLATE)
     print(text)
     assert text.rstrip().endswith("225848 rows exact")
