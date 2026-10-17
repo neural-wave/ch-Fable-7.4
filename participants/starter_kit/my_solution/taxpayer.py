@@ -10,12 +10,22 @@ Every function takes rows with the columns TB_POLNR, TB_EFFDT and TB_CHGTS, like
 """
 import polars as pl
 
-from conventions import TAXES
+from conventions import CONVERSION, ROUNDED_BY_SYSTEM, TAXES, TRUNCATED
 from legacy import table, valid_on
 from market import exchange_rates, rate_of
 from tariff import signed_policies
 
 RESIDENCE = ["AD_CNTRY", "AD_REGIO"]  # the address columns that the taxes read
+
+
+def rounds_half_up(country: pl.Expr, truncated: list[str] = TRUNCATED) -> pl.Expr:
+    """True where Neuron rounds an amount of `country` half up, false where it truncates to the cent.
+
+    With `conventions.ROUNDED_BY_SYSTEM` the system that processed the row (TB_CHGTS) decides: COBOL truncated,
+    Neuron NG rounds half up. Otherwise the country does: the countries of `truncated` truncate.
+    """
+    by_system = pl.col("TB_CHGTS").floordiv(1_000_000).ge(pl.lit(CONVERSION).dt.strftime("%Y%m%d").cast(pl.Int64))
+    return pl.when(pl.lit(ROUNDED_BY_SYSTEM)).then(by_system).otherwise(country.is_in(truncated).not_())
 
 
 def residences(legacy_dir, rows: pl.DataFrame) -> pl.DataFrame:
@@ -55,11 +65,13 @@ def tax_rates(legacy_dir, rows: pl.DataFrame, tax_type: pl.Expr, name: str, know
 
 
 def with_policies(legacy_dir, rows: pl.DataFrame) -> pl.DataFrame:
-    """`rows` with the currency PH_CCY and the start date PH_BEGDT of the policy; no version ever changes them.
+    """`rows` with the currency PH_CCY, the start date PH_BEGDT and the premium frequency PH_FREQ of the policy as
+    signed; no version ever changes the first two.
 
     A row of an unknown policy stays, with nulls: its amounts become null instead of disappearing.
     """
-    policies = signed_policies(legacy_dir).select(TB_POLNR="PH_POLNR", PH_CCY="PH_CCY", PH_BEGDT="PH_BEGDT")
+    policies = signed_policies(legacy_dir).select(TB_POLNR="PH_POLNR", PH_CCY="PH_CCY", PH_BEGDT="PH_BEGDT",
+                                                  PH_FREQ="PH_FREQ")
     return rows.join(policies, on="TB_POLNR", how="left")
 
 

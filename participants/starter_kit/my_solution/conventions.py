@@ -59,17 +59,26 @@ TAX_CURRENCY = {"CH": "CHF", "IT": "EUR", "DE": "EUR", "LU": "EUR"}  # country -
 TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent (example: 1407.04 x 5.5 % = 77.3872 -> 77.38)
 TRUNCATED_CONVERSION = ["DE"]  # countries whose premiums are truncated to the cent when converted to the tax
 # currency (example: only this gives 5628.16); IT rounds them half up like its taxes (assumption)
+ROUNDED_BY_SYSTEM = True  # the system that processed a tax decides its rounding, as in t2 and t3: COBOL truncated,
+# Neuron NG (TB_CHGTS from CONVERSION) rounds half up, the taxes and the conversions alike. The example (DE, 2006)
+# was processed by COBOL, so it fits this rule as well as TRUNCATED; False rounds by country (assumption)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
 BASE_WITHOUT_TAX = True  # the base is reported also for a payout without withholding; False reports 0 (assumption)
 REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month, no business-day shift. DE the
 # 10th (example: 2006-07-17 -> 2006-08-10, a Thursday); IT the 16th, F24 (law); CH 30 days after the month (law)
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
+REMITTED_ON_BUSINESS_DAY = False  # True: a remittance day on a weekend or holiday moves to the next business day
+# of Neuron's calendar (`dates.business_day`, as the direct debits); the example (a Thursday) fits both (assumption)
+STAMP_DUTY_REMITTED = True  # a payout with stamp duty alone has a remittance day; False: None, as the PDF says
+# "None if nothing was withheld" if the stamp duty collected does not count as withheld (assumption)
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
 BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019 (NRTAXB)
 PARTLY_TAXED = ["DE"]  # countries whose gain is taxed only in part: TFS, HEV and the old contracts
-OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS (law)
+OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS (law), if it
+# pays regular premiums: NRTAXB has KST on all 10 such payouts of single premium (PH_FREQ E) policies with a gain
+# and on none of the 23 of regular premium policies (labels); the law asks for 5 years of premiums
 HELD_YEARS = 12  # DE: years held for the old exemption and for HEV, section 20 (1) no. 6 EStG (law)
 HALF_INCOME_AGE = {False: 60, True: 62}  # DE: age for HEV by "started on or after HALF_INCOME_2012" (law)
 HALF_INCOME_2012 = dt.date(2012, 1, 1)  # DE: contracts from then need the higher age (law)

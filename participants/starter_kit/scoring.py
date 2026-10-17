@@ -21,7 +21,16 @@ def date(v):
     return v if isinstance(v, dt.date) else dt.date.fromisoformat(str(v))
 
 
+def optional_date(v):
+    """A date, or None for an empty value (t7: no remittance without tax)."""
+    return None if v is None or str(v).strip() == "" else date(v)
+
+
 def policy(v):
+    return str(v).strip()
+
+
+def text(v):
     return str(v).strip()
 
 
@@ -54,6 +63,8 @@ TASKS = {
     "t2_projected_maturity_value": Task((policy,), (amount,)),
     "t3_surrender_value": Task((policy, date), (amount,)),
     "t4_annual_statement": Task((policy, int), (amount,) * 6),
+    "t7_tax_payout": Task((policy, int), (text, amount, amount, amount, amount, optional_date)),
+    "t7_tax_annual": Task((policy, int), (amount,) * 7),
 }
 OUTLIER_TASK = "t5_outlier_detection"
 
