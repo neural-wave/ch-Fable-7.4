@@ -16,8 +16,8 @@ Status:
 - t0–t4 and t7 run in one process in 10 s, with a peak of 3.4 GB (synthetic tax tables).
 - PDF example 1 (`BL10000086,121`) is exact on the synthetic tables. Example 2 (`BL10000044,2019`, 616.11)
   needs the real Bollo rates: `t7_check.py` checks it.
-- Maintainability index: 97.1 for the whole folder, 100 for every module of the submission, 55.4 for the new
-  check tool.
+- Maintainability index: 96.7 for the whole folder, 100 for every module of the submission, 55.4 and 83.3
+  for the two new tools (`t7_check.py`, `t7_labels.py`).
 
 ## P0: the taxable base of DE and IT payouts — fixed
 

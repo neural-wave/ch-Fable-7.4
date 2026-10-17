@@ -15,7 +15,7 @@ from legacy import table, valid_on
 from market import exchange_rates, rate_of
 from tariff import signed_policies
 
-RESIDENCE = ["AD_CNTRY", "AD_REGIO"]  # the address columns that the taxes read
+RESIDENCE = ["AD_CNTRY", "AD_REGIO", "AD_TAXST", "AD_CHURCH"]  # the address columns that the taxes or their checks read
 
 
 def residences(legacy_dir, rows: pl.DataFrame) -> pl.DataFrame:

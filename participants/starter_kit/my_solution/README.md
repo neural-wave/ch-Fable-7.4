@@ -13,7 +13,7 @@ in too.
 | t4 annual statement | 34'125 / 34'145 train rows exact (99.94 %): every column of every row, except 20 admin fees. Those 20 are manual corrections |
 | t5 outlier detection | 54 outliers on the train targets: exactly the 54 rows that t0 – t4 miss, among them all 38 corrections that NREXCP lists for train policies. Without them every task scores 100 % (`scoring.accuracy` with `excluded`) |
 | t7 tax audit | No targets. PDF example 1 (BL10000086 #121) exact on synthetic tax tables, with the rule that converts every premium on its money date; example 2 (BL10000044 2019, 616.11) matched on the real tables before these rules changed, and the change leaves every Bollo amount of the synthetic tables as it was. Before every upload `tools/neuron/t7_check.py` runs both examples and the labels of NRTAXB on the real tables, with an open-weights model |
-| Maintainability index | 97.1 for the whole folder (radon, weighted by lines): 100 for every module of the submission, 55.4 for the t7 check tool |
+| Maintainability index | 96.7 for the whole folder (radon, weighted by lines): 100 for every module of the submission, 55.4 and 83.3 for the two t7 tools |
 
 ```
 python check.py   # from starter_kit/: all tasks and the maintainability index
@@ -50,7 +50,8 @@ my_solution/
     ├── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
     ├── bisection.py                   the first step where a calculation leaves a diagnostic target (t2)
     ├── account_check.py               the unit account link by link against the diagnostics (t3, t4)
-    └── t7_check.py                    t7 before an upload: run like the evaluator, PDF examples, NRTAXB labels
+    ├── t7_check.py                    t7 before an upload: run like the evaluator, PDF examples, NRTAXB labels
+    └── t7_labels.py                   t7 rules: the bookings of NRTAXB against what may decide them, counts only
 ```
 
 ## Approach
@@ -256,7 +257,7 @@ As the strategy suggests: thin task functions, small modules with one job each, 
 of branches, and docstrings that state the rule in business terms. The polars expressions use its methods
 (`.add`, `.mul`, `.floordiv`, `.eq`, ...); the Z3 tools write their constraints in SMT-LIB, the input language of
 Z3, and let Z3 parse them (`(<= low (* base rate) high)`); plain Python keeps its operators where they read
-better, as in the t7 check tool. The maintainability index (radon, weighted by lines of code) is 97.1 for the
+better, as in the t7 tools. The maintainability index (radon, weighted by lines of code) is 96.7 for the
 whole folder and 100 for every module of the submission: a signal, not a target.
 
 ## Memory
@@ -282,6 +283,7 @@ PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.bisection import corrected_m
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.account_check import surrender_mismatches; print(surrender_mismatches())"
 PYTHONPATH="$PWD:$PWD/tools" python -c "from neuron.account_check import statement_mismatches; print(statement_mismatches())"
 POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_check   # tax tables: open-weights model only
+POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_labels  # tax tables: open-weights model only
 ```
 
 The tools look for the data in `$NEURON_DATA`, by default the `participants` folder that contains this
