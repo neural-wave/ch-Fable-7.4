@@ -44,29 +44,46 @@ def parse(col: str, kind: str) -> pl.Expr:
     return pl.when(text.ne("")).then(text).cast(STORED_AS[kind]).alias(col)
 
 
-@functools.cache
-def table(legacy_dir, name: str) -> pl.DataFrame:
-    """A legacy table (e.g. "NRPOLH") with every column converted by its NRDICT type.
+def scan(legacy_dir, name: str) -> pl.LazyFrame:
+    """A legacy table (e.g. "NRPOLH") to be read, every column converted by its NRDICT type.
 
-    Columns that NRDICT does not list stay text. The result is cached, since several tasks read the same tables.
+    Columns that NRDICT does not list stay text. Collected with the streaming engine, the file is read and
+    converted in batches, and a filter keeps only the rows needed: NRBOOK as text alone would take gigabytes.
     """
     types = column_types(legacy_dir)
-    frame = read(legacy_dir, name)
-    return frame.with_columns(parse(col, types.get(col, "C")) for col in frame.columns)
+    frame = pl.scan_csv(pathlib.Path(legacy_dir, f"{name}.csv"), separator=";", infer_schema=False)
+    return frame.with_columns(parse(col, types.get(col, "C")) for col in frame.collect_schema().names())
+
+
+@functools.cache
+def table(legacy_dir, name: str) -> pl.DataFrame:
+    """A whole legacy table (`scan`), cached, since several tasks read the same tables."""
+    return scan(legacy_dir, name).collect(engine="streaming")
 
 
 def valid_on(rows: pl.DataFrame, versions: pl.DataFrame, on: dict[str, str], date: str, prefix: str,
-             newest: str = "VRSNR") -> pl.DataFrame:
+             newest: str = "VRSNR", known_at: str | None = None) -> pl.DataFrame:
     """Every row of `rows` joined with the version of `versions` that is valid on its column `date`.
 
     `on` maps the key columns of `rows` to those of `versions`. A version is valid from `<prefix>_VLDFR` to
     `<prefix>_VLDTO`, both days included. If several versions are valid, the one with the highest
     `<prefix>_<newest>` wins: the version number, so a change counts from its validity date even when it
     was entered later.
+
+    With `known_at`, a column of timestamps of `rows`, only the versions entered by then count (timestamp
+    `<prefix>_CHGTS`): the versions as Neuron knew them when it processed the row.
+
+    The version is chosen on the keys and dates of `rows` alone, and the whole row joined to it once: joining
+    every version to the whole rows first would copy wide frames several times.
     """
-    joined = rows.with_row_index("row").join(versions, left_on=list(on), right_on=list(on.values()))
-    valid = joined.filter(pl.col(date).is_between(pl.col(f"{prefix}_VLDFR"), pl.col(f"{prefix}_VLDTO")))
-    return valid.sort(f"{prefix}_{newest}").unique("row", keep="last").drop("row")
+    numbered, indexed = rows.with_row_index("row"), versions.with_row_index("version")
+    keys = numbered.select("row", *on, date, *filter(None, [known_at]))
+    candidates = keys.join(indexed, left_on=list(on), right_on=list(on.values()))
+    known = pl.col(f"{prefix}_CHGTS").le(pl.col(known_at)) if known_at else pl.lit(True)
+    valid = candidates.filter(pl.col(date).is_between(pl.col(f"{prefix}_VLDFR"), pl.col(f"{prefix}_VLDTO")), known)
+    chosen = valid.sort(f"{prefix}_{newest}").unique("row", keep="last").select("row", "version")
+    joined = numbered.join(chosen, on="row").join(indexed.drop(*on.values()), on="version")
+    return joined.drop("row", "version")
 
 
 def as_date(col: str) -> pl.Expr:

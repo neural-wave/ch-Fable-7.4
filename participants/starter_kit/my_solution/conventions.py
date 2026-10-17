@@ -44,3 +44,26 @@ INITIAL_POT = "1"  # BK_POTCD of the initial units: management charge CG_AMCP1; 
 AGREED_ENTRY, AGREED_MANAGEMENT = "ENT", "AMC"  # AG_FEETP: individual rates (NRAGRE) that replace the tariff
 COBOL_MONTH = 360  # COBOL: the management charge of a month is its days / 360 of the yearly rate
 JAVA_MONTH = 12  # Neuron NG: a twelfth of the yearly rate, whatever the days of the month
+
+# Taxes (t7): NRTAXB names every tax booking of Neuron (type, event, dates); only the amounts are calculated
+PAYOUTS = [400, 410, 500]  # EV_EVTTP of a payout: partial withdrawal, full surrender, death claim
+TERMINATING = [410, 500]  # payouts that end the policy: they pay out all of it
+PAID_OUT = ["WDR", "SUR", "DTH"]  # BK_BKTYP of the money of a payout: its BK_AMTPC is negative
+TAXES = {"STP": "CH", "VST": "CH", "SOS": "IT", "BOL": "IT", "BOC": "IT", "KST": "DE", "SOL": "DE", "KIS": "DE"}
+ANNUAL_TAXES = ["STP", "VST", "SOS", "BOL", "KST", "SOL", "KIS"]  # the columns of t7_tax_annual; BOC is not reported
+WITHHELD, SURCHARGES, STAMP_DUTY = ["VST", "SOS", "KST"], ["SOL", "KIS"], ["BOC"]  # the amounts of a payout
+TAX_CURRENCY = {"CH": "CHF", "IT": "EUR", "DE": "EUR", "LU": "EUR"}  # country -> currency of its taxes
+TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent: 1407.04 x 5.5 % = 77.3872 -> 77.38
+TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere (LU)
+REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month: DE the 10th (2006-07-17 ->
+# 2006-08-10), IT the 16th (F24) and CH 30 days after the end of the month (VStG) are assumptions
+STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
+CHURCH_MEMBER = "J"  # AD_CHURCH of a church member
+CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: a church member pays KST / (1 + KST x KIS), section 32d EStG
+PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
+BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019
+PARTLY_TAXED = ["DE"]  # countries whose gain is taxed only in part: TFS, HEV and the old contracts
+OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS
+HELD_YEARS = 12  # DE: years held for the old exemption and the half-income rule (HEV)
+HALF_INCOME_AGE = {False: 60, True: 62}  # DE: age for HEV by "started on or after HALF_INCOME_2012"
+HALF_INCOME_2012 = dt.date(2012, 1, 1)

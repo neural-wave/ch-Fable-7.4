@@ -4,8 +4,8 @@ Each function gets the folder `legacy_dir` with the NR*.csv files and returns th
 `datetime.date`, amounts are `decimal.Decimal`. The rules found for each task are in the docstrings and README.md.
 
 Every task with amounts first builds a table in the format of its target file, amounts in cents (`commissions`,
-`maturity_values`, `surrender_table`, `statement_table`); the task function turns it into the result, and t5
-compares it with the targets (`outliers`).
+`maturity_values`, `surrender_table`, `statement_table`, `taxes.payout_table`, `taxes.annual_table`); the task
+function turns it into the result, and t5 compares it with the targets (`outliers`).
 
 Check the solution locally against the train targets with `python check.py`.
 """
@@ -22,6 +22,7 @@ from money import francs, share
 from outliers import TARGETS, outliers, target_table
 from projection import projected_years
 from statement import STATEMENT, annual_statements
+from taxes import ANNUAL_AMOUNTS, PAYOUT_AMOUNTS, annual_table, payout_table
 from valuation import surrender_values
 
 STATEMENT_AMOUNTS = TARGETS["t4_annual_statement"][1]  # the amounts of a statement, named as in the target file
@@ -186,3 +187,27 @@ def t5_outlier_detection(legacy_dir, targets_dir) -> set[tuple[str, object]]:
                  "t3_surrender_value": surrender_table(legacy_dir, valuation_dates),
                  "t4_annual_statement": statement_table(legacy_dir)}
     return set().union(*(outliers(task, expected[task], predicted[task]) for task in TARGETS))
+
+
+def t7_tax_payout(legacy_dir) -> dict[tuple[str, int], tuple]:
+    """{(policy_id, event_nr): (country, taxable_base, withholding, surcharges, stamp_duty, remittance_date)}
+
+    Every payout (events 400, 410, 500) with a tax booking or not reversed. NRTAXB names the tax bookings of
+    Neuron, so the rules calculate their amounts (`taxes`): the country is the residence of the holder valid on
+    the payout day as Neuron knew it then (`taxpayer`), the base the gross (CH) or the gain over the premiums
+    used (IT, DE) of the payout (`payouts`), the stamp duty the Bollo collected (`bollo`). remittance_date is None
+    without tax.
+    """
+    amounts = ["taxable_base", *PAYOUT_AMOUNTS]
+    rows = payout_table(legacy_dir).with_columns(map(francs, map(pl.col, amounts)))
+    return {(policy, event): tuple(values) for policy, event, *values in rows.iter_rows()}
+
+
+def t7_tax_annual(legacy_dir) -> dict[tuple[str, int], tuple[Decimal, ...]]:
+    """{(policy_id, year): (ch_stp, ch_vst, it_sos, it_bol, de_kst, de_sol, de_kis)}
+
+    Per calendar year of the effective date the amounts of the tax bookings, the Bollo accrued and re-priced
+    included and the Bollo collected not; only the years with an amount.
+    """
+    rows = annual_table(legacy_dir).with_columns(map(francs, map(pl.col, ANNUAL_AMOUNTS)))
+    return {(policy, year): tuple(amounts) for policy, year, *amounts in rows.iter_rows()}

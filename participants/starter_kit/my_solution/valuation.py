@@ -3,7 +3,8 @@
 - `unit_account`: every counted booking with its units, the calculated ones included (`bookings`, `charge_run`)
 - holdings on a day: the units of the bookings traded on or before that day, per fund and pot
 - policy value: every position at the bid price of its last price date and the exchange rates of the day,
-  rounded to the cent position by position (half up from the conversion on, truncated before)
+  rounded to the cent position by position (half up from the conversion on, truncated before); `values_on`
+  values any policy on any day, e.g. on the days of the payouts and of the Bollo (t7)
 - surrender value: the policy value less the surrender penalty NRSURR of the product's scale for the policy
   years completed on that day; no penalty in the waiver periods NRWAIV or after the last year of the scale
 """
@@ -12,7 +13,7 @@ import functools
 
 import polars as pl
 
-from bookings import POSITION, counted_bookings, moved_bookings, premium_bookings
+from bookings import POSITION, investment_bookings, moved_bookings, premium_bookings
 from charge_run import charge_bookings
 from conventions import CONVERSION
 from dates import completed_years
@@ -30,7 +31,7 @@ def unit_account(legacy_dir) -> pl.DataFrame:
 
     The premiums also have their ENTRY_CHARGE (`bookings.premium_bookings`); the other bookings have null there.
     """
-    bookings = counted_bookings(legacy_dir)
+    bookings = investment_bookings(legacy_dir)
     investments = pl.concat([moved_bookings(bookings).select(ACCOUNT),
                              premium_bookings(legacy_dir, bookings).select(*ACCOUNT, "ENTRY_CHARGE")], how="diagonal")
     return pl.concat([investments, charge_bookings(legacy_dir, investments).select(ACCOUNT)], how="diagonal")
@@ -45,14 +46,32 @@ def holdings(legacy_dir, day: dt.date) -> pl.DataFrame:
 
 def policy_values(legacy_dir, day: dt.date) -> pl.DataFrame:
     """PH_POLNR and VALUE (cents) of every policy on `day`: 0 without units."""
-    policies = signed_policies(legacy_dir).select("PH_POLNR", "PH_CCY")
-    positions = holdings(legacy_dir, day).join(policies, left_on="BK_POLNR", right_on="PH_POLNR").join(
-        table(legacy_dir, "NRFUND"), left_on="BK_FNDID", right_on="FD_FNDID").with_columns(DAY=as_cyymmdd(day))
+    policies = signed_policies(legacy_dir).select(BK_POLNR="PH_POLNR", DAY=as_cyymmdd(day))
+    return values_on(legacy_dir, policies).select(PH_POLNR="BK_POLNR", VALUE="VALUE")
+
+
+def values_on(legacy_dir, days: pl.DataFrame) -> pl.DataFrame:
+    """`days` (BK_POLNR and DAY, a date `CYYMMDD`) with VALUE: the policy value (cents) at the end of DAY.
+
+    The units traded on or before DAY, at the bid price and the exchange rates of DAY; 0 without units. The
+    units of every position are added up per trade date once, and each DAY takes the sum of its last trade date
+    (as `charge_run.run_positions`), so the account is never copied per day.
+    """
+    pairs = days.select("BK_POLNR", "DAY").unique()
+    account = unit_account(legacy_dir).join(pairs.select("BK_POLNR").unique(), on="BK_POLNR", how="semi")
+    daily = account.group_by(*POSITION, "BK_TRDDT").agg(pl.col("BK_UNITS").sum()).sort("BK_TRDDT")
+    booked = daily.with_columns(pl.col("BK_UNITS").cum_sum().over(POSITION))
+    wanted = pairs.join(daily.select(POSITION).unique(), on="BK_POLNR").sort("DAY")
+    held = wanted.join_asof(booked, left_on="DAY", right_on="BK_TRDDT", by=POSITION,
+                               check_sortedness=False).filter(pl.col("BK_UNITS").ne(0))
+    currencies = signed_policies(legacy_dir).select(BK_POLNR="PH_POLNR", PH_CCY="PH_CCY")
+    positions = held.join(currencies, on="BK_POLNR").join(table(legacy_dir, "NRFUND"), left_on="BK_FNDID",
+                                                          right_on="FD_FNDID")
     priced = with_exchange_rates(legacy_dir, with_prices(legacy_dir, positions, "DAY"), "DAY", same_day=True)
-    valued = priced.with_columns(VALUE=value_of(pl.col("BK_UNITS"), pl.col("FP_BIDPR"), pl.lit(day).ge(CONVERSION)))
-    values = valued.group_by("BK_POLNR").agg(pl.col("VALUE").sum())
-    return policies.join(values, left_on="PH_POLNR", right_on="BK_POLNR", how="left").select(
-        "PH_POLNR", pl.col("VALUE").fill_null(0))
+    valued = priced.with_columns(VALUE=value_of(pl.col("BK_UNITS"), pl.col("FP_BIDPR"),
+                                                as_date("DAY").ge(CONVERSION)))
+    values = valued.group_by("BK_POLNR", "DAY").agg(pl.col("VALUE").sum())
+    return days.join(values, on=["BK_POLNR", "DAY"], how="left").with_columns(pl.col("VALUE").fill_null(0))
 
 
 def penalty_rates(legacy_dir, day: dt.date) -> pl.DataFrame:

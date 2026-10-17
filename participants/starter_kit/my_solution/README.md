@@ -36,6 +36,10 @@ my_solution/
 ├── valuation.py       t3: holdings, policy value and surrender value on a date
 ├── statement.py       t4: premiums and charges of the unit account per calendar year
 ├── outliers.py        t5: the target files as tables, and the values that differ from their rule
+├── taxpayer.py        t7: residence of the holder and tax rates as Neuron knew them at a booking, tax currency
+├── payouts.py         t7: the payouts, the premiums they use one after another, the taxable base by country
+├── bollo.py           t7: the Italian Bollo, accrued every year, re-priced in 2019, collected at the payouts
+├── taxes.py           t7: the amount of every tax booking of NRTAXB, the payout and annual tables
 ├── requirements.txt   polars >= 1.31 (128-bit integers), holidays; tested with polars 1.31 and 2.0
 └── tools/neuron/      the tools that found the rules (not used by the submission)
     ├── load.py, codes.py, policy.py   tables decoded for exploring, code texts, history of one policy
@@ -204,6 +208,31 @@ listed in NREXCP, each with an event 990 at the same timestamp and no amount. Fo
 (+21.00), BL10004031 2013 (+96.00), BL10004844 2018 (+46.00), BL10004909 2017 (+53.00). The export has no
 trace of the corrected amounts, so no rule can reproduce them.
 
+**t7 tax audit.** NRTAXB names every tax booking of Neuron (type, event, effective date, processing timestamp,
+job user); only the amounts are missing. So the rules do not decide again whether a tax was due: they calculate
+the amount of every booking (`taxes.py`) and add them up per payout and per policy and year.
+
+- residence: the holder (NRHOLD) and the address (NRADDR) valid on the effective date, among the versions entered
+  up to the processing timestamp (`legacy.valid_on` with `known_at`). The rates NRTAXR are looked up the same way,
+  so the Bollo batches of 2017 – 2019 used rate version 1 and the fix of July 2019 version 2;
+- payouts: the events 400, 410 and 500 with a tax booking or not reversed. Gross = the WDR, SUR, DTH bookings;
+  value before = gross + the value left that day (`valuation.values_on`). The premiums received (not reversed)
+  up to the payout are used one after another: a partial withdrawal uses its share gross / value before;
+- taxable base, in the tax currency, rounded once: CH the gross, IT and DE the gain over the premiums used (at
+  least 0); DE x (1 - TFS), half under HEV, 0 for contracts before 2005 held 12 years; LU none;
+- amounts: VST, SOS = base x rate; KST = base x rate / (1 + rate x KIS) for church members; SOL, KIS = KST x rate;
+  STP = the premium of event 2 in francs x rate. Rounded half up, German taxes truncated;
+- Bollo: BOL = value x rate x days run / days of the year; the TAXFIX19 re-pricing is the difference of the
+  earlier BOL at the restated rate, **rounded once on the total**: BL10000044 2019 = 421.57 + 194.54 = 616.11, as
+  in the example (rounding every year gives 194.53). BOC collects the outstanding BOL, all of it at a payout that
+  ends the policy, its share at a partial withdrawal;
+- remittance: DE the 10th of the next month (example), IT the 16th and CH 30 days after the month end (assumed).
+
+Open: the example payout BL10000086 #121 has base 5'628.16, the rule gives 539.30: it converts the gain on the
+payout day. Converting every premium at the rate of its money date gives 5'628.03, 13 cents away; the basis of
+the gain is not found yet. The euro has rates from 31.12.1998 only: the 12 payouts of IT and DE residents before
+take the first rate (assumption).
+
 ## Code quality
 
 As the strategy suggests: thin task functions, small modules with one job each, the conventions as data instead
@@ -211,6 +240,18 @@ of branches, and docstrings that state the rule in business terms. Every file sc
 index (radon, weighted by lines of code), the tools included. The arithmetic goes through polars methods
 (`.add`, `.mul`, `.floordiv`, `.eq`, ...) and `math.prod`; the Z3 tools write their constraints in SMT-LIB, the
 input language of Z3, and let Z3 parse them (`(<= low (* base rate) high)`), so no Python operators are left.
+
+## Memory
+
+The evaluation allows 5 GB and 2 CPUs. All tasks in one process peak at 3.3 GB working set with 2 polars
+threads (5.8 GB before):
+
+- the export is read with the streaming engine (`legacy.scan`), in batches instead of 6.8 million rows of text;
+- the unit account reads only the rows of NRBOOK that are no charges (`bookings.uncharged_bookings`): the
+  charges are 6.2 million rows, and the charge runs calculate them anew;
+- `legacy.valid_on` chooses the version on the keys and dates alone and joins the wide rows once;
+- `valuation.values_on` adds the units up per position and trade date once and looks up every day with an as-of
+  join, instead of copying the account for every day (the Bollo of t7 values 5'500 policy-days).
 
 ## Running the tools
 

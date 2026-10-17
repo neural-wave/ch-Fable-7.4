@@ -15,12 +15,13 @@ A premium (event 110) buys units in every fund of the allocation:
 
 Neuron NG rounds half up and COBOL truncated, by the trade date of the booking (column HALF_UP).
 """
+import functools
 import math
 
 import polars as pl
 
-from conventions import AGREED_ENTRY, CALCULATED, CONVERSION, MANUAL_CORRECTION, PREMIUM_RECEIPT, REVERSAL
-from legacy import as_date, table, valid_on
+from conventions import AGREED_ENTRY, CALCULATED, CHARGES, CONVERSION, MANUAL_CORRECTION, PREMIUM_RECEIPT, REVERSAL
+from legacy import as_date, scan, table, valid_on
 from market import with_exchange_rates, with_prices
 from money import RATE_UNIT, rounded, share, units_for
 
@@ -48,12 +49,31 @@ def counted_events(legacy_dir) -> pl.DataFrame:
     return events.filter(corrections.not_()).join(reversed_events, on=["EV_POLNR", "EV_EVTNR"], how="anti")
 
 
+def counted(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
+    """The rows of `bookings` (NRBOOK) that count, with the type EV_EVTTP of their event and HALF_UP."""
+    events = counted_events(legacy_dir).select("EV_POLNR", "EV_EVTNR", "EV_EVTTP")
+    kept = bookings.join(events, left_on=["BK_POLNR", "BK_EVTNR"], right_on=["EV_POLNR", "EV_EVTNR"])
+    return kept.with_columns(HALF_UP=as_date("BK_TRDDT").ge(CONVERSION))
+
+
 def counted_bookings(legacy_dir) -> pl.DataFrame:
     """The bookings of NRBOOK that count, with the type EV_EVTTP of their event and HALF_UP (`conventions`)."""
-    events = counted_events(legacy_dir).select("EV_POLNR", "EV_EVTNR", "EV_EVTTP")
-    bookings = table(legacy_dir, "NRBOOK").join(events, left_on=["BK_POLNR", "BK_EVTNR"],
-                                                right_on=["EV_POLNR", "EV_EVTNR"])
-    return bookings.with_columns(HALF_UP=as_date("BK_TRDDT").ge(CONVERSION))
+    return counted(legacy_dir, table(legacy_dir, "NRBOOK"))
+
+
+@functools.cache
+def uncharged_bookings(legacy_dir) -> pl.DataFrame:
+    """The rows of NRBOOK that are no charges: premiums, switches and payouts.
+
+    The charges ADM, AMC and RSK are 6.2 of the 6.8 million rows, and the charge runs calculate them anew
+    (`charge_run`), so they are left out while the file is read (`legacy.scan`): that saves gigabytes.
+    """
+    return scan(legacy_dir, "NRBOOK").filter(pl.col("BK_BKTYP").is_in(CHARGES).not_()).collect(engine="streaming")
+
+
+def investment_bookings(legacy_dir) -> pl.DataFrame:
+    """The counted bookings that do not depend on the charges: the premiums and the moved units."""
+    return counted(legacy_dir, uncharged_bookings(legacy_dir))
 
 
 def agreed_rate(legacy_dir, rows: pl.DataFrame, fee: str, date: str) -> pl.DataFrame:
