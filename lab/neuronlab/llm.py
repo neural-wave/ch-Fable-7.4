@@ -20,9 +20,13 @@ def settings():
     return protocol, base.rstrip("/"), key, model
 
 
-def complete(prompt, system="", max_tokens=2048):
-    """The model's text answer to one prompt, at temperature 0."""
+def complete(prompt, system="", max_tokens=None):
+    """The model's text answer to one prompt, at temperature 0.
+
+    The default budget is OPEN_MAX_OUTPUT (8192): a reasoning model spends part of it thinking before it answers.
+    """
     protocol, base, key, model = settings()
+    max_tokens = max_tokens or int(os.environ.get("OPEN_MAX_OUTPUT") or 8192)
     if protocol == "openai":
         url = base + "/chat/completions"
         body = {"model": model, "temperature": 0, "max_tokens": max_tokens,
@@ -36,5 +40,5 @@ def complete(prompt, system="", max_tokens=2048):
     with urllib.request.urlopen(request, timeout=600) as response:
         answer = json.load(response)
     if protocol == "openai":
-        return answer["choices"][0]["message"]["content"]
+        return answer["choices"][0]["message"].get("content") or ""  # null when the budget ended in the thinking
     return "".join(block.get("text", "") for block in answer["content"] if block.get("type") == "text")

@@ -121,7 +121,7 @@ def main(argv=None):
         show(rest[0], rest[1:])
     elif cmd == "llm" and rest[:1] == ["ping"]:
         from . import llm
-        print(llm.complete('Answer with the single word "pong".', max_tokens=20))
+        print(llm.complete('Answer with the single word "pong".'))
     else:
         parser.print_help()
         return 2
