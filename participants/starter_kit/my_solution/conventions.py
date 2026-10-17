@@ -60,6 +60,10 @@ TAX_CURRENCY = {"CH": "CHF", "IT": "EUR", "DE": "EUR", "LU": "EUR"}  # country -
 TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent (example: 1407.04 x 5.5 % = 77.3872 -> 77.38)
 TRUNCATED_CONVERSION = ["DE"]  # countries whose premiums are truncated to the cent when converted to the tax
 # currency (example: only this gives 5628.16); IT rounds them half up like its taxes (assumption)
+ROUNDED_BY_SYSTEM = False  # True: the system that processed a tax decides its rounding, as in t2 and t3: COBOL
+# truncated, Neuron NG (TB_CHGTS from CONVERSION) rounds half up, the taxes and the conversions alike. The example
+# (DE, 2006) was processed by COBOL, so it fits this rule as well as TRUNCATED; False rounds by country (assumption,
+# to test on its own: it changes the annual table, which BASE_WITHOUT_TAX does not touch)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
 BASE_WITHOUT_TAX = False  # a payout without withholding reports the base 0; True reports it as calculated
 # (assumption, from the actuary: with the calculated base the payout table scored 1 of 20, while 56 % of the
@@ -67,17 +71,22 @@ BASE_WITHOUT_TAX = False  # a payout without withholding reports the base 0; Tru
 REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month. DE the 10th (example: 2006-07-17
 # -> 2006-08-10, a Thursday); IT the 16th, F24 (law); CH 30 days after the month (law)
 REMITTANCE_SHIFTED = []  # countries whose remittance day moves to the next business day of its calendar (assumption:
-# none; the law moves a deadline that falls on a weekend or holiday, about 30 % of the days)
+# none; the law moves a deadline that falls on a weekend or holiday, about 30 % of the days; the example, a
+# Thursday, fits both)
 REMITTANCE_CALENDARS = {"DE": {"country": "DE", "years": range(1994, 2100)},
-                        "IT": {"country": "IT", "years": range(1994, 2100)}, "CH": CALENDAR}
+                        "IT": {"country": "IT", "years": range(1994, 2100)}, "CH": CALENDAR}  # the tax offices; the
+# other variant is Neuron's own calendar CALENDAR for every country, as for the direct debits
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
+STAMP_DUTY_REMITTED = True  # a payout with stamp duty alone has a remittance day; False: None, as the PDF says
+# "None if nothing was withheld" if the stamp duty collected does not count as withheld (assumption)
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
 BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019 (NRTAXB)
 PARTLY_TAXED = ["DE"]  # countries whose gain is taxed only in part: TFS, HEV and the old contracts
-OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract with regular premiums started before is tax free once held
-# HELD_YEARS (law); one with a single premium is not (labels: NRTAXB books KST on every such payout with a gain)
+OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS (law), if it
+# pays regular premiums: NRTAXB has KST on every payout with a gain of a single premium (PH_FREQ E) policy and on
+# none of a regular premium one (labels); the old law asked for 5 years of premiums
 HELD_YEARS = 12  # DE: years held for the old exemption and for HEV, section 20 (1) no. 6 EStG (law)
 HALF_INCOME_AGE = {False: 60, True: 62}  # DE: age for HEV by "started on or after HALF_INCOME_2012" (law)
 HALF_INCOME_2012 = dt.date(2012, 1, 1)  # DE: contracts from then need the higher age (law)

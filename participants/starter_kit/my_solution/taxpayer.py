@@ -10,12 +10,22 @@ Every function takes rows with the columns TB_POLNR, TB_EFFDT and TB_CHGTS, like
 """
 import polars as pl
 
-from conventions import TAXES
+from conventions import CONVERSION, ROUNDED_BY_SYSTEM, TAXES, TRUNCATED
 from legacy import table, valid_on
 from market import exchange_rates, rate_of
 from tariff import signed_policies
 
 RESIDENCE = ["AD_CNTRY", "AD_REGIO", "AD_TAXST", "AD_CHURCH"]  # the address columns that the taxes or their checks read
+
+
+def rounds_half_up(country: pl.Expr, truncated: list[str] = TRUNCATED) -> pl.Expr:
+    """True where Neuron rounds an amount of `country` half up, false where it truncates to the cent.
+
+    With `conventions.ROUNDED_BY_SYSTEM` the system that processed the row (TB_CHGTS) decides: COBOL truncated,
+    Neuron NG rounds half up. Otherwise the country does: the countries of `truncated` truncate.
+    """
+    by_system = pl.col("TB_CHGTS").floordiv(1_000_000).ge(pl.lit(CONVERSION).dt.strftime("%Y%m%d").cast(pl.Int64))
+    return pl.when(pl.lit(ROUNDED_BY_SYSTEM)).then(by_system).otherwise(country.is_in(truncated).not_())
 
 
 def residences(legacy_dir, rows: pl.DataFrame) -> pl.DataFrame:

@@ -12,14 +12,14 @@ effective date and the processing timestamp of the event, the same as those of i
 - share PART / WHOLE: what the payout takes of the policy, gross / value before; all of it when it ends the policy
 - premiums used: the share of the premiums received up to the payout day that no earlier payout used. Each premium
   is converted to the tax currency at the rates of its money date and rounded to the cent (truncated in Germany,
-  `conventions.TRUNCATED_CONVERSION`). The payouts of a policy use them one after another (`in_turn`), kept in
-  millionths of a cent (BASIS_UNIT)
+  or by COBOL with `conventions.ROUNDED_BY_SYSTEM`: `taxpayer.rounds_half_up`). The payouts of a policy use them
+  one after another (`in_turn`), kept in millionths of a cent (BASIS_UNIT)
 - gain: the gross, converted on the payout day, less the premiums used
 
 PDF example 1 (BL10000086 #121, a USD policy of a German holder) gives its base 5628.16 only so: rounding every
 premium half up gives 5628.01, not rounding them 5628.02, converting the whole gain on the payout day 539.30.
 
-The taxable base is in the currency of the country (`taxpayer`), rounded once (truncated in Germany): in
+The taxable base is in the currency of the country (`taxpayer`), rounded once (as the premiums): in
 Switzerland the gross, the withholding tax VST takes the whole benefit; in Italy and Germany the gain, at least 0;
 elsewhere none. In Germany the base is the gain x (1 - TFS), the partial exemption of fund policies from 2018. A
 contract with regular premiums started before 2005 and held 12 years is tax free, one with a single premium is
@@ -34,10 +34,10 @@ import polars as pl
 from bookings import counted_events, received_premiums, uncharged_bookings
 from conventions import (HALF_INCOME_2012, HALF_INCOME_AGE, HALF_INCOME_WITHHELD, HELD_YEARS, OLD_CONTRACT, PAID_OUT,
                          PARTLY_TAXED, PAYOUTS, SINGLE_PREMIUM, TAX_CURRENCY, TAXED_ON_GAIN, TAXED_ON_GROSS, TAXES,
-                         TERMINATING, TRUNCATED, TRUNCATED_CONVERSION, WITHHELD)
+                         TERMINATING, TRUNCATED_CONVERSION, WITHHELD)
 from legacy import as_date, as_lenient_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
-from taxpayer import residences, tax_rates, with_policies, with_tax_currency
+from taxpayer import residences, rounds_half_up, tax_rates, with_policies, with_tax_currency
 from valuation import values_on
 
 BASIS_UNIT = RATE_UNIT  # the premiums used are kept in millionths of a cent, so a share loses nothing in the cents
@@ -168,7 +168,7 @@ def taxable_base() -> pl.Expr:
         gain.clip(0)).otherwise(0)
     factor = pl.when(country.is_in(PARTLY_TAXED)).then(german_factor()).otherwise(FACTOR_UNIT)
     whole = pl.col("RT").cast(pl.Int128).mul(BASIS_UNIT).mul(FACTOR_UNIT)
-    return rounded(taxed.mul(factor), whole, country.is_in(TRUNCATED).not_()).fill_null(0)
+    return rounded(taxed.mul(factor), whole, rounds_half_up(country)).fill_null(0)
 
 
 @functools.cache
@@ -179,7 +179,7 @@ def payouts(legacy_dir) -> pl.DataFrame:
     resident = with_policies(legacy_dir, residences(legacy_dir, paid)).join(booked_countries(legacy_dir), on=EVENT,
                                                                             how="left")
     country = pl.coalesce("BOOKED_CNTRY", "AD_CNTRY")
-    schemed = resident.with_columns(COUNTRY=country, CONVERTED_HALF_UP=country.is_in(TRUNCATED_CONVERSION).not_())
+    schemed = resident.with_columns(COUNTRY=country, CONVERTED_HALF_UP=rounds_half_up(country, TRUNCATED_CONVERSION))
     converted = with_tax_currency(legacy_dir, schemed, pl.col("COUNTRY").replace_strict(TAX_CURRENCY, default=None))
     gained = gains(legacy_dir, converted)
     exempt = tax_rates(legacy_dir, tax_rates(legacy_dir, gained, pl.lit("TFS"), "TFS"), pl.lit("HEV"), "HEV")

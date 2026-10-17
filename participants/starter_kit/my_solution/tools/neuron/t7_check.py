@@ -18,8 +18,8 @@ whose residence disagrees with the taxes Neuron booked (the country follows the 
 """
 import argparse
 import datetime as dt
+import ctypes
 import platform
-import resource
 import sys
 import time
 import traceback
@@ -60,8 +60,21 @@ def run_tasks(debug: bool) -> dict:
     return results
 
 
+class MemoryCounters(ctypes.Structure):  # PROCESS_MEMORY_COUNTERS of the Windows API, up to the peak working set
+    _fields_ = [("cb", ctypes.c_ulong), ("PageFaultCount", ctypes.c_ulong), ("PeakWorkingSetSize", ctypes.c_size_t),
+                ("WorkingSetSize", ctypes.c_size_t), ("rest", ctypes.c_size_t * 6)]
+
+
 def peak_gigabytes() -> float:
-    """The peak memory of this process: macOS counts it in bytes, Linux in kilobytes."""
+    """The peak memory of this process: macOS counts it in bytes, Linux in kilobytes, Windows by its API."""
+    if platform.system() == "Windows":
+        kernel = ctypes.windll.kernel32
+        kernel.GetCurrentProcess.restype = ctypes.c_void_p  # a handle: 64 bits, not the default int
+        kernel.K32GetProcessMemoryInfo.argtypes = [ctypes.c_void_p, ctypes.POINTER(MemoryCounters), ctypes.c_ulong]
+        counters = MemoryCounters(cb=ctypes.sizeof(MemoryCounters))
+        kernel.K32GetProcessMemoryInfo(kernel.GetCurrentProcess(), ctypes.byref(counters), counters.cb)
+        return counters.PeakWorkingSetSize / 1024**3
+    import resource  # Unix only
     peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     return peak / 1024**3 if platform.system() == "Darwin" else peak / 1024**2
 

@@ -127,6 +127,9 @@ Run this with an open-weights model, from `participants/starter_kit/my_solution`
     NEURON_DATA=<participants> POLARS_MAX_THREADS=2 PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_check
 
 It prints only PASS/FAIL, seconds and gigabytes; `--debug` adds counts and tracebacks. Upload when it says
-`ALL PASS`, then change one convention per upload, in this order: remittance IT/CH, rounding of the IT
-conversion, HEV, base without tax. The leaderboard returns one accuracy on a few rows that change at every
-evaluation, so only one choice can be read from each upload.
+`ALL PASS`, then change one convention per upload, in this order: base without tax (`BASE_WITHOUT_TAX`, now
+`False`), rounding by system (`ROUNDED_BY_SYSTEM`: it changes the annual table, which the base does not touch),
+stamp duty alone without a remittance day (`STAMP_DUTY_REMITTED`), business-day shift (`REMITTANCE_SHIFTED`),
+remittance IT/CH, rounding of the IT conversion, HEV. `tools/neuron/t7_variants.py` counts the rows each one
+changes. The leaderboard returns one accuracy on a few rows that change at every evaluation, so only one choice
+can be read from each upload.

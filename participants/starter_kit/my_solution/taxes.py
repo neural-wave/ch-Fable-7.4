@@ -10,8 +10,9 @@ booking, with the rates valid on the effective date as Neuron knew them at the p
   SOL and KIS: the KST x their rate, KIS of the region of residence
 - BOL, BOC: the Bollo (`bollo`)
 
-Every amount is rounded once: half up, in Germany truncated (`conventions.TRUNCATED`). A booking whose payout,
-premium or rate is missing keeps a null amount, so a check can find it (`tools/neuron/t7_check.py`).
+Every amount is rounded once: half up, in Germany truncated, or by the system that processed it with
+`conventions.ROUNDED_BY_SYSTEM` (`taxpayer.rounds_half_up`). A booking whose payout, premium or rate is missing
+keeps a null amount, so a check can find it (`tools/neuron/t7_check.py`).
 """
 import functools
 
@@ -19,13 +20,13 @@ import polars as pl
 
 from bollo import bollo_bookings
 from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_TAX, PREMIUM_STAMP, REMITTANCE,
-                         REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY, SURCHARGES, TAX_CURRENCY, TAXES,
-                         TRUNCATED, WITHHELD)
+                         REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY, STAMP_DUTY_REMITTED, SURCHARGES,
+                         TAX_CURRENCY, TAXES, WITHHELD)
 from dates import tax_office_holidays
 from legacy import as_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
 from payouts import EVENT, payouts
-from taxpayer import tax_rates, with_policies, with_tax_currency
+from taxpayer import rounds_half_up, tax_rates, with_policies, with_tax_currency
 
 BOOKING = ["TB_POLNR", "TB_EVTNR", "TB_TAXTP", "TB_EFFDT"]  # the columns of a booking besides TB_AMOUNT
 PAYOUT_AMOUNTS = {"withholding": WITHHELD, "surcharges": SURCHARGES, "stamp_duty": STAMP_DUTY}  # name -> types
@@ -33,8 +34,8 @@ ANNUAL_AMOUNTS = {f"{TAXES[tax].lower()}_{tax.lower()}": tax for tax in ANNUAL_T
 
 
 def half_up(tax_type: pl.Expr) -> pl.Expr:
-    """True where Neuron rounds the tax `tax_type` half up, false where it truncates (by its country)."""
-    return tax_type.replace_strict(TAXES, default=None).is_in(TRUNCATED).not_()
+    """True where Neuron rounds the tax `tax_type` half up, false where it truncates (`taxpayer.rounds_half_up`)."""
+    return rounds_half_up(tax_type.replace_strict(TAXES, default=None))
 
 
 def premium_stamp_duty(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
@@ -106,13 +107,15 @@ def remittance() -> pl.Expr:
     """The day Neuron paid the taxes of a payout to the tax office, null without tax.
 
     The country of the withholding decides, Italy for stamp duty alone; the day comes from REMITTANCE, moved to a
-    business day for the countries of REMITTANCE_SHIFTED.
+    business day for the countries of REMITTANCE_SHIFTED. A payout with stamp duty alone has a day with
+    STAMP_DUTY_REMITTED.
     """
     withheld = pl.col("withholding").add(pl.col("surcharges"))
     country = pl.when(withheld.ne(0)).then("COUNTRY").otherwise(pl.lit(STAMP_DUTY_COUNTRY))
     first = as_date("TB_EFFDT").dt.month_start().dt.offset_by("1mo")
     days = country.replace_strict(REMITTANCE, default=None, return_dtype=pl.Int64)
-    return pl.when(withheld.add(pl.col("stamp_duty")).ne(0)).then(shifted(first.add(pl.duration(days=days)), country))
+    remitted = pl.when(pl.lit(STAMP_DUTY_REMITTED)).then(withheld.add(pl.col("stamp_duty"))).otherwise(withheld)
+    return pl.when(remitted.ne(0)).then(shifted(first.add(pl.duration(days=days)), country))
 
 
 def withheld_amounts(legacy_dir) -> pl.DataFrame:
