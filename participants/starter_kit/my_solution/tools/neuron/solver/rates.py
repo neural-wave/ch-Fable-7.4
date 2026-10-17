@@ -7,19 +7,19 @@ integer division and remainder took minutes per group instead of a fraction of a
 import z3
 
 from neuron.solver import SCALE
-from neuron.solver.intervals import fits, keeps
+from neuron.solver.intervals import RATE, fits, within
 
 
-def bound(rate, constraints: list, minimize: bool) -> int:
+def bound(constraints: list, minimize: bool) -> int:
     """Smallest or largest rate that satisfies all `constraints`.
 
     The two bounds show how sharply the data fixes the rate: a single value when they are equal.
     """
     optimizer = z3.Optimize()
     optimizer.add(*constraints)
-    (optimizer.minimize if minimize else optimizer.maximize)(rate)
+    (optimizer.minimize if minimize else optimizer.maximize)(RATE)
     optimizer.check()
-    return optimizer.model()[rate].as_long()
+    return optimizer.model()[RATE].as_long()
 
 
 def recover_rate(pairs: dict[tuple[int, int], int], mode: str = "half_up", max_rate: int = SCALE) -> dict:
@@ -28,15 +28,14 @@ def recover_rate(pairs: dict[tuple[int, int], int], mode: str = "half_up", max_r
     MaxSMT: every pair is a soft constraint weighted by its count. Returns the best rate, the interval [low, high]
     of the rates that keep all those pairs, the number of rows and the pairs that no such rate explains.
     """
-    rate = z3.Int("rate")
-    domain = [rate >= 0, rate <= max_rate]
+    domain, fit = within(max_rate), {pair: fits(*pair, mode) for pair in pairs}
     optimizer = z3.Optimize()
-    optimizer.add(*domain)
-    for (base, amount), count in pairs.items():
-        optimizer.add_soft(fits(rate, base, amount, mode), weight=count)
+    optimizer.add(domain)
+    for pair, count in pairs.items():
+        optimizer.add_soft(fit[pair], weight=count)
     optimizer.check()
-    best = optimizer.model()[rate].as_long()
-    kept = [pair for pair in pairs if keeps(best, *pair, mode)]
-    constraints = [*domain, *(fits(rate, *pair, mode) for pair in kept)]
-    return {"rate": best, "low": bound(rate, constraints, True), "high": bound(rate, constraints, False),
+    best = optimizer.model()
+    kept = [pair for pair in pairs if z3.is_true(best.eval(fit[pair]))]
+    constraints = [domain, *map(fit.get, kept)]
+    return {"rate": best[RATE].as_long(), "low": bound(constraints, True), "high": bound(constraints, False),
             "rows": sum(pairs.values()), "outliers": {pair: pairs[pair] for pair in set(pairs).difference(kept)}}

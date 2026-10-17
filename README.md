@@ -20,6 +20,7 @@ wave/
 │           ├── tariff.py, charges.py, projection.py   motore dei costi e proiezione dell'offerta (t2)
 │           ├── market.py, bookings.py, charge_run.py, valuation.py   conto quote e valore di riscatto (t3)
 │           ├── statement.py    rendiconto annuale (t4) sullo stesso conto quote
+│           ├── outliers.py     correzioni manuali (t5): i valori dei target che differiscono dalla regola
 │           └── tools/neuron/   i tool: load, codes, policy, targets, schema/ (Desbordante), solver/ (Z3),
 │                               backtest (t1 su date di estrazione passate), bisection (t2 anno per anno),
 │                               account_check (t3 anello per anello contro le diagnostiche, t4 per colonna)
@@ -82,7 +83,8 @@ uv run python -c "from neuron.account_check import statement_mismatches; print(s
 ```
 
 `check.py` stampa l'accuratezza e il maintainability index (radon) di tutti i `.py` della consegna, tool
-compresi. La submission calcola tutto da `legacy_dir` (niente target, niente cache).
+compresi: 100 per ogni file. Le righe che t0–t4 mancano sono esattamente i 54 outlier di t5 (correzioni
+manuali); escludendole, come fa la valutazione ufficiale, ogni task fa il 100 %. La submission calcola tutto da `legacy_dir` (niente target, niente cache).
 
 ## Trappole trovate nei dati
 

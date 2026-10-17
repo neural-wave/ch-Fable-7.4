@@ -3,6 +3,10 @@
 Each function gets the folder `legacy_dir` with the NR*.csv files and returns the calculated values. Dates are
 `datetime.date`, amounts are `decimal.Decimal`. The rules found for each task are in the docstrings and README.md.
 
+Every task with amounts first builds a table in the format of its target file, amounts in cents (`commissions`,
+`maturity_values`, `surrender_table`, `statement_table`); the task function turns it into the result, and t5
+compares it with the targets (`outliers`).
+
 Check the solution locally against the train targets with `python check.py`.
 """
 import datetime as dt
@@ -15,9 +19,12 @@ from conventions import CONVERSION, DIRECT_DEBIT, IN_FORCE, MONTHS, SINGLE_PREMI
 from dates import business_day, every_months
 from legacy import as_date, table, valid_on, versions_on
 from money import francs, share
+from outliers import TARGETS, outliers, target_table
 from projection import projected_years
 from statement import STATEMENT, annual_statements
 from valuation import surrender_values
+
+STATEMENT_AMOUNTS = TARGETS["t4_annual_statement"][1]  # the amounts of a statement, named as in the target file
 
 
 def premium_type() -> pl.Expr:
@@ -41,6 +48,12 @@ def commission_rates(legacy_dir, items: pl.DataFrame) -> pl.DataFrame:
                     {"BR_TIER": "CR_TIER", "PAYTP": "CR_PAYTP"}, "PR_RCVDT", "CR", newest="VLDFR")
 
 
+def commissions(legacy_dir) -> pl.DataFrame:
+    """policy_id, due_nr and amount (cents): the commission of every premium item received and not reversed."""
+    rated = commission_rates(legacy_dir, received_premiums(legacy_dir))
+    return rated.select(policy_id="PR_POLNR", due_nr="PR_DUENR", amount=share(pl.col("PR_AMTRC"), pl.col("CR_RATE")))
+
+
 def t0_commission(legacy_dir) -> dict[tuple[str, int], Decimal]:
     """{(policy_id, due_nr): commission} of every premium item received and not reversed.
 
@@ -49,9 +62,8 @@ def t0_commission(legacy_dir) -> dict[tuple[str, int], Decimal]:
       its validity date, also when it was entered later), and
     - the premium type: E for single premium policies (frequency E), L for regular premiums.
     """
-    rated = commission_rates(legacy_dir, received_premiums(legacy_dir))
-    commissions = rated.select("PR_POLNR", "PR_DUENR", francs(share(pl.col("PR_AMTRC"), pl.col("CR_RATE"))))
-    return {(policy, due_nr): commission for policy, due_nr, commission in commissions.iter_rows()}
+    rows = commissions(legacy_dir).with_columns(francs(pl.col("amount")))
+    return {(policy, due_nr): commission for policy, due_nr, commission in rows.iter_rows()}
 
 
 def paying_policies(legacy_dir, day: dt.date) -> pl.DataFrame:
@@ -106,6 +118,12 @@ def t1_next_due_dates(legacy_dir, extract_date: dt.date) -> dict[tuple[str, int]
     return {(policy, n): (due, collection) for policy, n, due, collection in rows.iter_rows()}
 
 
+def maturity_values(legacy_dir) -> pl.DataFrame:
+    """policy_id and maturity_value (cents): the projected value at the end of the last policy year."""
+    years = projected_years(legacy_dir)
+    return years.group_by(policy_id="PH_POLNR").agg(maturity_value=pl.col("VALUE").sort_by("YEAR").last())
+
+
 def t2_projected_maturity_value(legacy_dir) -> dict[str, Decimal]:
     """{policy_id: maturity_value}: the value at maturity that the offer projected for every policy.
 
@@ -113,9 +131,14 @@ def t2_projected_maturity_value(legacy_dir) -> dict[str, Decimal]:
     and growth at the illustration rate NRILLU (`projection`). The maturity value is the value at the end of the
     last policy year.
     """
-    years = projected_years(legacy_dir)
-    maturity = years.group_by("PH_POLNR").agg(pl.col("VALUE").sort_by("YEAR").last())
-    return dict(maturity.select("PH_POLNR", francs(pl.col("VALUE"))).iter_rows())
+    return dict(maturity_values(legacy_dir).with_columns(francs(pl.col("maturity_value"))).iter_rows())
+
+
+def surrender_table(legacy_dir, valuation_dates: list[dt.date]) -> pl.DataFrame:
+    """policy_id, valuation_date and surrender_value (cents) of every policy on every valuation date."""
+    days = [surrender_values(legacy_dir, day).select(policy_id="PH_POLNR", valuation_date=pl.lit(day),
+                                                      surrender_value="SURRENDER") for day in valuation_dates]
+    return pl.concat(days)
 
 
 def t3_surrender_value(legacy_dir, valuation_dates: list[dt.date]) -> dict[tuple[str, dt.date], Decimal]:
@@ -127,11 +150,14 @@ def t3_surrender_value(legacy_dir, valuation_dates: list[dt.date]) -> dict[tuple
     The policy value adds up the positions at the bid price of the valuation date, and the surrender value is
     the policy value less the surrender penalty of the policy year (`valuation`).
     """
-    values = {}
-    for day in valuation_dates:
-        surrender = surrender_values(legacy_dir, day).select("PH_POLNR", francs(pl.col("SURRENDER")))
-        values.update({(policy, day): value for policy, value in surrender.iter_rows()})
-    return values
+    rows = surrender_table(legacy_dir, valuation_dates).with_columns(francs(pl.col("surrender_value")))
+    return {(policy, day): value for policy, day, value in rows.iter_rows()}
+
+
+def statement_table(legacy_dir) -> pl.DataFrame:
+    """policy_id, year and the six amounts (cents) of the annual statement of every policy and year."""
+    named = dict(zip(STATEMENT_AMOUNTS, map(pl.col, STATEMENT), strict=True))
+    return annual_statements(legacy_dir).select(policy_id="BK_POLNR", year="YEAR", **named)
 
 
 def t4_annual_statement(legacy_dir) -> dict[tuple[str, int], tuple[Decimal, ...]]:
@@ -140,8 +166,8 @@ def t4_annual_statement(legacy_dir) -> dict[tuple[str, int], tuple[Decimal, ...]
     Per calendar year the premiums by their money date and the charges of the unit account by their trade date;
     the entry charge of a premium per fund, since its funds can trade in two years (`statement`).
     """
-    statements = annual_statements(legacy_dir).select("BK_POLNR", "YEAR", *map(francs, map(pl.col, STATEMENT)))
-    return {(policy, year): tuple(amounts) for policy, year, *amounts in statements.iter_rows()}
+    rows = statement_table(legacy_dir).with_columns(map(francs, map(pl.col, STATEMENT_AMOUNTS)))
+    return {(policy, year): tuple(amounts) for policy, year, *amounts in rows.iter_rows()}
 
 
 def t5_outlier_detection(legacy_dir, targets_dir) -> set[tuple[str, object]]:
@@ -150,5 +176,13 @@ def t5_outlier_detection(legacy_dir, targets_dir) -> set[tuple[str, object]]:
     `targets_dir` holds the target files (t0 to t4) of the policies to check, in the format of `targets/`. This is
     the only function that may read target files. Example keys: ("t2_projected_maturity_value", "BL10000042"),
     ("t4_annual_statement", ("BL10000042", 2021)).
+
+    The rules reproduce every value that Neuron calculated, so a target value that differs from its rule was
+    changed by hand (`outliers`). The surrender values are calculated for the valuation dates of the targets.
     """
-    return set()
+    expected = {task: target_table(targets_dir, task) for task in TARGETS}
+    valuation_dates = expected["t3_surrender_value"]["valuation_date"].unique().to_list()
+    predicted = {"t0_commission": commissions(legacy_dir), "t2_projected_maturity_value": maturity_values(legacy_dir),
+                 "t3_surrender_value": surrender_table(legacy_dir, valuation_dates),
+                 "t4_annual_statement": statement_table(legacy_dir)}
+    return set().union(*(outliers(task, expected[task], predicted[task]) for task in TARGETS))

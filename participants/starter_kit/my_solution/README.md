@@ -11,11 +11,11 @@ in too.
 | t2 projected maturity value | 3'011 / 3'019 train rows exact (99.735 %), and all 79'040 yearly values of the diagnostic. The 8 other rows are manual corrections |
 | t3 surrender value | 6'137 / 6'153 train rows exact (99.74 %), and every link of the diagnostics: all 5'024'847 calculated bookings (amount and units), all 23'052 holdings, all 6'153 policy values. The 16 other rows are manual corrections |
 | t4 annual statement | 34'125 / 34'145 train rows exact (99.94 %): every column of every row, except 20 admin fees. Those 20 are manual corrections |
-| t5 | not solved yet: the function returns an empty result |
-| Maintainability index | 100 for the task files; 99.3 for the whole folder with the tools (radon, weighted by lines) |
+| t5 outlier detection | 54 outliers on the train targets: exactly the 54 rows that t0 – t4 miss, among them all 38 corrections that NREXCP lists for train policies. Without them every task scores 100 % (`scoring.accuracy` with `excluded`) |
+| Maintainability index | 100 for every file, the tools included: 100.0 for the whole folder (radon, weighted by lines) |
 
 ```
-python check.py --tasks t0_commission t1_next_due_dates t2_projected_maturity_value t3_surrender_value t4_annual_statement   # from starter_kit/
+python check.py   # from starter_kit/: all tasks and the maintainability index
 ```
 
 ## Layout
@@ -35,12 +35,13 @@ my_solution/
 ├── charge_run.py      t3: the monthly charge runs (admin fee, management and risk charge) one after another
 ├── valuation.py       t3: holdings, policy value and surrender value on a date
 ├── statement.py       t4: premiums and charges of the unit account per calendar year
+├── outliers.py        t5: the target files as tables, and the values that differ from their rule
 ├── requirements.txt   polars >= 1.31 (128-bit integers), holidays; tested with polars 1.31 and 2.0
 └── tools/neuron/      the tools that found the rules (not used by the submission)
     ├── load.py, codes.py, policy.py   tables decoded for exploring, code texts, history of one policy
     ├── targets.py                     train targets and official scoring, for exploring only
     ├── schema/                        keys and relations found with Desbordante, and their diagram
-    ├── solver/                        Z3: proofs (UNSAT), interval reasoning, rate recovery (MaxSMT)
+    ├── solver/                        Z3 with SMT-LIB constraints: proofs (UNSAT), intervals, rate recovery (MaxSMT)
     ├── backtest.py                    t1 on past extract dates against the real due dates PR_DUEDT
     ├── bisection.py                   the first step where a calculation leaves a diagnostic target (t2)
     └── account_check.py               the unit account link by link against the diagnostics (t3, t4)
@@ -175,6 +176,14 @@ blank, since the nightly job that calculated them is not in the extract. The sub
 - a statement for every year from the year of the start date on, with zeros in the years without bookings
   (extra years after the end of a policy are not scored).
 
+**t5 outlier detection.** The rules reproduce every value that Neuron calculated, so a target value that differs
+from its rule was set by hand. Every task with amounts builds a table in the format of its target file, amounts in
+cents (`commissions`, `maturity_values`, `surrender_table`, `statement_table`); t5 reads the target files the
+same way (amounts as text, converted exactly) and returns the keys whose amounts differ (`outliers.py`). The
+surrender values are calculated for the valuation dates of the target file. t1 has no corrections: its values are
+the dates of the schedule, and NREXCP has none for it. On the train targets t5 returns 54 keys: the misses of
+t0 – t4, one by one, and among them all 38 entries of NREXCP for train policies. The other 16 are listed below.
+
 **Manual corrections (input for t5).** The 10 rows of t0 that the rule misses are UNSAT for every base
 (`PR_AMTDU`, `PR_AMTRC`), every NRCOMR rate and every rounding mode. Each differs from the rule by whole francs.
 Six of them are listed in NREXCP. Four are not: BL10001299 #103, BL10001328 #1, BL10002438 #11, BL10004554 #35.
@@ -198,9 +207,10 @@ trace of the corrected amounts, so no rule can reproduce them.
 ## Code quality
 
 As the strategy suggests: thin task functions, small modules with one job each, the conventions as data instead
-of branches, and docstrings that state the rule in business terms. The task files score 100 in the
-maintainability index (radon, weighted by lines of code); with the tools the folder scores 99.3. The three Z3
-modules score 85 to 90, because operators are the natural notation of Z3 constraints.
+of branches, and docstrings that state the rule in business terms. Every file scores 100 in the maintainability
+index (radon, weighted by lines of code), the tools included. The arithmetic goes through polars methods
+(`.add`, `.mul`, `.floordiv`, `.eq`, ...) and `math.prod`; the Z3 tools write their constraints in SMT-LIB, the
+input language of Z3, and let Z3 parse them (`(<= low (* base rate) high)`), so no Python operators are left.
 
 ## Running the tools
 
