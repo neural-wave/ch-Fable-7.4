@@ -203,4 +203,5 @@ upload, write down the commit and its switches here; after the evaluation, its t
 | 17.10 22:09 | Roberto's own upload (#43), not on the branch | base as calculated | 1/20 | 14/20 | 98 |
 | 17.10 23:48 | `cbaf38b` (uploaded from this branch; MI not reported. Another engine's `t7_impl.py` was still being written at 23:47 and runs for minutes) | `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = True`, rounding by country | 0/40 | 8/30 | ? |
 | 18.10 00:45 | `d595375` | `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = False`, `ROUNDED_BY_SYSTEM = True`, `REMITTED_FROM_PAYMENT = True` | 0/40 | 11/30 | ? |
-| next | this commit | as `d595375`, and `REMITTANCE` the 10th everywhere (was IT the 16th, CH 30 days after the month), `BASE_WITHOUT_TAX = True`, `BOLLO_FIX_PER_YEAR = True` | | | |
+| 18.10 ~02:00 | `290312d` | as `d595375`, and `REMITTANCE` the 10th everywhere (was IT the 16th, CH 30 days after the month), `BASE_WITHOUT_TAX = True`, `BOLLO_FIX_PER_YEAR = True` | | | |
+| next | this commit | as `290312d`, and `BLENDED_RATES = ["SOS"]` (97 payouts, 95 annual rows), `REMITTANCE_SHIFTED = ["DE", "IT", "CH"]` (200 payouts) | | | |

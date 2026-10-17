@@ -68,9 +68,9 @@ ROUNDED_BY_SYSTEM = True  # the system that processed a tax decides its rounding
 # The example (DE, 2006) was processed by COBOL and fits it; truncating by country (False: TRUNCATED and
 # TRUNCATED_CONVERSION) rests on that one example (targets of t0, t2, t3; too few rows for the actuary to read)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
-BLENDED_RATES = []  # tax types whose rate is averaged by days over the life of the policy (`taxpayer.blended_rates`):
-# the Italian SOS takes the gain of each period at its rate, 12.5 % to 2011, 20 % to June 2014, 26 % after (law,
-# DL 138/2011 and DL 66/2014); [] takes the rate valid on the payout day (assumption, to test: ["SOS"])
+BLENDED_RATES = ["SOS"]  # tax types whose rate is averaged by days over the life of the policy
+# (`taxpayer.blended_rates`): the Italian SOS takes the gain of each period at its rate, 12.5 % to 2011, 20 % to June
+# 2014, 26 % after (law, DL 138/2011 and DL 66/2014); [] takes the rate valid on the payout day (assumption, to test)
 BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calculated: what Neuron calculated and,
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
@@ -84,9 +84,9 @@ REMITTED_FROM_PAYMENT = True  # the remittance month follows the day the money w
 # payout business days PD_PAYDAY of the product (NRPROD, read by no other rule; the law of all three countries
 # counts from the payment); False: from the effective date. The example fits both: paid 2006-07-24, still in July
 # (assumption, to test: it moves the month of about a fifth of the payouts with tax)
-REMITTANCE_SHIFTED = []  # countries whose remittance day moves to the next business day of its calendar (assumption:
-# none; the law moves a deadline that falls on a weekend or holiday, about 30 % of the days; the example, a
-# Thursday, fits both)
+REMITTANCE_SHIFTED = ["DE", "IT", "CH"]  # countries whose remittance day moves to the next business day of its
+# calendar: the law moves a deadline that falls on a weekend or holiday, about 30 % of the days (law; the example, a
+# Thursday, fits both). [] keeps the day as it is, as Neuron's own batches that run on weekends (assumption, to test)
 REMITTANCE_CALENDARS = {"DE": {"country": "DE", "years": range(1994, 2100)},
                         "IT": {"country": "IT", "years": range(1994, 2100)}, "CH": CALENDAR}  # the tax offices; the
 # other variant is Neuron's own calendar CALENDAR for every country, as for the direct debits

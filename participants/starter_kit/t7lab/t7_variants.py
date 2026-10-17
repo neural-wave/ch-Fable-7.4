@@ -23,9 +23,8 @@ VARIANTS = {  # name -> {convention: value} to flip
     "base 0 without withholding": {"BASE_WITHOUT_TAX": False},
     "Bollo fix rounded once on the total": {"BOLLO_FIX_PER_YEAR": False},
     "no remittance for stamp duty alone": {"STAMP_DUTY_REMITTED": False},
-    "remittance on a business day of the tax office": {"REMITTANCE_SHIFTED": ["DE", "IT", "CH"]},
-    "remittance on a business day of Neuron": {
-        "REMITTANCE_SHIFTED": ["DE", "IT", "CH"],
+    "remittance on the day as it falls, weekend or not": {"REMITTANCE_SHIFTED": []},
+    "remittance on a business day of Neuron, not of the tax office": {
         "REMITTANCE_CALENDARS": dict.fromkeys(["DE", "IT", "CH"], NEURON_CALENDAR)},
     "remittance on the days of the law (IT the 16th, CH 30 days after the month)": {
         "REMITTANCE": {"DE": 9, "IT": 15, "CH": 29}},
@@ -36,7 +35,7 @@ VARIANTS = {  # name -> {convention: value} to flip
     "CH on the last day of the next month": {"REMITTANCE_MONTH_END": ["CH"]},
     "KST plain, the church tax on top": {"CHURCH_REDUCES_KST": False},
     "Bollo collected in the annual Bollo": {"COLLECTED_IN_ANNUAL": True},
-    "SOS at the rate averaged over the periods": {"BLENDED_RATES": ["SOS"]},
+    "SOS at the rate of the payout day, not averaged over the periods": {"BLENDED_RATES": []},
 }
 COLUMNS = {"t7_tax_payout": ["country", "taxable_base", "withholding", "surcharges", "stamp_duty", "remittance"],
            "t7_tax_annual": ["ch_stp", "ch_vst", "it_sos", "it_bol", "de_kst", "de_sol", "de_kis"]}
