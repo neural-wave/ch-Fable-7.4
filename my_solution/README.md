@@ -12,8 +12,8 @@ layers, the path of each task and where each rule lives.
 | t0 commissions | 225,848 / 225,858 = 99.9956 % | 99.9956 % | 10, all changed by hand | 2 s |
 | t1 next due dates | 15,028 / 15,028 = 100.0000 % | 100 % | 0 | 1 s |
 | t2 projected maturity value | 3,011 / 3,019 = 99.7350 % | 99.7350 % | 8, all changed by hand | 4 s |
-| t3 surrender value | 6,137 / 6,153 = 99.7400 % | 99.7400 % | 16, all changed by hand | 32 s |
-| t4 annual statement | 34,125 / 34,145 = 99.9414 % | 99.9414 % | 20, all changed by hand | 30 s |
+| t3 surrender value | 6,137 / 6,153 = 99.7400 % | 99.7400 % | 16, all changed by hand | 24 s |
+| t4 annual statement | 34,125 / 34,145 = 99.9414 % | 99.9414 % | 20, all changed by hand | 0.1 s after t3 |
 
 The train targets still hold the 54 values that were changed by hand (task t5), and every row we
 miss is one of them: target and rule differ by a whole amount of francs. The official evaluation
@@ -26,7 +26,16 @@ values:
   skeleton that NRBOOK keeps (type, fund, pot, trade and price date): this is how the tie rule of
   the charge split was found on a public policy.
 
-Maintainability index (radon, as `scoring.py`): **97.1**.
+Maintainability index (radon, as `scoring.py`): **97.3**.
+
+**Speed.** t4 once ran out of the evaluator's time limit, so the runs are timed like the rest. t3
+and t4 read the same ledger, about 530,000 monthly runs and 6.8 million bookings: one pass now
+gives both (`reports/books.py`), and t4 after t3 in the same process costs nothing. The months are
+counted with plain arithmetic instead of dateutil, and the prices of a day are looked up once. In
+one process, as `check.py` runs them, the five tasks take 30 s instead of 68 s; on its own, in a
+fresh process, t3 or t4 takes 27 s instead of 35 s. `tools/evaluator_check.py` times every task
+in a fresh process and proves, value by value on all 4,011 policies, that a change of speed
+changed no result.
 
 ## How to run
 
@@ -38,6 +47,8 @@ python3.14 -m venv .venv && . .venv/bin/activate
 pip install -r my_solution/requirements.txt radon
 python -B $DATA/starter_kit/check.py --submission my_solution --legacy $DATA/legacy --targets $DATA/targets
 python -B tools/ledger_checks.py --data $DATA               # bookings against NRBOOK and t3_booking
+python -B tools/evaluator_check.py --data $DATA --save /tmp/before     # times per task, results kept
+python -B tools/evaluator_check.py --data $DATA --compare /tmp/before  # after a change: same values?
 python -B tools/mi_report.py my_solution                    # the MI, file by file and term by term
 ```
 
@@ -102,12 +113,12 @@ Seven packages, one business area each, and three modules at the top
 
 | Package | Business area | Tasks |
 |---|---|---|
-| `core/` | money by era, months, validity lookups | all |
+| `core/` | money by era, months, validity lookups, totals | all |
 | `legacy/` | reading the export: tables, formats, policy versions, premium items, market | all |
-| `insurance/` | insurance age, sum at risk, risk charge | t2, t3, t4 |
+| `insurance/` | insurance age, sum at risk, mortality, risk charge | t2, t3, t4 |
 | `accounting/` | the unit account: premiums, orders, monthly charge runs, ledger | t3, t4 |
-| `reports/` | surrender value and annual statement, read from the ledger | t3, t4 |
-| `billing/` | commissions, due dates, collection days | t0, t1 |
+| `reports/` | surrender value and annual statement, read from the ledger in one pass | t3, t4 |
+| `billing/` | commissions, due dates and their anchor, Ticino holidays, collection days | t0, t1 |
 | `maturity/` | the projection of the offer | t2 |
 
 `submission.py` is the entry point, `conventions.py` holds every constant of Neuron next to its

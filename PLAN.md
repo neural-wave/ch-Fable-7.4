@@ -12,11 +12,51 @@ Material delivered with this plan:
 - `tools/data_checks.py` reproduces every number in this document in about 6 seconds;
 - `tools/mi_report.py` breaks the maintainability index down file by file;
 - `tools/ledger_checks.py` compares every booking with NRBOOK (all policies) and `t3_booking` (train);
-- `my_solution/` is our submission: t0–t4 at 100% of the evaluated rows, MI 97.1; its `README.md` explains all the rules and its `ARCHITECTURE.md` maps the code.
+- `tools/evaluator_check.py` times every task in a fresh process and compares every value with a saved run;
+- `my_solution/` is our submission: t0–t4 at 100% of the evaluated rows, MI 97.3; its `README.md` explains all the rules and its `ARCHITECTURE.md` maps the code.
 
 ---
 
-## Status on 17 October, 03:30: public t3/t4 miss fixed, repo in English, Python 3.14
+## Status on 17 October, 03:15: t4 timed out on the leaderboard, the runs made faster
+
+**The leaderboard.** After the tie fix the leaderboard showed 80% overall: t4 had run out of the
+evaluator's time limit (scored 0), so the four other tasks were at 100%, t3 included. Locally t3
+and t4 took 35 s each in a fresh process, 68 s for the five tasks in one process.
+
+**What changed, measured.** Profiling first: 87% of t4 was the ledger (533,660 monthly runs,
+6.8 million bookings), the export load only 3 s.
+
+| Change | Where |
+|---|---|
+| t3 and t4 from one pass of the ledger; t4 after t3 returns the kept statements | `reports/books.py` |
+| month arithmetic as one number instead of dateutil's relativedelta (2 µs a call) | `core/months.py` |
+| `Counter[...] +=` instead of `Counter.update({...})`, 3.5 times faster | `accounting/trades.py`, `core/totals.py` |
+| t3: one account follows the valuation days, instead of one rebuilt per day | `reports/valuation.py` |
+| prices of a fund on a day looked up once; rounding mode passed positionally | `legacy/market.py`, `core/money.py` |
+
+| Run | Before | Now |
+|---|---|---|
+| five tasks in one process, as `check.py` | 68 s | 30 s (t3 24 s, t4 0.1 s) |
+| t3 alone in a fresh process | 35.6 s | 27 s |
+| t4 alone in a fresh process | 34.7 s | 27 s |
+
+Every value of every task is identical to the run before the changes on all 4,011 policies, train
+and public (`tools/evaluator_check.py --compare`); `check.py`, the NRBOOK skeleton and the train
+bookings are unchanged. The MI first fell to 94.7: a single `+=` in a flow module makes radon apply
+the formula to the whole file. The arithmetic moved into small formula modules, and five modules
+were split by concept (`runs` → `reports/periods`, `risk` → `mortality`, `schedule` → `anchor`,
+`business_days` → `holiday_calendar`, the value left after ADM and AMC → `accounting/remainder`):
+MI **97.3**.
+
+**TODO**
+
+- [ ] Submit again: t4 back within the time limit, and t3 and t4 at 100% on the public policies.
+- [ ] Raise the MI further, module by module, without losing speed or a single value.
+- [ ] t5 outliers (§4.6) and t6 tools (§4.7): on hold, as the user asked.
+
+---
+
+## Status on 17 October, 02:10: public t3/t4 miss fixed, repo in English, Python 3.14
 
 **The leaderboard.** On the public policies t3 and t4 were below 100% (total 99.99%), while the
 train stayed at its ceilings. The public targets are hidden, but NRBOOK keeps the skeleton of every
@@ -100,7 +140,7 @@ Every change is verified by comparing the movements with the reference engine (z
 
 - t5: the 54 corrections are already all integer deltas, so the detector is almost ready;
 - t6: tools and visualizations;
-- at hand-in, rename the folder to `my_solution` (done on 17 October, 03:30).
+- at hand-in, rename the folder to `my_solution` (done on 17 October, 02:10).
 
 ---
 

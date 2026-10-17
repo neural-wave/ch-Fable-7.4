@@ -31,7 +31,7 @@ flowchart LR
 `insurance/` (insurance age, sum at risk, risk charge) serves both `maturity/` and `accounting/`;
 `core/` (money by era, months, lookups) and `conventions.py` (every constant) serve everyone.
 t3 and t4 share one engine: the same ledger of each policy gives its surrender values and its
-statements.
+statements, and `reports/books.py` builds it once for both (t4 after t3 costs nothing).
 
 ## 2. Folder map
 
@@ -42,8 +42,9 @@ my_solution/
 ├── export.py             Export (every table, grouped by policy) and Contract (one policy)
 ├── core/                 arithmetic and calendar shared by every rule
 │   ├── money.py          rounding by era: COBOL truncates, Neuron NG rounds half up
-│   ├── months.py         whole months, the day clamped to the month end
-│   └── lookup.py         rows valid on a day, grouping of rows
+│   ├── months.py         whole months, the day clamped to the month end, counted as one number
+│   ├── lookup.py         rows valid on a day, grouping of rows
+│   └── totals.py         sums by key: the yearly sums of a statement
 ├── legacy/               reading the export the way Neuron wrote it
 │   ├── tables.py         any NR*.csv, every column typed by the data dictionary NRDICT
 │   ├── formats.py        CYYMMDD dates (impossible ones too), implied decimals
@@ -54,27 +55,33 @@ my_solution/
 │   ├── age_rules.py      age at the start: COBOL days / 365, Neuron NG completed months
 │   ├── ages.py           insurance age on a day, completed policy years
 │   ├── cover.py          sum at risk of the options A, B and C
-│   └── risk.py           monthly risk charge: qx, loading, smoker factor
+│   ├── mortality.py      qx of the tariff's table, with the loading and the smoker factor
+│   └── risk.py           monthly risk charge, never above the value
 ├── accounting/           the unit account, engine of t3 and t4
 │   ├── account.py        Booking and Account: units per position (fund, pot) and their value
 │   ├── conversion.py     cross rate through CHF, value of units
-│   ├── trades.py         units taken by a charge, bought by a premium
+│   ├── trades.py         units taken by a charge, bought by a premium, added to the positions
 │   ├── purchase.py       pot of a premium, gross and net of a premium share
 │   ├── investment.py     PRM bookings: allocation, entry charge, trade day
 │   ├── orders.py         customer orders of NRBOOK, without reversed or corrected events
-│   ├── runs.py           calendar of a policy: run days, valuation days, statement years
+│   ├── runs.py           the days of the charge runs: monthly anniversaries after the first premium
 │   ├── fees.py           AMC: ACT/360 under COBOL, a twelfth of the year under Neuron NG
 │   ├── sharing.py        pro-rata split, rounding rest to the largest position
+│   ├── remainder.py      value left after ADM and AMC: the base of the risk charge
 │   ├── charges.py        one monthly run: ADM, AMC and RSK
 │   └── ledger.py         all bookings of a policy, run after run
 ├── reports/              what the customer sees, read from the ledger
+│   ├── books.py          one pass of the ledger for t3 and t4; keeps the statements for t4
+│   ├── periods.py        valuation days (t3) and statement years (t4) of a policy
 │   ├── valuation.py      t3: policy value and penalty on a valuation date
 │   ├── surrender.py      t3: surrender value, never below zero
 │   └── statement.py      t4: yearly sums of the bookings
 ├── billing/              the premiums due and what they earn the broker
 │   ├── commission.py     t0: broker on the money date, rate of the broker's tier
-│   ├── schedule.py       t1: due dates (COBOL drift, then a Neuron NG anchor)
+│   ├── anchor.py         t1: COBOL drift of the due date until the switch, the anchor of Neuron NG
+│   ├── schedule.py       t1: due dates, whole periods from the anchor
 │   ├── collection.py     t1: collection day by payment method
+│   ├── holiday_calendar.py  t1: public holidays of Ticino
 │   └── business_days.py  t1: Ticino business days
 └── maturity/             the projection of the offer, t2
     ├── offer.py          the figures valid on the application date
@@ -113,7 +120,7 @@ flowchart TD
 | Layer | Unit | Holds | Imports |
 |---|---|---|---|
 | 0 | `conventions.py` | constants | nothing of ours |
-| 1 | `core/` | money, months, lookup | conventions |
+| 1 | `core/` | money, months, lookup, totals | conventions |
 | 2 | `legacy/` | reading the export | core |
 | 3 | `insurance/` | age, cover, risk charge | legacy, core |
 | 4 | `accounting/` | the unit account | insurance, legacy, core |
@@ -168,7 +175,8 @@ export.load(legacy_dir) → for each policy maturity.projection.maturity_value(d
 `submission.t4_annual_statement`
 
 ```text
-export.load(legacy_dir) → accounting.ledger.ledgers(data) → (contract, bookings) per policy
+export.load(legacy_dir) → reports.books: one pass of accounting.ledger.ledgers(data)
+                          → (contract, bookings) per policy, for t3 and t4 at once
     planned  = accounting.investment.bookings          PRM, one per fund of the allocation
              + data.orders                             accounting.orders: SWO, SWI, WDR, SUR, DTH
     run days = accounting.runs.run_days                monthly anniversaries after the first PRM,
@@ -178,8 +186,13 @@ export.load(legacy_dir) → accounting.ledger.ledgers(data) → (contract, booki
 t3: reports.valuation.surrender_values                 units traded up to the day, at bid, in the
         → reports.surrender.value                      policy currency; NRSURR penalty, NRWAIV waiver
 t4: reports.statement.statement                        yearly sums by booking kind; entry charge =
-                                                       gross − net, half up; years of runs.statement_years
+                                                       gross − net, half up; reports.periods.statement_years
 ```
+
+The pass of t3 also sums the statements and keeps them (`reports.books.STATEMENTS`), so that t4
+run after t3 in the same process, as `check.py` runs them, returns them at once; t4 alone makes
+its own pass. The ledger is the cost of the migration: about 530,000 monthly runs and 6.8 million
+bookings for the 4,011 policies of the export.
 
 ## 5. The monthly charge run (t3, t4)
 
@@ -190,9 +203,9 @@ flowchart TD
     units["units traded before the run day<br/>accounting/account.py"] --> values["value of each position at the bid price,<br/>in the policy currency<br/>accounting/conversion.py"]
     values --> adm["ADM = min(CG_ADMFEE, total value),<br/>shared by value<br/>accounting/sharing.py"]
     values --> amc["AMC of each position: pot rate or NRAGRE AMC,<br/>ACT/360 (COBOL) or 1/12 (Neuron NG)<br/>accounting/fees.py"]
-    adm --> left["value left = value − ADM − AMC"]
+    adm --> left["value left = value − ADM − AMC<br/>accounting/remainder.py"]
     amc --> left
-    left --> rsk["RSK = sum at risk × qx × (1 + load) × smoker / 12,<br/>capped at the value left<br/>insurance/risk.py, insurance/cover.py, insurance/ages.py"]
+    left --> rsk["RSK = sum at risk × qx × (1 + load) × smoker / 12,<br/>capped at the value left<br/>insurance/risk.py, cover.py, mortality.py, ages.py"]
     rsk --> split["RSK shared by what is left in each position<br/>accounting/sharing.py"]
     adm --> book["bookings: units taken at the bid price<br/>accounting/trades.py"]
     amc --> book
@@ -238,8 +251,8 @@ tax module NRHOLD, NRADDR, NRTAXR, NRTAXB.
 | Latest price publication; lower-case currency codes count | `legacy/market.py` | every price and unit of `t3_booking` |
 | The version valid on a day; the highest version wins | `legacy/portfolio.py` | t0, t1 |
 | Broker on the money date, rate of the tier and premium type | `billing/commission.py` | 225,848 / 225,858; the 10 others changed by hand |
-| COBOL drift of the due dates, then a Neuron NG anchor | `billing/schedule.py` | 15,028 / 15,028 |
-| Ticino business days, Good Friday a working day | `billing/business_days.py` | 158 Good Friday debits collected that day |
+| COBOL drift of the due dates, then a Neuron NG anchor | `billing/anchor.py`, `billing/schedule.py` | 15,028 / 15,028 |
+| Ticino business days, Good Friday a working day | `billing/holiday_calendar.py`, `billing/business_days.py` | 158 Good Friday debits collected that day |
 | The offer as it stood on the application date | `maturity/offer.py` | 79,040 / 79,040 yearly values |
 | Pot 1 in the first PD_INIMON months | `accounting/purchase.py` | every PRM booking |
 | Entry charge: NRAGRE ENT, else NRENTC of the broker's tier | `accounting/investment.py` | every PRM booking |
@@ -248,35 +261,39 @@ tax module NRHOLD, NRADDR, NRTAXR, NRTAXB.
 | Reversed events and technical corrections never happened | `accounting/orders.py` | NRBOOK without them = `t3_booking` |
 | Runs on the monthly anniversaries, after the first premium | `accounting/runs.py` | skeleton of NRBOOK, all 4,011 policies |
 | ADM never above the value; AMC per pot or agreed | `accounting/charges.py`, `accounting/fees.py` | every ADM and AMC booking |
-| RSK on the value left after ADM and AMC, capped at it | `accounting/charges.py`, `insurance/risk.py` | every RSK booking |
-| Sum at risk A, B, C; sex from the tariff key or the person | `insurance/cover.py`, `insurance/risk.py` | every RSK booking |
+| RSK on the value left after ADM and AMC, capped at it | `accounting/remainder.py`, `insurance/risk.py` | every RSK booking |
+| Sum at risk A, B, C; sex from the tariff key or the person | `insurance/cover.py`, `insurance/mortality.py` | every RSK booking |
 | Insurance age: COBOL days / 365, Neuron NG completed months | `insurance/age_rules.py`, `insurance/ages.py` | every RSK booking |
 | Rounding rest to the largest position; on a tie to the first fund | `accounting/sharing.py` | found on public BL10002262 with NRBOOK |
 | Value on a day includes that day's bookings | `reports/valuation.py` | 6,137 / 6,153; the 16 others changed by hand |
 | Penalty by scale and completed years, none while waived; never below zero | `reports/valuation.py`, `reports/surrender.py` | idem |
-| Statement years; entry charges rounded half up | `accounting/runs.py`, `reports/statement.py` | 34,125 / 34,145; the 20 others changed by hand |
+| Statement years; entry charges rounded half up | `reports/periods.py`, `reports/statement.py` | 34,125 / 34,145; the 20 others changed by hand |
 
 ## 8. Two kinds of modules, and the maintainability index
 
-The maintainability index (radon, as `scoring.py`) is **97.1** over 601 lines of code.
+The maintainability index (radon, as `scoring.py`) is **97.3** over 636 lines of code.
 
-- **Flow modules** (12) apply the rules and carry no arithmetic or comparison at all: radon gives
+- **Flow modules** (14) apply the rules and carry no arithmetic or comparison at all: radon gives
   them 100 whatever their size. They are `submission.py`, `export.py`, `conventions.py`,
   `legacy/market.py`, `accounting/account.py`, `investment.py`, `orders.py`, `charges.py`,
-  `ledger.py`, `reports/valuation.py`, `statement.py` and `maturity/offer.py`.
-- **Formula modules** (25) each hold one small family of formulas with the docstring that explains
-  it and the evidence that fixed it, between 87 and 100.
+  `ledger.py`, `reports/books.py`, `valuation.py`, `statement.py`, `billing/holiday_calendar.py`
+  and `maturity/offer.py`. A single `+=` in one of them costs it 15 points: radon then applies the
+  formula to the whole file, so the additions of units and of yearly sums live in `trades.py` and
+  `totals.py`, the value left after ADM and AMC in `remainder.py`.
+- **Formula modules** (30) each hold one small family of formulas with the docstring that explains
+  it and the evidence that fixed it, between 85 and 100. The lowest is `core/months.py` (85.3): its
+  month arithmetic replaced dateutil's relativedelta, 2 µs a call, for the speed of the ledger.
 
 | Unit | Lines of code | MI |
 |---|---|---|
-| top level (`submission`, `conventions`, `export`) | 134 | 100.0 |
-| `reports/` | 48 | 100.0 |
-| `accounting/` | 174 | 97.7 |
+| top level (`submission`, `conventions`, `export`) | 123 | 100.0 |
+| `reports/` | 70 | 99.7 |
+| `accounting/` | 170 | 98.2 |
 | `maturity/` | 48 | 97.6 |
-| `legacy/` | 86 | 95.2 |
-| `core/` | 28 | 94.5 |
-| `billing/` | 43 | 92.4 |
-| `insurance/` | 40 | 91.0 |
+| `billing/` | 48 | 95.7 |
+| `legacy/` | 89 | 95.4 |
+| `insurance/` | 44 | 93.2 |
+| `core/` | 44 | 91.5 |
 
 To add a rule: the constant goes into `conventions.py` with its evidence, the formula into a small
 module of its package, and the flow modules only call it. `tools/mi_report.py` shows each file
@@ -291,6 +308,8 @@ From the repository root, with Python 3.14:
 export DATA=~/Downloads/LifewareChallenge/participants
 python -B $DATA/starter_kit/check.py --submission my_solution --legacy $DATA/legacy --targets $DATA/targets
 python -B tools/ledger_checks.py --data $DATA     # every booking against NRBOOK (all policies) and t3_booking
+python -B tools/evaluator_check.py --data $DATA --save /tmp/before   # times per task, results kept
+python -B tools/evaluator_check.py --data $DATA --compare /tmp/before [--one-process]
 python -B tools/import_map.py my_solution         # the layers of §3
 python -B tools/mi_report.py my_solution          # the MI of every file
 python -B tools/data_checks.py --data $DATA       # the numbers of PLAN.md, see tools/data_checks_expected.txt
@@ -301,13 +320,16 @@ python -B tools/data_checks.py --data $DATA       # the numbers of PLAN.md, see 
 | Check | Expected |
 |---|---|
 | `check.py` t0 / t1 / t2 / t3 / t4 | 225,848 / 15,028 / 3,011 / 6,137 / 34,125 exact rows, the rest changed by hand |
-| `check.py` maintainability index | 97.1 |
+| `check.py` maintainability index | 97.3 |
 | `ledger_checks.py` | 4,011 / 4,011 skeletons and 3,017 / 3,017 train ledgers identical |
+| `evaluator_check.py --compare` | every task identical on every policy of the export |
 | `import_map.py` | exit code 0, no layer violation |
 
 `ledger_checks.py` is the only check of the t3 and t4 rules on the public policies, whose targets
 are hidden: NRBOOK keeps the type, fund, pot and dates of every booking of every policy, and only
-the amounts are blank.
+the amounts are blank. `evaluator_check.py` runs each task in a fresh process, as the evaluator
+does, with its time and peak memory: t4 once ran out of the evaluator's time limit. With `--save`
+and `--compare` it proves that an optimization changes no value of any policy, train or public.
 
 ## 10. Still open
 
