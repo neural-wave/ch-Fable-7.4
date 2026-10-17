@@ -1,4 +1,4 @@
-// OpenCode config of scripts/opencode-open.sh: one provider, "open", with the model of .env.llm.
+// OpenCode config of scripts/opencode-open.sh and .ps1: one provider, "open", with the model of .env.llm.
 // The script exports the variables; {env:...} is replaced as text before parsing, so the numbers stay unquoted.
 {
   "$schema": "https://opencode.ai/config.json",

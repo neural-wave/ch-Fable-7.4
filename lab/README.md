@@ -79,8 +79,8 @@ endpoint with the OpenAI API, such as vLLM on a vast.ai instance. `llm.py` speak
 Messages API with `OPEN_PROTOCOL=anthropic`. The model can only propose expressions of the DSL in
 `neuronlab/dsl.py`. They are parsed with a restricted `ast`, never evaluated as Python.
 
-OpenCode runs on the same model with `../scripts/opencode-open.sh`. It finds the protocol in
-`../.claude/skills/rule-discovery/SKILL.md` as the skill `rule-discovery`.
+OpenCode runs on the same model with `../scripts/opencode-open.sh` (Windows: `..\scripts\opencode-open.cmd`). It finds
+the protocol in `../.claude/skills/rule-discovery/SKILL.md` as the skill `rule-discovery`.
 
 ## Tests
 

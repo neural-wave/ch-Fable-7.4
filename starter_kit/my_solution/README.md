@@ -76,7 +76,7 @@ differ. Today this covers t0: 10 outliers.
 |---|---|
 | `tools/lab/` | the rule-discovery pipeline, a uv project (Python 3.12, polars, desbordante, scikit-learn), with its tests |
 | `tools/lab/runs/<task>/` | the artifacts of every task: `profile.json`, `clusters.json`, `trees.json`, `pool.json`, `ledger.jsonl` with every scored candidate, `report.md` (the summary that the language model reads), `score.md` |
-| `tools/scripts/` | `opencode-open.sh`: OpenCode on the open-weights model of `.env.llm` (template: `tools/.env.llm.example`) |
+| `tools/scripts/` | `opencode-open.sh` (Windows: `opencode-open.cmd`, which runs `opencode-open.ps1`): OpenCode on the open-weights model of `.env.llm` (template: `tools/.env.llm.example`) |
 | `tools/.claude/skills/rule-discovery/SKILL.md` | the protocol the agent follows |
 | `tools/docs/examples/` | stand-alone scripts of the method on t0 (standard library only) |
 
@@ -86,7 +86,7 @@ Main commands: `lab run <task>`, `lab pool show <task>`, `lab feature <task> <na
 `cd lab && uv sync && uv run lab run t0_commission`; the Parquet files of the runs are rebuilt then.
 
 The interactive agent is OpenCode running on an open-weights model, served by vLLM on vast.ai through the OpenAI
-API (`scripts/opencode-open.sh`, configured by `.env.llm`). It follows the protocol in
+API (`scripts/opencode-open.sh`, on Windows `scripts\opencode-open.cmd`, configured by `.env.llm`). It follows the protocol in
 `.claude/skills/rule-discovery/SKILL.md`.
 
 ## Data quirks found by the audit
