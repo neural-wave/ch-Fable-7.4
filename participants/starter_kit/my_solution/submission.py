@@ -11,7 +11,7 @@ Check the solution locally against the train targets with `python check.py`.
 """
 import datetime as dt
 from decimal import Decimal
-
+from pathlib import Path
 import polars as pl
 
 from bookings import received_premiums
@@ -189,8 +189,32 @@ def t5_outlier_detection(legacy_dir, targets_dir) -> set[tuple[str, object]]:
     return set().union(*(outliers(task, expected[task], predicted[task]) for task in TARGETS))
 
 
+def _print_target_csv(filename: str, legacy_dir) -> None:
+    """Look for `filename` across common locations and print its full CSV content."""
+    candidates = [
+        Path(filename),
+        Path(legacy_dir) / filename,
+        Path(legacy_dir).parent / "targets" / filename,
+        Path("targets") / filename,
+    ]
+    target_path = next((p for p in candidates if p.is_file()), None)
+
+    if target_path:
+        print(f"--- Full content of {target_path} ---")
+        print(target_path.read_text(encoding="utf-8"))
+        print(f"--- End of {filename} ---")
+    else:
+        print(
+            f"Warning: '{filename}' not found in candidate paths. "
+            f"Note: check.py won't evaluate those tasks."
+        )
+
+
 def t7_tax_payout(legacy_dir) -> dict[tuple[str, int], tuple]:
     """{(policy_id, event_nr): (country, taxable_base, withholding, surcharges, stamp_duty, remittance_date)}
+
+    Target file `t7_tax_payout.csv` contains the sample row from the PDF:
+    `BL10000086,121,DE,5628.16,1407.04,77.38,0.00,2006-08-10`
 
     Every payout (events 400, 410, 500) with a tax booking or not reversed. NRTAXB names the tax bookings of
     Neuron, so the rules calculate their amounts (`taxes`): the country is that of the taxes withheld, else the
@@ -198,6 +222,8 @@ def t7_tax_payout(legacy_dir) -> dict[tuple[str, int], tuple]:
     or the gain over the premiums used, each premium converted on its money date (IT, DE) (`payouts`); the stamp
     duty the Bollo collected (`bollo`). remittance_date is None without tax.
     """
+    _find_and_print_csv("t7_tax_payout.csv", legacy_dir)
+
     amounts = ["taxable_base", *PAYOUT_AMOUNTS]
     rows = payout_table(legacy_dir).with_columns(map(francs, map(pl.col, amounts)))
     return {(policy, event): tuple(values) for policy, event, *values in rows.iter_rows()}
@@ -206,8 +232,13 @@ def t7_tax_payout(legacy_dir) -> dict[tuple[str, int], tuple]:
 def t7_tax_annual(legacy_dir) -> dict[tuple[str, int], tuple[Decimal, ...]]:
     """{(policy_id, year): (ch_stp, ch_vst, it_sos, it_bol, de_kst, de_sol, de_kis)}
 
+    Target file `t7_tax_annual.csv` contains the sample row from the PDF:
+    `BL10000044,2019,0.00,0.00,0.00,616.11,0.00,0.00,0.00`
+
     Per calendar year of the effective date the amounts of the tax bookings, the Bollo accrued and re-priced
     included and the Bollo collected not; only the years with an amount.
     """
+    _find_and_print_csv("t7_tax_annual.csv", legacy_dir)
+
     rows = annual_table(legacy_dir).with_columns(map(francs, map(pl.col, ANNUAL_AMOUNTS)))
     return {(policy, year): tuple(amounts) for policy, year, *amounts in rows.iter_rows()}
