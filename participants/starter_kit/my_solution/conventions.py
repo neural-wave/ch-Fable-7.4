@@ -83,6 +83,10 @@ CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is b
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
 BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019 (NRTAXB)
+BOLLO_ON_SURRENDER_VALUE = True  # IT: the Bollo is on the surrender value, the policy value less the penalty, as the
+# Italian rules have it for insurance policies (law). The example cannot tell: its policy has no penalty. The share
+# of annual rows the actuary found wrong is about the share of Bollo in years with a penalty (assumption, to test);
+# False: on the policy value
 PARTLY_TAXED = ["DE"]  # countries whose gain is taxed only in part: TFS, HEV and the old contracts
 OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS (law), if it
 # pays regular premiums: NRTAXB has KST on every payout with a gain of a single premium (PH_FREQ E) policy and on

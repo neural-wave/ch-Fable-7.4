@@ -235,7 +235,8 @@ the amount of every booking (`taxes.py`) and add them up per payout and per poli
   booking (the label, not the address); SOL, KIS = KST x rate; STP = the premium of event 2 in francs x rate.
   Rounded half up, German taxes truncated (or COBOL truncates and Neuron NG rounds half up, with
   `ROUNDED_BY_SYSTEM`);
-- Bollo: BOL = value x rate x days run / days of the year; the TAXFIX19 re-pricing is the difference of the
+- Bollo: BOL = surrender value (the value less the penalty, as Italian rules have it for insurance policies;
+  `BOLLO_ON_SURRENDER_VALUE`) x rate x days run / days of the year; the TAXFIX19 re-pricing is the difference of the
   earlier BOL at the restated rate, **rounded once on the total**: BL10000044 2019 = 421.57 + 194.54 = 616.11, as
   in the example (rounding every year gives 194.53). BOC collects the outstanding BOL, all of it at a payout that
   ends the policy, its share at a partial withdrawal. A negative amount rounds like its positive twin;
@@ -254,6 +255,7 @@ the gain is above 0, no SOS on Italian death claims, and the country of every pa
 
 Open, with no labels: each choice is one line in `conventions.py`, to be changed one per upload as the actuary
 answers: the base of a payout without tax (`BASE_WITHOUT_TAX`: 0 since the upload after the 5 % of 19:30), the
+base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`: the surrender value, against the 70 % of the annual table), the
 rounding by system instead of by country (`ROUNDED_BY_SYSTEM`), the remittance day of a payout with stamp duty
 alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`) and their move to a business day
 (`REMITTANCE_SHIFTED`), the rounding of the IT conversion (`TRUNCATED_CONVERSION`) and HEV on the withholding

@@ -29,6 +29,7 @@ VARIANTS = {  # name -> {convention: value} to flip
     "remittance on the 10th everywhere": {"REMITTANCE": {"DE": 9, "IT": 9, "CH": 9}},
     "rounding by system, not by country": {"ROUNDED_BY_SYSTEM": True},
     "HEV not in the withholding": {"HALF_INCOME_WITHHELD": False},
+    "Bollo on the policy value, without the penalty": {"BOLLO_ON_SURRENDER_VALUE": False},
 }
 COLUMNS = {"t7_tax_payout": ["country", "taxable_base", "withholding", "surcharges", "stamp_duty", "remittance"],
            "t7_tax_annual": ["ch_stp", "ch_vst", "it_sos", "it_bol", "de_kst", "de_sol", "de_kis"]}

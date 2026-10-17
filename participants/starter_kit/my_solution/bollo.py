@@ -1,9 +1,11 @@
 """The Italian stamp duty on the policy value, the Bollo (t7): accrued every year, collected at the payouts.
 
-- BOL accrued: on 31 December the batch accrues the Bollo of the policies of Italian residents: the policy value
-  x the rate valid on the day as Neuron knew it then (`taxpayer.tax_rates`) x the days of the year the policy ran
-  (from 1 January or from its start date) / the days of the year. A payout that ends the policy accrues the
-  Bollo of the year so far on the value before it (a BOL with the event number of the payout).
+- BOL accrued: on 31 December the batch accrues the Bollo of the policies of Italian residents: the surrender
+  value (the policy value less the penalty of the day, as `valuation.surrender_values`; the policy value itself
+  without `conventions.BOLLO_ON_SURRENDER_VALUE`) x the rate valid on the day as Neuron knew it then
+  (`taxpayer.tax_rates`) x the days of the year the policy ran (from 1 January or from its start date) / the days
+  of the year. A payout that ends the policy accrues the Bollo of the year so far on the value before it, less the
+  penalty in the same way (a BOL with the event number of the payout).
 - BOL re-priced: the rate of 2017 to June 2019 was restated in July 2019 (version 2 of NRTAXR). The fix
   (TB_USRID TAXFIX19) booked per policy the difference of every BOL before it at the new rate, rounded once on
   the total: BL10000044 has 421.57 + 194.54 = 616.11 in 2019, as in the example; rounding every year gives 194.53.
@@ -16,13 +18,13 @@ the value is converted from the policy currency on the day.
 """
 import polars as pl
 
-from conventions import BOLLO_FIX, STAMP_DUTY, TAX_CURRENCY, TAXES
+from conventions import BOLLO_FIX, BOLLO_ON_SURRENDER_VALUE, CONVERSION, STAMP_DUTY, TAX_CURRENCY, TAXES
 from dates import days_between
-from legacy import as_date
-from money import RATE_UNIT, rounded_signed
+from legacy import as_cyymmdd, as_date
+from money import RATE_UNIT, rounded, rounded_signed
 from payouts import EVENT, in_turn, payouts
 from taxpayer import tax_rates, with_policies, with_tax_currency
-from valuation import values_on
+from valuation import penalty_rates, values_on
 
 BOLLO = "BOL"  # TB_TAXTP of the Bollo accrued; its rate in NRTAXR has the same type
 
@@ -47,13 +49,29 @@ def bollo(rate: pl.Expr, parts: int = 1) -> pl.Expr:
     return rounded_signed(taxed, whole, pl.lit(True))
 
 
+def penalties(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
+    """TB_POLNR, TB_EFFDT and SR_RATE: the surrender penalty of every policy on each day of `bookings`."""
+    days = bookings.select(as_date("TB_EFFDT").unique()).to_series()
+    return pl.concat([penalty_rates(legacy_dir, day).select(TB_POLNR="PH_POLNR", TB_EFFDT=as_cyymmdd(day),
+                                                             SR_RATE="SR_RATE") for day in days])
+
+
+def taxed_value() -> pl.Expr:
+    """The VALUE of a row less the surrender penalty SR_RATE of its day, rounded once and at least 0, as
+    `valuation.surrender_values`; the VALUE itself without `conventions.BOLLO_ON_SURRENDER_VALUE`."""
+    kept = pl.col("VALUE").mul(pl.lit(RATE_UNIT).sub(pl.col("SR_RATE")))
+    surrender = rounded(kept, RATE_UNIT, as_date("TB_EFFDT").ge(CONVERSION)).clip(0)
+    return pl.when(pl.lit(BOLLO_ON_SURRENDER_VALUE)).then(surrender).otherwise("VALUE")
+
+
 def accrued_bollo(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
-    """The BOL `bookings` of the batches and of the payouts with VALUE, RATE and TB_AMOUNT (`bollo`)."""
+    """The BOL `bookings` of the batches and of the payouts with VALUE (`taxed_value`), RATE and TB_AMOUNT."""
     values = values_on(legacy_dir, bookings.select(BK_POLNR="TB_POLNR", DAY="TB_EFFDT")).select(
         TB_POLNR="BK_POLNR", TB_EFFDT="DAY", YEAR_END="VALUE").unique()
     before = payouts(legacy_dir).select(*EVENT, "BEFORE")
-    valued = bookings.join(values, on=["TB_POLNR", "TB_EFFDT"]).join(before, on=EVENT, how="left").with_columns(
-        VALUE=pl.coalesce("BEFORE", "YEAR_END"))
+    valued = bookings.join(values, on=["TB_POLNR", "TB_EFFDT"]).join(before, on=EVENT, how="left").join(
+        penalties(legacy_dir, bookings), on=["TB_POLNR", "TB_EFFDT"], how="left").with_columns(
+        VALUE=pl.coalesce("BEFORE", "YEAR_END")).with_columns(VALUE=taxed_value())
     euros = with_tax_currency(legacy_dir, with_policies(legacy_dir, valued), pl.lit(TAX_CURRENCY[TAXES[BOLLO]]))
     rated = tax_rates(legacy_dir, euros.with_columns(**year_share()), pl.lit(BOLLO), "RATE")
     return rated.with_columns(TB_AMOUNT=bollo(pl.col("RATE")))
