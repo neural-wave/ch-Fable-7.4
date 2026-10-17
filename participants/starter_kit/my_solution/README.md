@@ -12,8 +12,8 @@ in too.
 | t3 surrender value | 6'137 / 6'153 train rows exact (99.74 %), and every link of the diagnostics: all 5'024'847 calculated bookings (amount and units), all 23'052 holdings, all 6'153 policy values. The 16 other rows are manual corrections |
 | t4 annual statement | 34'125 / 34'145 train rows exact (99.94 %): every column of every row, except 20 admin fees. Those 20 are manual corrections |
 | t5 outlier detection | 54 outliers on the train targets: exactly the 54 rows that t0 – t4 miss, among them all 38 corrections that NREXCP lists for train policies. Without them every task scores 100 % (`scoring.accuracy` with `excluded`) |
-| t7 tax audit | No targets. PDF example 1 (BL10000086 #121) exact on synthetic tax tables, with the rule that converts every premium on its money date; example 2 (BL10000044 2019, 616.11) matched on the real tables before these rules changed, and the change leaves every Bollo amount of the synthetic tables as it was. Before every upload `tools/neuron/t7_check.py` runs both examples and the labels of NRTAXB on the real tables, with an open-weights model |
-| Maintainability index | 96.7 for the whole folder (radon, weighted by lines): 100 for every module of the submission, 55.4 and 83.3 for the two t7 tools |
+| t7 tax audit | No targets. Both PDF examples exact on the real tables (BL10000086 #121 and BL10000044 2019, 616.11), also with the official `scoring_t7.py`. The labels of NRTAXB (which tax was booked) agree with the taxable base on 277 / 285 German and 384 / 393 Italian payouts (`tools/neuron/t7_labels.py`). Before every upload `tools/neuron/t7_check.py` runs both examples and the labels of NRTAXB on the real tables, with an open-weights model |
+| Maintainability index | 96.7 for the whole folder (radon, weighted by lines): 100 for every module of the submission, 55.4 and 82.2 for the two t7 tools |
 
 ```
 python check.py   # from starter_kit/: all tasks and the maintainability index
@@ -227,8 +227,9 @@ the amount of every booking (`taxes.py`) and add them up per payout and per poli
   after another: a partial withdrawal uses its share gross / value before. A holder who moved (CH -> DE) has the
   chain counted in the currency of each payout;
 - taxable base, in the tax currency, rounded once: CH the gross converted on the payout day, IT and DE the gain
-  = that gross less the premiums used (at least 0); DE x (1 - TFS), half under HEV, 0 for contracts before 2005
-  held 12 years; LU none;
+  = that gross less the premiums used (at least 0); DE x (1 - TFS), half under HEV, 0 for contracts with regular
+  premiums started before 2005 and held 12 years (NRTAXB books KST on every single premium one with a gain, as
+  the old law asked for 5 years of premiums); LU none. A payout without withholding reports the base 0;
 - amounts: VST, SOS = base x rate; KST = base x rate, divided by (1 + rate x KIS) when the payout has a KIS
   booking (the label, not the address); SOL, KIS = KST x rate; STP = the premium of event 2 in francs x rate.
   Rounded half up, German taxes truncated;
@@ -245,12 +246,16 @@ rounded half up 5'628.01, unrounded 5'628.02, and the whole gain converted on th
 the day before, the due dates and the reversed premium all miss. Then KST 25 % = 1'407.04 and SOL 5.5 %, truncated,
 = 77.38.
 
+The labels settle the discrete choices: VST is booked only for holders who objected to the reporting (AD_TAXST
+E) with a gross above TX_THRSH (257 of 259; never for the 1'275 payouts of reported holders), SOS and KST when
+the gain is above 0, no SOS on Italian death claims, and the country of every payout with tax is its residence.
+
 Open, with no labels: each choice is one line in `conventions.py`, to be changed one per upload as the actuary
-answers: the remittance days of IT and CH (`REMITTANCE`), the rounding of the IT conversion
-(`TRUNCATED_CONVERSION`), HEV on the withholding (`HALF_INCOME_WITHHELD`), the base of a payout without tax
-(`BASE_WITHOUT_TAX`), the VST of holders who chose the reporting (`REPORTED_WITHHELD`: withheld, or only reported
-in the annual table) and the move of a remittance day to a business day (`REMITTANCE_SHIFTED`). Also assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a
-partial withdrawal (no example). `tools/neuron/t7_check.py` checks the rest on the real tables before an upload.
+answers: the base of a payout without tax (`BASE_WITHOUT_TAX`: 0 since the upload after the 5 % of 19:30), the
+remittance days of IT and CH (`REMITTANCE`) and their move to a business day (`REMITTANCE_SHIFTED`), the
+rounding of the IT conversion (`TRUNCATED_CONVERSION`) and HEV on the withholding (`HALF_INCOME_WITHHELD`). Also
+assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a partial withdrawal (no
+example). `tools/neuron/t7_check.py` checks the rest on the real tables before an upload.
 
 ## Code quality
 

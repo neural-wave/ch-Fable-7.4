@@ -46,8 +46,9 @@ COBOL_MONTH = 360  # COBOL: the management charge of a month is its days / 360 o
 JAVA_MONTH = 12  # Neuron NG: a twelfth of the yearly rate, whatever the days of the month
 
 # Taxes (t7): NRTAXB names every tax booking of Neuron (type, event, dates); only the amounts are calculated.
-# The evidence of each rule is in its comment: "example" = an example of the task PDF, "law" = a prior from the
-# law that no data confirms yet, "assumption" = a choice the data cannot settle (to be decided by the actuary).
+# The evidence of each rule is in its comment: "example" = an example of the task PDF, "labels" = the bookings of
+# NRTAXB, "law" = a prior from the law that no data confirms yet, "assumption" = a choice the data cannot settle
+# (to be decided by the actuary).
 PAYOUTS = [400, 410, 500]  # EV_EVTTP of a payout: partial withdrawal, full surrender, death claim (NRCODE)
 TERMINATING = [410, 500]  # payouts that end the policy: they pay out all of it
 PAID_OUT = ["WDR", "SUR", "DTH"]  # BK_BKTYP of the money of a payout: its BK_AMTPC is negative
@@ -60,25 +61,23 @@ TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent (exampl
 TRUNCATED_CONVERSION = ["DE"]  # countries whose premiums are truncated to the cent when converted to the tax
 # currency (example: only this gives 5628.16); IT rounds them half up like its taxes (assumption)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
-BASE_WITHOUT_TAX = True  # the base is reported also for a payout without withholding; False reports 0 (assumption)
+BASE_WITHOUT_TAX = False  # a payout without withholding reports the base 0; True reports it as calculated
+# (assumption, from the actuary: with the calculated base the payout table scored 1 of 20, while 56 % of the
+# payouts are Swiss ones without withholding: reported (AD_TAXST M) or below the VST threshold)
 REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month. DE the 10th (example: 2006-07-17
 # -> 2006-08-10, a Thursday); IT the 16th, F24 (law); CH 30 days after the month (law)
 REMITTANCE_SHIFTED = []  # countries whose remittance day moves to the next business day of its calendar (assumption:
 # none; the law moves a deadline that falls on a weekend or holiday, about 30 % of the days)
 REMITTANCE_CALENDARS = {"DE": {"country": "DE", "years": range(1994, 2100)},
                         "IT": {"country": "IT", "years": range(1994, 2100)}, "CH": CALENDAR}
-REPORTED_STATUS, REPORTED_TAX = "M", "VST"  # CH: AD_TAXST of a holder whose payouts Neuron reports to the tax office
-# instead of withholding (NRCODE TAXST: M reported, E objection), and the tax so reported
-REPORTED_WITHHELD = True  # a VST booked for a reported holder counts as withheld (assumption). False: it is only
-# reported, so it stays in the annual table and the payout shows no withholding and no remittance day. The CH
-# cross-tab of tools/neuron/t7_labels.py decides it
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
 BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019 (NRTAXB)
 PARTLY_TAXED = ["DE"]  # countries whose gain is taxed only in part: TFS, HEV and the old contracts
-OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free once held HELD_YEARS (law)
+OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract with regular premiums started before is tax free once held
+# HELD_YEARS (law); one with a single premium is not (labels: NRTAXB books KST on every such payout with a gain)
 HELD_YEARS = 12  # DE: years held for the old exemption and for HEV, section 20 (1) no. 6 EStG (law)
 HALF_INCOME_AGE = {False: 60, True: 62}  # DE: age for HEV by "started on or after HALF_INCOME_2012" (law)
 HALF_INCOME_2012 = dt.date(2012, 1, 1)  # DE: contracts from then need the higher age (law)

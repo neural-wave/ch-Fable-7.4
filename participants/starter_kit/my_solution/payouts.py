@@ -22,8 +22,9 @@ premium half up gives 5628.01, not rounding them 5628.02, converting the whole g
 The taxable base is in the currency of the country (`taxpayer`), rounded once (truncated in Germany): in
 Switzerland the gross, the withholding tax VST takes the whole benefit; in Italy and Germany the gain, at least 0;
 elsewhere none. In Germany the base is the gain x (1 - TFS), the partial exemption of fund policies from 2018. A
-contract started before 2005 and held 12 years is tax free; a later one held 12 years counts half (HEV) from the
-age of 60, or 62 for contracts started from 2012 (`conventions.HALF_INCOME_WITHHELD`).
+contract with regular premiums started before 2005 and held 12 years is tax free, one with a single premium is
+not (NRTAXB books KST on all of them with a gain); a later one held 12 years counts half (HEV) from the age of
+60, or 62 for contracts started from 2012 (`conventions.HALF_INCOME_WITHHELD`).
 """
 import functools
 from collections.abc import Callable
@@ -32,8 +33,8 @@ import polars as pl
 
 from bookings import counted_events, received_premiums, uncharged_bookings
 from conventions import (HALF_INCOME_2012, HALF_INCOME_AGE, HALF_INCOME_WITHHELD, HELD_YEARS, OLD_CONTRACT, PAID_OUT,
-                         PARTLY_TAXED, PAYOUTS, TAX_CURRENCY, TAXED_ON_GAIN, TAXED_ON_GROSS, TAXES, TERMINATING,
-                         TRUNCATED, TRUNCATED_CONVERSION, WITHHELD)
+                         PARTLY_TAXED, PAYOUTS, SINGLE_PREMIUM, TAX_CURRENCY, TAXED_ON_GAIN, TAXED_ON_GROSS, TAXES,
+                         TERMINATING, TRUNCATED, TRUNCATED_CONVERSION, WITHHELD)
 from legacy import as_date, as_lenient_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
 from taxpayer import residences, tax_rates, with_policies, with_tax_currency
@@ -141,7 +142,8 @@ def gains(legacy_dir, payouts: pl.DataFrame) -> pl.DataFrame:
 
 
 def german_factor() -> pl.Expr:
-    """The taxed share of a German gain (FACTOR_UNIT): 1 - TFS, half of it under HEV, 0 for old contracts."""
+    """The taxed share of a German gain (FACTOR_UNIT): 1 - TFS, half of it under HEV, 0 for old contracts with
+    regular premiums."""
     start, day = as_date("PH_BEGDT"), as_date("TB_EFFDT")
     held = day.ge(start.dt.offset_by(f"{HELD_YEARS}y"))
     age = pl.when(start.ge(HALF_INCOME_2012)).then(HALF_INCOME_AGE[True]).otherwise(HALF_INCOME_AGE[False])
@@ -149,7 +151,8 @@ def german_factor() -> pl.Expr:
     half_income = pl.all_horizontal(held, start.ge(OLD_CONTRACT), aged, pl.lit(HALF_INCOME_WITHHELD))
     taxed = pl.lit(RATE_UNIT).sub(pl.col("TFS").fill_null(0))
     counted = pl.when(half_income).then(pl.col("HEV").fill_null(RATE_UNIT)).otherwise(RATE_UNIT)
-    return pl.when(held.and_(start.lt(OLD_CONTRACT))).then(0).otherwise(taxed.mul(counted))
+    exempt = pl.all_horizontal(held, start.lt(OLD_CONTRACT), pl.col("PH_FREQ").ne(SINGLE_PREMIUM))
+    return pl.when(exempt).then(0).otherwise(taxed.mul(counted))
 
 
 def taxable_base() -> pl.Expr:

@@ -6,17 +6,17 @@ rule explains the labels. They come from the tax tables, so run this with an ope
     NEURON_DATA=<participants> PYTHONPATH="$PWD:$PWD/tools" python -B -m neuron.t7_labels
 
 - payouts by country and by tax withheld: which rows each open choice of `conventions` touches;
-- CH: VST booked by reporting status AD_TAXST (M reported, E objection) and by gross above the threshold TX_THRSH.
-  VST booked for M holders means Neuron booked the reported VST too: reported, not withheld from the payout;
-- DE: KST booked by old contract held 12 years, by base above 0 and by event type (500 is a death claim);
+- CH: VST booked by reporting status AD_TAXST (M reported, E objection) and by gross above the threshold TX_THRSH;
+- DE: KST booked by old contract held 12 years, by single premium, by base above 0 and by event type (500 is a
+  death claim);
 - IT: SOS booked by base above 0;
 - BOC booked by the country of the payout, KIS booked by church membership AD_CHURCH;
-- the bookings by tax type and job user TB_USRID (online users grouped): a job of its own may mark the reported
-  VST, or a remittance run.
+- the bookings by tax type and job user TB_USRID (online users grouped): a job of its own may mark a remittance
+  run.
 """
 import polars as pl
 
-from conventions import HELD_YEARS, OLD_CONTRACT
+from conventions import HELD_YEARS, OLD_CONTRACT, SINGLE_PREMIUM
 from legacy import as_date, table
 from neuron.load import LEGACY
 from payouts import EVENT, payouts
@@ -46,7 +46,9 @@ def labelled_payouts() -> pl.DataFrame:
         rows = booked(rows, tax_types, name)
     start, day = as_date("PH_BEGDT"), as_date("TB_EFFDT")
     old_and_held = start.lt(OLD_CONTRACT).and_(day.ge(start.dt.offset_by(f"{HELD_YEARS}y")))
-    return thresholds(rows).with_columns(OLD_AND_HELD=old_and_held, BASE_ABOVE_0=pl.col("TAXABLE_BASE").gt(0),
+    single = pl.col("PH_FREQ").eq(SINGLE_PREMIUM)
+    return thresholds(rows).with_columns(OLD_AND_HELD=old_and_held, SINGLE=single,
+                                         BASE_ABOVE_0=pl.col("TAXABLE_BASE").gt(0),
                                          ABOVE_THRESHOLD=pl.col("TAXABLE_BASE").gt(pl.col("THRESHOLD").fill_null(0)))
 
 
@@ -68,8 +70,8 @@ def main():
         show("Payouts by country and tax withheld (VST, SOS, KST)", rows, "COUNTRY", "WITHHELD")
         show("CH: VST booked by reporting status and gross above the VST threshold",
              rows.filter(pl.col("COUNTRY").eq("CH")), "AD_TAXST", "ABOVE_THRESHOLD", "VST")
-        show("DE: KST booked by old contract held 12 years, base above 0 and event type",
-             rows.filter(pl.col("COUNTRY").eq("DE")), "OLD_AND_HELD", "BASE_ABOVE_0", "EV_EVTTP", "KST")
+        show("DE: KST booked by old contract held 12 years, single premium, base above 0 and event type",
+             rows.filter(pl.col("COUNTRY").eq("DE")), "OLD_AND_HELD", "SINGLE", "BASE_ABOVE_0", "EV_EVTTP", "KST")
         show("IT: SOS booked by base above 0", rows.filter(pl.col("COUNTRY").eq("IT")), "BASE_ABOVE_0", "SOS")
         show("BOC booked by country", rows, "COUNTRY", "BOC")
         show("DE: KIS booked by church membership", rows.filter(pl.col("COUNTRY").eq("DE")), "AD_CHURCH", "KIS")

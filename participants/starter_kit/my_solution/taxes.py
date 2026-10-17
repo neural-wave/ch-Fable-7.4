@@ -19,8 +19,8 @@ import polars as pl
 
 from bollo import bollo_bookings
 from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_TAX, PREMIUM_STAMP, REMITTANCE,
-                         REMITTANCE_SHIFTED, REPORTED_STATUS, REPORTED_TAX, REPORTED_WITHHELD, STAMP_DUTY,
-                         STAMP_DUTY_COUNTRY, SURCHARGES, TAX_CURRENCY, TAXES, TRUNCATED, WITHHELD)
+                         REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY, SURCHARGES, TAX_CURRENCY, TAXES,
+                         TRUNCATED, WITHHELD)
 from dates import tax_office_holidays
 from legacy import as_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
@@ -118,22 +118,17 @@ def remittance() -> pl.Expr:
 def withheld_amounts(legacy_dir) -> pl.DataFrame:
     """EVENT and the PAYOUT_AMOUNTS (cents) withheld from every payout with a tax booking.
 
-    A VST of a holder who chose the reporting (`conventions.REPORTED_STATUS`) is reported, not withheld, unless
-    REPORTED_WITHHELD: then it counts in the annual table only.
+    Every VST booked was withheld: NRTAXB books it only for holders who objected to the reporting (AD_TAXST E).
     """
     tax_type, amount = pl.col("TB_TAXTP"), pl.col("TB_AMOUNT")
-    statuses = payouts(legacy_dir).select(*EVENT, "AD_TAXST")
-    reported = tax_type.eq(REPORTED_TAX).and_(pl.col("AD_TAXST").eq_missing(REPORTED_STATUS)).and_(
-        pl.lit(REPORTED_WITHHELD).not_())
-    return tax_bookings(legacy_dir).join(statuses, on=EVENT, how="left").group_by(EVENT).agg(
-        **{name: amount.filter(tax_type.is_in(types).and_(reported.not_())).sum()
-           for name, types in PAYOUT_AMOUNTS.items()})
+    return tax_bookings(legacy_dir).group_by(EVENT).agg(
+        **{name: amount.filter(tax_type.is_in(types)).sum() for name, types in PAYOUT_AMOUNTS.items()})
 
 
 def payout_table(legacy_dir) -> pl.DataFrame:
     """policy_id, event_nr, country, taxable_base and the PAYOUT_AMOUNTS (cents), remittance_date of every payout.
 
-    Without withholding the base is reported as calculated, or as 0 (`conventions.BASE_WITHOUT_TAX`).
+    A payout without withholding reports the base 0 (`conventions.BASE_WITHOUT_TAX`).
     """
     amounts = withheld_amounts(legacy_dir)
     rows = payouts(legacy_dir).join(amounts, on=EVENT, how="left").with_columns(pl.col(*PAYOUT_AMOUNTS).fill_null(0))

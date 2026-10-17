@@ -55,11 +55,13 @@ def tax_rates(legacy_dir, rows: pl.DataFrame, tax_type: pl.Expr, name: str, know
 
 
 def with_policies(legacy_dir, rows: pl.DataFrame) -> pl.DataFrame:
-    """`rows` with the currency PH_CCY and the start date PH_BEGDT of the policy; no version ever changes them.
+    """`rows` with the currency PH_CCY, the start date PH_BEGDT and the premium frequency PH_FREQ of the policy; no
+    version ever changes them.
 
     A row of an unknown policy stays, with nulls: its amounts become null instead of disappearing.
     """
-    policies = signed_policies(legacy_dir).select(TB_POLNR="PH_POLNR", PH_CCY="PH_CCY", PH_BEGDT="PH_BEGDT")
+    policies = signed_policies(legacy_dir).select(TB_POLNR="PH_POLNR", PH_CCY="PH_CCY", PH_BEGDT="PH_BEGDT",
+                                                  PH_FREQ="PH_FREQ")
     return rows.join(policies, on="TB_POLNR", how="left")
 
 
