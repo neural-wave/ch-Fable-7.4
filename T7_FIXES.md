@@ -175,6 +175,21 @@ Facts measured on every row, not on the two examples of the PDF:
   the benefit, and the KST on German death claims follows no visible rule.
 - **Corrections.** NREXCP lists none for t7; the technical corrections (990) book switches only.
 
+## Decision plan for the uploads after `290312d` (written 18.10 01:50)
+
+The 257 Swiss payouts with VST are the cleanest probe of the payout table: one rate, no gain, base and VST sure,
+so from `290312d` on they can only fail on the remittance date (all on the 10th; 73 of them on a Saturday or
+Sunday) and, for the 46 COBOL-era rows, on the rounding. The switches of the branch `t7-next` are ready, all off.
+
+| Reading of `290312d` (payout) | Next payout switch | Next annual switch |
+|---|---|---|
+| rises by 3 or more | keep the 10th; `REMITTANCE_SHIFTED = ["DE", "IT", "CH"]` (200 rows, 78 CH) | `BLENDED_RATES = ["SOS"]` (95 rows) |
+| stays at 0 - 2 | the days of the law again plus the shift (623 rows), the 10th was not it | `BLENDED_RATES = ["SOS"]` |
+| annual falls by 3 or more | - | `BOLLO_FIX_PER_YEAR = False` first |
+
+Then, one per table: `STAMP_DUTY_REMITTED = False` (182), `REMITTANCE_MONTH_END = ["CH"]` (257),
+`COLLECTED_IN_ANNUAL = True` (277 annual), `CHURCH_REDUCES_KST = False` (28), death claims on the benefit.
+
 ## Uploads and the actuary's readings
 
 The actuary picks a few targets to test different patterns (task PDF, section 7), and t7 is scored on the public
