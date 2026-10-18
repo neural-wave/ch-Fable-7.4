@@ -27,16 +27,26 @@ VARIANTS = {  # name -> {convention: value} to flip
     "remittance on a business day of Neuron, not of the tax office": {
         "REMITTANCE_CALENDARS": dict.fromkeys(["DE", "IT", "CH"], NEURON_CALENDAR)},
     "remittance on the 10th everywhere, Neuron's tax batch day": {
-        "REMITTANCE": {"DE": 9, "IT": 9, "CH": 9}, "REMITTANCE_MONTH_END": []},
-    "CH 30 days after the month, the days of the law": {"REMITTANCE": {"DE": 9, "IT": 15, "CH": 29},
-                                                       "REMITTANCE_MONTH_END": []},
-    "rounding by country, not by system": {"ROUNDED_BY_SYSTEM": False},
+        "REMITTANCE": dict.fromkeys(["DE", "IT", "CH"], ("month", 10))},
+    "CH 30 days after the month, the days of the law": {
+        "REMITTANCE": {"DE": ("month", 10), "IT": ("month", 16), "CH": ("month", 30)}},
+    "CH 30 days after the payout day": {"REMITTANCE": {"DE": ("month", 10), "IT": ("month", 16), "CH": ("day", 30)}},
+    "CH 30 days after the quarter": {"REMITTANCE": {"DE": ("month", 10), "IT": ("month", 16), "CH": ("quarter", 30)}},
+    "IT at the end of the next month": {
+        "REMITTANCE": {"DE": ("month", 10), "IT": ("month_end", 0), "CH": ("month_end", 0)}},
+    "rounding half up always": {"ROUNDING": dict.fromkeys(["CH", "IT", "DE"], "half_up"),
+                                "PREMIUM_ROUNDING": dict.fromkeys(["CH", "IT", "DE"], "half_up")},
+    "rounding truncated always": {"ROUNDING": dict.fromkeys(["CH", "IT", "DE"], "truncate"),
+                                  "PREMIUM_ROUNDING": dict.fromkeys(["CH", "IT", "DE"], "truncate")},
+    "DE truncated always, the others by system": {"ROUNDING": {"CH": "system", "IT": "system", "DE": "truncate"},
+                                                  "PREMIUM_ROUNDING": {"CH": "system", "IT": "system", "DE": "truncate"}},
+    "premiums rounded by the system of their money date": {"PREMIUMS_ROUNDED_AT_RECEIPT": True},
     "HEV not in the withholding": {"HALF_INCOME_WITHHELD": False},
     "Bollo on the surrender value": {"BOLLO_ON_SURRENDER_VALUE": True},
     "remittance month from the effective date, not the payment day": {"REMITTED_FROM_PAYMENT": False},
     "KST plain, the church tax on top": {"CHURCH_REDUCES_KST": False},
     "Bollo collected in the annual Bollo": {"COLLECTED_IN_ANNUAL": True},
-    "SOS at the rate of the payout day, not averaged over the periods": {"BLENDED_RATES": []},
+    "SOS averaged over the periods of the policy, not at the rate of the payout day": {"BLENDED_RATES": ["SOS"]},
 }
 COLUMNS = {"t7_tax_payout": ["country", "taxable_base", "withholding", "surcharges", "stamp_duty", "remittance"],
            "t7_tax_annual": ["ch_stp", "ch_vst", "it_sos", "it_bol", "de_kst", "de_sol", "de_kis"]}

@@ -10,7 +10,7 @@ Every function takes rows with the columns TB_POLNR, TB_EFFDT and TB_CHGTS, like
 """
 import polars as pl
 
-from conventions import CONVERSION, ROUNDED_BY_SYSTEM, TAXES, TRUNCATED
+from conventions import CONVERSION, ROUNDING, TAXES
 from legacy import as_date, table, valid_on
 from market import exchange_rates, rate_of
 from tariff import signed_policies
@@ -18,14 +18,23 @@ from tariff import signed_policies
 RESIDENCE = ["AD_CNTRY", "AD_REGIO", "AD_TAXST", "AD_CHURCH"]  # the address columns that the taxes or their checks read
 
 
-def rounds_half_up(country: pl.Expr, truncated: list[str] = TRUNCATED) -> pl.Expr:
+PROCESSED = pl.col("TB_CHGTS").floordiv(1_000_000).cast(pl.String).str.to_date("%Y%m%d")  # the day of TB_CHGTS
+
+
+def processed_by_neuron_ng(day: pl.Expr = PROCESSED) -> pl.Expr:
+    """True where Neuron NG processed the row: `day`, the day of its timestamp TB_CHGTS, is from CONVERSION on."""
+    return day.ge(CONVERSION)
+
+
+def rounds_half_up(country: pl.Expr, modes: dict[str, str] = ROUNDING, day: pl.Expr = PROCESSED) -> pl.Expr:
     """True where Neuron rounds an amount of `country` half up, false where it truncates to the cent.
 
-    With `conventions.ROUNDED_BY_SYSTEM` the system that processed the row (TB_CHGTS) decides: COBOL truncated,
-    Neuron NG rounds half up. Otherwise the country does: the countries of `truncated` truncate.
+    The mode of the country in `modes` (`conventions.ROUNDING`) decides: "system", the system that processed the
+    row on `day` (`processed_by_neuron_ng`): COBOL truncated, Neuron NG rounds half up; "truncate" always;
+    "half_up" always.
     """
-    by_system = pl.col("TB_CHGTS").floordiv(1_000_000).ge(pl.lit(CONVERSION).dt.strftime("%Y%m%d").cast(pl.Int64))
-    return pl.when(pl.lit(ROUNDED_BY_SYSTEM)).then(by_system).otherwise(country.is_in(truncated).not_())
+    mode = country.replace_strict(modes, default="system")
+    return pl.when(mode.eq("system")).then(processed_by_neuron_ng(day)).otherwise(mode.eq("half_up"))
 
 
 def residences(legacy_dir, rows: pl.DataFrame) -> pl.DataFrame:

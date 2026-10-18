@@ -11,7 +11,7 @@ booking, with the rates valid on the effective date as Neuron knew them at the p
 - BOL, BOC: the Bollo (`bollo`)
 
 Every amount is rounded once, by the system that processed it: COBOL truncates, Neuron NG rounds half up
-(`taxpayer.rounds_half_up`); without `conventions.ROUNDED_BY_SYSTEM`, half up and in Germany truncated. A booking
+(`taxpayer.rounds_half_up`, the mode of the country in `conventions.ROUNDING`). A booking
 whose payout, premium or rate is missing keeps a null amount, so a check can find it (`t7lab/t7_check.py`, next to
 the hand-in).
 """
@@ -22,7 +22,7 @@ import polars as pl
 from bollo import bollo_bookings
 from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, BLENDED_RATES, CHURCH_REDUCED, CHURCH_REDUCES_KST,
                          CHURCH_TAX, COLLECTED_IN_ANNUAL, PREMIUM_STAMP, REMITTED_FROM_PAYMENT, REMITTANCE,
-                         REMITTANCE_MONTH_END, REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
+                         REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
                          STAMP_DUTY_REMITTED, SURCHARGES, TAX_CURRENCY, TAXES, WITHHELD)
 from dates import tax_office_holidays
 from legacy import as_date, table
@@ -111,23 +111,34 @@ def shifted(day: pl.Expr, country: pl.Expr) -> pl.Expr:
     return moved
 
 
+def due_day(paid: pl.Expr, country: pl.Expr) -> pl.Expr:
+    """The day the taxes of a payout paid on `paid` are due in `country`: the anchor of REMITTANCE plus its days.
+
+    The anchors: "month", the last day of the month of `paid`; "month_end", the last day of the month after;
+    "quarter", the last day of the quarter; "day", `paid` itself.
+    """
+    anchor = country.replace_strict({name: rule[0] for name, rule in REMITTANCE.items()}, default=None)
+    days = country.replace_strict({name: rule[1] for name, rule in REMITTANCE.items()}, default=None,
+                                  return_dtype=pl.Int64)
+    month_end = paid.dt.month_end()
+    quarter_end = paid.dt.truncate("1q").dt.offset_by("1q").dt.offset_by("-1d")
+    anchored = pl.when(anchor.eq("month")).then(month_end).when(anchor.eq("month_end")).then(
+        month_end.dt.offset_by("1d").dt.month_end()).when(anchor.eq("quarter")).then(quarter_end).otherwise(paid)
+    return anchored.add(pl.duration(days=days))
+
+
 def remittance() -> pl.Expr:
     """The day Neuron paid the taxes of a payout to the tax office, null without tax.
 
-    The country of the withholding decides, Italy for stamp duty alone; the day comes from REMITTANCE in the month
-    after the effective date, or after the day of the payment PAID with REMITTED_FROM_PAYMENT, its last day for the
-    countries of REMITTANCE_MONTH_END, moved to a business day for the countries of REMITTANCE_SHIFTED. A payout
-    with stamp duty alone has a day with STAMP_DUTY_REMITTED.
+    The country of the withholding decides, Italy for stamp duty alone; the day is the `due_day` of the payout day,
+    the day of the payment PAID with REMITTED_FROM_PAYMENT or else the effective date, moved to a business day for
+    the countries of REMITTANCE_SHIFTED. A payout with stamp duty alone has a day with STAMP_DUTY_REMITTED.
     """
     withheld = pl.col("withholding").add(pl.col("surcharges"))
     country = pl.when(withheld.ne(0)).then("COUNTRY").otherwise(pl.lit(STAMP_DUTY_COUNTRY))
-    month = pl.when(pl.lit(REMITTED_FROM_PAYMENT)).then(pl.col("PAID")).otherwise(as_date("TB_EFFDT"))
-    first = month.dt.month_start().dt.offset_by("1mo")
-    days = country.replace_strict(REMITTANCE, default=None, return_dtype=pl.Int64)
-    due = pl.when(country.is_in(REMITTANCE_MONTH_END)).then(first.dt.month_end()).otherwise(
-        first.add(pl.duration(days=days)))
+    paid = pl.when(pl.lit(REMITTED_FROM_PAYMENT)).then(pl.col("PAID")).otherwise(as_date("TB_EFFDT"))
     remitted = pl.when(pl.lit(STAMP_DUTY_REMITTED)).then(withheld.add(pl.col("stamp_duty"))).otherwise(withheld)
-    return pl.when(remitted.ne(0)).then(shifted(due, country))
+    return pl.when(remitted.ne(0)).then(shifted(due_day(paid, country), country))
 
 
 def withheld_amounts(legacy_dir) -> pl.DataFrame:

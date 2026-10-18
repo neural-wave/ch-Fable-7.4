@@ -60,26 +60,32 @@ TAXES = {"STP": "CH", "VST": "CH", "SOS": "IT", "BOL": "IT", "BOC": "IT", "KST":
 ANNUAL_TAXES = ["STP", "VST", "SOS", "BOL", "KST", "SOL", "KIS"]  # the columns of t7_tax_annual; BOC is not reported
 WITHHELD, SURCHARGES, STAMP_DUTY = ["VST", "SOS", "KST"], ["SOL", "KIS"], ["BOC"]  # the amounts of a payout
 TAX_CURRENCY = {"CH": "CHF", "IT": "EUR", "DE": "EUR", "LU": "EUR"}  # country -> currency of its taxes
-TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent (example: 1407.04 x 5.5 % = 77.3872 -> 77.38)
-TRUNCATED_CONVERSION = ["DE"]  # countries whose premiums are truncated to the cent when converted to the tax
-# currency (example: only this gives 5628.16); IT rounds them half up like its taxes (assumption)
-ROUNDED_BY_SYSTEM = True  # the system that processed a tax decides its rounding, as in every task with targets (t0,
-# t2, t3): COBOL truncated, Neuron NG (TB_CHGTS from CONVERSION) rounds half up, the taxes and the conversions alike.
-# The example (DE, 2006) was processed by COBOL and fits it; truncating by country (False: TRUNCATED and
-# TRUNCATED_CONVERSION) rests on that one example (targets of t0, t2, t3; too few rows for the actuary to read)
+ROUNDING = {"CH": "system", "IT": "system", "DE": "system"}  # country -> how Neuron rounds its taxes to the cent.
+# "system": the system that processed the booking (TB_CHGTS) decides, as in every task with targets (t0, t2, t3):
+# COBOL truncated, Neuron NG (from CONVERSION) rounds half up. "truncate": always truncated. "half_up": always half
+# up. The example (DE, 2006, 1407.04 x 5.5 % = 77.3872 -> 77.38) was processed by COBOL and fits "system" and
+# "truncate" (assumption, to test)
+PREMIUM_ROUNDING = {"CH": "system", "IT": "system", "DE": "system"}  # the same for the premiums converted to the tax
+# currency, decided by the system that processed the payout (example: only truncation gives 5628.16, 28 premiums
+# of a payout of 2006)
+PREMIUMS_ROUNDED_AT_RECEIPT = False  # True: a converted premium is rounded by the system of its own money date
+# PR_RCVDT, whatever PREMIUM_ROUNDING says, as if Neuron had converted it when received (assumption, to test: 160
+# of the 241 taxed Italian and German payouts are of Neuron NG with premiums received under COBOL)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
-BLENDED_RATES = ["SOS"]  # tax types whose rate is averaged by days over the life of the policy
-# (`taxpayer.blended_rates`): the Italian SOS takes the gain of each period at its rate, 12.5 % to 2011, 20 % to June
-# 2014, 26 % after (law, DL 138/2011 and DL 66/2014); [] takes the rate valid on the payout day (assumption, to test)
+BLENDED_RATES = []  # tax types whose rate is averaged by days over the life of the policy (`taxpayer.blended_rates`):
+# ["SOS"] takes the gain of each period at its rate, 12.5 % to 2011, 20 % to June 2014, 26 % after (law, DL 138/2011
+# and DL 66/2014); [] the rate valid on the payout day, as read 11 and 10 of 30 by the actuary (assumption, to test
+# once the payout table reads above 0: it changes 97 payouts and 95 annual rows)
 BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calculated: what Neuron calculated and,
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
-REMITTANCE = {"DE": 9, "IT": 15, "CH": 9}  # days after the 1st of the next month: DE the 10th (section 44 EStG and the
-# example: 2006-07-17 -> 2006-08-10), IT the 16th (the F24 of the month after). CH remits by REMITTANCE_MONTH_END.
-# The 10th everywhere (Neuron's own tax batch day, TAXBATCH every 10 January) and the law's 30 days after the
-# month for CH ({"CH": 29}) scored 0 of 40 (leaderboard, assumption: to test)
-REMITTANCE_MONTH_END = ["CH"]  # countries that remit on the last day of the month after instead of REMITTANCE (CH:
-# the reading "by the end of the next month" of art. 16 VStG; assumption, to test. [] takes REMITTANCE for all)
+REMITTANCE = {"DE": ("month", 10), "IT": ("month", 16), "CH": ("month_end", 0)}  # country -> (anchor, days): the
+# day Neuron paid the taxes of a payout is the anchor plus the days. "month": the last day of the month of the payout
+# day (so 10 = the 10th of the month after: DE, section 44 EStG and the example 2006-07-17 -> 2006-08-10; 16 = the
+# 16th, the F24 of Italy; 30 = the law's 30 days after the month for CH, art. 16 VStG). "month_end": the last day of
+# the month after (CH: the reading "by the end of the next month" of the same article). "day": the payout day itself
+# ("30 days after the benefit"). "quarter": the last day of the quarter (CH: 30 days after the quarter, the rule of
+# the bank interests). Read 0 of 40 by the actuary: ("month", 10) everywhere and CH ("month", 30) (assumption, to test)
 REMITTED_FROM_PAYMENT = True  # the remittance month follows the day the money was paid, the effective date + the
 # payout business days PD_PAYDAY of the product (NRPROD, read by no other rule; the law of all three countries
 # counts from the payment); False: from the effective date. The example fits both: paid 2006-07-24, still in July
