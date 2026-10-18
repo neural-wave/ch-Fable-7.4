@@ -1,0 +1,9092 @@
+{
+ "task": "t7_payout_taxes",
+ "values": {
+  "KST": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "best": "C2.1",
+   "ties": [],
+   "cards": [
+    {
+     "id": "L1",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "HE"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "1.000000"
+      ],
+      [
+       "PH_FREQ",
+       "=",
+       "M"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 10,
+     "purity": 0.8,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000246",
+       47
+      ],
+      [
+       "BL10000354",
+       117
+      ]
+     ]
+    },
+    {
+     "id": "L2",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "HE"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "1.000000"
+      ],
+      [
+       "PH_FREQ",
+       "!=",
+       "M"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 14,
+     "purity": 0.785714,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000162",
+       102
+      ],
+      [
+       "BL10000293",
+       131
+      ]
+     ]
+    },
+    {
+     "id": "L3",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "HE"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "1.000000"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "0.110000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2,
+     "purity": 1.0,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10003287",
+       176
+      ],
+      [
+       "BL10004718",
+       167
+      ]
+     ]
+    },
+    {
+     "id": "L4",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "HE"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "1.000000"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "0.110000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 23,
+     "purity": 0.913043,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000171",
+       307
+      ],
+      [
+       "BL10000182",
+       522
+      ]
+     ]
+    },
+    {
+     "id": "L5",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "HE"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "BY"
+      ],
+      [
+       "PH_FREQ",
+       "=",
+       "E"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 21,
+     "purity": 0.619048,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000231",
+       33
+      ],
+      [
+       "BL10000295",
+       78
+      ]
+     ]
+    },
+    {
+     "id": "L6",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "HE"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "BY"
+      ],
+      [
+       "PH_FREQ",
+       "!=",
+       "E"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 84,
+     "purity": 0.72619,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000055",
+       77
+      ],
+      [
+       "BL10000164",
+       38
+      ]
+     ]
+    },
+    {
+     "id": "L7",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "HE"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "BY"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2339,
+     "purity": 0.985036,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000003",
+       201
+      ],
+      [
+       "BL10000004",
+       31
+      ]
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "id": "C2.1",
+     "origin": "optimal tree on ['AD_REGIO@EV_EFFDT', 'EV_PCTG', 'PH_FREQ']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "BY"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KST",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1959,
+       2019
+      ],
+      "holdout": [
+       461,
+       474
+      ],
+      "total": [
+       2420,
+       2493
+      ],
+      "fingerprint": "c6413d62e5de"
+     },
+     "features": [
+      "AD_REGIO@EV_EFFDT",
+      "EV_PCTG",
+      "PH_FREQ"
+     ]
+    },
+    {
+     "id": "C1",
+     "origin": "CART tree as is",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "DE"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KST",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1957,
+       2019
+      ],
+      "holdout": [
+       461,
+       474
+      ],
+      "total": [
+       2418,
+       2493
+      ],
+      "fingerprint": "d7508786be79"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "EV_PCTG",
+      "PH_FREQ",
+      "RK_TARKEY[3]"
+     ]
+    },
+    {
+     "id": "C2.1/AD_REGIO",
+     "origin": "C2.1 with AD_REGIO instead of AD_REGIO@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "BY"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KST",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1956,
+       2019
+      ],
+      "holdout": [
+       460,
+       474
+      ],
+      "total": [
+       2416,
+       2493
+      ],
+      "fingerprint": "8754a1bdbaff"
+     },
+     "features": [
+      "AD_REGIO",
+      "EV_PCTG",
+      "PH_FREQ"
+     ]
+    },
+    {
+     "id": "C1/AD_CNTRY",
+     "origin": "C1 with AD_CNTRY instead of AD_CNTRY@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "DE"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KST",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1951,
+       2019
+      ],
+      "holdout": [
+       460,
+       474
+      ],
+      "total": [
+       2411,
+       2493
+      ],
+      "fingerprint": "86a8497d1fbc"
+     },
+     "features": [
+      "AD_CNTRY",
+      "EV_PCTG",
+      "PH_FREQ",
+      "RK_TARKEY[3]"
+     ]
+    }
+   ],
+   "residuals": [
+    [
+     "BL10000086",
+     121
+    ],
+    [
+     "BL10000228",
+     175
+    ],
+    [
+     "BL10000247",
+     37
+    ],
+    [
+     "BL10000262",
+     168
+    ],
+    [
+     "BL10000301",
+     76
+    ],
+    [
+     "BL10000352",
+     203
+    ],
+    [
+     "BL10000435",
+     61
+    ],
+    [
+     "BL10000435",
+     72
+    ],
+    [
+     "BL10000626",
+     234
+    ],
+    [
+     "BL10000670",
+     90
+    ],
+    [
+     "BL10000727",
+     306
+    ],
+    [
+     "BL10000734",
+     144
+    ],
+    [
+     "BL10000912",
+     128
+    ],
+    [
+     "BL10000992",
+     76
+    ],
+    [
+     "BL10001031",
+     106
+    ],
+    [
+     "BL10001241",
+     273
+    ],
+    [
+     "BL10001264",
+     268
+    ],
+    [
+     "BL10001483",
+     127
+    ],
+    [
+     "BL10001508",
+     13
+    ],
+    [
+     "BL10001571",
+     50
+    ],
+    [
+     "BL10001775",
+     73
+    ],
+    [
+     "BL10001775",
+     140
+    ],
+    [
+     "BL10001800",
+     143
+    ],
+    [
+     "BL10001911",
+     7
+    ],
+    [
+     "BL10002104",
+     47
+    ],
+    [
+     "BL10002462",
+     40
+    ],
+    [
+     "BL10002508",
+     159
+    ],
+    [
+     "BL10002604",
+     258
+    ],
+    [
+     "BL10002763",
+     73
+    ],
+    [
+     "BL10002763",
+     115
+    ],
+    [
+     "BL10002777",
+     245
+    ],
+    [
+     "BL10002793",
+     97
+    ],
+    [
+     "BL10002845",
+     156
+    ],
+    [
+     "BL10002855",
+     197
+    ],
+    [
+     "BL10002855",
+     298
+    ],
+    [
+     "BL10002883",
+     108
+    ],
+    [
+     "BL10002892",
+     202
+    ],
+    [
+     "BL10002898",
+     87
+    ],
+    [
+     "BL10002921",
+     244
+    ],
+    [
+     "BL10003013",
+     230
+    ],
+    [
+     "BL10003018",
+     126
+    ],
+    [
+     "BL10003045",
+     115
+    ],
+    [
+     "BL10003058",
+     30
+    ],
+    [
+     "BL10003136",
+     130
+    ],
+    [
+     "BL10003142",
+     358
+    ],
+    [
+     "BL10003180",
+     54
+    ],
+    [
+     "BL10003197",
+     165
+    ],
+    [
+     "BL10003380",
+     64
+    ],
+    [
+     "BL10003507",
+     375
+    ],
+    [
+     "BL10003517",
+     218
+    ],
+    [
+     "BL10003692",
+     221
+    ],
+    [
+     "BL10003718",
+     104
+    ],
+    [
+     "BL10003725",
+     130
+    ],
+    [
+     "BL10003866",
+     78
+    ],
+    [
+     "BL10003895",
+     88
+    ],
+    [
+     "BL10003920",
+     92
+    ],
+    [
+     "BL10003963",
+     306
+    ],
+    [
+     "BL10004025",
+     322
+    ],
+    [
+     "BL10004052",
+     130
+    ],
+    [
+     "BL10004056",
+     209
+    ],
+    [
+     "BL10004083",
+     295
+    ],
+    [
+     "BL10004083",
+     325
+    ],
+    [
+     "BL10004158",
+     208
+    ],
+    [
+     "BL10004230",
+     57
+    ],
+    [
+     "BL10004241",
+     14
+    ],
+    [
+     "BL10004265",
+     316
+    ],
+    [
+     "BL10004266",
+     125
+    ],
+    [
+     "BL10004408",
+     264
+    ],
+    [
+     "BL10004623",
+     149
+    ],
+    [
+     "BL10004687",
+     15
+    ],
+    [
+     "BL10004687",
+     32
+    ],
+    [
+     "BL10004928",
+     195
+    ],
+    [
+     "BL10004951",
+     323
+    ]
+   ]
+  },
+  "SOL": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "best": "C2.1",
+   "ties": [],
+   "cards": [
+    {
+     "id": "L1",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "HE"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "1.000000"
+      ],
+      [
+       "PH_FREQ",
+       "=",
+       "M"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 10,
+     "purity": 0.8,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000246",
+       47
+      ],
+      [
+       "BL10000354",
+       117
+      ]
+     ]
+    },
+    {
+     "id": "L2",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "HE"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "1.000000"
+      ],
+      [
+       "PH_FREQ",
+       "!=",
+       "M"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 14,
+     "purity": 0.785714,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000162",
+       102
+      ],
+      [
+       "BL10000293",
+       131
+      ]
+     ]
+    },
+    {
+     "id": "L3",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "HE"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "1.000000"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "0.110000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2,
+     "purity": 1.0,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10003287",
+       176
+      ],
+      [
+       "BL10004718",
+       167
+      ]
+     ]
+    },
+    {
+     "id": "L4",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "HE"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "1.000000"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "0.110000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 23,
+     "purity": 0.913043,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000171",
+       307
+      ],
+      [
+       "BL10000182",
+       522
+      ]
+     ]
+    },
+    {
+     "id": "L5",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "HE"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "BY"
+      ],
+      [
+       "PH_FREQ",
+       "=",
+       "E"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 21,
+     "purity": 0.619048,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000231",
+       33
+      ],
+      [
+       "BL10000295",
+       78
+      ]
+     ]
+    },
+    {
+     "id": "L6",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "HE"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "BY"
+      ],
+      [
+       "PH_FREQ",
+       "!=",
+       "E"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 84,
+     "purity": 0.72619,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000055",
+       77
+      ],
+      [
+       "BL10000164",
+       38
+      ]
+     ]
+    },
+    {
+     "id": "L7",
+     "when": [
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "HE"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "BY"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2339,
+     "purity": 0.985036,
+     "equivalent_when": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000003",
+       201
+      ],
+      [
+       "BL10000004",
+       31
+      ]
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "id": "C2.1",
+     "origin": "optimal tree on ['AD_REGIO@EV_EFFDT', 'EV_PCTG', 'PH_FREQ']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "BY"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "SOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1959,
+       2019
+      ],
+      "holdout": [
+       461,
+       474
+      ],
+      "total": [
+       2420,
+       2493
+      ],
+      "fingerprint": "c6413d62e5de"
+     },
+     "features": [
+      "AD_REGIO@EV_EFFDT",
+      "EV_PCTG",
+      "PH_FREQ"
+     ]
+    },
+    {
+     "id": "C1",
+     "origin": "CART tree as is",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "DE"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "SOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1957,
+       2019
+      ],
+      "holdout": [
+       461,
+       474
+      ],
+      "total": [
+       2418,
+       2493
+      ],
+      "fingerprint": "d7508786be79"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "EV_PCTG",
+      "PH_FREQ",
+      "RK_TARKEY[3]"
+     ]
+    },
+    {
+     "id": "C2.1/AD_REGIO",
+     "origin": "C2.1 with AD_REGIO instead of AD_REGIO@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "BY"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "SOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1956,
+       2019
+      ],
+      "holdout": [
+       460,
+       474
+      ],
+      "total": [
+       2416,
+       2493
+      ],
+      "fingerprint": "8754a1bdbaff"
+     },
+     "features": [
+      "AD_REGIO",
+      "EV_PCTG",
+      "PH_FREQ"
+     ]
+    },
+    {
+     "id": "C1/AD_CNTRY",
+     "origin": "C1 with AD_CNTRY instead of AD_CNTRY@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "DE"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "DE"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "SOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1951,
+       2019
+      ],
+      "holdout": [
+       460,
+       474
+      ],
+      "total": [
+       2411,
+       2493
+      ],
+      "fingerprint": "86a8497d1fbc"
+     },
+     "features": [
+      "AD_CNTRY",
+      "EV_PCTG",
+      "PH_FREQ",
+      "RK_TARKEY[3]"
+     ]
+    }
+   ],
+   "residuals": [
+    [
+     "BL10000086",
+     121
+    ],
+    [
+     "BL10000228",
+     175
+    ],
+    [
+     "BL10000247",
+     37
+    ],
+    [
+     "BL10000262",
+     168
+    ],
+    [
+     "BL10000301",
+     76
+    ],
+    [
+     "BL10000352",
+     203
+    ],
+    [
+     "BL10000435",
+     61
+    ],
+    [
+     "BL10000435",
+     72
+    ],
+    [
+     "BL10000626",
+     234
+    ],
+    [
+     "BL10000670",
+     90
+    ],
+    [
+     "BL10000727",
+     306
+    ],
+    [
+     "BL10000734",
+     144
+    ],
+    [
+     "BL10000912",
+     128
+    ],
+    [
+     "BL10000992",
+     76
+    ],
+    [
+     "BL10001031",
+     106
+    ],
+    [
+     "BL10001241",
+     273
+    ],
+    [
+     "BL10001264",
+     268
+    ],
+    [
+     "BL10001483",
+     127
+    ],
+    [
+     "BL10001508",
+     13
+    ],
+    [
+     "BL10001571",
+     50
+    ],
+    [
+     "BL10001775",
+     73
+    ],
+    [
+     "BL10001775",
+     140
+    ],
+    [
+     "BL10001800",
+     143
+    ],
+    [
+     "BL10001911",
+     7
+    ],
+    [
+     "BL10002104",
+     47
+    ],
+    [
+     "BL10002462",
+     40
+    ],
+    [
+     "BL10002508",
+     159
+    ],
+    [
+     "BL10002604",
+     258
+    ],
+    [
+     "BL10002763",
+     73
+    ],
+    [
+     "BL10002763",
+     115
+    ],
+    [
+     "BL10002777",
+     245
+    ],
+    [
+     "BL10002793",
+     97
+    ],
+    [
+     "BL10002845",
+     156
+    ],
+    [
+     "BL10002855",
+     197
+    ],
+    [
+     "BL10002855",
+     298
+    ],
+    [
+     "BL10002883",
+     108
+    ],
+    [
+     "BL10002892",
+     202
+    ],
+    [
+     "BL10002898",
+     87
+    ],
+    [
+     "BL10002921",
+     244
+    ],
+    [
+     "BL10003013",
+     230
+    ],
+    [
+     "BL10003018",
+     126
+    ],
+    [
+     "BL10003045",
+     115
+    ],
+    [
+     "BL10003058",
+     30
+    ],
+    [
+     "BL10003136",
+     130
+    ],
+    [
+     "BL10003142",
+     358
+    ],
+    [
+     "BL10003180",
+     54
+    ],
+    [
+     "BL10003197",
+     165
+    ],
+    [
+     "BL10003380",
+     64
+    ],
+    [
+     "BL10003507",
+     375
+    ],
+    [
+     "BL10003517",
+     218
+    ],
+    [
+     "BL10003692",
+     221
+    ],
+    [
+     "BL10003718",
+     104
+    ],
+    [
+     "BL10003725",
+     130
+    ],
+    [
+     "BL10003866",
+     78
+    ],
+    [
+     "BL10003895",
+     88
+    ],
+    [
+     "BL10003920",
+     92
+    ],
+    [
+     "BL10003963",
+     306
+    ],
+    [
+     "BL10004025",
+     322
+    ],
+    [
+     "BL10004052",
+     130
+    ],
+    [
+     "BL10004056",
+     209
+    ],
+    [
+     "BL10004083",
+     295
+    ],
+    [
+     "BL10004083",
+     325
+    ],
+    [
+     "BL10004158",
+     208
+    ],
+    [
+     "BL10004230",
+     57
+    ],
+    [
+     "BL10004241",
+     14
+    ],
+    [
+     "BL10004265",
+     316
+    ],
+    [
+     "BL10004266",
+     125
+    ],
+    [
+     "BL10004408",
+     264
+    ],
+    [
+     "BL10004623",
+     149
+    ],
+    [
+     "BL10004687",
+     15
+    ],
+    [
+     "BL10004687",
+     32
+    ],
+    [
+     "BL10004928",
+     195
+    ],
+    [
+     "BL10004951",
+     323
+    ]
+   ]
+  },
+  "KIS": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "best": "C2.3",
+   "ties": [
+    "C2.2"
+   ],
+   "cards": [
+    {
+     "id": "L1",
+     "when": [
+      [
+       "AD_CHURCH",
+       "=",
+       "J"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "0.110000"
+      ],
+      [
+       "AD_REGIO",
+       "=",
+       "BW"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2,
+     "purity": 1.0,
+     "equivalent_when": {
+      "EV_PCTG": [],
+      "AD_CHURCH": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10002371",
+       300
+      ],
+      [
+       "BL10002607",
+       248
+      ]
+     ]
+    },
+    {
+     "id": "L2",
+     "when": [
+      [
+       "AD_CHURCH",
+       "=",
+       "J"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "0.110000"
+      ],
+      [
+       "AD_REGIO",
+       "!=",
+       "BW"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 3,
+     "purity": 1.0,
+     "equivalent_when": {
+      "EV_PCTG": [],
+      "AD_CHURCH": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10000301",
+       76
+      ],
+      [
+       "BL10003287",
+       176
+      ]
+     ]
+    },
+    {
+     "id": "L3",
+     "when": [
+      [
+       "AD_CHURCH",
+       "=",
+       "J"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "0.110000"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "0.260000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2,
+     "purity": 1.0,
+     "equivalent_when": {
+      "EV_PCTG": [],
+      "AD_CHURCH": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10001721",
+       123
+      ],
+      [
+       "BL10002462",
+       40
+      ]
+     ]
+    },
+    {
+     "id": "L4",
+     "when": [
+      [
+       "AD_CHURCH",
+       "=",
+       "J"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "0.110000"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "0.260000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 119,
+     "purity": 0.815126,
+     "equivalent_when": {
+      "EV_PCTG": [],
+      "AD_CHURCH": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10000055",
+       77
+      ],
+      [
+       "BL10000171",
+       307
+      ]
+     ]
+    },
+    {
+     "id": "L5",
+     "when": [
+      [
+       "AD_CHURCH",
+       "!=",
+       "J"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "0.300000"
+      ],
+      [
+       "AD_REGIO",
+       "=",
+       "PIE"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 1,
+     "purity": 1.0,
+     "equivalent_when": {
+      "EV_PCTG": [],
+      "AD_CHURCH": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10004687",
+       32
+      ]
+     ]
+    },
+    {
+     "id": "L6",
+     "when": [
+      [
+       "AD_CHURCH",
+       "!=",
+       "J"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "0.300000"
+      ],
+      [
+       "AD_REGIO",
+       "!=",
+       "PIE"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 68,
+     "purity": 1.0,
+     "equivalent_when": {
+      "EV_PCTG": [],
+      "AD_CHURCH": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10000007",
+       132
+      ],
+      [
+       "BL10000094",
+       232
+      ]
+     ]
+    },
+    {
+     "id": "L7",
+     "when": [
+      [
+       "AD_CHURCH",
+       "!=",
+       "J"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "0.300000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2298,
+     "purity": 0.999565,
+     "equivalent_when": {
+      "EV_PCTG": [],
+      "AD_CHURCH": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10000003",
+       201
+      ],
+      [
+       "BL10000004",
+       31
+      ]
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "id": "C2.3",
+     "origin": "optimal tree on ['EV_PCTG', 'PS_LANG', 'AD_REGIO']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_LANG",
+         "=",
+         "FR"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_LANG",
+         "!=",
+         "FR"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "PIE"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.300000"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KIS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       2000,
+       2019
+      ],
+      "holdout": [
+       470,
+       474
+      ],
+      "total": [
+       2470,
+       2493
+      ],
+      "fingerprint": "0a5025aa7aaf"
+     },
+     "features": [
+      "AD_REGIO",
+      "EV_PCTG",
+      "PS_LANG"
+     ]
+    },
+    {
+     "id": "C2.2",
+     "origin": "optimal tree on ['EV_PCTG', 'PS_LANG@EV_EFFDT', 'AD_REGIO']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_LANG@EV_EFFDT",
+         "=",
+         "FR"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_LANG@EV_EFFDT",
+         "!=",
+         "FR"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "PIE"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.300000"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KIS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       2000,
+       2019
+      ],
+      "holdout": [
+       470,
+       474
+      ],
+      "total": [
+       2470,
+       2493
+      ],
+      "fingerprint": "0a5025aa7aaf"
+     },
+     "features": [
+      "AD_REGIO",
+      "EV_PCTG",
+      "PS_LANG@EV_EFFDT"
+     ]
+    },
+    {
+     "id": "C1",
+     "origin": "CART tree as is",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CHURCH@EV_EFFDT",
+         "=",
+         "N"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH@EV_EFFDT",
+         "!=",
+         "N"
+        ],
+        [
+         "PS_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH@EV_EFFDT",
+         "!=",
+         "N"
+        ],
+        [
+         "PS_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH@EV_EFFDT",
+         "!=",
+         "N"
+        ],
+        [
+         "PS_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.260000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH@EV_EFFDT",
+         "!=",
+         "N"
+        ],
+        [
+         "PS_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.260000"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KIS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       2001,
+       2019
+      ],
+      "holdout": [
+       469,
+       474
+      ],
+      "total": [
+       2470,
+       2493
+      ],
+      "fingerprint": "e7fe1f798bb6"
+     },
+     "features": [
+      "AD_CHURCH@EV_EFFDT",
+      "EV_PCTG",
+      "PH_FREQ",
+      "PS_CNTRY"
+     ]
+    },
+    {
+     "id": "C1/AD_CHURCH",
+     "origin": "C1 with AD_CHURCH instead of AD_CHURCH@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "=",
+         "N"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "N"
+        ],
+        [
+         "PS_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "N"
+        ],
+        [
+         "PS_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "N"
+        ],
+        [
+         "PS_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.260000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "N"
+        ],
+        [
+         "PS_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.260000"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KIS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1999,
+       2019
+      ],
+      "holdout": [
+       469,
+       474
+      ],
+      "total": [
+       2468,
+       2493
+      ],
+      "fingerprint": "82d1531372c9"
+     },
+     "features": [
+      "AD_CHURCH",
+      "EV_PCTG",
+      "PH_FREQ",
+      "PS_CNTRY"
+     ]
+    },
+    {
+     "id": "C2.1",
+     "origin": "optimal tree on ['EV_PCTG', 'AD_CHURCH', 'AD_REGIO']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "BW"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "BW"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.260000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.260000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "PIE"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.300000"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "KIS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       2002,
+       2019
+      ],
+      "holdout": [
+       468,
+       474
+      ],
+      "total": [
+       2470,
+       2493
+      ],
+      "fingerprint": "3acc84c5fa8d"
+     },
+     "features": [
+      "AD_CHURCH",
+      "AD_REGIO",
+      "EV_PCTG"
+     ]
+    }
+   ],
+   "residuals": [
+    [
+     "BL10000228",
+     175
+    ],
+    [
+     "BL10000231",
+     33
+    ],
+    [
+     "BL10000247",
+     37
+    ],
+    [
+     "BL10000262",
+     168
+    ],
+    [
+     "BL10000301",
+     76
+    ],
+    [
+     "BL10000352",
+     203
+    ],
+    [
+     "BL10000435",
+     141
+    ],
+    [
+     "BL10000626",
+     234
+    ],
+    [
+     "BL10000727",
+     306
+    ],
+    [
+     "BL10001721",
+     123
+    ],
+    [
+     "BL10002462",
+     40
+    ],
+    [
+     "BL10002921",
+     244
+    ],
+    [
+     "BL10003380",
+     64
+    ],
+    [
+     "BL10003517",
+     218
+    ],
+    [
+     "BL10003692",
+     221
+    ],
+    [
+     "BL10003920",
+     92
+    ],
+    [
+     "BL10003963",
+     306
+    ],
+    [
+     "BL10004052",
+     130
+    ],
+    [
+     "BL10004265",
+     316
+    ],
+    [
+     "BL10004408",
+     264
+    ],
+    [
+     "BL10004623",
+     149
+    ],
+    [
+     "BL10004687",
+     15
+    ],
+    [
+     "BL10004928",
+     195
+    ]
+   ]
+  },
+  "VST": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "best": "C1",
+   "ties": [],
+   "cards": [
+    {
+     "id": "L1",
+     "when": [
+      [
+       "AD_TAXST@EV_EFFDT",
+       "=",
+       "E"
+      ],
+      [
+       "RK_TARKEY[3]",
+       "=",
+       "W"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "0.100000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 4,
+     "purity": 1.0,
+     "equivalent_when": {
+      "AD_TAXST@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "RK_TARKEY[3]": []
+     },
+     "examples": [
+      [
+       "BL10000368",
+       214
+      ],
+      [
+       "BL10002267",
+       6
+      ]
+     ]
+    },
+    {
+     "id": "L2",
+     "when": [
+      [
+       "AD_TAXST@EV_EFFDT",
+       "=",
+       "E"
+      ],
+      [
+       "RK_TARKEY[3]",
+       "=",
+       "W"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "0.100000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 152,
+     "purity": 0.789474,
+     "equivalent_when": {
+      "AD_TAXST@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "RK_TARKEY[3]": []
+     },
+     "examples": [
+      [
+       "BL10000028",
+       369
+      ],
+      [
+       "BL10000094",
+       232
+      ]
+     ]
+    },
+    {
+     "id": "L3",
+     "when": [
+      [
+       "AD_TAXST@EV_EFFDT",
+       "=",
+       "E"
+      ],
+      [
+       "RK_TARKEY[3]",
+       "!=",
+       "W"
+      ],
+      [
+       "EV_PCTG",
+       "=",
+       "1.000000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 113,
+     "purity": 0.814159,
+     "equivalent_when": {
+      "AD_TAXST@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "RK_TARKEY[3]": []
+     },
+     "examples": [
+      [
+       "BL10000003",
+       201
+      ],
+      [
+       "BL10000052",
+       94
+      ]
+     ]
+    },
+    {
+     "id": "L4",
+     "when": [
+      [
+       "AD_TAXST@EV_EFFDT",
+       "=",
+       "E"
+      ],
+      [
+       "RK_TARKEY[3]",
+       "!=",
+       "W"
+      ],
+      [
+       "EV_PCTG",
+       "!=",
+       "1.000000"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 117,
+     "purity": 0.615385,
+     "equivalent_when": {
+      "AD_TAXST@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "RK_TARKEY[3]": []
+     },
+     "examples": [
+      [
+       "BL10000058",
+       95
+      ],
+      [
+       "BL10000174",
+       127
+      ]
+     ]
+    },
+    {
+     "id": "L5",
+     "when": [
+      [
+       "AD_TAXST@EV_EFFDT",
+       "!=",
+       "E"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2107,
+     "purity": 1.0,
+     "equivalent_when": {
+      "AD_TAXST@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "RK_TARKEY[3]": []
+     },
+     "examples": [
+      [
+       "BL10000004",
+       31
+      ],
+      [
+       "BL10000005",
+       54
+      ]
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "id": "C1",
+     "origin": "CART tree as is",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "M"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "!=",
+         "M"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "!=",
+         "M"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "!=",
+         "M"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "!=",
+         "M"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "VST",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1937,
+       2019
+      ],
+      "holdout": [
+       453,
+       474
+      ],
+      "total": [
+       2390,
+       2493
+      ],
+      "fingerprint": "20f34ed0c7fd"
+     },
+     "features": [
+      "AD_TAXST@EV_EFFDT",
+      "EV_PCTG",
+      "RK_TARKEY[3]"
+     ]
+    },
+    {
+     "id": "C2.1",
+     "origin": "optimal tree on ['AD_TAXST@EV_EFFDT', 'EV_PCTG', 'RK_TARKEY[3]']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.100000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.100000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "!=",
+         "E"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "VST",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1943,
+       2019
+      ],
+      "holdout": [
+       452,
+       474
+      ],
+      "total": [
+       2395,
+       2493
+      ],
+      "fingerprint": "ba6113374af0"
+     },
+     "features": [
+      "AD_TAXST@EV_EFFDT",
+      "EV_PCTG",
+      "RK_TARKEY[3]"
+     ]
+    },
+    {
+     "id": "C1/AD_TAXST",
+     "origin": "C1 with AD_TAXST instead of AD_TAXST@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "=",
+         "M"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "!=",
+         "M"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "!=",
+         "M"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "!=",
+         "M"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "!=",
+         "M"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ]
+       ],
+       "then": "yes"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "VST",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1929,
+       2019
+      ],
+      "holdout": [
+       451,
+       474
+      ],
+      "total": [
+       2380,
+       2493
+      ],
+      "fingerprint": "cfb09d19aa4e"
+     },
+     "features": [
+      "AD_TAXST",
+      "EV_PCTG",
+      "RK_TARKEY[3]"
+     ]
+    },
+    {
+     "id": "C2.1/AD_TAXST",
+     "origin": "C2.1 with AD_TAXST instead of AD_TAXST@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.100000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.100000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_TAXST",
+         "!=",
+         "E"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "VST",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1937,
+       2019
+      ],
+      "holdout": [
+       450,
+       474
+      ],
+      "total": [
+       2387,
+       2493
+      ],
+      "fingerprint": "6beb0952f53c"
+     },
+     "features": [
+      "AD_TAXST",
+      "EV_PCTG",
+      "RK_TARKEY[3]"
+     ]
+    }
+   ],
+   "residuals": [
+    [
+     "BL10000058",
+     95
+    ],
+    [
+     "BL10000075",
+     62
+    ],
+    [
+     "BL10000174",
+     127
+    ],
+    [
+     "BL10000267",
+     99
+    ],
+    [
+     "BL10000328",
+     32
+    ],
+    [
+     "BL10000368",
+     214
+    ],
+    [
+     "BL10000393",
+     64
+    ],
+    [
+     "BL10000419",
+     84
+    ],
+    [
+     "BL10000496",
+     6
+    ],
+    [
+     "BL10000554",
+     7
+    ],
+    [
+     "BL10000652",
+     213
+    ],
+    [
+     "BL10000661",
+     10
+    ],
+    [
+     "BL10000685",
+     109
+    ],
+    [
+     "BL10000685",
+     161
+    ],
+    [
+     "BL10001012",
+     19
+    ],
+    [
+     "BL10001012",
+     77
+    ],
+    [
+     "BL10001115",
+     267
+    ],
+    [
+     "BL10001123",
+     57
+    ],
+    [
+     "BL10001125",
+     40
+    ],
+    [
+     "BL10001152",
+     180
+    ],
+    [
+     "BL10001239",
+     15
+    ],
+    [
+     "BL10001467",
+     86
+    ],
+    [
+     "BL10001485",
+     125
+    ],
+    [
+     "BL10001521",
+     51
+    ],
+    [
+     "BL10001529",
+     56
+    ],
+    [
+     "BL10001573",
+     8
+    ],
+    [
+     "BL10001573",
+     17
+    ],
+    [
+     "BL10001605",
+     157
+    ],
+    [
+     "BL10001618",
+     119
+    ],
+    [
+     "BL10001666",
+     63
+    ],
+    [
+     "BL10001693",
+     45
+    ],
+    [
+     "BL10001918",
+     225
+    ],
+    [
+     "BL10001967",
+     50
+    ],
+    [
+     "BL10001967",
+     118
+    ],
+    [
+     "BL10002031",
+     6
+    ],
+    [
+     "BL10002046",
+     286
+    ],
+    [
+     "BL10002046",
+     443
+    ],
+    [
+     "BL10002053",
+     35
+    ],
+    [
+     "BL10002096",
+     127
+    ],
+    [
+     "BL10002148",
+     16
+    ],
+    [
+     "BL10002186",
+     200
+    ],
+    [
+     "BL10002202",
+     17
+    ],
+    [
+     "BL10002267",
+     6
+    ],
+    [
+     "BL10002286",
+     11
+    ],
+    [
+     "BL10002348",
+     140
+    ],
+    [
+     "BL10002588",
+     41
+    ],
+    [
+     "BL10002630",
+     28
+    ],
+    [
+     "BL10002630",
+     121
+    ],
+    [
+     "BL10002630",
+     170
+    ],
+    [
+     "BL10002630",
+     185
+    ],
+    [
+     "BL10002662",
+     15
+    ],
+    [
+     "BL10002712",
+     251
+    ],
+    [
+     "BL10002720",
+     179
+    ],
+    [
+     "BL10002724",
+     15
+    ],
+    [
+     "BL10002724",
+     98
+    ],
+    [
+     "BL10002803",
+     154
+    ],
+    [
+     "BL10002811",
+     47
+    ],
+    [
+     "BL10003001",
+     28
+    ],
+    [
+     "BL10003071",
+     164
+    ],
+    [
+     "BL10003333",
+     21
+    ],
+    [
+     "BL10003360",
+     50
+    ],
+    [
+     "BL10003377",
+     44
+    ],
+    [
+     "BL10003439",
+     99
+    ],
+    [
+     "BL10003439",
+     239
+    ],
+    [
+     "BL10003444",
+     43
+    ],
+    [
+     "BL10003506",
+     74
+    ],
+    [
+     "BL10003506",
+     76
+    ],
+    [
+     "BL10003601",
+     228
+    ],
+    [
+     "BL10003624",
+     10
+    ],
+    [
+     "BL10003633",
+     131
+    ],
+    [
+     "BL10003670",
+     44
+    ],
+    [
+     "BL10003841",
+     19
+    ],
+    [
+     "BL10003918",
+     116
+    ],
+    [
+     "BL10003933",
+     37
+    ],
+    [
+     "BL10003946",
+     25
+    ],
+    [
+     "BL10003968",
+     22
+    ],
+    [
+     "BL10004128",
+     198
+    ],
+    [
+     "BL10004156",
+     23
+    ],
+    [
+     "BL10004201",
+     11
+    ],
+    [
+     "BL10004205",
+     111
+    ],
+    [
+     "BL10004242",
+     167
+    ],
+    [
+     "BL10004242",
+     227
+    ],
+    [
+     "BL10004242",
+     387
+    ],
+    [
+     "BL10004276",
+     288
+    ],
+    [
+     "BL10004282",
+     67
+    ],
+    [
+     "BL10004313",
+     154
+    ],
+    [
+     "BL10004320",
+     111
+    ],
+    [
+     "BL10004342",
+     17
+    ],
+    [
+     "BL10004389",
+     77
+    ],
+    [
+     "BL10004408",
+     106
+    ],
+    [
+     "BL10004443",
+     16
+    ],
+    [
+     "BL10004479",
+     143
+    ],
+    [
+     "BL10004495",
+     101
+    ],
+    [
+     "BL10004544",
+     463
+    ],
+    [
+     "BL10004579",
+     13
+    ],
+    [
+     "BL10004595",
+     89
+    ],
+    [
+     "BL10004800",
+     217
+    ],
+    [
+     "BL10004803",
+     146
+    ],
+    [
+     "BL10004803",
+     187
+    ],
+    [
+     "BL10004825",
+     56
+    ],
+    [
+     "BL10004875",
+     77
+    ],
+    [
+     "BL10004877",
+     44
+    ],
+    [
+     "BL10004918",
+     35
+    ]
+   ]
+  },
+  "SOS": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "best": "C2.1",
+   "ties": [],
+   "cards": [
+    {
+     "id": "L1",
+     "when": [
+      [
+       "PH_MKTCD",
+       "=",
+       "TV2017"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "LAZ"
+      ],
+      [
+       "RK_TARKEY[5]",
+       "=",
+       "1"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 6,
+     "purity": 0.833333,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "AD_REGIO@EV_EFFDT": [],
+      "PH_MKTCD": [
+       "PH_MKTCD@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000862",
+       157
+      ],
+      [
+       "BL10000862",
+       299
+      ]
+     ]
+    },
+    {
+     "id": "L2",
+     "when": [
+      [
+       "PH_MKTCD",
+       "=",
+       "TV2017"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "LAZ"
+      ],
+      [
+       "RK_TARKEY[5]",
+       "!=",
+       "1"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2,
+     "purity": 1.0,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "AD_REGIO@EV_EFFDT": [],
+      "PH_MKTCD": [
+       "PH_MKTCD@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10001679",
+       177
+      ],
+      [
+       "BL10004237",
+       68
+      ]
+     ]
+    },
+    {
+     "id": "L3",
+     "when": [
+      [
+       "PH_MKTCD",
+       "=",
+       "TV2017"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "LAZ"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "PIE"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 14,
+     "purity": 0.714286,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "AD_REGIO@EV_EFFDT": [],
+      "PH_MKTCD": [
+       "PH_MKTCD@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10001013",
+       71
+      ],
+      [
+       "BL10001013",
+       109
+      ]
+     ]
+    },
+    {
+     "id": "L4",
+     "when": [
+      [
+       "PH_MKTCD",
+       "=",
+       "TV2017"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "LAZ"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "PIE"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 387,
+     "purity": 0.97416,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "AD_REGIO@EV_EFFDT": [],
+      "PH_MKTCD": [
+       "PH_MKTCD@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000004",
+       31
+      ],
+      [
+       "BL10000007",
+       132
+      ]
+     ]
+    },
+    {
+     "id": "L5",
+     "when": [
+      [
+       "PH_MKTCD",
+       "!=",
+       "TV2017"
+      ],
+      [
+       "RK_TARKEY[5]",
+       "=",
+       "1"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "=",
+       "LOM"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 87,
+     "purity": 0.62069,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "AD_REGIO@EV_EFFDT": [],
+      "PH_MKTCD": [
+       "PH_MKTCD@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000044",
+       667
+      ],
+      [
+       "BL10000093",
+       199
+      ]
+     ]
+    },
+    {
+     "id": "L6",
+     "when": [
+      [
+       "PH_MKTCD",
+       "!=",
+       "TV2017"
+      ],
+      [
+       "RK_TARKEY[5]",
+       "=",
+       "1"
+      ],
+      [
+       "AD_REGIO@EV_EFFDT",
+       "!=",
+       "LOM"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 582,
+     "purity": 0.982818,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "AD_REGIO@EV_EFFDT": [],
+      "PH_MKTCD": [
+       "PH_MKTCD@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000003",
+       201
+      ],
+      [
+       "BL10000006",
+       13
+      ]
+     ]
+    },
+    {
+     "id": "L7",
+     "when": [
+      [
+       "PH_MKTCD",
+       "!=",
+       "TV2017"
+      ],
+      [
+       "RK_TARKEY[5]",
+       "!=",
+       "1"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 1415,
+     "purity": 0.95477,
+     "equivalent_when": {
+      "RK_TARKEY[5]": [],
+      "AD_REGIO@EV_EFFDT": [],
+      "PH_MKTCD": [
+       "PH_MKTCD@EV_EFFDT"
+      ]
+     },
+     "examples": [
+      [
+       "BL10000005",
+       54
+      ],
+      [
+       "BL10000016",
+       108
+      ]
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "id": "C2.1",
+     "origin": "optimal tree on ['RK_TARKEY[5]', 'AD_REGIO@EV_EFFDT', 'PH_MKTCD']",
+     "rules": [
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "LAZ"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "LAZ"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "LAZ"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "PIE"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "LAZ"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "LOM"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "LOM"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "SOS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1919,
+       2019
+      ],
+      "holdout": [
+       452,
+       474
+      ],
+      "total": [
+       2371,
+       2493
+      ],
+      "fingerprint": "830995a28f23"
+     },
+     "features": [
+      "AD_REGIO@EV_EFFDT",
+      "PH_MKTCD",
+      "RK_TARKEY[5]"
+     ]
+    },
+    {
+     "id": "C2.1/AD_REGIO",
+     "origin": "C2.1 with AD_REGIO instead of AD_REGIO@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "LAZ"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "LAZ"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "LAZ"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "PIE"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "LAZ"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "LOM"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "LOM"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "SOS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1916,
+       2019
+      ],
+      "holdout": [
+       450,
+       474
+      ],
+      "total": [
+       2366,
+       2493
+      ],
+      "fingerprint": "40d204f48d1c"
+     },
+     "features": [
+      "AD_REGIO",
+      "PH_MKTCD",
+      "RK_TARKEY[5]"
+     ]
+    },
+    {
+     "id": "C1",
+     "origin": "CART tree as is",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.150000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.150000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ],
+        [
+         "PH_PRDCD",
+         "=",
+         "FLKL"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ],
+        [
+         "PH_PRDCD",
+         "!=",
+         "FLKL"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "SOS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1920,
+       2019
+      ],
+      "holdout": [
+       446,
+       474
+      ],
+      "total": [
+       2366,
+       2493
+      ],
+      "fingerprint": "f058963af2d0"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "EV_PCTG",
+      "PH_PRDCD",
+      "RK_TARKEY[3]"
+     ]
+    },
+    {
+     "id": "C1/AD_CNTRY",
+     "origin": "C1 with AD_CNTRY instead of AD_CNTRY@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.150000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "U"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.150000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ],
+        [
+         "PH_PRDCD",
+         "=",
+         "FLKL"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "U"
+        ],
+        [
+         "PH_PRDCD",
+         "!=",
+         "FLKL"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "SOS",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1911,
+       2019
+      ],
+      "holdout": [
+       442,
+       474
+      ],
+      "total": [
+       2353,
+       2493
+      ],
+      "fingerprint": "dbdec1895373"
+     },
+     "features": [
+      "AD_CNTRY",
+      "EV_PCTG",
+      "PH_PRDCD",
+      "RK_TARKEY[3]"
+     ]
+    }
+   ],
+   "residuals": [
+    [
+     "BL10000036",
+     20
+    ],
+    [
+     "BL10000036",
+     101
+    ],
+    [
+     "BL10000036",
+     258
+    ],
+    [
+     "BL10000051",
+     48
+    ],
+    [
+     "BL10000076",
+     43
+    ],
+    [
+     "BL10000093",
+     158
+    ],
+    [
+     "BL10000125",
+     171
+    ],
+    [
+     "BL10000168",
+     147
+    ],
+    [
+     "BL10000305",
+     179
+    ],
+    [
+     "BL10000312",
+     107
+    ],
+    [
+     "BL10000335",
+     190
+    ],
+    [
+     "BL10000455",
+     17
+    ],
+    [
+     "BL10000466",
+     59
+    ],
+    [
+     "BL10000489",
+     548
+    ],
+    [
+     "BL10000592",
+     130
+    ],
+    [
+     "BL10000650",
+     105
+    ],
+    [
+     "BL10000684",
+     425
+    ],
+    [
+     "BL10000704",
+     111
+    ],
+    [
+     "BL10000777",
+     455
+    ],
+    [
+     "BL10000855",
+     14
+    ],
+    [
+     "BL10000891",
+     313
+    ],
+    [
+     "BL10001078",
+     31
+    ],
+    [
+     "BL10001078",
+     470
+    ],
+    [
+     "BL10001078",
+     597
+    ],
+    [
+     "BL10001164",
+     57
+    ],
+    [
+     "BL10001198",
+     487
+    ],
+    [
+     "BL10001198",
+     609
+    ],
+    [
+     "BL10001211",
+     62
+    ],
+    [
+     "BL10001252",
+     379
+    ],
+    [
+     "BL10001294",
+     273
+    ],
+    [
+     "BL10001313",
+     75
+    ],
+    [
+     "BL10001341",
+     11
+    ],
+    [
+     "BL10001349",
+     81
+    ],
+    [
+     "BL10001349",
+     117
+    ],
+    [
+     "BL10001349",
+     132
+    ],
+    [
+     "BL10001410",
+     53
+    ],
+    [
+     "BL10001453",
+     48
+    ],
+    [
+     "BL10001516",
+     413
+    ],
+    [
+     "BL10001536",
+     536
+    ],
+    [
+     "BL10001560",
+     59
+    ],
+    [
+     "BL10001584",
+     218
+    ],
+    [
+     "BL10001585",
+     154
+    ],
+    [
+     "BL10001596",
+     178
+    ],
+    [
+     "BL10001662",
+     18
+    ],
+    [
+     "BL10001709",
+     42
+    ],
+    [
+     "BL10001709",
+     51
+    ],
+    [
+     "BL10001720",
+     525
+    ],
+    [
+     "BL10001757",
+     135
+    ],
+    [
+     "BL10001835",
+     226
+    ],
+    [
+     "BL10001835",
+     295
+    ],
+    [
+     "BL10001838",
+     34
+    ],
+    [
+     "BL10001982",
+     135
+    ],
+    [
+     "BL10001988",
+     136
+    ],
+    [
+     "BL10001989",
+     246
+    ],
+    [
+     "BL10002058",
+     126
+    ],
+    [
+     "BL10002074",
+     172
+    ],
+    [
+     "BL10002100",
+     180
+    ],
+    [
+     "BL10002260",
+     304
+    ],
+    [
+     "BL10002299",
+     131
+    ],
+    [
+     "BL10002335",
+     30
+    ],
+    [
+     "BL10002416",
+     436
+    ],
+    [
+     "BL10002438",
+     169
+    ],
+    [
+     "BL10002535",
+     285
+    ],
+    [
+     "BL10002548",
+     85
+    ],
+    [
+     "BL10002615",
+     267
+    ],
+    [
+     "BL10002669",
+     46
+    ],
+    [
+     "BL10002691",
+     43
+    ],
+    [
+     "BL10002740",
+     138
+    ],
+    [
+     "BL10002760",
+     45
+    ],
+    [
+     "BL10002790",
+     82
+    ],
+    [
+     "BL10002850",
+     165
+    ],
+    [
+     "BL10002873",
+     28
+    ],
+    [
+     "BL10002916",
+     262
+    ],
+    [
+     "BL10002963",
+     565
+    ],
+    [
+     "BL10003042",
+     224
+    ],
+    [
+     "BL10003072",
+     187
+    ],
+    [
+     "BL10003090",
+     312
+    ],
+    [
+     "BL10003100",
+     241
+    ],
+    [
+     "BL10003154",
+     182
+    ],
+    [
+     "BL10003167",
+     67
+    ],
+    [
+     "BL10003204",
+     63
+    ],
+    [
+     "BL10003276",
+     53
+    ],
+    [
+     "BL10003326",
+     161
+    ],
+    [
+     "BL10003349",
+     151
+    ],
+    [
+     "BL10003402",
+     411
+    ],
+    [
+     "BL10003408",
+     512
+    ],
+    [
+     "BL10003409",
+     9
+    ],
+    [
+     "BL10003447",
+     262
+    ],
+    [
+     "BL10003471",
+     180
+    ],
+    [
+     "BL10003517",
+     115
+    ],
+    [
+     "BL10003594",
+     589
+    ],
+    [
+     "BL10003685",
+     306
+    ],
+    [
+     "BL10003687",
+     132
+    ],
+    [
+     "BL10003767",
+     92
+    ],
+    [
+     "BL10003822",
+     244
+    ],
+    [
+     "BL10003843",
+     751
+    ],
+    [
+     "BL10003849",
+     84
+    ],
+    [
+     "BL10003856",
+     159
+    ],
+    [
+     "BL10003905",
+     180
+    ],
+    [
+     "BL10003928",
+     56
+    ],
+    [
+     "BL10003967",
+     134
+    ],
+    [
+     "BL10003988",
+     50
+    ],
+    [
+     "BL10004079",
+     78
+    ],
+    [
+     "BL10004089",
+     283
+    ],
+    [
+     "BL10004108",
+     31
+    ],
+    [
+     "BL10004109",
+     228
+    ],
+    [
+     "BL10004116",
+     156
+    ],
+    [
+     "BL10004117",
+     179
+    ],
+    [
+     "BL10004140",
+     223
+    ],
+    [
+     "BL10004161",
+     41
+    ],
+    [
+     "BL10004217",
+     80
+    ],
+    [
+     "BL10004226",
+     224
+    ],
+    [
+     "BL10004238",
+     119
+    ],
+    [
+     "BL10004268",
+     187
+    ],
+    [
+     "BL10004303",
+     152
+    ],
+    [
+     "BL10004535",
+     36
+    ],
+    [
+     "BL10004581",
+     40
+    ],
+    [
+     "BL10004608",
+     25
+    ],
+    [
+     "BL10004619",
+     152
+    ],
+    [
+     "BL10004774",
+     80
+    ],
+    [
+     "BL10004810",
+     21
+    ],
+    [
+     "BL10004963",
+     158
+    ]
+   ]
+  },
+  "BOL": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "best": "C2.1",
+   "ties": [
+    "C2.2"
+   ],
+   "cards": [
+    {
+     "id": "L1",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "=",
+       "IT"
+      ],
+      [
+       "EV_EVTTP",
+       "=",
+       "400"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 210,
+     "purity": 1.0,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "EV_EVTTP": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10000036",
+       20
+      ],
+      [
+       "BL10000036",
+       101
+      ]
+     ]
+    },
+    {
+     "id": "L2",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "=",
+       "IT"
+      ],
+      [
+       "EV_EVTTP",
+       "!=",
+       "400"
+      ],
+      [
+       "AD_REGIO",
+       "=",
+       "GR"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 1,
+     "purity": 1.0,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "EV_EVTTP": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10001626",
+       53
+      ]
+     ]
+    },
+    {
+     "id": "L3",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "=",
+       "IT"
+      ],
+      [
+       "EV_EVTTP",
+       "!=",
+       "400"
+      ],
+      [
+       "AD_REGIO",
+       "!=",
+       "GR"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 181,
+     "purity": 0.734807,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "EV_EVTTP": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10000036",
+       258
+      ],
+      [
+       "BL10000102",
+       25
+      ]
+     ]
+    },
+    {
+     "id": "L4",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "!=",
+       "IT"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2101,
+     "purity": 0.999524,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "EV_EVTTP": [],
+      "AD_REGIO": []
+     },
+     "examples": [
+      [
+       "BL10000003",
+       201
+      ],
+      [
+       "BL10000004",
+       31
+      ]
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "id": "C2.1",
+     "origin": "optimal tree on ['AD_CNTRY@EV_EFFDT', 'EV_EVTTP', 'AD_REGIO']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "=",
+         "400"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "!=",
+         "400"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "GR"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "!=",
+         "400"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "GR"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1978,
+       2019
+      ],
+      "holdout": [
+       466,
+       474
+      ],
+      "total": [
+       2444,
+       2493
+      ],
+      "fingerprint": "1f3e5251f3f4"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "AD_REGIO",
+      "EV_EVTTP"
+     ]
+    },
+    {
+     "id": "C2.2",
+     "origin": "optimal tree on ['AD_CNTRY@EV_EFFDT', 'EV_PCTG', 'AD_REGIO']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "GR"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "GR"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1978,
+       2019
+      ],
+      "holdout": [
+       466,
+       474
+      ],
+      "total": [
+       2444,
+       2493
+      ],
+      "fingerprint": "1f3e5251f3f4"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "AD_REGIO",
+      "EV_PCTG"
+     ]
+    },
+    {
+     "id": "C1",
+     "origin": "CART tree as is",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_CNTRY",
+         "=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BE"
+        ],
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BE"
+        ],
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "BE"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1979,
+       2019
+      ],
+      "holdout": [
+       465,
+       474
+      ],
+      "total": [
+       2444,
+       2493
+      ],
+      "fingerprint": "f899af4ebaaa"
+     },
+     "features": [
+      "AD_CNTRY",
+      "AD_CNTRY@EV_EFFDT",
+      "AD_REGIO@EV_EFFDT",
+      "EV_PCTG",
+      "PS_CNTRY"
+     ]
+    },
+    {
+     "id": "C1/AD_REGIO",
+     "origin": "C1 with AD_REGIO instead of AD_REGIO@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_CNTRY",
+         "=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "BE"
+        ],
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "BE"
+        ],
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "BE"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1978,
+       2019
+      ],
+      "holdout": [
+       465,
+       474
+      ],
+      "total": [
+       2443,
+       2493
+      ],
+      "fingerprint": "f12a04c6f532"
+     },
+     "features": [
+      "AD_CNTRY",
+      "AD_CNTRY@EV_EFFDT",
+      "AD_REGIO",
+      "EV_PCTG",
+      "PS_CNTRY"
+     ]
+    },
+    {
+     "id": "C2.1/AD_CNTRY",
+     "origin": "C2.1 with AD_CNTRY instead of AD_CNTRY@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "=",
+         "400"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "!=",
+         "400"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "GR"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "!=",
+         "400"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "GR"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1963,
+       2019
+      ],
+      "holdout": [
+       464,
+       474
+      ],
+      "total": [
+       2427,
+       2493
+      ],
+      "fingerprint": "36af76ef6ce9"
+     },
+     "features": [
+      "AD_CNTRY",
+      "AD_REGIO",
+      "EV_EVTTP"
+     ]
+    },
+    {
+     "id": "C2.2/AD_CNTRY",
+     "origin": "C2.2 with AD_CNTRY instead of AD_CNTRY@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "GR"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "GR"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1963,
+       2019
+      ],
+      "holdout": [
+       464,
+       474
+      ],
+      "total": [
+       2427,
+       2493
+      ],
+      "fingerprint": "36af76ef6ce9"
+     },
+     "features": [
+      "AD_CNTRY",
+      "AD_REGIO",
+      "EV_PCTG"
+     ]
+    },
+    {
+     "id": "C1/AD_CNTRY",
+     "origin": "C1 with AD_CNTRY instead of AD_CNTRY@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_CNTRY",
+         "=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BE"
+        ],
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BE"
+        ],
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "BE"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOL",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1963,
+       2019
+      ],
+      "holdout": [
+       464,
+       474
+      ],
+      "total": [
+       2427,
+       2493
+      ],
+      "fingerprint": "36af76ef6ce9"
+     },
+     "features": [
+      "AD_CNTRY",
+      "AD_REGIO@EV_EFFDT",
+      "EV_PCTG",
+      "PS_CNTRY"
+     ]
+    }
+   ],
+   "residuals": [
+    [
+     "BL10000051",
+     48
+    ],
+    [
+     "BL10000076",
+     43
+    ],
+    [
+     "BL10000093",
+     199
+    ],
+    [
+     "BL10000256",
+     9
+    ],
+    [
+     "BL10000455",
+     17
+    ],
+    [
+     "BL10000487",
+     96
+    ],
+    [
+     "BL10000506",
+     190
+    ],
+    [
+     "BL10000795",
+     225
+    ],
+    [
+     "BL10000974",
+     92
+    ],
+    [
+     "BL10001120",
+     25
+    ],
+    [
+     "BL10001178",
+     130
+    ],
+    [
+     "BL10001313",
+     75
+    ],
+    [
+     "BL10001325",
+     89
+    ],
+    [
+     "BL10001341",
+     11
+    ],
+    [
+     "BL10001378",
+     57
+    ],
+    [
+     "BL10001410",
+     53
+    ],
+    [
+     "BL10001434",
+     136
+    ],
+    [
+     "BL10001824",
+     133
+    ],
+    [
+     "BL10001942",
+     321
+    ],
+    [
+     "BL10001988",
+     369
+    ],
+    [
+     "BL10002040",
+     199
+    ],
+    [
+     "BL10002182",
+     18
+    ],
+    [
+     "BL10002194",
+     14
+    ],
+    [
+     "BL10002217",
+     173
+    ],
+    [
+     "BL10002335",
+     238
+    ],
+    [
+     "BL10002850",
+     165
+    ],
+    [
+     "BL10003100",
+     241
+    ],
+    [
+     "BL10003154",
+     182
+    ],
+    [
+     "BL10003247",
+     70
+    ],
+    [
+     "BL10003326",
+     161
+    ],
+    [
+     "BL10003350",
+     140
+    ],
+    [
+     "BL10003585",
+     30
+    ],
+    [
+     "BL10003779",
+     309
+    ],
+    [
+     "BL10003828",
+     89
+    ],
+    [
+     "BL10003862",
+     67
+    ],
+    [
+     "BL10003943",
+     366
+    ],
+    [
+     "BL10003988",
+     50
+    ],
+    [
+     "BL10003993",
+     106
+    ],
+    [
+     "BL10004030",
+     101
+    ],
+    [
+     "BL10004089",
+     283
+    ],
+    [
+     "BL10004108",
+     31
+    ],
+    [
+     "BL10004161",
+     41
+    ],
+    [
+     "BL10004238",
+     119
+    ],
+    [
+     "BL10004303",
+     152
+    ],
+    [
+     "BL10004462",
+     94
+    ],
+    [
+     "BL10004524",
+     113
+    ],
+    [
+     "BL10004774",
+     80
+    ],
+    [
+     "BL10004812",
+     282
+    ],
+    [
+     "BL10004964",
+     198
+    ]
+   ]
+  },
+  "BOC": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "best": "C2.1",
+   "ties": [],
+   "cards": [
+    {
+     "id": "L1",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "=",
+       "IT"
+      ],
+      [
+       "previous(SOS)",
+       "=",
+       null
+      ],
+      [
+       "RK_TARKEY[5]",
+       "=",
+       "1"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 90,
+     "purity": 0.633333,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "previous(SOS)": [],
+      "RK_TARKEY[5]": []
+     },
+     "examples": [
+      [
+       "BL10000036",
+       20
+      ],
+      [
+       "BL10000051",
+       48
+      ]
+     ]
+    },
+    {
+     "id": "L2",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "=",
+       "IT"
+      ],
+      [
+       "previous(SOS)",
+       "=",
+       null
+      ],
+      [
+       "RK_TARKEY[5]",
+       "!=",
+       "1"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 228,
+     "purity": 0.842105,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "previous(SOS)": [],
+      "RK_TARKEY[5]": []
+     },
+     "examples": [
+      [
+       "BL10000102",
+       25
+      ],
+      [
+       "BL10000104",
+       239
+      ]
+     ]
+    },
+    {
+     "id": "L3",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "=",
+       "IT"
+      ],
+      [
+       "previous(SOS)",
+       "!=",
+       null
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 74,
+     "purity": 0.77027,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "previous(SOS)": [],
+      "RK_TARKEY[5]": []
+     },
+     "examples": [
+      [
+       "BL10000036",
+       258
+      ],
+      [
+       "BL10000168",
+       147
+      ]
+     ]
+    },
+    {
+     "id": "L4",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "!=",
+       "IT"
+      ],
+      [
+       "previous(SOS)",
+       "=",
+       "yes"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "yes"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 1,
+     "purity": 1.0,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "previous(SOS)": [],
+      "RK_TARKEY[5]": []
+     },
+     "examples": [
+      [
+       "BL10003517",
+       218
+      ]
+     ]
+    },
+    {
+     "id": "L5",
+     "when": [
+      [
+       "AD_CNTRY@EV_EFFDT",
+       "!=",
+       "IT"
+      ],
+      [
+       "previous(SOS)",
+       "!=",
+       "yes"
+      ]
+     ],
+     "then": {
+      "relation": "value",
+      "center": "no"
+     },
+     "rounding": [
+      "HALF_UP"
+     ],
+     "support_rows": 2100,
+     "purity": 0.994286,
+     "equivalent_when": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "previous(SOS)": [],
+      "RK_TARKEY[5]": []
+     },
+     "examples": [
+      [
+       "BL10000003",
+       201
+      ],
+      [
+       "BL10000004",
+       31
+      ]
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "id": "C2.1",
+     "origin": "optimal tree on ['AD_CNTRY@EV_EFFDT', 'previous(SOS)', 'RK_TARKEY[5]']",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         null
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         null
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         null
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         "yes"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         "yes"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOC",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1938,
+       2019
+      ],
+      "holdout": [
+       457,
+       474
+      ],
+      "total": [
+       2395,
+       2493
+      ],
+      "fingerprint": "c526f68a1d24"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "RK_TARKEY[5]",
+      "previous(SOS)"
+     ]
+    },
+    {
+     "id": "C1/EC_RATE",
+     "origin": "C1 with EC_RATE instead of EC_RATE@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE",
+         "=",
+         "0.030000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE",
+         "!=",
+         "0.030000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         "yes"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         "yes"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOC",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1918,
+       2019
+      ],
+      "holdout": [
+       455,
+       474
+      ],
+      "total": [
+       2373,
+       2493
+      ],
+      "fingerprint": "2886b9a15ed8"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "AD_REGIO@EV_EFFDT",
+      "AD_VRSNR@EV_EFFDT",
+      "EC_RATE",
+      "RK_TARKEY[5]",
+      "previous(SOS)"
+     ]
+    },
+    {
+     "id": "C1/AD_REGIO",
+     "origin": "C1 with AD_REGIO instead of AD_REGIO@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE@EV_EFFDT",
+         "=",
+         "0.030000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE@EV_EFFDT",
+         "!=",
+         "0.030000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         "yes"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         "yes"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOC",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1937,
+       2019
+      ],
+      "holdout": [
+       454,
+       474
+      ],
+      "total": [
+       2391,
+       2493
+      ],
+      "fingerprint": "b412d2da4590"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "AD_REGIO",
+      "AD_VRSNR@EV_EFFDT",
+      "EC_RATE@EV_EFFDT",
+      "RK_TARKEY[5]",
+      "previous(SOS)"
+     ]
+    },
+    {
+     "id": "C1/AD_VRSNR",
+     "origin": "C1 with AD_VRSNR instead of AD_VRSNR@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE@EV_EFFDT",
+         "=",
+         "0.030000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE@EV_EFFDT",
+         "!=",
+         "0.030000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         "yes"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         "yes"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOC",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1937,
+       2019
+      ],
+      "holdout": [
+       454,
+       474
+      ],
+      "total": [
+       2391,
+       2493
+      ],
+      "fingerprint": "b412d2da4590"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "AD_REGIO@EV_EFFDT",
+      "AD_VRSNR",
+      "EC_RATE@EV_EFFDT",
+      "RK_TARKEY[5]",
+      "previous(SOS)"
+     ]
+    },
+    {
+     "id": "C1",
+     "origin": "CART tree as is",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE@EV_EFFDT",
+         "=",
+         "0.030000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE@EV_EFFDT",
+         "!=",
+         "0.030000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         "yes"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         "yes"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOC",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1937,
+       2019
+      ],
+      "holdout": [
+       454,
+       474
+      ],
+      "total": [
+       2391,
+       2493
+      ],
+      "fingerprint": "b412d2da4590"
+     },
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "AD_REGIO@EV_EFFDT",
+      "AD_VRSNR@EV_EFFDT",
+      "EC_RATE@EV_EFFDT",
+      "RK_TARKEY[5]",
+      "previous(SOS)"
+     ]
+    },
+    {
+     "id": "C2.1/AD_CNTRY",
+     "origin": "C2.1 with AD_CNTRY instead of AD_CNTRY@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         null
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         null
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         null
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         "yes"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         "yes"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOC",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1916,
+       2019
+      ],
+      "holdout": [
+       452,
+       474
+      ],
+      "total": [
+       2368,
+       2493
+      ],
+      "fingerprint": "b4357b633f44"
+     },
+     "features": [
+      "AD_CNTRY",
+      "RK_TARKEY[5]",
+      "previous(SOS)"
+     ]
+    },
+    {
+     "id": "C1/AD_CNTRY",
+     "origin": "C1 with AD_CNTRY instead of AD_CNTRY@EV_EFFDT",
+     "rules": [
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE@EV_EFFDT",
+         "=",
+         "0.030000"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "EC_RATE@EV_EFFDT",
+         "!=",
+         "0.030000"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "=",
+         "IT"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "2"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "=",
+         "3"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "TI"
+        ]
+       ],
+       "then": "no"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         "yes"
+        ]
+       ],
+       "then": "yes"
+      },
+      {
+       "when": [
+        [
+         "AD_CNTRY",
+         "!=",
+         "IT"
+        ],
+        [
+         "AD_VRSNR@EV_EFFDT",
+         "!=",
+         "3"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         "yes"
+        ]
+       ],
+       "then": "no"
+      }
+     ],
+     "relation": {
+      "kind": "label",
+      "input": null
+     },
+     "value": "BOC",
+     "rounding": "ROUND_HALF_UP",
+     "score": {
+      "discovery": [
+       1913,
+       2019
+      ],
+      "holdout": [
+       450,
+       474
+      ],
+      "total": [
+       2363,
+       2493
+      ],
+      "fingerprint": "48dc91eb8f63"
+     },
+     "features": [
+      "AD_CNTRY",
+      "AD_REGIO@EV_EFFDT",
+      "AD_VRSNR@EV_EFFDT",
+      "EC_RATE@EV_EFFDT",
+      "RK_TARKEY[5]",
+      "previous(SOS)"
+     ]
+    }
+   ],
+   "residuals": [
+    [
+     "BL10000036",
+     101
+    ],
+    [
+     "BL10000044",
+     667
+    ],
+    [
+     "BL10000076",
+     43
+    ],
+    [
+     "BL10000093",
+     199
+    ],
+    [
+     "BL10000168",
+     103
+    ],
+    [
+     "BL10000256",
+     9
+    ],
+    [
+     "BL10000305",
+     179
+    ],
+    [
+     "BL10000316",
+     517
+    ],
+    [
+     "BL10000389",
+     135
+    ],
+    [
+     "BL10000487",
+     96
+    ],
+    [
+     "BL10000489",
+     548
+    ],
+    [
+     "BL10000550",
+     229
+    ],
+    [
+     "BL10000565",
+     29
+    ],
+    [
+     "BL10000645",
+     19
+    ],
+    [
+     "BL10000680",
+     72
+    ],
+    [
+     "BL10000777",
+     455
+    ],
+    [
+     "BL10000862",
+     299
+    ],
+    [
+     "BL10000921",
+     84
+    ],
+    [
+     "BL10000974",
+     92
+    ],
+    [
+     "BL10000989",
+     349
+    ],
+    [
+     "BL10001000",
+     140
+    ],
+    [
+     "BL10001037",
+     298
+    ],
+    [
+     "BL10001112",
+     593
+    ],
+    [
+     "BL10001120",
+     25
+    ],
+    [
+     "BL10001187",
+     174
+    ],
+    [
+     "BL10001198",
+     487
+    ],
+    [
+     "BL10001252",
+     379
+    ],
+    [
+     "BL10001325",
+     89
+    ],
+    [
+     "BL10001341",
+     11
+    ],
+    [
+     "BL10001349",
+     117
+    ],
+    [
+     "BL10001349",
+     132
+    ],
+    [
+     "BL10001494",
+     43
+    ],
+    [
+     "BL10001535",
+     115
+    ],
+    [
+     "BL10001536",
+     536
+    ],
+    [
+     "BL10001560",
+     59
+    ],
+    [
+     "BL10001584",
+     218
+    ],
+    [
+     "BL10001587",
+     177
+    ],
+    [
+     "BL10001600",
+     497
+    ],
+    [
+     "BL10001835",
+     226
+    ],
+    [
+     "BL10001883",
+     11
+    ],
+    [
+     "BL10001895",
+     7
+    ],
+    [
+     "BL10001942",
+     321
+    ],
+    [
+     "BL10001988",
+     282
+    ],
+    [
+     "BL10001988",
+     358
+    ],
+    [
+     "BL10001988",
+     369
+    ],
+    [
+     "BL10002040",
+     199
+    ],
+    [
+     "BL10002182",
+     18
+    ],
+    [
+     "BL10002195",
+     327
+    ],
+    [
+     "BL10002211",
+     101
+    ],
+    [
+     "BL10002214",
+     54
+    ],
+    [
+     "BL10002214",
+     103
+    ],
+    [
+     "BL10002299",
+     19
+    ],
+    [
+     "BL10002335",
+     112
+    ],
+    [
+     "BL10002335",
+     238
+    ],
+    [
+     "BL10002340",
+     419
+    ],
+    [
+     "BL10002406",
+     352
+    ],
+    [
+     "BL10002626",
+     380
+    ],
+    [
+     "BL10002963",
+     565
+    ],
+    [
+     "BL10003013",
+     230
+    ],
+    [
+     "BL10003014",
+     31
+    ],
+    [
+     "BL10003154",
+     182
+    ],
+    [
+     "BL10003228",
+     8
+    ],
+    [
+     "BL10003247",
+     70
+    ],
+    [
+     "BL10003343",
+     323
+    ],
+    [
+     "BL10003391",
+     356
+    ],
+    [
+     "BL10003408",
+     512
+    ],
+    [
+     "BL10003409",
+     9
+    ],
+    [
+     "BL10003507",
+     375
+    ],
+    [
+     "BL10003585",
+     30
+    ],
+    [
+     "BL10003594",
+     246
+    ],
+    [
+     "BL10003761",
+     7
+    ],
+    [
+     "BL10003780",
+     286
+    ],
+    [
+     "BL10003815",
+     127
+    ],
+    [
+     "BL10003843",
+     751
+    ],
+    [
+     "BL10003856",
+     159
+    ],
+    [
+     "BL10003862",
+     67
+    ],
+    [
+     "BL10003865",
+     27
+    ],
+    [
+     "BL10003875",
+     105
+    ],
+    [
+     "BL10003905",
+     180
+    ],
+    [
+     "BL10003928",
+     56
+    ],
+    [
+     "BL10003928",
+     161
+    ],
+    [
+     "BL10003991",
+     244
+    ],
+    [
+     "BL10004005",
+     408
+    ],
+    [
+     "BL10004043",
+     184
+    ],
+    [
+     "BL10004108",
+     31
+    ],
+    [
+     "BL10004117",
+     179
+    ],
+    [
+     "BL10004161",
+     41
+    ],
+    [
+     "BL10004226",
+     39
+    ],
+    [
+     "BL10004278",
+     70
+    ],
+    [
+     "BL10004447",
+     124
+    ],
+    [
+     "BL10004462",
+     94
+    ],
+    [
+     "BL10004613",
+     5
+    ],
+    [
+     "BL10004724",
+     451
+    ],
+    [
+     "BL10004729",
+     60
+    ],
+    [
+     "BL10004774",
+     80
+    ],
+    [
+     "BL10004795",
+     574
+    ],
+    [
+     "BL10004944",
+     217
+    ],
+    [
+     "BL10004971",
+     240
+    ]
+   ]
+  }
+ }
+}

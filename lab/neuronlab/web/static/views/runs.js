@@ -1,10 +1,12 @@
 // Runs: every run of the pipeline, of step 5, of scoring, of ablation and of the agent. Newest first.
-import { cells, get, h, header, loading, mount, pill, post, start, table, toast } from '../lib/h.js';
+import { cells, dialog, get, h, header, icons, loading, modelNotice, mount, pill, post, settings, start, table, term, toast } from '../lib/h.js';
 
 const PAGE = 25;
 const state = { kind: 'All', task: 'All tasks', search: '', page: 0 };
 
 const KIND_ACTION = { Pipeline: 'run', 'Step 5': 'suggest', Score: 'score', Ablation: 'ablate' };
+const KIND_HELP = { Pipeline: 'Steps 1–4, 6 and 7: profile, cluster, trees, pool, exact scoring, residuals', 'Step 5': 'The language model proposes features, each scored exactly',
+  Score: 'lab score on submission.py', Ablation: 'Each rule card switched off in turn', Agent: 'A Claude Code session that edits submission.py' };
 
 export async function render(root) {
   loading(root, 'runs');
@@ -29,12 +31,12 @@ export async function render(root) {
         h('div', { class: 'row' },
           h('button', { type: 'button', class: 'btn', onClick: () => unattended(data) }, 'Run every task unattended'),
           h('button', { type: 'button', class: 'btn primary', onClick: () => newRun(data) }, 'New run'))),
-      h('section', { 'aria-label': 'Latest result per task', class: 'grid', style: { gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))' } },
-        data.tasks.map((t) => h('a', { href: `#/runs/${encodeURIComponent(t.id)}`, class: 'card tight', style: { textDecoration: 'none', color: 'inherit', gap: '6px', padding: '16px' } },
-          h('span', { class: 'row-between' }, h('span', { class: 'mono strong small' }, t.id), stateDot(t.state)),
-          h('span', { class: 'tiny muted' }, 'Holdout, exact'),
-          h('span', { class: 'mono', style: { fontSize: '24px', fontWeight: 500, lineHeight: 1.2 } }, t.holdout),
-          h('span', { class: 'small muted' }, t.frozen)))),
+      h('section', { 'aria-label': 'Latest result per task', class: 'grid', style: { gridTemplateColumns: 'repeat(auto-fit, minmax(min(210px, 100%), 1fr))' } },
+        data.tasks.map((t) => h('a', { href: `#/runs/${encodeURIComponent(t.id)}`, class: ['tile', t.holdout === '—' && 'idle'] },
+          h('span', { class: 'tile-head' }, h('span', { class: 'tile-name', title: t.id }, t.id), stateDot(t.state)),
+          h('span', { class: 'tile-value' }, tileValue(t.holdout)),
+          h('span', { class: 'tile-foot' }, h('span', {}, t.holdout === '—' ? 'No holdout score' : 'Holdout, exact'),
+            h('span', { class: ['tile-frozen', t.frozen === 'Frozen in submission' && 'on'] }, t.frozen === 'Frozen in submission' ? [icons.check(), 'Frozen'] : t.frozen))))),
       h('section', { class: 'card flush' },
         h('div', { class: 'row', style: { padding: '16px 20px', borderBottom: '1px solid var(--divider)', alignItems: 'flex-end' } },
           h('label', { class: 'field', style: { flex: '1 1 260px' } }, 'Search', search),
@@ -43,17 +45,17 @@ export async function render(root) {
               ['All tasks', ...taskNames].map((n) => h('option', { selected: n === state.task ? true : null }, n)))),
           h('fieldset', { style: { border: 0, margin: 0, padding: 0 } },
             h('legend', { class: 'small strong', style: { padding: 0, marginBottom: '6px' } }, 'Kind'),
-            h('div', { class: 'segmented' }, data.kinds.map((k) => h('button', { type: 'button', 'aria-pressed': String(k === state.kind),
+            h('div', { class: 'segmented' }, data.kinds.map((k) => h('button', { type: 'button', title: KIND_HELP[k] || null, 'aria-pressed': String(k === state.kind),
               onClick: () => { state.kind = k; state.page = 0; redraw(); } }, k))))),
         rows.length ? table([
           { label: 'Status', cell: (r) => pill(r.status) },
-          { label: 'Run', cell: (r) => h('a', { href: r.job ? `#/jobs/${r.id}` : `#/runs/${encodeURIComponent(r.run)}`, class: 'mono strong', style: { fontSize: '13.5px' } }, r.run) },
+          { label: 'Run', cell: (r) => h('a', { href: r.job ? `#/jobs/${r.id}` : `#/runs/${encodeURIComponent(r.run)}`, class: 'rowlink' }, r.run) },
           { label: 'Kind', cell: (r) => h('span', { class: 'muted' }, r.kind) },
           { label: 'Steps', cell: (r) => cells(r.steps) },
           { label: 'Started', cell: (r) => h('span', { style: { whiteSpace: 'nowrap' } }, r.started) },
           { label: 'Took', num: true, key: 'took' },
-          { label: 'Discovery', num: true, key: 'disc' },
-          { label: 'Holdout', num: true, cell: (r) => [r.hold, ' ', h('span', { class: 'tiny', style: { color: (r.delta || '').startsWith('-') ? 'var(--bad)' : 'var(--ok)' } }, (r.delta || '').replace('-', '−'))] },
+          { label: term('Discovery'), num: true, key: 'disc' },
+          { label: term('Holdout'), num: true, cell: (r) => [r.hold, ' ', h('span', { class: 'tiny', style: { color: (r.delta || '').startsWith('-') ? 'var(--bad)' : 'var(--ok)' } }, (r.delta || '').replace('-', '−'))] },
           { label: 'Winner or reason', cell: (r) => h('span', { style: { color: ['failed', 'interrupted'].includes(r.status) ? 'var(--bad)' : null } }, r.note) },
         ], shown, { minWidth: '1080px' }) : h('p', { class: 'empty', style: { margin: '20px' } }, 'No run matches.'),
         h('div', { class: 'row-between small muted', style: { padding: '12px 20px', borderTop: '1px solid var(--divider)' } },
@@ -82,31 +84,28 @@ export async function render(root) {
 function stateDot(status) {
   const colors = { done: 'var(--ok-dot)', running: 'var(--ink)', failed: 'var(--accent)', queued: 'var(--control)' };
   const label = { done: 'Done', running: 'Running', failed: 'Failed', queued: 'Queued', cancelled: 'Cancelled', interrupted: 'Interrupted' }[status] || status;
-  return h('span', { class: 'row tiny', style: { gap: '6px' } }, h('span', { class: 'dot', style: { background: colors[status] || 'var(--faint)' } }), label);
+  return h('span', { class: 'row tiny', style: { gap: '6px', flex: 'none' } }, h('span', { class: 'dot', style: { background: colors[status] || 'var(--faint)' } }), label);
+}
+
+// "99.76 %" -> 99.76 with a small unit; a task never scored says so in words.
+function tileValue(holdout) {
+  const m = /^([\d.]+)\s*%$/.exec(holdout || '');
+  return m ? [m[1], h('small', {}, '%')] : 'Not run yet';
 }
 
 function legend(state_, label) {
   return h('span', { class: 'row', style: { gap: '6px' } }, h('span', { class: ['cell', state_] }), label);
 }
 
-function dialog(title, body, actions) {
-  const el = h('dialog', { style: { border: '1px solid var(--line)', borderRadius: '8px', padding: '24px', maxWidth: '560px', width: 'calc(100% - 32px)' } },
-    h('form', { method: 'dialog', class: 'stack-16' }, h('h2', {}, title), body,
-      h('div', { class: 'row', style: { justifyContent: 'flex-end' } }, h('button', { class: 'btn', value: 'cancel' }, 'Cancel'), actions)));
-  document.body.append(el);
-  el.addEventListener('close', () => el.remove());
-  el.showModal();
-  return el;
-}
-
 function newRun(data) {
   const tasks = [...new Set(data.tasks.map((t) => t.id))];
   const task = h('select', { class: 'input mono' }, tasks.map((t) => h('option', {}, t)));
-  const kind = h('select', { class: 'input' }, Object.keys(KIND_ACTION).map((k) => h('option', {}, k)));
+  const notice = h('div', {});
+  const kind = h('select', { class: 'input', onChange: () => notice.replaceChildren(kind.value === 'Step 5' ? modelNotice('suggest') : '') }, Object.keys(KIND_ACTION).map((k) => h('option', {}, k)));
   const go = h('button', { class: 'btn primary', value: 'go' }, 'Start');
   const el = dialog('New run', h('div', { class: 'stack-12' },
     h('label', { class: 'field' }, 'Task', task),
-    h('label', { class: 'field' }, 'Kind', kind),
+    h('label', { class: 'field' }, 'Kind', kind), notice,
     h('p', { class: 'small muted' }, 'Pipeline runs steps 1–4, 6 and 7. Step 5 asks the language model for features. Score runs submission.py. Ablation switches each rule card off.')), go);
   go.addEventListener('click', () => { el.close(); start(KIND_ACTION[kind.value], task.value); });
 }
@@ -117,9 +116,11 @@ function unattended(data) {
   const go = h('button', { class: 'btn primary', value: 'go' }, 'Queue the sessions');
   const el = dialog('Run every task unattended', h('div', { class: 'stack-12' },
     h('p', { class: 'small muted' }, 'One headless Claude Code session per task, one after the other, with the skill rule-discovery: the same as lab agent. Each session edits submission.py.'),
+    modelNotice('agent'),
     h('div', {}, boxes)), go);
   go.addEventListener('click', async () => {
     el.close();
+    if ((await settings())?.claude === false) { toast('Claude Code is not installed: the agent cannot run. See the model in the header.', true); return; }
     const chosen = boxes.map((b) => b.querySelector('input')).filter((i) => i.checked).map((i) => i.value);
     if (!chosen.length) return;
     try {

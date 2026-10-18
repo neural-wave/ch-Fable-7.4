@@ -1,6 +1,7 @@
 // New task in four steps: legacy data, task description, test pairs, review and run. One draft per task, kept in
 // memory and in this browser until it is saved as lab/tasks/<id>.json.
-import { card, edges, get, h, header, icons, loading, mount, post, table, toast } from '../lib/h.js';
+import { zoomCanvas } from '../lib/canvas.js';
+import { card, edges, get, h, header, icons, loading, mount, post, table, tech, toast } from '../lib/h.js';
 
 const STEPS = [['legacy', 'Legacy data', 'required'], ['task', 'Task description', ''], ['pairs', 'Test pairs', 'optional'], ['review', 'Review and run', '']];
 const PIPELINE = [['profile', 'Profile keys and joins'], ['frame', 'Build the frame'], ['cluster', 'Cluster relations'], ['tree', 'Optimal decision trees'],
@@ -28,7 +29,7 @@ export async function render(root, { task, step }) {
   loading(root, 'tasks');
   const draft = await draftOf(task);
   const def = draft.definition;
-  const ctx = { root, task, step, draft, def, redraw: null, changed: () => { draft.dirty = true; remember(task); } };
+  const ctx = { root, task, step, draft, def, redraw: null, changed: () => { draft.dirty = true; remember(task); }, canvases: {} };
   const view = { legacy: legacyStep, task: taskStep, pairs: pairsStep, review: reviewStep }[step];
   ctx.redraw = async () => {
     const [mainNode, asideNode] = await view(ctx);
@@ -53,8 +54,7 @@ function stepNav(task, current) {
 }
 
 function preview(title, data, note) {
-  return [h('div', { class: 'dark' }, h('div', { class: 'row-between' }, h('h2', {}, title), h('span', { class: 'tiny muted' }, 'live preview')),
-    h('pre', {}, JSON.stringify(data, null, 2))),
+  return [tech('json', [title, h('span', { class: 'tiny muted' }, 'live preview of the file')], h('pre', {}, JSON.stringify(data, null, 2)), 'dark'),
   note ? h('div', { class: 'card tight', style: { gap: '8px' } }, h('h3', {}, note[0]), h('p', { class: 'small muted' }, note[1])) : null];
 }
 
@@ -116,7 +116,7 @@ async function legacyStep(ctx) {
       'Every file gets a typed copy in ', h('code', {}, '.cache/'), '. ', ov.profiled ? `Keys and relationships come from the profile of ${ov.tables.length} tables.` : 'The tables have not been profiled yet: keys and relationships appear after step 1 of a run.')),
     diagram ? card(h('div', { class: 'stack' }, h('h2', {}, 'Structure at a glance'),
       h('p', { class: 'small muted' }, 'Tables in this task and their relationships. Each arrow goes from a foreign key to the key it references; dashed: a temporal join, read on a date.')),
-    erDiagram(diagram, tableMeta, ctx.selected)) : null,
+    inCanvas(ctx, 'tables', 'Tables and joins of the task', diagram, erDiagram(diagram, tableMeta, ctx.selected))) : null,
     card(h('div', { class: 'card-head' }, h('h2', {}, 'Tables'), h('span', { class: 'small muted' }, 'Tick the tables of this task; pick one to check its columns')),
       table([
         { label: h('span', { class: 'sr' }, 'In this task'), cell: (t) => h('input', { type: 'checkbox', 'aria-label': `${t.name} in this task`, checked: inTask.has(t.name) ? true : null, style: { width: '18px', height: '18px', accentColor: 'var(--accent)' },
@@ -205,8 +205,15 @@ function erDiagram(diagram, meta, selected) {
   const boxes = diagram.nodes.map((n) => h('div', { class: ['table-node', n.highlight && 'on'], style: { left: `${n.x}px`, top: `${n.y}px`, width: `${n.w}px`, height: `${n.h}px` } },
     h('b', { class: 'mono', style: { fontSize: '14px' } }, n.id), ' ', h('span', { class: 'muted' }, (meta[n.id]?.desc || '').split(',')[0]), h('br'),
     h('span', { class: 'mono', style: { fontSize: '12.5px' } }, (meta[n.id]?.key || '').split(', ').slice(0, 3).map((k, i) => [i ? h('br') : null, `${k} · PK`]))));
-  return h('div', { class: 'diagram-box' }, h('div', { class: 'diagram', style: { width: `${diagram.width}px`, height: `${diagram.height}px` } },
-    edges(diagram, () => '#6B6F74'), boxes));
+  return h('div', { class: 'diagram', style: { width: `${diagram.width}px`, height: `${diagram.height}px` } },
+    edges(diagram, () => '#6B6F74'), boxes);
+}
+
+// One canvas per diagram of the step, kept in ctx so zoom and position survive the redraws of the page.
+function inCanvas(ctx, key, label, diagram, node) {
+  ctx.canvases[key] = ctx.canvases[key] || zoomCanvas(label);
+  ctx.canvases[key].setContent(node, { w: diagram.width, h: diagram.height });
+  return ctx.canvases[key].el;
 }
 
 async function upload(ctx, files) {
@@ -285,7 +292,7 @@ async function taskStep(ctx) {
       ], outputs, { minWidth: '760px' }) : h('p', { class: 'empty' }, 'No column yet: add the keys and the values of the target file.'),
       addOutput(ctx)),
     card(h('div', { class: 'stack' }, h('h2', {}, 'Inputs in scope'), h('p', { class: 'small muted' }, 'Narrowing the scope speeds up profiling and keeps the frame small. Other tasks can be inputs too: their values join on the keys both share.')),
-      diagram ? h('div', { class: 'diagram-box' }, h('div', { class: 'diagram', style: { width: `${diagram.width}px`, height: `${diagram.height}px` } },
+      diagram ? inCanvas(ctx, 'scope', 'Inputs in scope', diagram, h('div', { class: 'diagram', style: { width: `${diagram.width}px`, height: `${diagram.height}px` } },
         edges(diagram, () => '#6B6F74'), diagram.nodes.map((n) => h('div', { class: ['table-node', n.output && 'out'], style: { left: `${n.x}px`, top: `${n.y}px`, width: `${n.w}px`, height: `${n.h}px` } },
           h('b', { class: 'mono' }, n.id), h('br'), n.output ? [...t.keys.map((k) => `${k.name} · key`), ...t.values.map((v) => `${v.name} · value`)].slice(0, 4).map((x) => [h('span', { class: 'mono tiny' }, x), h('br')]) : null)))) : null,
       h('fieldset', { style: { border: 0, margin: 0, padding: 0 }, class: 'stack-8' }, h('legend', { class: 'small strong', style: { padding: 0, marginBottom: '6px' } }, 'Legacy tables'),
@@ -520,13 +527,13 @@ async function reviewStep(ctx) {
           onChange: (e) => { def.run.max_features = Math.max(1, Math.min(3, Number(e.target.value) || 3)); ctx.changed(); ctx.redraw(); } })),
         h('p', { class: 'small muted', style: { flex: '1 1 100%' } }, settings.claude ? 'Step 5 runs only where the trees need a feature that is not in the data yet. Every proposal is parsed in the DSL and scored exactly, before and after.' :
           'Claude Code is not on the PATH of the server: step 5 will fail until `claude` is installed and logged in.')),
-      h('div', { class: 'stack' }, h('span', { class: 'small strong' }, 'Same as'), h('pre', { class: 'code' }, commands.join('\n')))),
+      tech('cli', 'Same on the command line', h('pre', { class: 'code' }, commands.join('\n')))),
     h('div', { class: 'row-between', style: { padding: '16px 0' } }, h('a', { class: 'btn', href: href(ctx, 'pairs') }, 'Back'),
       h('div', { class: 'row' },
         h('button', { type: 'button', class: 'btn', disabled: blocked ? true : null, onClick: () => save(false) }, 'Save definition'),
         h('button', { type: 'button', class: 'btn primary', disabled: blocked ? true : null, onClick: () => save(true) }, 'Save and run'))),
   ];
-  return [main, [h('div', { class: 'dark' }, h('h2', {}, `tasks/${def.id || '<id>'}.json`), h('pre', {}, JSON.stringify(definitionToSave(def), null, 2))),
+  return [main, [tech('json', `tasks/${def.id || '<id>'}.json`, h('pre', {}, JSON.stringify(definitionToSave(def), null, 2)), 'dark'),
     h('div', { class: 'card tight', style: { gap: '8px' } }, h('h3', {}, 'One file, versioned'),
       h('p', { class: 'small muted' }, 'The definition sits in ', h('code', {}, 'lab/tasks/'), ' next to ', h('code', {}, 'rules/'), ', so the pipeline, the agent of ', h('code', {}, 'lab agent'), ' and this page read the same task.'))]];
 }

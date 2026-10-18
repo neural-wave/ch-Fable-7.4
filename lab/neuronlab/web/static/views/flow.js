@@ -1,5 +1,6 @@
 // Control flow: the candidate as a graph and as the code freeze writes, replayed on a target row or custom values.
 // The server computes the value (evaluate.predicted, exact decimals); the page only animates the path it returns.
+import { zoomCanvas } from '../lib/canvas.js';
 import { edges, get, h, header, icons, loading, mount, post, runTabs, start, toast, valuePicker, wordsMode, wordsSwitch } from '../lib/h.js';
 
 export async function render(root, { run, query }) {
@@ -18,6 +19,7 @@ export async function render(root, { run, query }) {
   let step = 0;
   let timer = null;
   let mode = wordsMode();
+  const canvas = zoomCanvas('Graph of the control flow');
 
   const sequence = () => {
     if (!result) return [];
@@ -55,6 +57,7 @@ export async function render(root, { run, query }) {
     const lit = new Set(seq.slice(0, step).flat());
     const now = new Set(step > 0 ? seq[step - 1] : []);
     const onPath = new Set(seq.flat());
+    canvas.setContent(graph(d.diagram, lit, now, done ? onPath : null, mode), { w: d.diagram.width, h: d.diagram.height });
     mount(root, header('runs'), h('div', { class: 'wrap' },
       h('div', { class: 'stack-8' },
         h('div', { class: 'crumbs' }, h('a', { href: '#/runs' }, 'Runs'), ' / ', h('a', { href: base, class: 'mono' }, run), ' / Control flow'),
@@ -84,12 +87,14 @@ export async function render(root, { run, query }) {
             !done ? (result ? 'Running…' : 'Pick a row') : result.equal ? 'Equals the target file' : result.equal === false ? `Target file: ${result.target}` : 'Custom values: no target row to compare'))),
       h('section', { class: 'card' }, h('div', { class: 'card-head' }, h('div', { class: 'stack' }, h('h2', {}, 'Graph'), h('span', { class: 'small muted' }, 'Leaves show the constant of each branch; counts are rows of the tree of step 3')),
         wordsSwitch(mode, (m) => { mode = m; draw(); })),
-        graph(d.diagram, lit, now, done ? onPath : null, mode)),
+        canvas.el),
       h('div', { class: 'row', style: { gap: '20px', alignItems: 'flex-start' } },
         codePanel(d, result, lit, now, step, seq.length),
         h('section', { class: 'card tight', style: { flex: '2 1 380px', minWidth: 0 } }, h('h3', {}, 'Trace'),
           h('ol', { style: { listStyle: 'none', margin: 0, padding: 0 } }, ((mode === 'plain' ? result?.say : null) || result?.trace || []).map((t, i) => h('li', { class: 'row', style: { gap: '12px', padding: '8px 0', borderTop: '1px solid var(--divider)', opacity: i < Math.max(1, step - 1) || done ? 1 : 0.3, flexWrap: 'nowrap' } },
             h('span', { class: 'mono tiny muted', style: { width: '18px', paddingTop: '2px' } }, i + 1), h('span', { class: mode === 'plain' && result?.say ? 'small' : 'mono small', style: { overflowWrap: 'anywhere' } }, t))))))));
+    const current = d.diagram.nodes.find((n) => now.has(n.id));
+    if (current) canvas.reveal(current);
   };
 
   draw();
@@ -115,9 +120,9 @@ function graph(diagram, lit, now, dimOff, mode) {
     const [x, y] = e.points.length > 2 ? e.points[2] : e.points[1];
     return h('span', { class: 'edge-label', style: { left: `${x + (e.branch === 'yes' ? -18 : 14)}px`, top: `${y + 12}px` } }, e.branch);
   });
-  return h('div', { class: 'diagram-box' }, h('div', { class: 'diagram', style: { width: `${diagram.width}px`, height: `${diagram.height}px` } },
+  return h('div', { class: 'diagram', style: { width: `${diagram.width}px`, height: `${diagram.height}px` } },
     edges(diagram, (e) => (lit.has(e.from) && lit.has(e.to) ? 'var(--accent)' : '#A9ABA5'), { opacityOf: (e) => (dimOff && !(dimOff.has(e.from) && dimOff.has(e.to)) ? 0.3 : 1) }),
-    nodes, labels));
+    nodes, labels);
 }
 
 function codePanel(d, result, lit, now, step, total) {

@@ -60,13 +60,127 @@ export async function post(url, body) {
 let toastTimer = null;
 export function toast(text, bad = false) {
   document.querySelector('.toast')?.remove();
-  const el = h('div', { class: ['toast', bad && 'bad'], role: 'status' }, text);
+  const el = h('div', { class: ['toast', bad && 'bad'], role: bad ? 'alert' : 'status' },
+    h('span', {}, text),
+    h('button', { type: 'button', class: 'toast-close', 'aria-label': 'Dismiss', onClick: () => el.remove() }, icons.close()));
   document.body.append(el);
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.remove(), bad ? 9000 : 4000);
+  toastTimer = setTimeout(() => el.remove(), bad ? 12000 : 5000);
+}
+
+export function dialog(title, body, actions) {
+  const el = h('dialog', { class: 'dialog' },
+    h('form', { method: 'dialog', class: 'stack-16' }, h('h2', {}, title), body,
+      h('div', { class: 'row', style: { justifyContent: 'flex-end' } }, h('button', { class: 'btn', value: 'cancel' }, actions ? 'Cancel' : 'Close'), actions)));
+  document.body.append(el);
+  el.addEventListener('close', () => el.remove());
+  el.showModal();
+  return el;
+}
+
+// Freeze rewrites submission.py: say so and ask before the job starts.
+export function confirmFreeze(task, run, candidate) {
+  const go = h('button', { class: 'btn primary', value: 'go' }, 'Freeze and score');
+  const el = dialog(`Freeze ${candidate}?`, h('div', { class: 'stack-8' },
+    h('p', {}, 'Freeze writes this candidate as the function of ', h('span', { class: 'mono' }, task), ' in ', h('span', { class: 'mono' }, 'submission.py'), ', then scores the submission.'),
+    h('p', { class: 'small muted' }, 'The function it replaces is overwritten: commit submission.py first if you want to keep it.')), go);
+  go.addEventListener('click', () => { el.close(); start('freeze', task, { run, candidate }); });
+}
+
+// Words of the lab a newcomer meets first, explained on hover and focus.
+export const GLOSSARY = {
+  Discovery: 'Rows the rules are learned on (4 policies in 5). Exact = reproduced to the cent.',
+  Holdout: 'Rows kept aside to check the rules (1 policy in 5, crc32(policy) % 5 == 0). The score that counts.',
+  Freeze: 'Write a candidate into submission.py, then score it.',
+  Candidate: 'One formula the pipeline proposes for the target, scored exactly on every row.',
+  'Wrong rows': 'Rows where the winner does not give the exact legacy value.',
+  'Typed by hand': 'Wrong rows of policies listed in NREXCP: the legacy values were edited by hand, no rule reproduces them.',
+};
+
+export function term(label, help = GLOSSARY[label]) {
+  return help ? h('span', { class: 'term', title: help, tabindex: '0' }, label) : label;
+}
+
+// --- language model -------------------------------------------------------------------------------------------
+// Step 5 (lab suggest) and the agent call Claude Code. .env.llm is read when `lab serve` starts.
+
+let settingsCache = null;
+export function settings() {
+  settingsCache = settingsCache || get('/api/settings').catch(() => null);
+  return settingsCache;
+}
+
+const MODEL_USES = { suggest: 'model', agent: 'agent_model' };
+
+// ok: every model is set; warn: Claude Code picks its default; bad: no Claude Code, nothing can run.
+export function modelState(st) {
+  if (!st) return { level: 'unknown', chip: 'Model unknown', text: 'The lab could not read its settings.' };
+  if (!st.claude) {
+    return { level: 'bad', chip: 'No language model', text: 'Claude Code is not installed on the lab machine, so Suggest features and the agent cannot run.' };
+  }
+  if (!st.model && !st.agent_model) {
+    return { level: 'warn', chip: 'Model not set', text: 'No model is set: Suggest features and the agent use the default model of Claude Code, which can change from one day to the next.' };
+  }
+  if (!st.model || !st.agent_model) {
+    const missing = st.model ? 'the agent' : 'Suggest features';
+    return { level: 'warn', chip: `Model: ${st.model || st.agent_model} · one not set`, text: `No model is set for ${missing}: it uses the default model of Claude Code.` };
+  }
+  return { level: 'ok', chip: `Model: ${st.model === st.agent_model ? st.model : `${st.model} / ${st.agent_model}`}`, text: 'Both uses of the language model have a model set.' };
+}
+
+const LEVEL_ICON = { ok: () => icons.check(), warn: () => icons.warn(), bad: () => icons.warn(), unknown: () => icons.info() };
+
+export function modelDialog() {
+  settings().then((st) => {
+    const state = modelState(st);
+    const row = (use, value, variable) => h('li', { class: ['model-row', value ? 'ok' : 'warn'] },
+      h('span', { class: 'model-row-icon' }, value ? icons.check() : icons.warn()),
+      h('span', { class: 'stack' }, h('span', { class: 'strong' }, use),
+        h('span', { class: 'small muted' }, value ? ['Uses ', h('span', { class: 'mono' }, value)] : ['Not set: the default model of Claude Code', h('span', { class: 'mono' }, ` (${variable})`)])));
+    dialog('Language model', h('div', { class: 'stack-16' },
+      h('div', { class: ['banner', state.level === 'ok' ? 'ok' : state.level === 'bad' ? 'bad' : 'warn'] }, LEVEL_ICON[state.level](), h('span', { style: { flex: '1 1 300px' } }, state.text)),
+      st && st.claude ? h('ul', { class: 'model-rows' },
+        row('Suggest features (step 5)', st.model, 'LLM_MODEL'),
+        row('Agent sessions', st.agent_model, 'AGENT_MODEL')) : null,
+      state.level === 'ok' ? null : h('div', { class: 'stack-8' },
+        h('h3', {}, 'How to set it'),
+        st && !st.claude ? h('p', { class: 'small' }, 'Install Claude Code on this machine and log in once with ', h('span', { class: 'mono' }, 'claude'), '.') : null,
+        h('p', { class: 'small' }, 'Add the models to ', h('span', { class: 'mono' }, '.env.llm'), ' at the root of the repository, then restart ', h('span', { class: 'mono' }, 'lab serve'), ':'),
+        h('pre', { class: 'code' }, 'LLM_MODEL=opus\nAGENT_MODEL=opus'))), null);
+  });
+}
+
+function modelChip() {
+  const chip = h('button', { type: 'button', class: 'model-chip', 'data-level': 'unknown', onClick: modelDialog, 'aria-haspopup': 'dialog' }, 'Model…');
+  settings().then((st) => {
+    const state = modelState(st);
+    chip.dataset.level = state.level;
+    chip.title = state.text;
+    chip.replaceChildren(h('span', { class: 'dot' }), h('span', {}, state.chip));
+  });
+  return chip;
+}
+
+// A notice where a use of the model starts: nothing when it is set.
+export function modelNotice(use) {
+  const slot = h('div', { class: 'model-notice' });
+  settings().then((st) => {
+    if (!st) return;
+    const missing = !st.claude ? 'bad' : !st[MODEL_USES[use]] ? 'warn' : null;
+    if (!missing) return;
+    slot.replaceChildren(h('div', { class: ['banner', missing], role: 'status' }, icons.warn(),
+      h('span', { style: { flex: '1 1 300px' } }, missing === 'bad' ? 'Claude Code is not installed: this step cannot run.'
+        : 'No model is set for this step: it will use the default model of Claude Code.'),
+      h('button', { type: 'button', class: 'btn small', onClick: modelDialog }, missing === 'bad' ? 'How to fix it' : 'Set the model')));
+  });
+  return slot;
 }
 
 export async function start(action, task, options = {}) {
+  if (MODEL_USES[action]) {
+    const st = await settings();
+    if (st && !st.claude) { modelDialog(); return; }
+  }
   try {
     const job = await post('/api/jobs', { action, task, options });
     location.hash = `#/jobs/${job.id}`;
@@ -97,12 +211,27 @@ export function cells(states) {
     states.map((st) => h('span', { class: ['cell', st] })));
 }
 
-export function header(active, workspace = 'neuron-migration') {
+export function header(active) {
   const link = (href, label, key) => h('a', { href, 'aria-current': active === key ? 'page' : null }, label);
   return h('header', { class: 'top' },
-    h('a', { href: '#/runs', class: 'brand' }, h('img', { src: '/static/brand/ergo-logo-white.png', alt: 'Ergo', height: 32 })),
-    h('nav', { 'aria-label': 'Main' }, link('#/tasks', 'Tasks', 'tasks'), link('#/runs', 'Runs', 'runs'), link('/atlas', 'Atlas', 'atlas')),
-    h('div', { class: 'workspace' }, `workspace: ${workspace}`));
+    h('button', { type: 'button', class: 'skip', onClick: skipToContent }, 'Skip to content'),
+    h('a', { href: '#/runs', class: 'brand' }, h('img', { src: '/static/brand/ergo-logo.png', alt: 'Ergo', height: 28 })),
+    h('nav', { 'aria-label': 'Main' }, link('#/tasks', 'Tasks', 'tasks'), link('#/runs', 'Runs', 'runs')),
+    h('div', { class: 'top-end' }, workspaceName(), modelChip()));
+}
+
+function workspaceName() {
+  const el = h('span', { class: 'workspace', title: 'Workspace' });
+  settings().then((st) => { el.textContent = st?.workspace || ''; });
+  return el;
+}
+
+// Hash routes own location.hash, so the skip link moves focus itself.
+function skipToContent() {
+  const wrap = document.querySelector('.wrap');
+  if (!wrap) return;
+  wrap.setAttribute('tabindex', '-1');
+  wrap.focus();
 }
 
 export function card(...children) {
@@ -161,6 +290,15 @@ export function edges(diagram, colorOf = () => '#8A8D90', opts = {}) {
       'stroke-dasharray': e.kind === 'temporal' ? '6 6' : null, opacity: opts.opacityOf ? opts.opacityOf(e) : null }));
   }
   return svg;
+}
+
+// JSON, commands and file names fold away for whoever does not need them; opened once, a kind stays open in this browser.
+export function tech(kind, summary, children, cls) {
+  let open = false;
+  try { open = localStorage.getItem(`ergo-tech-${kind}`) === 'open'; } catch (e) { /* closed by default */ }
+  const el = h('details', { class: ['tech', cls], open: open || null }, h('summary', {}, summary), children);
+  el.addEventListener('toggle', () => { try { localStorage.setItem(`ergo-tech-${kind}`, el.open ? 'open' : 'closed'); } catch (e) { /* memory only */ } });
+  return el;
 }
 
 // Plain language or codes on the diagrams: a choice of the viewer, kept in this browser.

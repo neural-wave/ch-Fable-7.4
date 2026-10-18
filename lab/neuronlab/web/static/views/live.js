@@ -1,5 +1,5 @@
 // Run · in progress: the seven steps as they happen, the log, the queue, the agent. Server-sent events drive it.
-import { get, h, header, icons, loading, mount, pill, post, toast } from '../lib/h.js';
+import { get, h, header, icons, loading, mount, pill, post, tech, toast } from '../lib/h.js';
 
 const DOT = {
   done: { background: 'var(--ok-dot)', color: '#fff', border: '0' },
@@ -67,7 +67,7 @@ export async function render(root, { job: id }) {
               h('li', { class: 'row-between', style: { padding: '10px 0', borderTop: '1px solid var(--divider)' } }, h('span', { class: 'mono strong' }, `${job.task} · ${job.kind}`), pill(job.status)),
               view.queue.map((q) => h('li', { class: 'row-between', style: { padding: '10px 0', borderTop: '1px solid var(--divider)' } },
                 h('a', { href: `#/jobs/${q.id}`, class: 'mono' }, `${q.task} · ${q.kind}`), h('span', { class: 'small muted' }, 'Queued')))),
-            h('pre', { class: 'code', style: { whiteSpace: 'pre-wrap' } }, (job.commands || []).join('\n')),
+            tech('cli', 'Command line', h('pre', { class: 'code', style: { whiteSpace: 'pre-wrap' } }, (job.commands || []).join('\n'))),
             view.queue.length ? h('button', { type: 'button', class: 'btn small', onClick: stopQueue }, 'Stop after this job') : null),
           view.agent ? h('section', { class: 'card tight' },
             h('div', { class: 'stack' }, h('h3', {}, 'Agent'), h('p', { class: 'small muted' }, 'Claude Code with the rule-discovery skill', view.agent.trace ? [' · trace in ', h('code', {}, view.agent.trace)] : ' · waiting for its trace')),

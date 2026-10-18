@@ -1,4 +1,5 @@
 // Step 3 · Decision trees: the optimal tree of the smallest feature set, the path of a leaf, regions, equivalents.
+import { zoomCanvas } from '../lib/canvas.js';
 import { card, clusterColors, clusterInk, edges, get, h, header, loading, mount, runTabs, swatch, valuePicker, wordsMode, wordsSwitch } from '../lib/h.js';
 
 export async function render(root, { run, query }) {
@@ -10,6 +11,7 @@ export async function render(root, { run, query }) {
   const firstLeaf = d.leaves?.slice().sort((a, b) => b.errors - a.errors)[0];
   let selected = firstLeaf ? firstLeaf.id : null;
   let mode = wordsMode();
+  const canvas = zoomCanvas('Decision tree');
 
   const draw = () => {
     const onPath = new Set(selected === null ? [] : Array.from({ length: selected.length + 1 }, (_, i) => selected.slice(0, i)));
@@ -34,7 +36,7 @@ export async function render(root, { run, query }) {
             style: i === d.index ? { borderColor: 'var(--accent)', background: 'var(--accent-soft)' } : null }, x.features.join(', ')))) : null,
         card(h('div', { class: 'card-head' }, h('div', { class: 'stack' }, h('h2', {}, 'The tree'), h('span', { class: 'small muted' }, 'Leaves are clusters of step 2 · counts on discovery rows')),
           wordsSwitch(mode, (m) => { mode = m; draw(); })),
-          treeDiagram(d, onPath, (id) => { selected = id; draw(); }, mode),
+          inCanvas(canvas, d.diagram, treeDiagram(d, onPath, (id) => { selected = id; draw(); }, mode)),
           leaf ? h('div', { role: 'status', class: 'row', style: { gap: '12px 24px', padding: '14px 16px', borderRadius: '6px', background: 'var(--tint)' } },
             h('span', { class: 'stack', style: { flex: '1 1 420px' } }, h('span', { class: 'small muted' }, 'Path to the selected leaf'),
               mode === 'plain' ? [h('span', { class: 'small' }, leaf.say), h('span', { class: 'mono tiny muted' }, leaf.path)] : h('span', { class: 'mono small' }, leaf.path)),
@@ -96,8 +98,13 @@ function treeDiagram(d, onPath, pick, mode) {
     const [x, y] = e.points.length > 2 ? e.points[2] : e.points[1];
     return h('span', { class: 'edge-label', style: { left: `${x + (e.branch === 'yes' ? -18 : 14)}px`, top: `${y + 12}px` } }, e.branch);
   });
-  return h('div', { class: 'diagram-box' }, h('div', { class: 'diagram', style: { width: `${diagram.width}px`, height: `${diagram.height}px` } },
-    edges(diagram, (e) => (onPath.has(e.to) ? 'var(--accent)' : '#8A8D90')), nodes, labels));
+  return h('div', { class: 'diagram', style: { width: `${diagram.width}px`, height: `${diagram.height}px` } },
+    edges(diagram, (e) => (onPath.has(e.to) ? 'var(--accent)' : '#8A8D90')), nodes, labels);
+}
+
+function inCanvas(canvas, diagram, node) {
+  canvas.setContent(node, { w: diagram.width, h: diagram.height });
+  return canvas.el;
 }
 
 function regions(r, centers, selected, pick, mode) {

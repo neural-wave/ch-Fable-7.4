@@ -856,7 +856,8 @@ def settings():
     import os
     import shutil
     return {"legacy": str(paths.LEGACY), "targets": str(paths.TARGETS), "claude": bool(shutil.which("claude")),
-            "model": os.environ.get("LLM_MODEL", ""), "workspace": paths.REPO.name}
+            "model": os.environ.get("LLM_MODEL", ""), "agent_model": os.environ.get("AGENT_MODEL", ""),
+            "workspace": paths.REPO.name}
 
 
 def dsl_check(task, expr):
