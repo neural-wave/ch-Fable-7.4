@@ -131,6 +131,6 @@ HALF_INCOME_WITHHELD = False  # DE: HEV does not halve the base of the withholdi
 # to the assessment, and the targets leave the other taxable share of NRTAXR, TFS, out of the withholding too
 PARTIAL_EXEMPTION_WITHHELD = False  # DE: the partial exemption TFS (15 % from 2018) does not reduce the base of the
 # withholding; True: it does (targets: BL10004408 2020 and BL10000301 2024, KST on the whole gain)
-PAYOUT_SCOPE = "all"  # the payouts that t7_tax_payout reports: "all"; or, for a leaderboard probe, "unflagged" (only
+PAYOUT_SCOPE = "unflagged"  # the payouts that t7_tax_payout reports: "all"; or, for a leaderboard probe, "unflagged" (only
 # those without a flag of `gaps.FLAGS`, decided by verified rules alone) or "flagged" (only those with one). A probe
 # scores only the rows it reports, so it tells in which of the two groups the rows of a sample are right
