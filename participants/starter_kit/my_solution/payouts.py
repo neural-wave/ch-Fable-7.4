@@ -146,8 +146,8 @@ def converted_premiums(legacy_dir, schemes: pl.DataFrame) -> pl.DataFrame:
     """TB_POLNR, SCHEME, PR_RCVDT and PREMIUM of the received premiums (not reversed) of the policies of `schemes`
     (TB_POLNR, PH_CCY and SCHEME), once per scheme: PR_AMTRC in cents of TAX_CCY at the rates of its money date,
     rounded to the cent by the system that received it (COBOL truncates, Neuron NG rounds half up), or as the scheme
-    says without `conventions.ROUNDED_BY_SYSTEM` (targets: the gains of the policies with premiums of both systems;
-    a premium from before the euro too, with the first rate: BL10003541, 1996)."""
+    says without `conventions.ROUNDED_BY_SYSTEM` (public samples: the gains of the policies with premiums of both
+    systems; a premium from before the euro too, with the first rate)."""
     premiums = received_premiums(legacy_dir).select(TB_POLNR="PR_POLNR", PR_RCVDT="PR_RCVDT", PR_AMTRC="PR_AMTRC")
     rated = with_tax_currency(legacy_dir, schemes.join(premiums, on="TB_POLNR"), pl.col("TAX_CCY"), "PR_RCVDT")
     amount = pl.col("PR_AMTRC").cast(pl.Int128).mul(pl.col("RP"))
@@ -168,8 +168,8 @@ def received_until(legacy_dir, chains: pl.DataFrame, schemes: pl.DataFrame) -> p
 
 def premiums_used(turn: pl.DataFrame) -> pl.DataFrame:
     """The payouts of one turn with USED: their share of the premiums that the EARLIER payouts left over, rounded to
-    the cent as the scheme says (kept in BASIS_UNIT), so a later payout takes the rest of rounded amounts (targets:
-    BL10002694 2017 and BL10003541 2023, both after an earlier withdrawal)."""
+    the cent as the scheme says (kept in BASIS_UNIT), so a later payout takes the rest of rounded amounts (public
+    samples: 2 payouts, both after an earlier withdrawal)."""
     left_over = pl.col("RECEIVED").cast(pl.Int128).mul(BASIS_UNIT).sub(pl.col("EARLIER"))
     whole = pl.col("WHOLE").cast(pl.Int128).mul(BASIS_UNIT)
     return turn.with_columns(
@@ -217,7 +217,7 @@ def taxable_base() -> pl.Expr:
     """The taxable base in cents of the tax currency: the gross or the gain by country.
 
     The gross converted on the payout day (RP / RT) and the premiums USED are each rounded to the cent by the system
-    (targets: BL10001775 of 2004 223.77 only with both truncated; the example fits it), so the gain is a difference
+    (public samples: a base of 2004 matches only with both truncated; the example fits it), so the gain is a difference
     of cents; only the German factor rounds it again.
     """
     country = pl.col("COUNTRY")

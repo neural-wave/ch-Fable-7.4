@@ -10,8 +10,8 @@ takes, its tax is
 
     rate of the payout day x base - sum over the bounds (rate after the bound - rate up to it) x TAKEN
 
-which is the gain of every period at the rate of the period. Targets: all five SOS payouts, among them BL10003541,
-whose third payout (2023) follows a German one (2003) and an Italian one (2018).
+which is the gain of every period at the rate of the period. Public samples: all five SOS payouts, among them the
+third payout of a policy, after a German one and an Italian one.
 """
 import polars as pl
 

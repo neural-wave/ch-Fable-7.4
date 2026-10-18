@@ -5,7 +5,7 @@
   rate valid on the day as Neuron knew it then (`taxpayer.tax_rates`), for the whole year even when the policy
   started during it. A payout that ends the policy accrues the Bollo of the year so far on the value before it, taken
   the same way, x the days from 1 January to the payout / the days of the year (a BOL with the event number of the
-  payout). Targets: BL10000041 2013 (started in May) 6.81 and BL10000587 2025 (276 of 365 days) 2.48.
+  payout). Public samples: a policy started in May pays the whole year, a surrender the days from 1 January.
 - BOL re-priced: the rate of 2017 to June 2019 was restated in July 2019 (version 2 of NRTAXR). The fix
   (TB_USRID TAXFIX19) booked per policy the difference of the rates over every BOL before it, rounded once on the
   total (`fix_difference`; with `conventions.BOLLO_FIX_PER_YEAR`, the Bollo at the new rate less the amount booked,
