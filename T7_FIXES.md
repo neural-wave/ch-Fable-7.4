@@ -315,3 +315,30 @@ MI 100. The mechanism is a guess (the evaluator turning None into the text "None
 |---|---|---|---|---|---|
 | 18.10 ~08:00 | `3f27c59` | all | None | 7/40 | 28/30 |
 | next | this commit | all | "" | | |
+
+Reading of `648cc19` (the same values as `c50b2ca`, comments cleaned), upload #78, evaluation 77 at 09:12: payout
+**36/40**, annual 28/30, MI 100. The empty date was the blocker: 7 -> 36.
+
+## What is left (18.10, after 36/40 and 28/30)
+
+A review of the payout path (joins, nulls, dates, rounding, conversions, calendars) and of the annual path (BOL
+shapes, the 2019 fix, BOC, SOS bounds, the year of a remitted tax, holders who moved to Italy) found no defect. Every
+annual case is covered by the samples: withheld taxes reported in the remittance year (VST, SOS, KST, SOL, KIS, each
+with a sampled crossing year), BOL of holders who moved in during the year (2 sampled), termination BOL (8), fixes
+(4), years with a BOC (16 bookings). No payout is processed after its effective month, so the remittance month is
+the effective one everywhere.
+
+One inconsistency, untested by the samples: an exempt gain reports two different bases. German contracts from
+before 2005 report 0 (the German factor is 0, 22 payouts with a gain), while the untaxed IT and DE payouts with a
+gain (death claims and one DE payout, 11 rows) report the gain. `UNTAXED_BASE_ZERO = ["IT", "DE"]` makes them all
+0: in IT and DE a gain goes untaxed only where the law exempts it, while in CH the gross stays taxable and only the
+procedure or the threshold spares the withholding. It changes the base of those 11 payouts and nothing else.
+
+| Evaluated | Code | Change | Payout | Annual |
+|---|---|---|---|---|
+| 18.10 09:12 | `648cc19` | date "" without tax, every payout | 36/40 | 28/30 |
+| next | this commit | `UNTAXED_BASE_ZERO = ["IT", "DE"]` (11 payout bases) | | |
+
+- above 36: keep it;
+- below 36: the calculated base was right; set `UNTAXED_BASE_ZERO = []` again;
+- 36: none of the 11 is in the sample; the rule stays a choice for the private policies.
