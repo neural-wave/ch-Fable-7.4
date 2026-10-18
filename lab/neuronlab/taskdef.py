@@ -230,6 +230,11 @@ def check(definition):
                        "detail": "Found by profiling in step 1."})
     checks.append({"level": "ok" if task.get("description") else "warning", "title": "Description is written",
                    "detail": "Passed to the language model in step 5 only."})
+    text = [v["name"] for v in task.get("values", []) if str(v.get("type", "")).lower() in ("string", "text", "str")]
+    if text:
+        checks.append({"level": "warning", "title": f"Text value{'s' if len(text) > 1 else ''}: {', '.join(text)}",
+                       "detail": "The relations of steps 2 to 4 compute numbers and dates: the pipeline skips "
+                                 "a text value and finds the rules of the others. Write its function by hand."})
     frame_meta = paths.RUNS / task_id / "frame.json"
     columns_known = list(json.loads(frame_meta.read_text())["lineage"]) if frame_meta.exists() else None
     for hint in task.get("hints", []):

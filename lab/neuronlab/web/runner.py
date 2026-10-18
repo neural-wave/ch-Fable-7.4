@@ -38,7 +38,7 @@ PIPELINE = ("profile", "frame", "cluster", "tree", "pool", "iterate", "report")
 def plan(action, task, options=None):
     """(kind, run folder, commands, environment) of an action of the page."""
     options = options or {}
-    env = {"LLM_MODEL": options["model"]} if options.get("model") else {}
+    env = step5_env(options.get("model"))
     if action == "run":
         steps = [s for s in options.get("steps") or PIPELINE if s in PIPELINE]
         commands = [lab("run", task)] if list(steps) == list(PIPELINE) else [lab(s, task) for s in steps]
@@ -71,9 +71,34 @@ def plan(action, task, options=None):
     if action == "policy":
         return "Viz", task, [lab("viz", "policy", *options["policies"])], env
     if action == "agent":
-        env = {"AGENT_MODEL": options["model"]} if options.get("model") else {}
-        return "Agent", task, [lab("agent", task)], env
+        return "Agent", task, [lab("agent", task)], agent_env(options.get("model"))
     raise ValueError(f"unknown action {action}")
+
+
+def model_choice(model_id):
+    """(backend, model) of a model id of the pages: "claude:opus", "claude:" (Claude Code's default), "open:<id>"."""
+    if not model_id:
+        return None, None
+    backend, _, model = str(model_id).partition(":")
+    if backend not in ("claude", "open"):  # a bare name from an older page: a Claude Code model
+        return "claude", model_id
+    return backend, model
+
+
+def step5_env(model_id):
+    """LLM_BACKEND and LLM_MODEL of step 5 for the model chosen on the page (nothing: the defaults of .env.llm)."""
+    backend, model = model_choice(model_id)
+    if backend is None:
+        return {}
+    return {"LLM_BACKEND": backend, "LLM_MODEL": model}
+
+
+def agent_env(model_id):
+    """AGENT_BACKEND and AGENT_MODEL of `lab agent`: Claude Code, or OpenCode on the open-weights model."""
+    backend, model = model_choice(model_id)
+    if backend is None:
+        return {}
+    return {"AGENT_BACKEND": "opencode" if backend == "open" else "claude", "AGENT_MODEL": model}
 
 
 def score_refusal(task):

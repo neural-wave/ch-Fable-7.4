@@ -262,6 +262,7 @@ def test_agent_sessions_write_their_trace_and_summary(tmp_path, monkeypatch, cap
     fake = tmp_path / "fake_claude.py"
     fake.write_text(FAKE_CLAUDE, encoding="utf-8")
     monkeypatch.setenv("AGENT_MODEL", "opus")
+    monkeypatch.setenv("AGENT_BACKEND", "claude")
     monkeypatch.delenv("MAX_BUDGET_USD", raising=False)
     command = agent.command("t9_example", [sys.executable, str(fake)])
     assert command[2:9] == ["-p", "--permission-mode", "auto", "--output-format", "stream-json", "--verbose", "--model"]
@@ -282,6 +283,140 @@ def test_tasks_without_a_submission_function_are_refused_before_queueing():
         with pytest.raises(ValueError, match="no function in submission.py"):
             runner.plan(action, "t2_projection_year")
     assert runner.plan("score", "t0_commission")[0] == "Score"
+
+
+FAKE_OPENCODE = """import json, sys
+args = sys.argv[1:]
+def event(kind, **part):
+    print(json.dumps({"type": kind, "timestamp": 1, "sessionID": "ses_1", "part": part}))
+event("step_start", type="step-start")
+event("tool_use", type="tool", tool="shell", state={"status": "completed", "input": {"command": "lab run t9"}})
+event("step_finish", type="step-finish", reason="tool-calls", cost=0.25)
+event("step_start", type="step-start")
+event("text", type="text", text="t9: 9 / 10 exact")
+event("step_finish", type="step-finish", reason="stop", cost=0.5)
+sys.exit(int("--fail" in args[-1]))
+"""
+
+
+def test_agent_on_opencode_runs_with_the_guardrails_and_closes_its_trace(tmp_path, monkeypatch, capsys):
+    from neuronlab import agent
+    fake = tmp_path / "fake_opencode.py"
+    fake.write_text(FAKE_OPENCODE, encoding="utf-8")
+    monkeypatch.delenv("AGENT_BACKEND", raising=False)  # OpenCode is the default
+    monkeypatch.setenv("AGENT_MODEL", "qwen-test")
+    monkeypatch.setattr(agent, "read_env_file", lambda path=None: {
+        "OPEN_BASE_URL": "http://endpoint/v1/", "OPEN_API_KEY": "k", "OPEN_MODEL": "other", "OPEN_CONTEXT": "65536"})
+    env = agent.opencode_env()
+    assert env["OPEN_MODEL"] == "qwen-test" and env["OPEN_BASE_URL"] == "http://endpoint/v1"
+    assert env["OPENCODE_CONFIG"].endswith("opencode-open.jsonc") and env["OPEN_MAX_OUTPUT"] == "8192"
+    command = agent.command("t9_example", [sys.executable, str(fake)])
+    assert command[2:8] == ["run", "--standalone", "--auto", "--format", "json", "--title"]
+    assert "\n" not in command[-1] and command[-1].startswith("The skill is the file .claude/skills/rule-discovery")
+    assert agent.session("t9_example", tmp_path / "runs", [sys.executable, str(fake)]) == 0
+    trace = next((tmp_path / "runs" / "t9_example").glob("agent-*.jsonl"))
+    record = history.agent_run("t9_example", trace)
+    assert record["status"] == "done" and record["cost"] == 0.75 and record["turns"] == 2
+    assert record["note"] == "t9: 9 / 10 exact"
+    monkeypatch.setattr(paths, "RUNS", tmp_path / "runs")
+    timeline = api.agent_timeline({"run": "t9_example", "started": None})
+    assert {"tool": "shell", "what": "lab run t9"} in timeline["items"]
+    assert "t9: 9 / 10 exact" in capsys.readouterr().out
+    with pytest.raises(RuntimeError, match="OPEN_API_KEY"):
+        monkeypatch.setattr(agent, "read_env_file", lambda path=None: {"OPEN_API_KEY": "REPLACE_ME"})
+        agent.opencode_env()
+
+
+def test_the_guardrails_deny_what_the_agent_never_needs():
+    import re
+    text = (paths.REPO / "scripts" / "opencode-open.jsonc").read_text(encoding="utf-8")
+    rules = re.findall(r'\{ "action": "(\w+)", "resource": "([^"]+)", "effect": "(\w+)" \}', text)
+    denied = {(a, r) for a, r, e in rules if e == "deny"}
+    for rule in [("external_directory", "*"), ("webfetch", "*"), ("read", "*.env"), ("edit", "*"),
+                 ("shell", "*git push*"), ("shell", "*git commit*"), ("shell", "*.env.llm*")]:
+        assert rule in denied, rule
+    assert '"permissions": [' in text  # tool rules: "policies" only govern providers in OpenCode 2
+
+
+def test_models_of_the_pages_choose_the_backend(monkeypatch):
+    from neuronlab import llm
+    assert runner.step5_env("open:qwen3.6:35b-a3b-coding") == {"LLM_BACKEND": "open",
+                                                               "LLM_MODEL": "qwen3.6:35b-a3b-coding"}
+    assert runner.step5_env("claude:") == {"LLM_BACKEND": "claude", "LLM_MODEL": ""}
+    assert runner.step5_env("opus") == {"LLM_BACKEND": "claude", "LLM_MODEL": "opus"}  # a saved older value
+    assert runner.agent_env("open:qwen") == {"AGENT_BACKEND": "opencode", "AGENT_MODEL": "qwen"}
+    assert runner.plan("suggest", "t0_commission", {"model": "open:qwen"})[3]["LLM_BACKEND"] == "open"
+    monkeypatch.setenv("LLM_BACKEND", "open")
+    monkeypatch.setenv("OPEN_BASE_URL", "http://endpoint/v1")
+    monkeypatch.setenv("OPEN_API_KEY", "k")
+    monkeypatch.setenv("OPEN_MODEL", "qwen")
+    monkeypatch.delenv("LLM_MODEL", raising=False)
+    monkeypatch.delenv("LLM_BASE_URL", raising=False)
+    assert llm.label() == "open:qwen" and llm.settings() == ("http://endpoint/v1", "qwen")
+    monkeypatch.setenv("LLM_BACKEND", "gpt")
+    with pytest.raises(RuntimeError, match="LLM_BACKEND"):
+        llm.backend()
+
+
+FAKE_SILENT = """import json, sys, time
+print(json.dumps({"type": "step_start", "timestamp": 1, "sessionID": "ses_2", "part": {"type": "step-start"}}), flush=True)
+time.sleep(60)  # a model that stopped answering
+"""
+
+
+def test_a_silent_session_is_stopped_and_the_next_task_runs(tmp_path, monkeypatch, capsys):
+    from neuronlab import agent
+    fake = tmp_path / "fake_silent.py"
+    fake.write_text(FAKE_SILENT, encoding="utf-8")
+    monkeypatch.setenv("AGENT_IDLE_TIMEOUT", "2")
+    monkeypatch.delenv("AGENT_TIMEOUT", raising=False)
+    monkeypatch.setattr(agent, "read_env_file", lambda path=None: {
+        "OPEN_BASE_URL": "http://endpoint/v1", "OPEN_API_KEY": "k", "OPEN_MODEL": "m", "OPEN_CONTEXT": "65536"})
+    started = time.time()
+    assert agent.session("t9_example", tmp_path / "runs", [sys.executable, str(fake)], "opencode") == agent.TIMED_OUT
+    assert time.time() - started < 30
+    trace = next((tmp_path / "runs" / "t9_example").glob("agent-*.jsonl"))
+    record = history.agent_run("t9_example", trace)
+    assert record["status"] == "failed" and "AGENT_IDLE_TIMEOUT" in record["note"]
+    assert "was stopped" in capsys.readouterr().out
+    monkeypatch.setenv("AGENT_IDLE_TIMEOUT", "0")
+    monkeypatch.setenv("AGENT_TIMEOUT", "3")
+    assert agent.limits() == (None, 3.0)
+    assert agent.session("t9_example", tmp_path / "runs", [sys.executable, str(fake)], "claude") == agent.TIMED_OUT
+    claude_trace = sorted((tmp_path / "runs" / "t9_example").glob("agent-*.jsonl"))[-1]
+    assert "AGENT_TIMEOUT" in agent.summary(claude_trace)
+
+
+def test_a_text_value_is_skipped_and_a_single_constant_covers_every_row():
+    from decimal import Decimal
+    from neuronlab import evaluate, relations
+    frame = pl.DataFrame({"policy_id": ["A", "B", "C"], "country": ["CH", "IT", "CH"],
+                          "base": [Decimal("10.00"), Decimal("20.00"), Decimal("30.00")],
+                          "tax": [Decimal("0.00"), Decimal("0.00"), Decimal("0.00")]})
+    meta = {"keys": ["policy_id"], "values": ["country", "tax"], "mapping": {}}
+    assert relations.candidates(frame, meta, "country") == []  # no relation computes a country
+    assert not relations.clusterable(frame["country"].dtype) and relations.clusterable(frame["tax"].dtype)
+    zero = {"rules": [{"when": [], "then": "0"}], "relation": {"kind": "ratio", "input": "base"},
+            "rounding": "ROUND_HALF_UP"}
+    assert evaluate.constants(frame, zero).len() == 3
+    assert evaluate.correct(frame, zero, "tax").to_list() == [True, True, True]
+    fee = {"rules": [{"when": [], "then": "0"}], "relation": {"kind": "const", "input": None}}
+    assert evaluate.correct(frame, fee, "tax").to_list() == [True, True, True]
+
+
+def test_a_task_that_changes_its_target_file_does_not_read_the_old_copy(tmp_path, monkeypatch):
+    import os
+    from neuronlab import store
+    monkeypatch.setattr(paths, "CACHE", tmp_path / "cache")
+    old, new = tmp_path / "old.csv", tmp_path / "new.csv"
+    old.write_text("policy_id,due_nr,amount\nA,1,1.00\n", encoding="utf-8")
+    new.write_text("policy_id,n,due_date\nA,1,2026-07-01\n", encoding="utf-8")
+    os.utime(new, (1, 1))  # the new target file is older than any copy made now
+
+    def build(source):
+        return pl.read_csv(source)
+    assert store._cached("t1", tmp_path, build, old).columns == ["policy_id", "due_nr", "amount"]
+    assert store._cached("t1", tmp_path, build, new).columns == ["policy_id", "n", "due_date"]
 
 
 FAKE_ENDPOINT = """import json, os, sys

@@ -807,6 +807,13 @@ def agent_timeline(job):
             event = json.loads(line)
         except json.JSONDecodeError:
             continue
+        part = event.get("part") if isinstance(event.get("part"), dict) else None
+        if part and event.get("type") == "tool_use":  # OpenCode
+            items.append({"tool": part.get("tool"), "what": tool_summary((part.get("state") or {}).get("input") or {})})
+        elif part and event.get("type") == "text":
+            text = history.last_line(part.get("text"), 140)
+            if text:
+                items.append({"tool": "says", "what": text})
         for block in (event.get("message") or {}).get("content") or []:
             if isinstance(block, dict) and block.get("type") == "tool_use":
                 items.append({"tool": block.get("name"), "what": tool_summary(block.get("input") or {})})
@@ -820,7 +827,7 @@ def agent_timeline(job):
 
 
 def tool_summary(arguments):
-    for key in ("command", "file_path", "pattern", "description", "prompt", "skill"):
+    for key in ("command", "file_path", "filePath", "path", "pattern", "description", "prompt", "skill"):
         if arguments.get(key):
             return str(arguments[key]).splitlines()[0][:140]
     return json.dumps(arguments)[:140]
@@ -856,12 +863,25 @@ def task_definition(task):
 
 
 def settings():
+    """Folders, and the models the pages offer for step 5 and for the agent (with the default of each)."""
     import os
     import shutil
+    from .. import agent, llm
+    models = llm.models()
+    step5_default = "open:" if os.environ.get("LLM_BACKEND", "claude") == "open" else "claude:"
+    agent_models = [m for m in models if m["backend"] == "claude"] if shutil.which("claude") else []
+    if shutil.which("opencode"):
+        agent_models = [dict(m, label=f"OpenCode · {m['model']}") for m in models if m["backend"] == "open"] \
+            + agent_models
+    agent_default = next((m["id"] for m in agent_models if m["backend"] == ("open" if agent.backend() == "opencode"
+                                                                            else "claude")), None)
     return {"legacy": str(paths.LEGACY), "targets": str(paths.TARGETS), "claude": bool(shutil.which("claude")),
-            "model": os.environ.get("LLM_MODEL", ""), "agent_model": os.environ.get("AGENT_MODEL", ""),
+            "opencode": bool(shutil.which("opencode")), "model": os.environ.get("LLM_MODEL", ""),
+            "agent_model": os.environ.get("AGENT_MODEL", ""),
             "endpoint": os.environ.get("ANTHROPIC_BASE_URL", ""), "custom_model": os.environ.get("ANTHROPIC_MODEL", ""),
-            "workspace": paths.REPO.name}
+            "models": models, "step5_default": next((m["id"] for m in models if m["id"].startswith(step5_default)),
+                                                    None),
+            "agent_models": agent_models, "agent_default": agent_default, "workspace": paths.REPO.name}
 
 
 # Which model each use of Claude Code answers with, read like the trace of a task run (agent.connection): one
@@ -879,12 +899,29 @@ def model_status(refresh=False):
         return json.loads(json.dumps(model_check))
 
 
+def probe_open(model):
+    """agent.probe() of the open-weights endpoint of .env.llm: one short request to the model."""
+    from .. import llm
+    try:
+        _, base, _, configured = llm.open_settings()
+        model = model or configured
+        llm.open_complete("ok", "Answer with one word.", max_tokens=16, model=model)
+    except Exception as e:  # noqa: BLE001 - any failure means the model does not answer
+        return {"model": model or None, "source": None, "version": None, "ok": False, "error": str(e)}
+    return {"model": model, "source": base, "version": None, "ok": True, "error": None}
+
+
 def check_models():
+    """Each use asked on its own backend: Claude Code, or the open-weights endpoint (step 5 open, agent opencode).
+    `id` is the model as the pages name it (llm.models()), so a run on another model is not held by this check."""
     import os
-    from .. import agent
-    wanted = {use: os.environ.get(variable, "") for use, variable in MODEL_USES.items()}
-    found = {model: agent.probe(model) for model in set(wanted.values())}
-    uses = {use: dict(found[model], requested=model, variable=MODEL_USES[use]) for use, model in wanted.items()}
+    from .. import agent, llm
+    backends = {"suggest": "open" if llm.backend() == "open" else "claude",
+                "agent": "open" if agent.backend() == "opencode" else "claude"}
+    wanted = {use: (backends[use], os.environ.get(variable, "")) for use, variable in MODEL_USES.items()}
+    found = {key: (probe_open if key[0] == "open" else agent.probe)(key[1]) for key in set(wanted.values())}
+    uses = {use: dict(found[key], requested=key[1], variable=MODEL_USES[use], backend=key[0], id=f"{key[0]}:{key[1]}")
+            for use, key in wanted.items()}
     with model_lock:
         model_check.update(state="done", uses=uses, checked=dt.datetime.now().strftime("%H:%M:%S"),
                            endpoint=os.environ.get("ANTHROPIC_BASE_URL") or None)

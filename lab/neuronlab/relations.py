@@ -39,6 +39,11 @@ def numeric(dtype):
     return isinstance(dtype, pl.Decimal) or dtype in (pl.Int64, pl.Int32)
 
 
+def clusterable(dtype):
+    """A value the relations can compute: an amount, a whole number or a date."""
+    return numeric(dtype) or dtype == pl.Date
+
+
 def candidates(frame, meta, value, sequence=False):
     """All relations of a target value column with the usable inputs of the frame.
 
@@ -48,6 +53,8 @@ def candidates(frame, meta, value, sequence=False):
     later = meta["values"][meta["values"].index(value):]
     skip = set(meta["keys"]) | set(meta["mapping"].values()) | set(later)
     target = frame[value].dtype
+    if not clusterable(target):
+        return []  # a text value (a country, a code): no relation of this module computes one
     found = [] if sequence else [Relation("const", None)]
     for name in frame.columns:
         if name in skip or name.endswith("_RAW") or frame[name].null_count() > 0.5 * frame.height:

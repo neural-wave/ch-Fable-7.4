@@ -6,6 +6,7 @@ null. Targets get the types of the official scoring (policy text, int, Decimal, 
 `lab/.cache` make every later load fast; they are rebuilt when the CSV is newer.
 """
 import functools
+import hashlib
 import re
 import sys
 from decimal import Decimal
@@ -26,8 +27,15 @@ def tables():
 
 
 def _cached(name, folder, build, source=None):
-    source = source or folder / f"{name}.csv"
-    cache = paths.CACHE / folder.name / f"{name}.parquet"
+    """The typed copy of `folder/<name>.csv`, or of another `source` file (a task definition may name one).
+
+    The copy of another source carries a hash of its path in its name: a task that changes its target file must
+    not read the copy of the previous one, even when that copy is newer than the new file.
+    """
+    default = folder / f"{name}.csv"
+    source = source or default
+    stem = name if source == default else f"{name}--{hashlib.sha1(str(source).encode()).hexdigest()[:10]}"
+    cache = paths.CACHE / folder.name / f"{stem}.parquet"
     if cache.exists() and cache.stat().st_mtime >= source.stat().st_mtime:
         return pl.read_parquet(cache)
     df = build(source)

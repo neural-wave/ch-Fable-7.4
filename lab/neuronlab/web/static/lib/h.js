@@ -210,8 +210,8 @@ export function modelNotice(use) {
 
 export async function start(action, task, options = {}) {
   if (action === 'suggest' || action === 'agent') {
-    const st = await modelStatus();
-    if (st && !st.uses?.[action]?.ok) { modelDialog(); return; }
+    const u = (await modelStatus())?.uses?.[action];
+    if (u && !u.ok && (!options.model || options.model === u.id)) { modelDialog(); return; }
   }
   try {
     const job = await post('/api/jobs', { action, task, options });

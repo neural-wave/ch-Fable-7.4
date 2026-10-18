@@ -156,7 +156,7 @@ def suggest(task, ablate=None, dry_run=False, max_features=3):
         used = p["name"] in winner["features"]
         p["score"] = {"before": held_before, "after": held_after,
                       "outcome": "Kept" if used and held_after[0] > held_before[0] else ("Used" if used else "No gain")}
-    log = {"time": dt.datetime.now().isoformat(timespec="seconds"), "model": llm.settings()[1] or "claude-code",
+    log = {"time": dt.datetime.now().isoformat(timespec="seconds"), "model": llm.label(),
            "prompt_sha": hashlib.sha1(prompt.encode()).hexdigest()[:12], "answers": answers,
            "proposals": [{k: v for k, v in p.items() if k != "node"} for p in proposals], "errors": errors,
            "before": before, "after": after, "holdout_before": held_before, "holdout_after": held_after,

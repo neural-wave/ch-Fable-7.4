@@ -521,11 +521,12 @@ async function reviewStep(ctx) {
           h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: def.run.suggest ? true : null, onChange: (e) => { def.run.suggest = e.target.checked; ctx.changed(); ctx.redraw(); } }),
             h('span', { class: 'mono muted' }, '+'), 'Language model features (step 5)'))),
       h('div', { class: 'row', style: { padding: '16px', borderRadius: '6px', background: 'var(--tint)', alignItems: 'flex-end' } },
-        h('label', { class: 'field', style: { flex: '1 1 200px' } }, 'Model for step 5', h('select', { class: 'input', onChange: (e) => { def.run.model = e.target.value; ctx.changed(); ctx.redraw(); } },
-          modelOptions(settings).map(([v, label]) => h('option', { value: v, selected: def.run.model === v ? true : null }, label)))),
+        h('label', { class: 'field', style: { flex: '1 1 200px' } }, 'Model for step 5', modelSelect(settings.models, def.run.model || settings.step5_default,
+          (v) => { def.run.model = v; ctx.changed(); ctx.redraw(); })),
         h('label', { class: 'field', style: { flex: '1 1 200px' } }, 'Features per request', h('input', { class: 'input', type: 'number', min: 1, max: 3, value: def.run.max_features,
           onChange: (e) => { def.run.max_features = Math.max(1, Math.min(3, Number(e.target.value) || 3)); ctx.changed(); ctx.redraw(); } })),
-        h('p', { class: 'small muted', style: { flex: '1 1 100%' } }, 'Step 5 runs only where the trees need a feature that is not in the data yet. Every proposal is parsed in the DSL and scored exactly, before and after.'),
+        h('p', { class: 'small muted', style: { flex: '1 1 100%' } }, settings.models.length ? 'Step 5 runs only where the trees need a feature that is not in the data yet. Every proposal is parsed in the DSL and scored exactly, before and after.' :
+          'No model for step 5: install Claude Code (`claude`) or fill in the endpoint of .env.llm (OPEN_BASE_URL, OPEN_MODEL).'),
         modelNotice('suggest')),
       tech('cli', 'Same on the command line', h('pre', { class: 'code' }, commands.join('\n')))),
     h('div', { class: 'row-between', style: { padding: '16px 0' } }, h('a', { class: 'btn', href: href(ctx, 'pairs') }, 'Back'),
@@ -538,11 +539,11 @@ async function reviewStep(ctx) {
       h('p', { class: 'small muted' }, 'The definition sits in ', h('code', {}, 'lab/tasks/'), ' next to ', h('code', {}, 'rules/'), ', so the pipeline, the agent of ', h('code', {}, 'lab agent'), ' and this page read the same task.'))]];
 }
 
-// The default of Claude Code, then the Claude aliases, or the models of a custom endpoint (ANTHROPIC_BASE_URL).
-function modelOptions(settings) {
-  const fallback = settings.model || settings.custom_model;
-  const named = settings.endpoint ? [...new Set([settings.model, settings.custom_model].filter(Boolean))] : ['opus', 'sonnet'];
-  return [['', `Claude Code default${fallback ? ` (${fallback})` : ''}`], ...named.map((m) => [m, m])];
+export function modelSelect(models, current, change) {
+  const known = models.some((m) => m.id === current);
+  return h('select', { class: 'input', onChange: (e) => change(e.target.value) },
+    known || !current ? null : h('option', { value: current, selected: true }, `${current} (saved)`),
+    models.map((m) => h('option', { value: m.id, selected: m.id === current ? true : null }, m.label)));
 }
 
 function summary(title, link, mono, line1, line2) {

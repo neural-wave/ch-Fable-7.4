@@ -65,7 +65,8 @@ def lookup_constants(df, lookup):
 def constants(df, candidate):
     if candidate.get("lookup"):
         return lookup_constants(df, candidate["lookup"])
-    return df.select(rule_constants(candidate["rules"]).alias("c"))["c"]
+    # with_columns, not select: a single rule without conditions is a scalar, and it must cover every row
+    return df.with_columns(rule_constants(candidate["rules"]).alias("_c_rule"))["_c_rule"]
 
 
 def predicted(df, candidate, value):
@@ -73,7 +74,8 @@ def predicted(df, candidate, value):
     relation = candidate["relation"]
     c = constants(df, candidate)
     kind, x = relation["kind"], relation.get("input")
-    work = df.select([pl.col(x)] if x else [pl.lit(0).alias("_none")]).with_columns(c.alias("_c"))
+    work = df.select(pl.col(x)) if x else pl.DataFrame({"_none": [0] * df.height})  # const: one row per frame row
+    work = work.with_columns(c.alias("_c"))
     if kind == "days":
         expr = pl.col(x) + pl.duration(days=pl.col("_c").cast(pl.Int64))
         return work.select(expr.alias("p"))["p"]
