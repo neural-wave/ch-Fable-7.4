@@ -17,6 +17,7 @@ MAX_CLUSTERS = 25
 SHORTLIST = 4
 MIN_COVERAGE = 0.3  # a relation must reproduce at least this share of the rows exactly
 SIMPLER = 0.95  # a relation with at most half the clusters wins if it reproduces this share of the best one's rows
+BINS = 120  # histogram of a relation on the page of step 2
 
 
 def plain(value):
@@ -176,11 +177,38 @@ def _cluster(df, meta, value, candidates):
     return tried, hint
 
 
+def histogram(df, relation, value, centers):
+    """Counts of the relation on the precise rows in BINS bins around the centers, for the page of step 2."""
+    r = relations.evaluate(df, relation, value)
+    precise, _ = precision(df, relation, value)
+    r = r.filter(precise & r.is_not_null() & r.is_not_nan())
+    if r.len() == 0:
+        return None
+    marks = [float(c) for c in centers]
+    if marks:
+        lo, hi = min(marks), max(marks)
+        span = (hi - lo) or abs(hi) * 0.05 or 1.0
+        lo, hi = lo - 0.15 * span, hi + 0.15 * span
+    else:
+        lo, hi = float(r.quantile(0.01)), float(r.quantile(0.99))
+        lo, hi = (lo - 0.5, hi + 0.5) if lo == hi else (lo, hi)
+    width = (hi - lo) / BINS
+    index = ((r - lo) / width).floor().cast(pl.Int64)
+    inside = index.filter((index >= 0) & (index < BINS))
+    counts = [0] * BINS
+    for i, n in pl.DataFrame({"i": inside}).group_by("i").len().iter_rows():
+        counts[i] = n
+    return {"lo": lo, "hi": hi, "counts": counts, "rows": r.len(), "outside": r.len() - inside.len(),
+            "centers": [{"center": str(c), "bin": min(BINS - 1, max(0, int((float(c) - lo) / width)))}
+                        for c in centers]}
+
+
 def run(task):
     """clusters.json and labels.parquet of a task."""
     df, meta = frames.load(task)
     folder = paths.run_dir(task)
     out, labels = {"task": task, "rows": df.height, "values": {}}, df.select(meta["keys"])
+    shapes = {}  # histograms of the relations tried, best first: histograms.json, for the page of step 2
     for value in meta["values"]:
         tried, hint = cluster_value(df, meta, value)
         sums = relations.identities(df, meta, value)
@@ -201,9 +229,11 @@ def run(task):
             "alternatives": [{"relation": t["relation"].name, "centers": len(t["centers"]), "assigned": t["assigned"],
                               "noise": t["noise"]} for t in tried[1:]],
         }
+        shapes[value] = [histogram(df, t["relation"], value, t["centers"]) for t in tried]
         labels = labels.with_columns(label.alias(f"label:{value}"), modes.alias(f"modes:{value}"))
     labels.write_parquet(folder / "labels.parquet")
     (folder / "clusters.json").write_text(json.dumps(out, indent=1, default=str))
+    (folder / "histograms.json").write_text(json.dumps(shapes, separators=(",", ":"), default=str))
     return out
 
 

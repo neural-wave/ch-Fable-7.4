@@ -11,6 +11,7 @@ import subprocess
 import sys
 
 from . import frame as frames, paths, profile, schema
+from .store import scoring
 
 HEADING = re.compile(r"^### (NR\w{4}): ([^(\n]+)")
 HEADER = '''"""Neuron migration challenge: the formulas found by the lab pipeline (clustering + optimal trees + exact score).
@@ -203,11 +204,35 @@ def replace_function(source, name, new):
 
 def check_score(task):
     """(exact rows, output) of check.py for one task, run with the Python of the lab."""
-    result = subprocess.run([sys.executable, "check.py", "--tasks", task], cwd=paths.STARTER_KIT,
-                            capture_output=True, text=True)
+    result = subprocess.run([sys.executable, "check.py", "--tasks", task, "--legacy", str(paths.LEGACY),
+                             "--targets", str(paths.TARGETS)], cwd=paths.STARTER_KIT, capture_output=True, text=True)
     output = result.stdout + result.stderr
     found = re.search(rf"^{task}\s+(\d+) /", output, re.M)
     return (int(found.group(1)) if found else -1), output
+
+
+def refusal(run, candidate_id=None):
+    """Why `freeze` has no code template for this run and candidate, or None: the checks of freeze, nothing written."""
+    task = run.split("~")[0]
+    if run.endswith("~ablate"):
+        return "no code template for an ablation run: it tests step 5 with columns removed, it is not a rule"
+    if task not in scoring.TASKS:
+        return (f"{task} has no function in submission.py: the official scoring and check.py know "
+                f"{', '.join(scoring.TASKS)}")
+    meta = json.loads((paths.run_dir(run) / "frame.json").read_text())
+    if len(meta["values"]) > 1:
+        return (f"no code template for a task with {len(meta['values'])} value columns: write the function "
+                f"in submission.py and score it with `lab score {task}`")
+    pool = json.loads((paths.run_dir(run) / "pool.json").read_text())
+    info = next(iter(pool["values"].values()))
+    wanted = candidate_id or info["best"]
+    candidate = next(c for c in info["candidates"] if c["id"] == wanted)
+    used = candidate["features"] + [candidate["relation"].get("input")]
+    missing = [f for f in used if f and "path" not in meta["lineage"].get(f, {})]
+    if missing:  # previous(...) or a calendar feature: no join path that a template can follow
+        return (f"no code template for the features {missing}: write the function in submission.py and "
+                f"score it with `lab score {task}`")
+    return None
 
 
 def freeze(run, candidate_id=None, write=True, check=True):
@@ -218,21 +243,13 @@ def freeze(run, candidate_id=None, write=True, check=True):
     freeze without risk.
     """
     task = run.split("~")[0]
-    if run.endswith("~ablate"):
-        raise ValueError("no code template for an ablation run: it tests step 5 with columns removed, it is not a rule")
+    reason = refusal(run, candidate_id)
+    if reason:
+        raise ValueError(reason)
     pool = json.loads((paths.run_dir(run) / "pool.json").read_text())
-    value, info = next(iter(pool["values"].items()))
+    info = next(iter(pool["values"].values()))
     wanted = candidate_id or info["best"]
     candidate = next(c for c in info["candidates"] if c["id"] == wanted)
-    _, meta = frames.load(run)
-    if len(meta["values"]) > 1:
-        raise ValueError(f"no code template for a task with {len(meta['values'])} value columns: write the function "
-                         f"in submission.py and score it with `lab score {task}`")
-    used = candidate["features"] + [candidate["relation"].get("input")]
-    missing = [f for f in used if f and "path" not in meta["lineage"].get(f, {})]
-    if missing:  # previous(...) or a calendar feature: no join path that a template can follow
-        raise ValueError(f"no code template for the features {missing}: write the function in submission.py and "
-                         f"score it with `lab score {task}`")
     source, _ = render(run, candidate)
     source = source.replace(f"def {run}(", f"def {task}(", 1)
     if not write:
@@ -244,6 +261,9 @@ def freeze(run, candidate_id=None, write=True, check=True):
     if not check:
         return source, None
     after, output = check_score(task)
+    if before < 0 or after < 0:  # check.py failed: nothing says the new function is not worse
+        target.write_text(text, encoding="utf-8")
+        raise ValueError(f"check.py did not score {task}, submission.py is unchanged:\n{output[-2000:]}")
     if after < before:
         target.write_text(text, encoding="utf-8")
         raise ValueError(f"the new function scores {after} rows, the current one {before}: submission.py is unchanged")

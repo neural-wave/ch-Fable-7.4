@@ -16,13 +16,17 @@
     lab viz [task ...]               runs/atlas.html: before / after, policy timelines and the story, offline
     lab viz policy <id> [id ...]     runs/policies/<id>.json: one policy month by month against the files
     lab viz story                    runs/story.json: the journey of 100 francs, on a policy picked by the rules
+    lab agent [task ...]             Claude Code sessions with the skill rule-discovery, one per task (t1-t4)
+    lab serve [--port 8765]          Ergo: the pages of the lab on http://127.0.0.1:8765 (runs, steps, new tasks)
+    lab task init|show|check <task>  the definition lab/tasks/<task>.json (keys, values, scope, hints, pairs)
+    lab task add <file.json>         check a definition and save it as lab/tasks/<id>.json
 """
 import argparse
 import json
 import sys
 import time
 
-from . import paths
+from . import events, paths
 
 
 def _step(name, task):
@@ -30,8 +34,9 @@ def _step(name, task):
     started = time.time()
     fn = {"profile": profile.profile, "frame": frame.build, "cluster": cluster.run, "tree": tree.run,
           "pool": pool.run, "iterate": iterate.run, "report": report.build}[name]
-    fn(task)
-    print(f"{name:8s} {task}  {time.time() - started:5.1f}s")
+    with events.step(name, task):
+        fn(task)
+    print(f"{name:8s} {task}  {time.time() - started:5.1f}s", flush=True)
 
 
 def run(task):
@@ -80,6 +85,8 @@ def main(argv=None):
     parser.add_argument("--ablate", default=None, help="suggest: drop frame columns matching this glob first")
     parser.add_argument("--dry-run", action="store_true", help="suggest: print the prompt, do not call the model")
     parser.add_argument("--submission", default=None, help="score: another submission folder (not recorded)")
+    parser.add_argument("--max-features", type=int, default=3, help="suggest: features per request (1 to 3)")
+    parser.add_argument("--port", type=int, default=8765, help="serve: port on 127.0.0.1")
     args = parser.parse_args(argv)
     cmd, rest = args.command, args.args
     if cmd == "ingest":
@@ -110,7 +117,7 @@ def main(argv=None):
         print(check)
     elif cmd == "suggest":
         from . import suggest
-        print(suggest.suggest(rest[0], ablate=args.ablate, dry_run=args.dry_run))
+        print(suggest.suggest(rest[0], ablate=args.ablate, dry_run=args.dry_run, max_features=args.max_features))
     elif cmd == "feature":
         from . import dsl, suggest
         try:
@@ -120,10 +127,20 @@ def main(argv=None):
             return 1
     elif cmd == "score":
         from . import score
-        print(score.score(rest[0], dict(item.split("=", 1) for item in rest[1:]), args.submission))
+        reason = score.refusal(rest[0])
+        if reason:
+            print(f"refused: {reason}")
+            return 1
+        with events.step("score", rest[0]):
+            print(score.score(rest[0], dict(item.split("=", 1) for item in rest[1:]), args.submission))
     elif cmd == "ablate":
         from . import ablate
-        ablate.ablate(rest[0], rest[1:])
+        try:
+            with events.step("ablate", rest[0]):
+                ablate.ablate(rest[0], rest[1:])
+        except ValueError as e:  # no rule cards for the task
+            print(f"refused: {e}")
+            return 1
     elif cmd == "show":
         show(rest[0], rest[1:])
     elif cmd == "viz" and rest[:1] == ["policy"]:
@@ -138,6 +155,15 @@ def main(argv=None):
     elif cmd == "viz":
         from . import viz
         print(viz.atlas(rest or None))
+    elif cmd == "agent":
+        from . import agent
+        return agent.main(rest)
+    elif cmd == "serve":
+        from .web import server
+        server.serve(args.port)
+    elif cmd == "task":
+        from . import taskdef
+        return taskdef.command(rest)
     elif cmd == "llm" and rest[:1] == ["ping"]:
         from . import llm
         print(llm.complete('Answer with the single word "pong".'))

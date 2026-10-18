@@ -30,7 +30,7 @@ from decimal import Decimal
 
 import polars as pl
 
-from . import dsl, evaluate, frame as frames, iterate, paths, store, tree
+from . import dsl, evaluate, frame as frames, iterate, paths, store, taskdef, tree
 from .store import scoring
 
 MIN_POLICIES = 3
@@ -221,12 +221,52 @@ def record(task, source, ok, held, wrong):
     return entry
 
 
+def pair_lines(task, predictions):
+    """Lines of score.md for the acceptance pairs of the task definition: keys a person checked by hand.
+
+    A pair marked as typed by hand is shown but not counted: the rules are not meant to reproduce it.
+    """
+    hand = taskdef.pairs(task, use="acceptance")
+    if not hand or task not in scoring.TASKS:
+        return []
+    spec = scoring.TASKS[task]
+    keys, values = store.target_columns(task)
+    lines, ok, counted = ["", "## acceptance pairs", "", "| key | expected | computed | |", "|---|---|---|---|"], 0, 0
+    for p in hand:
+        try:
+            key = spec.make_key([p["in"][k] for k in keys])
+            expected = spec.make_value([p["out"][v] for v in values])
+        except (KeyError, TypeError, ValueError, ArithmeticError) as e:
+            lines.append(f"| {p.get('in')} | | | unreadable pair: {e} |")
+            continue
+        got = predictions.get(key)
+        same = got == expected
+        if not p.get("noise"):
+            counted += 1
+            ok += same
+        verdict = "ok" if same else ("typed by hand, not counted" if p.get("noise") else "wrong")
+        lines.append(f"| {key} | {expected} | {got} | {verdict} |")
+    lines.insert(2, f"Pairs: {ok} / {counted} exact")
+    return lines
+
+
+def refusal(task):
+    """Why `lab score` cannot score a task, or None: only the tasks of the official scoring have a function to run."""
+    if task in scoring.TASKS:
+        return None
+    return (f"{task} has no function in submission.py: `lab score` runs the tasks of the official scoring "
+            f"({', '.join(scoring.TASKS)}). The candidates of {task} are scored exactly by `lab run {task}` (pool.json).")
+
+
 def score(task, extra=None, folder=None, run=None):
     """Score the task function of submission.py, explain its wrong rows, write runs/<task>/score.md and diffs.parquet.
 
     `folder` scores another submission folder (a scratch copy): nothing is written to the ledger then. `run` writes
     score.md and diffs.parquet into another run folder, e.g. `<task>~off-<card>` of `lab ablate`.
     """
+    reason = refusal(task)
+    if reason:
+        raise ValueError(reason)
     out = paths.run_dir(run or task)
     module = load_submission(folder or paths.SUBMISSION)
     targets = scoring.read_targets(paths.TARGETS, task)
@@ -263,6 +303,7 @@ def score(task, extra=None, folder=None, run=None):
     for value in per_value:
         work = df.with_columns(labels[f"label:{value}"].alias("_label"))
         lines += describe(task, value, work, keys, per_value[value], trees)
-    text = "\n".join(lines) + "\n"
+    lines += pair_lines(task, predictions)
+    text ="\n".join(lines) + "\n"
     (out / "score.md").write_text(text)
     return text

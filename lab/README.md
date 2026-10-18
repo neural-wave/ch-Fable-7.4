@@ -23,8 +23,10 @@ uv run lab audit        # data quality findings
 
 On Windows, Desbordante has no wheels (only cp312 for Linux and macOS): install the locked packages without it
 (`uv export --frozen --all-groups --no-emit-project | grep -v desbordante > req.txt`, then `uv venv`,
-`uv pip install -r req.txt` and `uv pip install --no-deps -e .`). Every step but `lab profile` works then, with the
-`frame.parquet` files of a run made elsewhere.
+`uv pip install -r req.txt` and `uv pip install --no-deps -e .`). Without Desbordante, `lab profile` mines keys and
+inclusion dependencies by exact counting and set inclusion (`profile.exact_uccs`, `profile.exact_inds`): the same
+minimal keys up to three columns and the same unary inclusions, slower (about 25 s for the legacy extract, once; the
+result is cached). On t0 the profile and every later artifact are identical to the ones made with Desbordante.
 
 The data folders are `../legacy` and `../targets`. The environment variables `NEURON_LEGACY` and `NEURON_TARGETS`
 point elsewhere.
@@ -47,6 +49,10 @@ point elsewhere.
 | `lab viz policy <id> ... [--submission DIR]` | `runs/policies/<id>.json`: one policy month by month, replayed by the submission and compared with the diagnostic files |
 | `lab viz story` | `runs/story.json`: the journey of 100 francs, on a policy the rules pick themselves |
 | `lab llm ping` | checks that Claude Code answers for step 5 |
+| `lab agent [task ...]` | Claude Code with the skill rule-discovery, one headless session per task (default t1 to t4), trace in `runs/<task>/agent-<time>.jsonl` |
+| `lab serve [--port 8765]` | Ergo, the pages of the lab on `http://127.0.0.1:8765`: runs, steps, control flow, new tasks (below) |
+| `lab task init\|show\|check <task>` · `lab task add <file.json>` | the definition `tasks/<task>.json` of a task: drafted from its artifacts, shown, checked, saved |
+| `lab suggest <task> --max-features N` | step 5 with at most N features per request (1 to 3) |
 
 ## Artifacts of a task (`runs/<task>/`)
 
@@ -55,6 +61,7 @@ point elsewhere.
 | `profile.json` | 1 | keys (UCC), inclusion dependencies, joins (plain or temporal), grain, filter |
 | `frame.parquet`, `frame.json` | 1 | one row per target row with every reachable column; lineage of every column |
 | `clusters.json`, `labels.parquet` | 2 | best relation, cluster centers, the rounding modes that reproduce each row, noise |
+| `histograms.json` | 2 | the relations tried, binned on their precise rows, for the page of step 2 |
 | `trees.json` | 3 | optimal trees, smallest feature sets, equivalent features, conflicting vectors, CART |
 | `pool.json` | 4 | cards (leaves) and candidates with exact scores, ties |
 | `ledger.jsonl` | 6 | every scored candidate: discovery and holdout score, fingerprint of the right rows |
@@ -75,6 +82,57 @@ Relations: ratio and difference with an amount, days and months with a date, a c
 before it in the target file are inputs too. When nothing gives dense clusters, the value is related to
 `previous(value)`, the value of the same policy one step before. The report also lists exact sums among the values,
 and approximate relations that no constant reproduces to the cent.
+
+## Ergo: `lab serve`
+
+`lab serve` serves the pages of the canvas "Ergo — Task definition" with the standard library only
+(`neuronlab/web/`: `server.py`, view models in `api.py` and `legacy.py`, layouts in `layout.py`; the page is plain ES
+modules in `web/static/`, no build step). It listens on 127.0.0.1; every POST needs the header `X-Ergo: 1`, and the
+Host header must name this machine.
+
+- **Runs**: every run, newest first. Jobs started from the pages are recorded in `runs/_history.jsonl`; runs made
+  before, or on the command line, are rebuilt from their ledger (a burst of pool evaluations is a run, a `code:` entry
+  a `lab score`) and from the traces of `lab agent`. Rebuilt runs have no step durations.
+- **Run**: scores, the seven steps, the candidates with Freeze (disabled, with the reason, where `freeze` has no
+  template: tasks with several values, features without a join path), the wrong rows by kind, the proposals of step 5.
+- **Run in progress**: the steps and the log stream from the job (server-sent events). The child gets
+  `NEURON_EVENTS`, the file where `events.py` writes the step events and the scoring progress of the pool; without
+  the variable the pipeline writes nothing more than before. Jobs run one at a time from a queue: a run, step 5, a
+  score, an ablation, a freeze, or one Claude Code session of `lab agent` per task. Cancel stops the job and its
+  children; "Stop after this job" empties the queue.
+- **Clusters, Trees, Control flow**: step 2 with the histogram of each relation; the optimal tree with the path of
+  a leaf; the candidate as a graph and as the code `freeze` writes, replayed on a row of the target or on values typed
+  in. The value of a replay is computed by `evaluate.predicted`, the exact interpreter of the pool; the page only
+  animates it. Tasks written by hand (t1-t4) show their function instead: it works on whole tables, not row by row.
+  Trees and graphs speak plain language by default ("Is the premium frequency monthly?", "2 % of the amount
+  received"), with the code under each sentence and a switch to codes only. `neuronlab/labels.py` takes every word
+  from the extract: NRDICT for what a column is (and the codes some descriptions list), NRCODE for what a code means
+  (domain = the column's abbreviation, or its table alias followed by it: `PR_STATE` -> PRSTAT), the position tables
+  of SCHEMA.md for fixed-width codes, the frame names for dates and calendar features, the rule for constants. A
+  code the extract does not explain stays a code (`tests/test_labels.py` lists the ones left in t0-t4).
+- **New task** in four steps: legacy data, task description, test pairs, review and run. The result is
+  `tasks/<id>.json` (schema `neuron-task/1`, `neuronlab/taskdef.py`).
+
+A task definition is optional: without one every step infers what it needs, as before. With one:
+
+| Field | Read by |
+|---|---|
+| `task.keys`, `task.values` | `store.target_columns` instead of the header of the target file |
+| `examples.target_file.path` | `store.target`: the target file can live anywhere |
+| `legacy.joins` (`keep: false`, `origin: hand`) | `profile.profile`: rejected relationships leave the join graph, added ones join it |
+| `task.scope.tables` | `frame.build`: only these tables are joined |
+| `legacy.tables[].columns[].type` | `frame.build`: legacy columns without a type in NRDICT are cast |
+| `task.scope.tasks` | `frame.build`: the values of another task are inputs (`<task>__<column>`, summed when finer) |
+| `task.values[].rounding` | `pool.run`: a known rounding mode replaces the rounding variants |
+| `task.description`, notes in `task.hints` | `suggest`: added to the prompt of step 5 |
+| features in `task.hints` | the run of the review page adds them with `lab feature` |
+| `examples.pairs`, `pairs_use` | `lab score` checks acceptance pairs (`## acceptance pairs` in score.md); discovery pairs join the target rows |
+
+A target file the cached legacy profile does not know gets its inclusion dependencies by set inclusion
+(`profile.target_inds`), without mining the legacy tables again. New tasks are scored by the lab only: the official
+`scoring.py` and `check.py` know t0-t4, and `freeze` writes only functions the submission has. COBOL copybooks are
+not read (a schema file is JSON or SQL DDL, and becomes the NRDICT.csv of the upload), and a hand pair must point at
+keys that exist in the legacy data.
 
 ## Visualizations (t6): `lab viz`
 
@@ -133,9 +191,11 @@ may propose different features; each one is scored exactly. The model can only p
 `neuronlab/dsl.py`. They are parsed with a restricted `ast`, never evaluated as Python.
 
 The agent is Claude Code too: it finds the protocol in `../.claude/skills/rule-discovery/SKILL.md` as the skill
-`rule-discovery`, when started with `claude` in the root of the repository. `../scripts/claude-tasks.sh [task ...]`
-runs it without supervision: one headless session per task (default t1 to t4), one after the other, with the trace in
-`runs/<task>/agent-<time>.jsonl`.
+`rule-discovery`, when started with `claude` in the root of the repository. `lab agent [task ...]` runs it without
+supervision: one headless session per task (default t1 to t4), one after the other, with the trace in
+`runs/<task>/agent-<time>.jsonl`. `neuronlab/agent.py` uses the standard library only, so
+`python lab/neuronlab/agent.py [task ...]` works without installing the lab, and `../scripts/claude-tasks.sh` is a
+wrapper around it.
 
 ## Tests
 

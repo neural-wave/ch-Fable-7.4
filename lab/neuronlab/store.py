@@ -12,7 +12,7 @@ from decimal import Decimal
 
 import polars as pl
 
-from . import paths, schema
+from . import paths, schema, taskdef
 
 OPEN_END = 9999999
 MAX_DATE = (9999, 12, 31)
@@ -25,8 +25,8 @@ def tables():
     return sorted(p.stem for p in paths.LEGACY.glob("NR*.csv"))
 
 
-def _cached(name, folder, build):
-    source = folder / f"{name}.csv"
+def _cached(name, folder, build, source=None):
+    source = source or folder / f"{name}.csv"
     cache = paths.CACHE / folder.name / f"{name}.parquet"
     if cache.exists() and cache.stat().st_mtime >= source.stat().st_mtime:
         return pl.read_parquet(cache)
@@ -97,15 +97,29 @@ def _infer(series):
 
 
 def target(name):
-    """A target file (scored or diagnostic), typed: keys and values in the canonical types of `scoring.py`."""
+    """A target file (scored or diagnostic), typed: keys and values in the canonical types of `scoring.py`.
+
+    A task definition may put the file elsewhere, and add its hand pairs to the rows (pairs used for discovery).
+    """
     def build(source):
         raw = pl.read_csv(source, separator=",", infer_schema=False)
         return raw.select(_infer(raw[c].str.strip_chars()).alias(c) for c in raw.columns)
-    return _cached(name, paths.TARGETS, build)
+    df = _cached(name, paths.TARGETS, build, taskdef.target_path(name))
+    extra = [p for p in taskdef.pairs(name, use="discovery") if not p.get("noise")]
+    if extra:
+        rows = pl.DataFrame([{**p["in"], **p["out"]} for p in extra], schema={c: pl.String for c in df.columns})
+        rows = rows.select(pl.col(c).cast(df[c].dtype) if df[c].dtype != pl.Date else pl.col(c).str.to_date()
+                           for c in df.columns)
+        keys = (taskdef.columns(name) or (df.columns[:1], None))[0]
+        df = pl.concat([df, rows]).unique(subset=list(keys), keep="first", maintain_order=True)
+    return df
 
 
 def target_names():
-    return sorted(p.stem for p in paths.TARGETS.glob("t*.csv"))
+    found = {p.stem for p in paths.TARGETS.glob("t*.csv")}
+    found |= {d["id"] for d in taskdef.all_definitions() if taskdef.target_path(d["id"])
+              and taskdef.target_path(d["id"]).exists()}
+    return sorted(found)
 
 
 @functools.cache
@@ -116,6 +130,9 @@ def target_columns(task):
     shortest unique prefix of the header is the key, with policy_id in front when the prefix lacks it (the holdout
     split is by policy), and the decimal columns after it are the values.
     """
+    declared = taskdef.columns(task)
+    if declared:
+        return declared
     df = target(task)
     header = df.columns
     if task in scoring.TASKS:

@@ -13,7 +13,7 @@ import json
 
 import polars as pl
 
-from . import paths, schema, store
+from . import paths, schema, store, taskdef
 
 MAX_UCC = 3
 SKIP_UCC = {"NRBOOK"}  # 6.8 M rows: its key BK_BOOKID is checked directly
@@ -61,12 +61,52 @@ def key_like(table):
     return cols
 
 
+def _desbordante():
+    """The Desbordante module, or None where it has no wheels (Windows): the exact fallbacks below take over."""
+    try:
+        import desbordante  # here, not at the top: only the mining needs it
+    except ImportError:
+        return None
+    return desbordante
+
+
+def exact_uccs(df, max_size=MAX_UCC):
+    """Minimal unique column combinations up to `max_size` columns, by counting (the result of HyUCC, cut to size).
+
+    Nulls are compared as empty text, as in the frame given to Desbordante. A combination that contains a smaller
+    unique one is not minimal and is never counted.
+    """
+    text = df.select(pl.all().cast(pl.String).fill_null(""))
+    found = []
+    for size in range(1, max_size + 1):
+        for combo in itertools.combinations(sorted(text.columns), size):
+            if any(set(u) <= set(combo) for u in found):
+                continue
+            if text.select(combo).n_unique() == text.height:
+                found.append(list(combo))
+    return found
+
+
+def exact_inds(columns):
+    """Unary inclusion dependencies (lhs values contained in rhs values), by set inclusion: what Spider returns."""
+    names = sorted((n for n, values in columns.items() if values), key=lambda n: len(columns[n]))
+    pairs = set()
+    for i, lhs in enumerate(names):
+        left = columns[lhs]
+        for rhs in names[i:] + [n for n in names[:i] if len(columns[n]) == len(left)]:
+            if rhs != lhs and left <= columns[rhs]:
+                pairs.add((lhs, rhs))
+    return sorted(pairs)
+
+
 def mine_uccs(table, max_size=MAX_UCC):
     """Minimal unique column combinations of a table (Desbordante HyUCC), smallest first."""
     df = store.load(table)
     if table in SKIP_UCC:
         return [[c] for c in df.columns if df[c].n_unique() == df.height]
-    import desbordante  # here, not at the top: it has no wheels for Windows, and only the mining needs it
+    desbordante = _desbordante()
+    if desbordante is None:
+        return sorted(exact_uccs(df, max_size), key=lambda u: (len(u), u))
     frame = df.select(pl.all().cast(pl.String).fill_null("")).to_pandas()
     algorithm = desbordante.ucc.algorithms.HyUCC()
     algorithm.load_data(table=frame)
@@ -77,7 +117,9 @@ def mine_uccs(table, max_size=MAX_UCC):
 
 def mine_inds(columns):
     """Unary inclusion dependencies {(lhs, rhs)} among named value sets (Desbordante Spider)."""
-    import desbordante
+    desbordante = _desbordante()
+    if desbordante is None:
+        return exact_inds(columns)
     names = [n for n, values in columns.items() if values]
     frames = [pl.DataFrame({"v": sorted(columns[n])}).to_pandas() for n in names]
     algorithm = desbordante.ind.algorithms.Spider()
@@ -247,22 +289,44 @@ def filter_rule(task, chosen):
         errors = int(rates.select(pl.min_horizontal(pl.col("rate"), 1 - pl.col("rate")) * pl.col("rows")).sum().item())
         if best is None or errors < best["errors"]:
             keep = sorted(str(v) for v in rates.filter(pl.col("rate") >= 0.5)["_v"].to_list())
-            drop = {str(r["_v"]): r["rows"] for r in rates.filter(pl.col("rate") < 0.5).iter_rows(named=True)}
+            drop = dict(sorted((str(r["_v"]), r["rows"]) for r in rates.filter(pl.col("rate") < 0.5).iter_rows(named=True)))
             best = {"column": name if categorical else f"{name} is null", "keep": keep,
                     "excluded_rows": drop, "errors": errors}
     return best if best and best["excluded_rows"] else None  # every row is in the target: no filter
 
 
+def target_inds(task):
+    """INDs from the columns of a target into the legacy columns, for a target the cached profile does not know.
+
+    The cached legacy profile has the inclusion dependencies of the target files present when it was mined; a task
+    defined later (lab/tasks/<id>.json) gets its own, by set inclusion, without mining the legacy tables again.
+    """
+    tgt = store.target(task)
+    left = {f"{task}.{c}": set(_strings(tgt[c]).drop_nulls().unique().to_list()) for c in tgt.columns
+            if not isinstance(tgt[c].dtype, pl.Decimal)}
+    right = {}
+    for table in store.tables():
+        if table not in ("NRDICT", "NRCODE"):
+            for name, series in key_like(table).items():
+                right[f"{table}.{name}"] = set(_strings(series).drop_nulls().unique().to_list()) - {""}
+    return sorted((lhs, rhs) for lhs, values in left.items() if values
+                  for rhs, others in right.items() if len(values) <= len(others) and values <= others)
+
+
 def profile(task):
-    """profile.json of a task: keys, joins, grain, filter."""
+    """profile.json of a task: keys, joins, grain, filter (and the relationships confirmed in its definition)."""
     legacy = legacy_profile()
+    if not any(lhs.startswith(task + ".") for lhs, _ in legacy["inds"]):
+        legacy = dict(legacy, inds=list(legacy["inds"]) + [list(p) for p in target_inds(task)])
+    rejected, added = taskdef.join_overrides(task)
+    edges = [j for j in joins(legacy) if (j["from"], j["to"]) not in rejected] + added
     chosen = grain(task, legacy)
     result = {
         "task": task,
         "keys": {t: [u for u in uccs if len(u) <= 2][:8] for t, uccs in legacy["uccs"].items()},
         "temporal": {t: list(schema.validity(t)) for t in store.tables() if t in schema.dictionary()
                      and schema.validity(t)},
-        "joins": joins(legacy),
+        "joins": edges,
         "grain": chosen,
         "filter": filter_rule(task, chosen["best"]),
         "inds_of_target": [p for p in legacy["inds"] if p[0].startswith(task + ".")],
