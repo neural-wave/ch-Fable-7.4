@@ -215,3 +215,27 @@ remittance date, so its payout score reads that one choice:
   claims are tax free, except German contracts from 2010).
 - still 0: switch to isolation probes. The payout table scores 0, so a probe costs nothing: submit one pattern alone,
   first the 257 CH VST rows (base and VST settled by the labels, so only the date is open).
+
+## The public samples arrived (18.10)
+
+The organizers published the first two leaderboard samples (`participants/t7_samples_1_and_2`, merged into
+`participants/targets`: 60 payouts, 50 policy-years). Against them `bb98fee` scored 43/60 and 24/50. Every miss
+pointed at one rule; after these fixes the submission scores **60/60 and 50/50**, both PDF examples stay exact,
+t7_check passes, t0-t5 are unchanged and the MI is 100.
+
+| Rule (targets that settle it) | Rows |
+|---|---|
+| No remittance date for the Bollo collected alone (`STAMP_DUTY_REMITTED = False`) | 6 payouts |
+| The Swiss tax office keeps the calendar of Bern: 2 January is a holiday (BL10000094, 3.1.2018) | 1 payout |
+| A death claim pays the death benefit of the tariff option, option A 101 % of the units (BL10003217, BL10004258) | 2 payouts |
+| SOS by period: the gain to 31.12.2011 and to 30.6.2014 from the policy value of the day, at 12.5 / 20 / 26 %; every payout takes its share of each, as of the premiums (`periods.py`; BL10003541 after two earlier payouts) | 5 payouts, 12 years |
+| The taxes withheld count in the year of their remittance (`REPORTED_WHEN_REMITTED`; BL10003349 paid out 12.2025, it_sos in 2026) | 5 years |
+| The Bollo charges the whole year on 31 December, also in the first year; at a surrender the days from 1 January | 6 years and the BOC |
+| The 2019 Bollo fix rounded once on the total (`BOLLO_FIX_PER_YEAR = False`) | 2 years |
+| TFS (and HEV) stay out of the German withholding (BL10004408 2020, BL10000301 2024) | 2 years |
+| German taxes always truncated; bases and conversions rounded by system (BL10001204 2012: 1.57 + 2.58 = 4.15) | 2 rows |
+| The base = gross converted - premiums used, each rounded to the cent by system (BL10001775 2004: 223.77) | 1 payout |
+| Each premium rounded by the system that received it; the premiums used of a payout rounded to the cent (BL10002694, BL10002916, BL10003541) | 4 rows |
+
+Against `bb98fee` 428 payout rows and 755 annual rows change on the whole extract. Still assumed, as no sample
+row tests it: the base of a death claim without tax, the first EUR rate for the days before 31.12.1998.

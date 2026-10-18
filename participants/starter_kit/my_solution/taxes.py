@@ -11,7 +11,8 @@ booking, with the rates valid on the effective date as Neuron knew them at the p
 - BOL, BOC: the Bollo (`bollo`)
 
 Every amount is rounded once, by the system that processed it: COBOL truncates, Neuron NG rounds half up
-(`taxpayer.rounds_half_up`); without `conventions.ROUNDED_BY_SYSTEM`, half up and in Germany truncated. A booking
+(`taxpayer.rounds_half_up`); without `conventions.ROUNDED_BY_SYSTEM`, half up and in Germany truncated. The German
+taxes are truncated in both systems (`conventions.TRUNCATED_TAXES`). A booking
 whose payout, premium or rate is missing keeps a null amount, so a check can find it (`t7lab/t7_check.py`, next to
 the hand-in).
 """
@@ -20,15 +21,16 @@ import functools
 import polars as pl
 
 from bollo import bollo_bookings
-from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, BLENDED_RATES, CHURCH_REDUCED, CHURCH_REDUCES_KST,
-                         CHURCH_TAX, COLLECTED_IN_ANNUAL, PREMIUM_STAMP, REMITTED_FROM_PAYMENT, REMITTANCE,
-                         REMITTANCE_MONTH_END, REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
-                         STAMP_DUTY_REMITTED, SURCHARGES, TAX_CURRENCY, TAXES, WITHHELD)
+from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_REDUCES_KST, CHURCH_TAX,
+                         COLLECTED_IN_ANNUAL, PREMIUM_STAMP, REMITTED_FROM_PAYMENT, REMITTANCE, REMITTANCE_MONTH_END,
+                         REMITTANCE_SHIFTED, REPORTED_WHEN_REMITTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
+                         STAMP_DUTY_REMITTED, SURCHARGES, TAX_CURRENCY, TAXES, TRUNCATED_TAXES, WITHHELD)
 from dates import tax_office_holidays
 from legacy import as_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
-from payouts import EVENT, payouts
-from taxpayer import blended_rates, rounds_half_up, tax_rates, with_policies, with_tax_currency
+from payouts import BASIS_UNIT, EVENT, payouts
+from periods import period_reductions
+from taxpayer import rounds_half_up, tax_rates, with_policies, with_tax_currency
 
 BOOKING = ["TB_POLNR", "TB_EVTNR", "TB_TAXTP", "TB_EFFDT"]  # the columns of a booking besides TB_AMOUNT
 PAYOUT_AMOUNTS = {"withholding": WITHHELD, "surcharges": SURCHARGES, "stamp_duty": STAMP_DUTY}  # name -> types
@@ -37,8 +39,10 @@ COLLECTED = {"BOL": STAMP_DUTY}  # accrued tax type -> the types that collect it
 
 
 def half_up(tax_type: pl.Expr) -> pl.Expr:
-    """True where Neuron rounds the tax `tax_type` half up, false where it truncates (`taxpayer.rounds_half_up`)."""
-    return rounds_half_up(tax_type.replace_strict(TAXES, default=None))
+    """True where Neuron rounds the tax `tax_type` half up, false where it truncates: by the system that processed it
+    (`taxpayer.rounds_half_up`), and always truncated in the countries of `conventions.TRUNCATED_TAXES`."""
+    country = tax_type.replace_strict(TAXES, default=None)
+    return rounds_half_up(country).and_(country.is_in(TRUNCATED_TAXES).not_())
 
 
 def premium_stamp_duty(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
@@ -71,22 +75,20 @@ def capital_gains_tax() -> pl.Expr:
 def payout_taxes(legacy_dir, bookings: pl.DataFrame) -> pl.DataFrame:
     """The withholding taxes and surcharges of the payouts in `bookings` with TB_AMOUNT.
 
-    VST and SOS are the base x their rate, SOL and KIS the KST x their rate; the rate of the types in
-    `conventions.BLENDED_RATES` is averaged over the life of the policy (`taxpayer.blended_rates`). A booking of no
-    reported payout keeps a null amount.
+    VST and SOS are the base x their rate, SOL and KIS the KST x their rate; the types of
+    `conventions.PERIOD_RATES` take the gain of every period of their rates at the rate of the period
+    (`periods.period_reductions`). A booking of no reported payout keeps a null amount.
     """
     residents = payouts(legacy_dir).select(*EVENT, "TAXABLE_BASE", "AD_REGIO", "PH_BEGDT")
     church_tax = bookings.group_by(EVENT).agg(KIS_BOOKED=pl.col("TB_TAXTP").eq(CHURCH_TAX).any())
     booked = bookings.join(residents, on=EVENT, how="left").join(church_tax, on=EVENT, how="left")
-    dated = tax_rates(legacy_dir, booked, pl.col("TB_TAXTP"), "DAY_RATE", region="AD_REGIO")
-    blended = blended_rates(legacy_dir, dated, pl.col("TB_TAXTP"), "LIFE_RATE")
-    rows = blended.with_columns(RATE=pl.when(pl.col("TB_TAXTP").is_in(BLENDED_RATES)).then("LIFE_RATE").otherwise(
-        "DAY_RATE")).drop("DAY_RATE", "LIFE_RATE")
+    rows = tax_rates(legacy_dir, period_reductions(legacy_dir, booked), pl.col("TB_TAXTP"), "RATE",
+                     region="AD_REGIO")
     german = tax_rates(legacy_dir, rows, pl.lit(CHURCH_REDUCED), "KST_RATE")
     church = tax_rates(legacy_dir, german, pl.lit(CHURCH_TAX), "KIS_RATE", region="AD_REGIO")
     tax_type = pl.col("TB_TAXTP")
     taxed = pl.when(tax_type.is_in(SURCHARGES)).then("KST").otherwise("TAXABLE_BASE").cast(pl.Int128)
-    amount = rounded(taxed.mul(pl.col("RATE")), RATE_UNIT, half_up(tax_type))
+    amount = rounded(taxed.mul(pl.col("RATE")).mul(BASIS_UNIT).sub(pl.col("REDUCTION")), SHARE_UNIT, half_up(tax_type))
     return church.with_columns(KST=capital_gains_tax()).with_columns(
         TB_AMOUNT=pl.when(tax_type.eq(CHURCH_REDUCED)).then("KST").otherwise(amount))
 
@@ -161,9 +163,16 @@ def annual_types(tax: str) -> pl.Expr:
 
 
 def annual_table(legacy_dir) -> pl.DataFrame:
-    """policy_id, year and the ANNUAL_AMOUNTS (cents) of the bookings effective in the year, if any is not 0."""
+    """policy_id, year and the ANNUAL_AMOUNTS (cents) of the bookings of the year, if any is not 0.
+
+    The year of a tax withheld from a payout (`conventions.REPORTED_WHEN_REMITTED`) is the year Neuron remitted it to
+    the tax office (`remittance`), the year of every other booking that of its effective date.
+    """
     amount = pl.col("TB_AMOUNT")
-    booked = tax_bookings(legacy_dir).with_columns(year=as_date("TB_EFFDT").dt.year())
+    remitted = payout_table(legacy_dir).select(TB_POLNR="policy_id", TB_EVTNR="event_nr", REMITTED="remittance_date")
+    year = pl.when(pl.col("TB_TAXTP").is_in(REPORTED_WHEN_REMITTED)).then(pl.col("REMITTED").dt.year()).otherwise(
+        as_date("TB_EFFDT").dt.year())
+    booked = tax_bookings(legacy_dir).join(remitted, on=EVENT, how="left").with_columns(year=year)
     years = booked.group_by(policy_id="TB_POLNR", year="year").agg(
         **{name: amount.filter(annual_types(tax)).sum() for name, tax in ANNUAL_AMOUNTS.items()})
     return years.filter(pl.any_horizontal(pl.col(*ANNUAL_AMOUNTS).ne(0)))

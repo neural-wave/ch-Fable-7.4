@@ -2,14 +2,15 @@
 
 - BOL accrued: on 31 December the batch accrues the Bollo of the policies of Italian residents: the policy value
   (less the penalty of the day, as `valuation.surrender_values`, with `conventions.BOLLO_ON_SURRENDER_VALUE`) x the
-  rate valid on the day as Neuron knew it then (`taxpayer.tax_rates`) x the days of the year the policy ran (from
-  1 January or from its start date) / the days of the year. A payout that ends the policy accrues the Bollo of the
-  year so far on the value before it, taken the same way (a BOL with the event number of the payout).
+  rate valid on the day as Neuron knew it then (`taxpayer.tax_rates`), for the whole year even when the policy
+  started during it. A payout that ends the policy accrues the Bollo of the year so far on the value before it, taken
+  the same way, x the days from 1 January to the payout / the days of the year (a BOL with the event number of the
+  payout). Targets: BL10000041 2013 (started in May) 6.81 and BL10000587 2025 (276 of 365 days) 2.48.
 - BOL re-priced: the rate of 2017 to June 2019 was restated in July 2019 (version 2 of NRTAXR). The fix
-  (TB_USRID TAXFIX19) booked per policy, for every BOL before it, the Bollo at the new rate less the amount booked,
-  each rounded as booked (`fix_difference`; with `conventions.BOLLO_FIX_PER_YEAR` off, the difference of the rates
-  rounded once on the total). Both give BL10000044 421.57 + 194.54 = 616.11 in 2019, as in the example; rounding
-  the difference of the rates year by year gives 194.53.
+  (TB_USRID TAXFIX19) booked per policy the difference of the rates over every BOL before it, rounded once on the
+  total (`fix_difference`; with `conventions.BOLLO_FIX_PER_YEAR`, the Bollo at the new rate less the amount booked,
+  each rounded as booked). Both give BL10000044 421.57 + 194.54 = 616.11 in 2019, as in the example; the targets
+  want it once.
 - BOC collected: every payout of a policy that accrued Bollo collects the outstanding Bollo, also after the holder
   left Italy: the BOL booked up to it less the BOC before it. A payout that ends the policy collects all of it, a
   partial withdrawal its share PART / WHOLE (`payouts`), so the BOC of a policy follow one another (`in_turn`).
@@ -37,11 +38,11 @@ def is_fix() -> pl.Expr:
 
 
 def year_share() -> dict[str, pl.Expr]:
-    """RUN_DAYS, the days of the year up to TB_EFFDT that the policy ran, and YEAR_DAYS, the days of the year."""
+    """RUN_DAYS, the days of the year from 1 January up to TB_EFFDT, whenever the policy started, and YEAR_DAYS, the
+    days of the year."""
     day = as_date("TB_EFFDT")
     first = day.dt.truncate("1y")
-    start = pl.max_horizontal(first, as_date("PH_BEGDT"))
-    return {"RUN_DAYS": days_between(start, day).add(1), "YEAR_DAYS": days_between(first, first.dt.offset_by("1y"))}
+    return {"RUN_DAYS": days_between(first, day).add(1), "YEAR_DAYS": days_between(first, first.dt.offset_by("1y"))}
 
 
 def bollo(rate: pl.Expr, parts: int = 1) -> pl.Expr:

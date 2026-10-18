@@ -87,7 +87,7 @@ def is_amount(value) -> bool:
 
 def payout_row_ok(value) -> bool:
     country, *amounts, remittance = value
-    no_tax = not any(amounts[1:])
+    no_tax = not any(amounts[1:3])  # nothing withheld: no withholding, no surcharges (the stamp duty is collected)
     return (isinstance(country, str) and all(map(is_amount, amounts)) and (remittance is None) == no_tax
             and (remittance is None or isinstance(remittance, dt.date)))
 
@@ -171,7 +171,7 @@ def result_checks(results: dict, debug: bool) -> list[bool]:
     payout, annual = results["t7_tax_payout"], results["t7_tax_annual"]
     if payout is None or annual is None:
         return [False]
-    oks = [failures("payout rows: country, 4 amounts to the cent, a date or None (None exactly without tax)",
+    oks = [failures("payout rows: country, 4 amounts to the cent, a date or None (None exactly when nothing was withheld)",
                     sum(not payout_row_ok(value) for value in payout.values()), debug),
            failures("annual rows: 7 amounts to the cent, at least one not 0",
                     sum(not (all(map(is_amount, value)) and any(value)) for value in annual.values()), debug)]

@@ -12,7 +12,7 @@ in too.
 | t3 surrender value | 6'137 / 6'153 train rows exact (99.74 %), and every link of the diagnostics: all 5'024'847 calculated bookings (amount and units), all 23'052 holdings, all 6'153 policy values. The 16 other rows are manual corrections |
 | t4 annual statement | 34'125 / 34'145 train rows exact (99.94 %): every column of every row, except 20 admin fees. Those 20 are manual corrections |
 | t5 outlier detection | 54 outliers on the train targets: exactly the 54 rows that t0 – t4 miss, among them all 38 corrections that NREXCP lists for train policies. Without them every task scores 100 % (`scoring.accuracy` with `excluded`) |
-| t7 tax audit | No targets. Both PDF examples exact on the real tables (BL10000086 #121 and BL10000044 2019, 616.11), also with the official `scoring_t7.py`. The labels of NRTAXB (which tax was booked) agree with the taxable base on 277 / 285 German and 384 / 393 Italian payouts (`t7lab/t7_labels.py`, next to the hand-in). Before every upload `t7lab/t7_check.py` runs both examples and the labels of NRTAXB on the real tables, with an open-weights model |
+| t7 tax audit | 60 / 60 payouts and 50 / 50 policy-years of the first two public samples (`participants/targets`), and both PDF examples (BL10000086 #121 and BL10000044 2019, 616.11). Before every upload `t7lab/t7_check.py` runs both examples and the labels of NRTAXB (which tax was booked) on the real tables |
 | Maintainability index | 100 for the whole folder (radon, weighted by lines) and for every file in it. The t7 lab, which keeps the operators of plain Python, is next to the folder (`../t7lab/`), not in the hand-in |
 
 ```
@@ -40,6 +40,7 @@ my_solution/
 ├── taxpayer.py        t7: residence of the holder and tax rates as Neuron knew them at a booking, tax currency
 ├── payouts.py         t7: the payouts, the premiums they use one after another, the taxable base by country
 ├── bollo.py           t7: the Italian Bollo, accrued every year, re-priced in 2019, collected at the payouts
+├── periods.py       t7: the gain of a payout split by the periods of its tax rates (the Italian SOS)
 ├── taxes.py           t7: the amount of every tax booking of NRTAXB, the payout and annual tables
 ├── requirements.txt   polars 2.0.0 and holidays 0.106, pinned: the versions tested (128-bit integers need polars 1.31+)
 └── tools/neuron/      the tools that found the rules (not used by the submission)
@@ -214,7 +215,9 @@ trace of the corrected amounts, so no rule can reproduce them.
 
 **t7 tax audit.** NRTAXB names every tax booking of Neuron (type, event, effective date, processing timestamp,
 job user); only the amounts are missing. So the rules do not decide again whether a tax was due: they calculate
-the amount of every booking (`taxes.py`) and add them up per payout and per policy and year.
+the amount of every booking (`taxes.py`) and add them up per payout and per policy and year. The rules were
+found on the labels of NRTAXB and the two PDF examples, and then settled on the first two public samples of the
+actuary (60 payouts, 50 years: `participants/targets`), which they now reproduce in full.
 
 - country: the country of the taxes withheld from the payout (VST, SOS, KST), a label of NRTAXB; without them
   the residence: the holder (NRHOLD) and the address (NRADDR) valid on the effective date, among the versions
@@ -223,33 +226,38 @@ the amount of every booking (`taxes.py`) and add them up per payout and per poli
   version 1 and the fix of July 2019 version 2;
 - payouts: the events 400, 410 and 500 with a tax booking or not reversed. Units sold = the WDR, SUR, DTH
   bookings; gross = the units sold less the surrender penalty of the day for a withdrawal or a surrender
-  (`PENALIZED`, rounded as in t3), so NRTAXB books no tax where the penalty takes the gain or the gross to the
-  limit or below; value before = units sold + the value left that day (`valuation.values_on`);
+  (`PENALIZED`, rounded as in t3), the death benefit of the tariff option for a death claim (`DEATH_CLAIM`: 101 %
+  of the units sold, the higher of them and the sum insured, or both added); value before = units sold + the
+  value left that day (`valuation.values_on`);
 - premiums used: every premium received (not reversed) up to the payout, converted to the tax currency at the
-  rates of its own money date and rounded to the cent, truncated in DE. The payouts of a policy use them one
-  after another: a partial withdrawal uses its share units sold / value before. A holder who moved (CH -> DE) has the
-  chain counted in the currency of each payout;
-- taxable base, in the tax currency, rounded once: CH the gross converted on the payout day, IT and DE the gain
-  = that gross less the premiums used (at least 0); DE x (1 - TFS), half under HEV, 0 for contracts with regular
+  rates of its own money date and rounded to the cent by the system that received it (a premium from before the
+  euro with the first EUR rate). The payouts of a policy use them one after another: a partial withdrawal uses
+  its share units sold / value before, rounded to the cent. A holder who moved (CH -> DE) has the chain counted
+  in the currency of each payout;
+- taxable base, in the tax currency: CH the gross converted on the payout day, IT and DE the gain = that gross
+  less the premiums used, both rounded to the cent by the system (at least 0); DE 0 for contracts with regular
   premiums started before 2005 and held 12 years (NRTAXB books KST on every single premium one with a gain, as
-  the old law asked for 5 years of premiums); LU none. A payout without withholding reports the base 0;
-- amounts: VST, SOS = base x rate, the SOS at the rate averaged by days over the life of the policy, 12.5 % to
-  2011, 20 % to June 2014, 26 % after (`BLENDED_RATES`, as the law taxes the gain of each period at its rate);
+  the old law asked for 5 years of premiums); TFS and HEV stay out of the withholding
+  (`PARTIAL_EXEMPTION_WITHHELD`, `HALF_INCOME_WITHHELD`); LU none. A payout without withholding reports the base
+  as calculated;
+- amounts: VST = base x rate; SOS takes the gain accrued in each period of its rates at the rate of the period,
+  12.5 % to 2011, 20 % to June 2014, 26 % after (`PERIOD_RATES`, `periods.py`): the gain up to 31.12.2011 and to
+  30.6.2014 comes from the policy value on that day, and every payout takes its share of it, as of the premiums;
   KST = base x rate, divided by (1 + rate x KIS) when the payout has a KIS booking (the label, not the address);
-  SOL, KIS = KST x rate; STP = the premium of event 2 in francs x rate.
-  Rounded by the system, as in every task with targets: COBOL truncates, Neuron NG rounds half up
-  (`ROUNDED_BY_SYSTEM`; without it half up, German taxes truncated);
-- Bollo: BOL = policy value (the surrender value with `BOLLO_ON_SURRENDER_VALUE`) x rate x days run / days of the
-  year; the TAXFIX19 re-pricing books, for every earlier BOL, the Bollo at the restated rate less the amount
-  booked, both in cents (`BOLLO_FIX_PER_YEAR`; off, the difference of the rates rounded once on the total):
-  BL10000044 2019 = 421.57 + 194.54 = 616.11 either way, as in the example (rounding the difference of the rates
-  every year gives 194.53). BOC collects the outstanding BOL, all of it at a payout that
+  SOL, KIS = KST x rate; STP = the premium of event 2 in francs x rate. Rounded by the system, as in every task
+  with targets: COBOL truncates, Neuron NG rounds half up (`ROUNDED_BY_SYSTEM`); the German taxes are always
+  truncated (`TRUNCATED_TAXES`);
+- Bollo: BOL = policy value x rate on 31 December for the whole year, also in the year the policy started, and
+  at a payout that ends the policy for the days from 1 January to it; the TAXFIX19 re-pricing books the
+  difference of the rates over every earlier BOL, rounded once (`BOLLO_FIX_PER_YEAR` off): BL10000044 2019 =
+  421.57 + 194.54 = 616.11, as in the example. BOC collects the outstanding BOL, all of it at a payout that
   ends the policy, its share at a partial withdrawal. A negative amount rounds like its positive twin;
-- remittance: in the month after the effective date (`REMITTED_FROM_PAYMENT`; the payment day, the effective
-  date + the payout business days `PD_PAYDAY` of the product, is the other variant), on the day of the law: DE the
-  10th, as example 1, IT the 16th, CH 30 days after the month end (`REMITTANCE`; the 10th everywhere, the day of
-  Neuron's tax batch, is the other variant), moved to the next business day of the tax office when it falls on a
-  weekend or holiday (`REMITTANCE_SHIFTED`).
+- remittance: when something was withheld (not for the Bollo collected alone, `STAMP_DUTY_REMITTED` off), in the
+  month after the effective date (`REMITTED_FROM_PAYMENT` off) on the day of the law: DE the 10th, IT the 16th,
+  CH 30 days after the month end (`REMITTANCE`), moved to the next business day of the tax office, the Swiss one
+  in Bern (`REMITTANCE_SHIFTED`, `REMITTANCE_CALENDARS`);
+- annual table: the taxes withheld count in the year of their remittance (`REPORTED_WHEN_REMITTED`), STP and the
+  Bollo in the year of their effective date.
 
 Example 1 (BL10000086 #121: a USD policy, surrendered on 17.7.2006, gross 12'107.36 USD, 28 premiums of 420.00
 USD) decides the base. Every premium converted on its money date and truncated gives 5'628.16, as in the PDF;
@@ -258,21 +266,10 @@ the day before, the due dates and the reversed premium all miss. Then KST 25 % =
 = 77.38.
 
 The labels settle the discrete choices: VST is booked only for holders who objected to the reporting (AD_TAXST
-E) with a gross above TX_THRSH (257 of 259; never for the 1'275 payouts of reported holders), SOS and KST when
-the gain is above 0, no SOS on Italian death claims, and the country of every payout with tax is its residence.
-
-Open, with no labels: each choice is one line in `conventions.py`, to be changed one per upload as the actuary
-answers: the base of a payout without tax (`BASE_WITHOUT_TAX`: as calculated again, 0 scored 0 of 40), the
-base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`: back to the policy value after 8 of 30 with the surrender value),
-the rounding of the 2019 fix (`BOLLO_FIX_PER_YEAR`: per earlier BOL, as booked),
-the rounding by system instead of by country (`ROUNDED_BY_SYSTEM`, on: set by the targets of t0, t2, t3, too few
-rows for the actuary), the remittance day of a payout with stamp duty
-alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`), the month of the effective date
-or of the payment day (`REMITTED_FROM_PAYMENT`, with the payout business days `PD_PAYDAY`) and the move to
-a business day (`REMITTANCE_SHIFTED`), the rounding of the IT conversion (`TRUNCATED_CONVERSION`) and HEV on the withholding
-(`HALF_INCOME_WITHHELD`). Also
-assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a partial withdrawal (no
-example). `t7lab/t7_check.py` checks the rest on the real tables before an upload.
+E) with a gross above TX_THRSH, SOS and KST when the gain is above 0, no SOS on Italian death claims, and the
+country of every payout with tax is its residence. `t7lab/t7_check.py` checks them on the real tables before an
+upload. Still assumed, since no target row tests them: the first EUR rate for the days before 31.12.1998 and the
+base of a death claim without tax.
 
 ## Code quality
 

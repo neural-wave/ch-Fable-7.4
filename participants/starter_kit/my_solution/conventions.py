@@ -54,6 +54,9 @@ TERMINATING = [410, 500]  # payouts that end the policy: they pay out all of it
 PENALIZED = [400, 410]  # payouts that pay the units sold less the surrender penalty of the day; a death claim pays
 # them whole. NRTAXB books no tax on the withdrawals and surrenders that the penalty takes to the limit or below,
 # and taxes all the others (labels)
+DEATH_CLAIM = 500  # EV_EVTTP of a death claim: it pays the death benefit of the tariff option on the units sold, the
+# higher of the sum insured and the value, or 101 % of the value, or the value plus the sum insured
+# (`charges.death_benefit_factors`; targets: BL10003217 and BL10004258, option A, pay 101 % of the units sold)
 PAID_OUT = ["WDR", "SUR", "DTH"]  # BK_BKTYP of the money of a payout: its BK_AMTPC is negative
 TAXES = {"STP": "CH", "VST": "CH", "SOS": "IT", "BOL": "IT", "BOC": "IT", "KST": "DE", "SOL": "DE", "KIS": "DE",
          "HEV": "DE", "TFS": "DE"}  # every TAXTP of NRCODE -> its country, TX_CNTRY of its rates in NRTAXR
@@ -63,14 +66,17 @@ TAX_CURRENCY = {"CH": "CHF", "IT": "EUR", "DE": "EUR", "LU": "EUR"}  # country -
 TRUNCATED = ["DE"]  # countries whose taxes Neuron truncates to the cent (example: 1407.04 x 5.5 % = 77.3872 -> 77.38)
 TRUNCATED_CONVERSION = ["DE"]  # countries whose premiums are truncated to the cent when converted to the tax
 # currency (example: only this gives 5628.16); IT rounds them half up like its taxes (assumption)
-ROUNDED_BY_SYSTEM = True  # the system that processed a tax decides its rounding, as in every task with targets (t0,
-# t2, t3): COBOL truncated, Neuron NG (TB_CHGTS from CONVERSION) rounds half up, the taxes and the conversions alike.
-# The example (DE, 2006) was processed by COBOL and fits it; truncating by country (False: TRUNCATED and
-# TRUNCATED_CONVERSION) rests on that one example (targets of t0, t2, t3; too few rows for the actuary to read)
+ROUNDED_BY_SYSTEM = True  # the system that processed an amount decides its rounding, as in every task with targets
+# (t0, t2, t3): COBOL truncated, Neuron NG (TB_CHGTS from CONVERSION) rounds half up, the bases and the conversions
+# alike (targets: CH STP 2006 985.95 and a CH base of 1998 truncated, a DE base of 2012 rounded half up). False:
+# by country, TRUNCATED and TRUNCATED_CONVERSION
+TRUNCATED_TAXES = ["DE"]  # countries whose tax amounts Neuron truncates to the cent whatever the system (targets:
+# BL10001204 2012 SOL + KIS 1.57 + 2.58 = 4.15, BL10004408 2020 KIS 12.78; the example 77.38)
 TAXED_ON_GROSS, TAXED_ON_GAIN = ["CH"], ["IT", "DE"]  # the taxable base of a payout; none elsewhere, LU (law)
-BLENDED_RATES = ["SOS"]  # tax types whose rate is averaged by days over the life of the policy
-# (`taxpayer.blended_rates`): the Italian SOS takes the gain of each period at its rate, 12.5 % to 2011, 20 % to June
-# 2014, 26 % after (law, DL 138/2011 and DL 66/2014); [] takes the rate valid on the payout day (assumption, to test)
+PERIOD_RATES = ["SOS"]  # tax types that take the gain accrued in each period of their rates at the rate of the
+# period (`periods`): the Italian SOS, 12.5 % to 2011, 20 % to June 2014, 26 % after (DL 138/2011, DL 66/2014), the
+# gain of a period from the policy value at its end. Every payout takes its share of the gain of each period, which
+# then shrinks by that share, as the premiums used do (targets: all 5 SOS payouts, BL10003541 with three payouts)
 BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calculated: what Neuron calculated and,
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
@@ -90,22 +96,26 @@ REMITTANCE_SHIFTED = ["DE", "IT", "CH"]  # countries whose remittance day moves 
 # calendar: the law moves a deadline that falls on a weekend or holiday, about 30 % of the days (law; the example, a
 # Thursday, fits both). [] keeps the day as it is, as Neuron's own batches that run on weekends (assumption, to test)
 REMITTANCE_CALENDARS = {"DE": {"country": "DE", "years": range(1994, 2100)},
-                        "IT": {"country": "IT", "years": range(1994, 2100)}, "CH": CALENDAR}  # the tax offices; the
-# other variant is Neuron's own calendar CALENDAR for every country, as for the direct debits
+                        "IT": {"country": "IT", "years": range(1994, 2100)},
+                        "CH": {"country": "CH", "subdiv": "BE", "years": range(1994, 2100)}}  # the tax offices;
+# the Swiss one is in Bern, where 2 January is a holiday (targets: BL10000094, 30.12.2017 -> 3.1.2018)
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
-STAMP_DUTY_REMITTED = True  # a payout with stamp duty alone has a remittance day; False: None, as the PDF says
-# "None if nothing was withheld" if the stamp duty collected does not count as withheld (assumption)
+STAMP_DUTY_REMITTED = False  # a payout with stamp duty alone has no remittance day: the PDF's "None if nothing was
+# withheld", the Bollo collected is not withheld (targets: 6 IT payouts with Bollo alone, none has a day)
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 CHURCH_REDUCES_KST = True  # DE: the KIS booking reduces the KST as above (law, from 2009); False: base x KST and the
 # church tax on top (assumption, to test)
+REPORTED_WHEN_REMITTED = [*WITHHELD, *SURCHARGES]  # the taxes withheld from a payout count in the annual table in
+# the year of their remittance, not of the payout (targets: BL10003349 paid out 3.12.2025, remitted 16.1.2026, it_sos
+# in 2026; four more of the kind). STP and the Bollo count in the year of their effective date (the example)
 COLLECTED_IN_ANNUAL = False  # IT: it_bol of the annual table adds up the Bollo accrued (BOL); True also the Bollo
 # collected at the payouts of the year (BOC), which pays the accrued one (assumption, to test)
 PREMIUM_STAMP = "STP"  # CH: the stamp duty on the premium of its event, the single premium
 BOLLO_FIX = "TAXFIX"  # TB_USRID of the re-pricing of the Bollo after the rate restatement of July 2019 (NRTAXB)
-BOLLO_FIX_PER_YEAR = True  # the fix books, for every earlier BOL, the Bollo at the restated rate less the amount
-# booked, both in cents: a fix job works on booked amounts. False: the difference of the rates over all the earlier
-# BOL, rounded once. The example fits both (BL10000044, 2019) (assumption)
+BOLLO_FIX_PER_YEAR = False  # the fix books the difference of the rates over all the earlier BOL, rounded once;
+# True: for every earlier BOL the Bollo at the restated rate less the amount booked. The example fits both
+# (BL10000044, 2019); the targets want it once (BL10003273 2019 142.48, BL10002967 2019 347.13)
 BOLLO_ON_SURRENDER_VALUE = False  # IT: the Bollo is on the policy value. True: on the surrender value, the value less
 # the penalty, as the Italian rules have it for insurance policies (law); the example cannot tell, its policy has no
 # penalty. The actuary scored the annual table 14 of 20 twice without it and 8 of 30 with it (leaderboard)
@@ -116,5 +126,7 @@ OLD_CONTRACT = dt.date(2005, 1, 1)  # DE: a contract started before is tax free 
 HELD_YEARS = 12  # DE: years held for the old exemption and for HEV, section 20 (1) no. 6 EStG (law)
 HALF_INCOME_AGE = {False: 60, True: 62}  # DE: age for HEV by "started on or after HALF_INCOME_2012" (law)
 HALF_INCOME_2012 = dt.date(2012, 1, 1)  # DE: contracts from then need the higher age (law)
-HALF_INCOME_WITHHELD = True  # DE: HEV halves the base of the withholding (assumption: NRTAXR has HEV rates, while
-# the law, as far as we know, leaves HEV out of the KapESt)
+HALF_INCOME_WITHHELD = False  # DE: HEV does not halve the base of the withholding; True: it does. The law leaves HEV
+# to the assessment, and the targets leave the other taxable share of NRTAXR, TFS, out of the withholding too
+PARTIAL_EXEMPTION_WITHHELD = False  # DE: the partial exemption TFS (15 % from 2018) does not reduce the base of the
+# withholding; True: it does (targets: BL10004408 2020 and BL10000301 2024, KST on the whole gain)
