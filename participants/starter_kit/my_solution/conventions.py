@@ -79,7 +79,9 @@ BLENDED_RATES = []  # tax types whose rate is averaged by days over the life of 
 BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calculated: what Neuron calculated and,
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
-REMITTANCE = {"DE": ("month", 10), "IT": ("month_end", 0), "CH": ("day", 30)}  # country -> (anchor, days): the
+STAMP_DUTY_ALONE = "stamp duty alone"  # the key of REMITTANCE for a payout with stamp duty and no withholding
+REMITTANCE = {"DE": ("month", 10), "IT": ("month_end", 0), "CH": ("day", 30),
+              STAMP_DUTY_ALONE: ("month_end", 0)}  # country, or STAMP_DUTY_ALONE -> (anchor, days): the
 # day Neuron paid the taxes of a payout is the anchor plus the days. "month": the last day of the month of the payout
 # day (so 10 = the 10th of the month after: DE, section 44 EStG and the example 2006-07-17 -> 2006-08-10; 16 = the
 # 16th, the F24 of Italy; 30 = the law's 30 days after the month for CH, art. 16 VStG). "month_end": the last day of

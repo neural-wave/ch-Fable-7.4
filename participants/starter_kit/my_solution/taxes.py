@@ -22,7 +22,7 @@ import polars as pl
 from bollo import bollo_bookings
 from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, BLENDED_RATES, CHURCH_REDUCED, CHURCH_REDUCES_KST,
                          CHURCH_TAX, COLLECTED_IN_ANNUAL, PREMIUM_STAMP, REMITTED_FROM_PAYMENT, REMITTANCE,
-                         REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
+                         REMITTANCE_SHIFTED, STAMP_DUTY, STAMP_DUTY_ALONE, STAMP_DUTY_COUNTRY,
                          STAMP_DUTY_REMITTED, SURCHARGES, TAX_CURRENCY, TAXES, WITHHELD)
 from dates import tax_office_holidays
 from legacy import as_date, table
@@ -111,15 +111,15 @@ def shifted(day: pl.Expr, country: pl.Expr) -> pl.Expr:
     return moved
 
 
-def due_day(paid: pl.Expr, country: pl.Expr) -> pl.Expr:
-    """The day the taxes of a payout paid on `paid` are due in `country`: the anchor of REMITTANCE plus its days.
+def due_day(paid: pl.Expr, rule: pl.Expr) -> pl.Expr:
+    """The day the taxes of a payout paid on `paid` are due under the `rule` of REMITTANCE: its anchor plus its days.
 
     The anchors: "month", the last day of the month of `paid`; "month_end", the last day of the month after;
     "quarter", the last day of the quarter; "day", `paid` itself.
     """
-    anchor = country.replace_strict({name: rule[0] for name, rule in REMITTANCE.items()}, default=None)
-    days = country.replace_strict({name: rule[1] for name, rule in REMITTANCE.items()}, default=None,
-                                  return_dtype=pl.Int64)
+    anchor = rule.replace_strict({name: anchored[0] for name, anchored in REMITTANCE.items()}, default=None)
+    days = rule.replace_strict({name: anchored[1] for name, anchored in REMITTANCE.items()}, default=None,
+                               return_dtype=pl.Int64)
     month_end = paid.dt.month_end()
     quarter_end = paid.dt.truncate("1q").dt.offset_by("1q").dt.offset_by("-1d")
     anchored = pl.when(anchor.eq("month")).then(month_end).when(anchor.eq("month_end")).then(
@@ -130,15 +130,17 @@ def due_day(paid: pl.Expr, country: pl.Expr) -> pl.Expr:
 def remittance() -> pl.Expr:
     """The day Neuron paid the taxes of a payout to the tax office, null without tax.
 
-    The country of the withholding decides, Italy for stamp duty alone; the day is the `due_day` of the payout day,
+    The country of the withholding decides the calendar, Italy for stamp duty alone, and the rule of REMITTANCE is
+    the country's, or STAMP_DUTY_ALONE's for stamp duty alone; the day is the `due_day` of the payout day,
     the day of the payment PAID with REMITTED_FROM_PAYMENT or else the effective date, moved to a business day for
     the countries of REMITTANCE_SHIFTED. A payout with stamp duty alone has a day with STAMP_DUTY_REMITTED.
     """
     withheld = pl.col("withholding").add(pl.col("surcharges"))
     country = pl.when(withheld.ne(0)).then("COUNTRY").otherwise(pl.lit(STAMP_DUTY_COUNTRY))
+    rule = pl.when(withheld.ne(0)).then("COUNTRY").otherwise(pl.lit(STAMP_DUTY_ALONE))
     paid = pl.when(pl.lit(REMITTED_FROM_PAYMENT)).then(pl.col("PAID")).otherwise(as_date("TB_EFFDT"))
     remitted = pl.when(pl.lit(STAMP_DUTY_REMITTED)).then(withheld.add(pl.col("stamp_duty"))).otherwise(withheld)
-    return pl.when(remitted.ne(0)).then(shifted(due_day(paid, country), country))
+    return pl.when(remitted.ne(0)).then(shifted(due_day(paid, rule), country))
 
 
 def withheld_amounts(legacy_dir) -> pl.DataFrame:
