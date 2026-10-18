@@ -1,6 +1,7 @@
 """Official scoring of the Neuron migration challenge. The organizers will use exactly this module.
 
 A row counts only if it is exact: amounts to the cent, dates to the day, all six columns of a statement.
+t7 (tax module): every column exact, the country, the amounts to the cent and the remittance date.
 """
 import csv
 import dataclasses
@@ -23,6 +24,14 @@ def date(v):
 
 def policy(v):
     return str(v).strip()
+
+
+def optional_date(v):
+    return None if v in ("", None) else date(v)
+
+
+def country(v):
+    return str(v).strip().upper()
 
 
 @dataclasses.dataclass(frozen=True)
@@ -56,10 +65,18 @@ TASKS = {
     "t4_annual_statement": Task((policy, int), (amount,) * 6),
 }
 OUTLIER_TASK = "t5_outlier_detection"
+T7_TASKS = {  # no train targets
+    "t7_tax_payout": Task((policy, int), (country,) + (amount,) * 4 + (optional_date,)),
+    "t7_tax_annual": Task((policy, int), (amount,) * 7),
+}
+
+
+def spec(task):
+    return TASKS[task] if task in TASKS else T7_TASKS[task]
 
 
 def read_targets(folder, task):
-    return TASKS[task].read(pathlib.Path(folder) / f"{task}.csv")
+    return spec(task).read(pathlib.Path(folder) / f"{task}.csv")
 
 
 def arguments(task, targets):
@@ -76,7 +93,7 @@ def normalize(task, predictions):
     out = {}
     for key, value in (predictions or {}).items():
         try:
-            out[TASKS[task].make_key(key)] = TASKS[task].make_value(value)
+            out[spec(task).make_key(key)] = spec(task).make_value(value)
         except (TypeError, ValueError, InvalidOperation):
             continue
     return out

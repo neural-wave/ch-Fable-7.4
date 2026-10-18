@@ -1,0 +1,28 @@
+// OpenCode config of scripts/opencode-open.sh and .ps1: one provider, "open", with the model of .env.llm.
+// The script exports the variables; {env:...} is replaced as text before parsing, so the numbers stay unquoted.
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "open/model",
+  // only this provider: no session, title or subagent request goes to another one
+  "policies": [
+    { "action": "provider.use", "resource": "*", "effect": "deny" },
+    { "action": "provider.use", "resource": "open", "effect": "allow" }
+  ],
+  "providers": {
+    "open": {
+      "name": "Open-weights model (.env.llm)",
+      "package": "@opencode/ai/providers/{env:OPEN_PROTOCOL}-compatible",
+      "settings": { "baseURL": "{env:OPEN_BASE_URL}", "apiKey": "{env:OPEN_API_KEY}" },
+      "headers": { "Authorization": "Bearer {env:OPEN_API_KEY}" }, // the anthropic package sends only x-api-key
+      "models": {
+        "model": {
+          "modelID": "{env:OPEN_MODEL}",
+          "capabilities": { "reasoning": { "supported": false } }, // no thinking fields the server may not know
+          "compatibility": { "maxTokensField": "max_tokens" },      // the field every OpenAI-compatible server reads
+          "limit": { "context": {env:OPEN_CONTEXT}, "output": {env:OPEN_MAX_OUTPUT} }, // real window: compaction in time
+          "body": { "max_tokens": {env:OPEN_MAX_OUTPUT} }           // the title request too, which asks for 32000
+        }
+      }
+    }
+  }
+}

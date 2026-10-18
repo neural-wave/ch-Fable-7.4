@@ -10,3 +10,4 @@ lab/.cache/
 lab/runs/**/*.parquet
 lab/runs/*~*/
 dist/
+*.json

@@ -8,6 +8,7 @@ TARGETS = pathlib.Path(os.environ.get("NEURON_TARGETS", REPO / "targets"))
 STARTER_KIT = REPO / "starter_kit"
 SUBMISSION = STARTER_KIT / "my_solution"
 CACHE = REPO / "lab" / ".cache"
+DERIVED = CACHE / "derived"  # pseudo-targets built from legacy tables (derived.py)
 RUNS = REPO / "lab" / "runs"
 
 

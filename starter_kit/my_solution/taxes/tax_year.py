@@ -28,7 +28,7 @@ class TaxYear:
         ch_stp = self.swiss_stamp_duty() if country == "CH" else ZERO
         it_sos, it_bol = self.italian() if country == "IT" else (ZERO, ZERO)
         de_kst, de_sol = self.german() if country == "DE" else (ZERO, ZERO)
-        return ch_stp, ZERO, it_sos, it_bol, de_kst, de_sol, annual_kis(self, country)
+        return tuple(map(cents, (ch_stp, ZERO, it_sos, it_bol, de_kst, de_sol, annual_kis(self, country))))
 
     def fund_value(self, day_):
         """(fund value, paid premiums / 100) of the policy on `day_`."""

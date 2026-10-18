@@ -1,4 +1,4 @@
-"""Step 5 in batch (`lab suggest`): one request to Claude Code (`claude -p`), a constrained answer, an exact score.
+"""Step 5 in batch (`lab suggest`): one request to the open-weights model, a constrained answer, an exact score.
 
 The model reads report.md and the feature vocabulary (dsl.py) and answers with at most 3 features in JSON. The
 harness validates them (known primitives, existing columns, at most two levels), retries once with the
@@ -45,11 +45,25 @@ def rerun(run):
     return report.build(run)
 
 
-def best_score(run):
+def best_scores(run):
+    """{value: (id of the winner, exact rows)} for every value of the run."""
     data = json.loads((paths.run_dir(run) / "pool.json").read_text())
-    value, info = next(iter(data["values"].items()))
-    best = next(c for c in info["candidates"] if c["id"] == info["best"])
-    return best["id"], best["score"]["total"][0]
+    found = {}
+    for value, info in data["values"].items():
+        best = next(c for c in info["candidates"] if c["id"] == info["best"])
+        found[value] = best["id"], best["score"]["total"][0]
+    return found
+
+
+def best_score(run):
+    return next(iter(best_scores(run).values()))
+
+
+def per_value(before, after):
+    """The change of every value, when a task has more than one (a feature may help only a later value)."""
+    if len(before) < 2:
+        return ""
+    return "; per value: " + ", ".join(f"{v} {before[v][1]} -> {after.get(v, ('', '?'))[1]}" for v in before)
 
 
 def prompt_for(run, df, full, full_meta, text):
@@ -87,12 +101,12 @@ def validate(answer, df, full):
 
 
 def add_feature(task, name, expr):
-    """One feature written by hand or by the agent in Claude Code, same validation and scoring as `suggest`."""
+    """One feature written by hand (or by the agent in OpenCode), same validation and scoring as `suggest`."""
     run = f"{task}~llm"
     if not (paths.run_dir(run) / "frame.parquet").exists():
         variant(task, None)
         rerun(run)
-    before = best_score(run)
+    before, before_all = best_score(run), best_scores(run)
     df, meta = frames.load(run)
     full, full_meta = frames.load(task)
     node = dsl.parse(expr, df.columns, full.columns)
@@ -102,13 +116,14 @@ def add_feature(task, name, expr):
     (paths.run_dir(run) / "frame.json").write_text(json.dumps(meta, indent=1, default=str))
     rerun(run)
     after = best_score(run)
-    return f"{name} = {expr}: best before {before[0]} {before[1]}, after {after[0]} {after[1]} rows exact ({run})"
+    return (f"{name} = {expr}: best before {before[0]} {before[1]}, after {after[0]} {after[1]} rows exact ({run})"
+            + per_value(before_all, best_scores(run)))
 
 
 def suggest(task, ablate=None, dry_run=False):
     run = variant(task, ablate)
     text = rerun(run)
-    before = best_score(run)
+    before, before_all = best_score(run), best_scores(run)
     df, meta = frames.load(run)
     full, full_meta = frames.load(task)
     prompt = prompt_for(run, df, full, full_meta, text)
@@ -128,7 +143,7 @@ def suggest(task, ablate=None, dry_run=False):
         (paths.run_dir(run) / "frame.json").write_text(json.dumps(meta, indent=1, default=str))
         rerun(run)
     after = best_score(run)
-    log = {"time": dt.datetime.now().isoformat(timespec="seconds"), "model": llm.settings()[1] or "claude-code",
+    log = {"time": dt.datetime.now().isoformat(timespec="seconds"), "model": llm.settings()[3],
            "prompt_sha": hashlib.sha1(prompt.encode()).hexdigest()[:12], "answers": answers,
            "proposals": [{k: v for k, v in p.items() if k != "node"} for p in proposals], "errors": errors,
            "before": before, "after": after}
@@ -138,5 +153,6 @@ def suggest(task, ablate=None, dry_run=False):
     lines = [f"model {log['model']}: {len(proposals)} valid proposals, {len(errors)} rejected"]
     lines += [f"  + {p['name']} = {p['expr']}  ({p['why']})" for p in log["proposals"]]
     lines += [f"  - {e}" for e in errors]
-    lines.append(f"best before: {before[0]} {before[1]} rows exact; after: {after[0]} {after[1]} rows exact")
+    lines.append(f"best before: {before[0]} {before[1]} rows exact; after: {after[0]} {after[1]} rows exact"
+                 + per_value(before_all, best_scores(run)))
     return "\n".join(lines)

@@ -10,9 +10,10 @@ from .dates import add_months, age, calendar_years, months_between, policy_years
 from .eras import SYSTEM_CHANGE, cents, era_rounding, is_cobol
 from .extract import read_targets, table
 from .days import OPEN_END, day
-from .lookups import first_after, grouped, keyed, on_or_before
+from .lookups import differing_keys, first_after, grouped, keyed, on_or_before
 from .versions import first_valid, latest, valid
 
-__all__ = ["OPEN_END", "SYSTEM_CHANGE", "add_months", "age", "calendar_years", "cents", "day", "era_rounding",
+__all__ = ["OPEN_END", "SYSTEM_CHANGE", "add_months", "age", "calendar_years", "cents", "day", "differing_keys",
+           "era_rounding",
            "first_after", "first_valid", "grouped", "is_cobol", "keyed", "latest", "months_between", "on_or_before",
            "policy_years", "read_targets", "table", "valid"]

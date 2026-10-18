@@ -28,6 +28,8 @@ def holdout(df, policy_col):
 def condition(clause):
     name, op, value = clause
     col = pl.col(name).cast(pl.String)
+    if value is None:  # a leaf on a missing value (no previous payout, no version on that date)
+        return col.is_null() if op == "=" else col.is_not_null()
     return col == value if op == "=" else (col != value) | col.is_null()
 
 
@@ -73,6 +75,8 @@ def predicted(df, candidate, value):
     relation = candidate["relation"]
     c = constants(df, candidate)
     kind, x = relation["kind"], relation.get("input")
+    if kind == "label":
+        return c
     work = df.select([pl.col(x)] if x else [pl.lit(0).alias("_none")]).with_columns(c.alias("_c"))
     if kind == "days":
         expr = pl.col(x) + pl.duration(days=pl.col("_c").cast(pl.Int64))
@@ -101,7 +105,7 @@ def predicted(df, candidate, value):
 def correct(df, candidate, value):
     """Boolean series: the candidate reproduces the target value of each row exactly."""
     p = predicted(df, candidate, value)
-    if df[value].dtype == pl.Date:
+    if df[value].dtype in (pl.Date, pl.String):
         return (p == df[value]).fill_null(False)
     s = max(scale_of(df[value].dtype), scale_of(p.dtype))
     both = pl.DataFrame({"p": p, "v": df[value]})

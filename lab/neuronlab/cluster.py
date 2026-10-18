@@ -31,6 +31,8 @@ def scale_of(dtype):
 def matches(df, relation, value, center, mode):
     """Boolean expression: the relation with this center reproduces the target value exactly."""
     v = pl.col(value)
+    if relation.kind == "label":
+        return v == str(center)
     if relation.kind == "days":
         return (v - pl.col(relation.input)).dt.total_days() == int(center)
     if relation.kind == "months":
@@ -102,6 +104,9 @@ def snap(df, relation, value, rows, mean):
 
 def find_centers(df, relation, value):
     """(centers, precise coverage) of one relation."""
+    if relation.kind == "label":  # every category is a cluster, every row is assigned exactly
+        values = df[value].drop_nulls().unique().sort().to_list()
+        return (values, 1.0) if 1 <= len(values) <= MAX_CLUSTERS else ([], 0.0)
     r = relations.evaluate(df, relation, value)
     precise, eps = precision(df, relation, value)
     keep = precise & r.is_not_null() & r.is_not_nan()

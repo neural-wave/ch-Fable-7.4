@@ -8,9 +8,10 @@
     lab pool eval <task> <file.json> score a candidate written by hand or by the LLM
     lab freeze <task> [candidate]    generate the function in submission.py and check it
     lab score <task> [name=expr ...] exact score of the function in submission.py and where it is wrong
-    lab suggest <task> [--ablate C]  step 5 in batch: JSON proposals of Claude Code (claude -p), validated, scored
+    lab suggest <task> [--ablate C]  step 5 in batch: JSON proposals of the open-weights model, validated, scored
     lab feature <task> <name> <expr> step 5 by hand: one feature in the DSL (e.g. "at(BR_TIER, PR_RCVDT)")
-    lab llm ping                     check that Claude Code answers for step 5
+    lab llm ping                     check the endpoint and model of step 5
+    lab t7check                      t7 without targets: the examples of such.pdf, consistency with NRTAXB
     lab show <table> [COL=VALUE ...] typed rows of a legacy table or target file, e.g. NRPOLH PH_POLNR=BL10000001
     lab viz [task ...]               runs/atlas.html: the charts of the scored tasks, offline
 """
@@ -120,6 +121,9 @@ def main(argv=None):
         print(score.score(rest[0], dict(item.split("=", 1) for item in rest[1:]), args.submission))
     elif cmd == "show":
         show(rest[0], rest[1:])
+    elif cmd == "t7check":
+        from . import t7check
+        print(t7check.check(args.submission))
     elif cmd == "viz":
         from . import viz
         print(viz.atlas(rest or None))

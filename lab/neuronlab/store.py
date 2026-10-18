@@ -97,25 +97,34 @@ def _infer(series):
 
 
 def target(name):
-    """A target file (scored or diagnostic), typed: keys and values in the canonical types of `scoring.py`."""
+    """A target file (scored, diagnostic or derived), typed: keys and values in the canonical types of `scoring.py`."""
     def build(source):
         raw = pl.read_csv(source, separator=",", infer_schema=False)
         return raw.select(_infer(raw[c].str.strip_chars()).alias(c) for c in raw.columns)
+    from . import derived
+    if name in derived.DERIVED:
+        derived.write(name)
+        return _cached(name, paths.DERIVED, build)
     return _cached(name, paths.TARGETS, build)
 
 
 def target_names():
-    return sorted(p.stem for p in paths.TARGETS.glob("t*.csv"))
+    from . import derived
+    return sorted([p.stem for p in paths.TARGETS.glob("t*.csv")] + derived.names())
 
 
 @functools.cache
 def target_columns(task):
     """(key columns, value columns) of a target file.
 
-    Scored tasks: the arity in `scoring.TASKS`. Diagnostic files such as t2_projection_year or t3_booking: the
-    shortest unique prefix of the header is the key, with policy_id in front when the prefix lacks it (the holdout
-    split is by policy), and the decimal columns after it are the values.
+    Scored tasks: the arity in `scoring.TASKS`. Derived pseudo-targets: the columns `derived.py` declares.
+    Diagnostic files such as t2_projection_year or t3_booking: the shortest unique prefix of the header is the key,
+    with policy_id in front when the prefix lacks it (the holdout split is by policy), and the decimal columns after
+    it are the values.
     """
+    from . import derived
+    if task in derived.DERIVED:
+        return derived.columns(task)
     df = target(task)
     header = df.columns
     if task in scoring.TASKS:

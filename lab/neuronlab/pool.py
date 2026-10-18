@@ -158,7 +158,7 @@ def run(task):
         for i, minimal in enumerate(tinfo.get("minimal_sets", [])):
             base.append({"id": f"C2.{i + 1}", "origin": f"optimal tree on {minimal['features']}",
                          "rules": leaf_rules(minimal["leaf_rules"])})
-            for j, g in enumerate(generalize(df, labelled, minimal, centers)):
+            for j, g in enumerate(generalize(df, labelled, minimal, centers) if relation["kind"] != "label" else []):
                 base.append({"id": f"C3.{i + 1}.{j + 1}", "lookup": g["lookup"],
                              "origin": f"generalization of C2.{i + 1}: constants = {g['lookup']['table']}."
                                        f"{g['lookup']['column']} (agreement {g['agreement']})"})
@@ -166,7 +166,7 @@ def run(task):
             c.update(relation=relation, value=value, rounding=c.get("rounding", "ROUND_HALF_UP"))
         pool = list(base)
         for c in base:
-            pool += rounding_variants(c) + anchor_variants(c, meta["anchors"])
+            pool += (rounding_variants(c) if relation["kind"] != "label" else []) + anchor_variants(c, meta["anchors"])
         unique = {}
         for c in pool:
             unique.setdefault(json.dumps({k: c.get(k) for k in ("rules", "lookup", "rounding", "relation")},

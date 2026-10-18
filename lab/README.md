@@ -5,8 +5,7 @@ The lab finds the formulas of a target with a generic pipeline:
 2. clustering of target/input relations;
 3. optimal decision trees;
 4. a pool of candidate rules with exact scores;
-5. a language model, Claude Code run headless (`claude -p`), only where the trees need a feature that is not in the
-   data yet;
+5. an open-weights language model, only where the trees need a feature that is not in the data yet;
 6. exact scoring;
 7. a second pass on the residuals.
 
@@ -33,11 +32,11 @@ point elsewhere.
 | `lab pool show <task>` | candidates with their exact scores |
 | `lab pool eval <task> <file.json>` | scores a candidate written by hand or by a model |
 | `lab feature <task> <name> "<expr>"` | adds one feature in the DSL (e.g. `at(BR_TIER, PR_RCVDT)`) and reruns steps 3, 4 and 7 in `<task>~llm` |
-| `lab suggest <task> [--ablate GLOB] [--dry-run]` | step 5 in batch: one request to Claude Code (`claude -p`), at most 3 validated features, exact score before and after |
+| `lab suggest <task> [--ablate GLOB] [--dry-run]` | step 5 in batch: one request to the open-weights model, at most 3 validated features, exact score before and after |
 | `lab freeze <run> [candidate]` | writes the function of the winner into `submission.py` and runs `check.py` |
 | `lab score <task> [name=expr ...] [--submission DIR]` | runs the task function of `submission.py` behind a firewall on the target files, gives its exact score and explains its wrong rows with the optimal trees (`score.md`) |
 | `lab show <table> COL=VALUE ...` | at most 40 typed rows of a legacy table or target file |
-| `lab llm ping` | checks that Claude Code answers for step 5 |
+| `lab llm ping` | checks the endpoint and model of step 5 |
 
 ## Artifacts of a task (`runs/<task>/`)
 
@@ -73,30 +72,29 @@ and approximate relations that no constant reproduces to the cent.
 - A row counts only if it equals the target, with the same semantics as `scoring.accuracy`.
 - One policy in five (`crc32(policy_id) % 5 == 0`) is the holdout.
 
-## Step 5 with Claude Code
+## Step 5 with an open-weights model
 
-`llm.py` sends the prompt of step 5 to Claude Code in headless mode (`claude -p`): no tools, no skills, no MCP
-servers, no saved session, and the system prompt of step 5 instead of the one of Claude Code. It uses the login of
-the `claude` CLI (subscription or `ANTHROPIC_API_KEY`). `LLM_MODEL` (in the environment or in `../.env.llm`) picks
-the model, e.g. `opus`; without it Claude Code uses its default model. There is no temperature setting, so two runs
-may propose different features; each one is scored exactly. The model can only propose expressions of the DSL in
+The protocol, endpoint, key and model are in `../.env.llm` (template: `../.env.llm.example`). The default is an
+endpoint with the OpenAI API, such as vLLM on a vast.ai instance. `llm.py` speaks that protocol, or the Anthropic
+Messages API with `OPEN_PROTOCOL=anthropic`. The model can only propose expressions of the DSL in
 `neuronlab/dsl.py`. They are parsed with a restricted `ast`, never evaluated as Python.
 
-The agent is Claude Code too: it finds the protocol in `../.claude/skills/rule-discovery/SKILL.md` as the skill
-`rule-discovery`, when started with `claude` in the root of the repository. `../scripts/claude-tasks.sh [task ...]`
-runs it without supervision: one headless session per task (default t1 to t4), one after the other, with the trace in
-`runs/<task>/agent-<time>.jsonl`.
+OpenCode runs on the same model with `../scripts/opencode-open.sh`. It finds the protocol in
+`../.claude/skills/rule-discovery/SKILL.md` as the skill `rule-discovery`. `../scripts/opencode-tasks.sh [task ...]`
+runs it without supervision: for each task (default t1 to t4) the script runs `lab run`, `lab suggest` when the
+report shows a missing feature, and `lab score` itself, writes their output to `runs/<task>/pipeline.md`, and only
+then starts an OpenCode session that continues the loop from that file (trace: `runs/<task>/agent-<time>.jsonl`).
 
 ## Tests
 
 ```bash
 uv run pytest -q                  # about 40 s
 NEURON_FULL=1 uv run pytest -q    # also compares the two loaders on NRBOOK (6.8 M rows)
-NEURON_LLM=1 uv run pytest -q tests/test_suggest.py   # the acceptance test of step 5 with Claude Code (metered)
+NEURON_LLM=1 uv run pytest -q tests/test_suggest.py   # the acceptance test of step 5 with the real model (metered)
 ```
 
 The tests cover four things:
 - the parity of the stdlib loader of the submission with the Polars loader;
 - the t0 pipeline from grain to residuals;
 - the submission against `scoring.accuracy`, with a firewall check that no task function reads target files;
-- step 5 with a scripted model, and with Claude Code when `NEURON_LLM=1`.
+- step 5 with a scripted model, and with the real one when `.env.llm` is filled in.

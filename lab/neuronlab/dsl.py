@@ -25,6 +25,7 @@ PRIMITIVES = {
     "pos": ("character at a 1-based position of a code", ("column", "int")),
     "ratio": ("first number divided by the second", ("number", "number")),
     "diff": ("first number minus the second", ("number", "number")),
+    "at_least": ("the number is at least the constant (a threshold: years, age, amount)", ("number", "int")),
     "era": ("'before' or 'after' the system change of 2007-08-11", ("date",)),
 }
 
@@ -101,6 +102,7 @@ def evaluate(node, df, full):
         "birthday_days": lambda: _birthday_days(a, b),
         "ratio": lambda: a.cast(pl.Float64) / b.cast(pl.Float64),
         "diff": lambda: a.cast(pl.Float64) - b.cast(pl.Float64),
+        "at_least": lambda: a.cast(pl.Float64) >= b.cast(pl.Float64),
         "era": lambda: pl.when(a < CONVERSION).then(pl.lit("before")).otherwise(pl.lit("after")),
     }[name]()
     return frame.select(expr.alias("v"))["v"]

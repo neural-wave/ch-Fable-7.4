@@ -20,6 +20,11 @@ def grouped(rows, *key):
     return groups
 
 
+def differing_keys(computed, expected):
+    """The keys of both dicts whose values differ, e.g. the targets a rule does not reproduce."""
+    return {key for key in computed.keys() & expected.keys() if computed[key] != expected[key]}
+
+
 def on_or_before(days, day_):
     """The last of the sorted `days` on or before `day_`.
 

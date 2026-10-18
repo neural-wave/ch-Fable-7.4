@@ -5,6 +5,7 @@ diff   value = x + c           a fixed amount on top of an input
 days   value = x + c days      a date shifted from an input date
 months value = x + c months    a schedule (due dates), the 31st clipped to shorter months
 const  value = c               a constant (fees)
+label  value = c               a category (a tax type, a country): the value is its own cluster
 
 When no input gives dense clusters, a second pass relates the value to `previous(value)`, the value of the same
 policy one step before (the previous due date, last year's projection): sequences and recurrences.
@@ -16,7 +17,7 @@ import operator
 
 import polars as pl
 
-KINDS = ("ratio", "diff", "days", "months", "const")
+KINDS = ("ratio", "diff", "days", "months", "const", "label")
 
 
 @dataclasses.dataclass(frozen=True)
@@ -26,7 +27,7 @@ class Relation:
 
     @property
     def name(self):
-        if self.kind == "const":
+        if self.kind in ("const", "label"):
             return "value"
         symbol = {"ratio": "/", "diff": "-", "days": "- (days)", "months": "- (months)"}[self.kind]
         return f"value {symbol} {self.input}"
@@ -48,6 +49,8 @@ def candidates(frame, meta, value, sequence=False):
     later = meta["values"][meta["values"].index(value):]
     skip = set(meta["keys"]) | set(meta["mapping"].values()) | set(later)
     target = frame[value].dtype
+    if target == pl.String:
+        return [] if sequence else [Relation("label", None)]
     found = [] if sequence else [Relation("const", None)]
     for name in frame.columns:
         if name in skip or name.endswith("_RAW") or frame[name].null_count() > 0.5 * frame.height:

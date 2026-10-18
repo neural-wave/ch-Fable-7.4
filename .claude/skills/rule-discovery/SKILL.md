@@ -55,7 +55,10 @@ count (on a fixed fifth of the policies, because the file has 5 million rows).
 uv run lab run <task>
 ```
 
-It prints `lab/runs/<task>/report.md`. That file is all you need to read. For every target value it has:
+It is the first command on a task, before you read data or write code. When `scripts/opencode-tasks.sh` started
+you, it already ran it, `lab suggest` and `lab score`: their output is in `lab/runs/<task>/pipeline.md`.
+
+`lab run` prints `lab/runs/<task>/report.md`. That file is all you need to read. For every target value it has:
 
 | Line | Meaning |
 |---|---|

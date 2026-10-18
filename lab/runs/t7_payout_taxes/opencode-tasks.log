@@ -1,0 +1,8 @@
+== t7_payout_taxes
+   steps 1-4, 6, 7: lab run
+   step 5: lab suggest
+   the code now: lab t7check
+   before:   taxed or not as NRTAXB: 552 / 2493
+   agent (trace: /Users/antonio/dev/ch-Fable-7.4/lab/runs/t7_payout_taxes/agent-20261018T005413.jsonl)
+   after the agent: lab t7check
+   lab t7check failed

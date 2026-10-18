@@ -209,6 +209,9 @@ def grain(task, legacy):
     """
     keys, _ = store.target_columns(task)
     candidates, rows = _grain_candidates(task, keys, legacy)
+    from . import derived
+    if task in derived.DERIVED:
+        return {"best": derived.grain(task), "candidates": candidates[:6], "target_rows": rows}
     best = candidates[0] if candidates and candidates[0]["missing"] == 0 else None
     fallback = None
     if len(keys) > 1 and (best is None or best["coverage"] < MIN_COVERAGE or not best["unique"]):
