@@ -81,6 +81,10 @@ PERIOD_RATES = ["SOS"]  # tax types that take the gain accrued in each period of
 BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calculated: what Neuron calculated and,
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
+UNTAXED_BASE_ZERO = []  # countries whose payouts without withholding report the base 0 despite BASE_WITHOUT_TAX:
+# in IT and DE a gain goes untaxed only where the law exempts it (death claims, German contracts from before 2005,
+# which already report 0), while in CH only the procedure or the threshold spares the withholding of a taxable
+# gross. ["IT", "DE"] changes 11 payouts (5 IT, 6 DE), none in the public samples (assumption, to test)
 REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month: the days of the law, DE the
 # 10th (section 44 EStG, and the example: 2006-07-17 -> 2006-08-10), IT the 16th (F24, art. 18 D.Lgs. 241/1997), CH
 # 30 days after the month. They scored 0 of 40 twice, but never with the move to a business day and never alone

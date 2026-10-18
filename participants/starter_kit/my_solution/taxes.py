@@ -24,7 +24,8 @@ from bollo import bollo_bookings
 from conventions import (ANNUAL_TAXES, BASE_WITHOUT_TAX, CHURCH_REDUCED, CHURCH_REDUCES_KST, CHURCH_TAX,
                          COLLECTED_IN_ANNUAL, PREMIUM_STAMP, REMITTED_FROM_PAYMENT, REMITTANCE, REMITTANCE_MONTH_END,
                          REMITTANCE_SHIFTED, REPORTED_WHEN_REMITTED, STAMP_DUTY, STAMP_DUTY_COUNTRY,
-                         STAMP_DUTY_REMITTED, SURCHARGES, TAX_CURRENCY, TAXES, TRUNCATED_TAXES, WITHHELD)
+                         STAMP_DUTY_REMITTED, SURCHARGES, TAX_CURRENCY, TAXES, TRUNCATED_TAXES, UNTAXED_BASE_ZERO,
+                         WITHHELD)
 from dates import tax_office_holidays
 from legacy import as_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
@@ -145,11 +146,13 @@ def withheld_amounts(legacy_dir) -> pl.DataFrame:
 def payout_table(legacy_dir) -> pl.DataFrame:
     """policy_id, event_nr, country, taxable_base and the PAYOUT_AMOUNTS (cents), remittance_date of every payout.
 
-    A payout without withholding reports the base 0 (`conventions.BASE_WITHOUT_TAX`).
+    A payout without withholding reports the base as calculated (`conventions.BASE_WITHOUT_TAX`), or 0 in the
+    countries of `conventions.UNTAXED_BASE_ZERO`.
     """
     amounts = withheld_amounts(legacy_dir)
     rows = payouts(legacy_dir).join(amounts, on=EVENT, how="left").with_columns(pl.col(*PAYOUT_AMOUNTS).fill_null(0))
-    base = pl.when(pl.lit(BASE_WITHOUT_TAX).or_(pl.col("withholding").ne(0))).then("TAXABLE_BASE").otherwise(0)
+    reported = pl.lit(BASE_WITHOUT_TAX).and_(pl.col("COUNTRY").is_in(UNTAXED_BASE_ZERO).not_())
+    base = pl.when(reported.or_(pl.col("withholding").ne(0))).then("TAXABLE_BASE").otherwise(0)
     return rows.select(pl.col("TB_POLNR").alias("policy_id"), pl.col("TB_EVTNR").alias("event_nr"),
                        pl.col("COUNTRY").fill_null("").alias("country"), base.alias("taxable_base"),
                        *PAYOUT_AMOUNTS, remittance().alias("remittance_date"))
