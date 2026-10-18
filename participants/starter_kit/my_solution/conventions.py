@@ -74,16 +74,18 @@ BLENDED_RATES = ["SOS"]  # tax types whose rate is averaged by days over the lif
 BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calculated: what Neuron calculated and,
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
-REMITTANCE = {"DE": 9, "IT": 9, "CH": 9}  # days after the 1st of the next month: the 10th everywhere, the day of
-# Neuron's tax batch (TAXBATCH runs every 10 January, weekends included) and of the example (DE: 2006-07-17 ->
-# 2006-08-10). The laws are the other variant, IT the 16th (F24) and CH 30 days after the month: {"DE": 9, "IT": 15,
-# "CH": 29}, with which the payout table scored 0 of 40 twice (assumption, to test)
+REMITTANCE = {"DE": 9, "IT": 15, "CH": 29}  # days after the 1st of the next month: the days of the law, DE the
+# 10th (section 44 EStG, and the example: 2006-07-17 -> 2006-08-10), IT the 16th (F24, art. 18 D.Lgs. 241/1997), CH
+# 30 days after the month. They scored 0 of 40 twice, but never with the move to a business day and never alone
+# (with the base 0 and the Bollo changed). The other variant is the 10th everywhere, the day of Neuron's tax batch
+# (TAXBATCH runs every 10 January): {"DE": 9, "IT": 9, "CH": 9} (assumption, to test)
 REMITTANCE_MONTH_END = []  # countries that remit on the last day of the month after instead of REMITTANCE (CH: the
 # reading "by the end of the next month" of art. 16 VStG; assumption, to test)
-REMITTED_FROM_PAYMENT = True  # the remittance month follows the day the money was paid, the effective date + the
-# payout business days PD_PAYDAY of the product (NRPROD, read by no other rule; the law of all three countries
-# counts from the payment); False: from the effective date. The example fits both: paid 2006-07-24, still in July
-# (assumption, to test: it moves the month of about a fifth of the payouts with tax)
+REMITTED_FROM_PAYMENT = False  # the remittance month follows the effective date of the payout, the day its tax
+# is booked; True: the day the money was paid, the effective date + the payout business days PD_PAYDAY of the
+# product (NRPROD, read by no other rule; the law of all three countries counts from the payment). The example fits
+# both: paid 2006-07-24, still in July (assumption, to test: it moves the month of about a fifth of the payouts with
+# tax)
 REMITTANCE_SHIFTED = ["DE", "IT", "CH"]  # countries whose remittance day moves to the next business day of its
 # calendar: the law moves a deadline that falls on a weekend or holiday, about 30 % of the days (law; the example, a
 # Thursday, fits both). [] keeps the day as it is, as Neuron's own batches that run on weekends (assumption, to test)

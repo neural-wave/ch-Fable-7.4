@@ -26,12 +26,11 @@ VARIANTS = {  # name -> {convention: value} to flip
     "remittance on the day as it falls, weekend or not": {"REMITTANCE_SHIFTED": []},
     "remittance on a business day of Neuron, not of the tax office": {
         "REMITTANCE_CALENDARS": dict.fromkeys(["DE", "IT", "CH"], NEURON_CALENDAR)},
-    "remittance on the days of the law (IT the 16th, CH 30 days after the month)": {
-        "REMITTANCE": {"DE": 9, "IT": 15, "CH": 29}},
+    "remittance on the 10th everywhere, the day of Neuron's tax batch": {"REMITTANCE": {"DE": 9, "IT": 9, "CH": 9}},
     "rounding by country, not by system": {"ROUNDED_BY_SYSTEM": False},
     "HEV not in the withholding": {"HALF_INCOME_WITHHELD": False},
     "Bollo on the surrender value": {"BOLLO_ON_SURRENDER_VALUE": True},
-    "remittance month from the effective date, not the payment day": {"REMITTED_FROM_PAYMENT": False},
+    "remittance month from the payment day, not the effective date": {"REMITTED_FROM_PAYMENT": True},
     "CH on the last day of the next month": {"REMITTANCE_MONTH_END": ["CH"]},
     "KST plain, the church tax on top": {"CHURCH_REDUCES_KST": False},
     "Bollo collected in the annual Bollo": {"COLLECTED_IN_ANNUAL": True},

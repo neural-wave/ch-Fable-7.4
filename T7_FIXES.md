@@ -203,5 +203,15 @@ upload, write down the commit and its switches here; after the evaluation, its t
 | 17.10 22:09 | Roberto's own upload (#43), not on the branch | base as calculated | 1/20 | 14/20 | 98 |
 | 17.10 23:48 | `cbaf38b` (uploaded from this branch; MI not reported. Another engine's `t7_impl.py` was still being written at 23:47 and runs for minutes) | `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = True`, rounding by country | 0/40 | 8/30 | ? |
 | 18.10 00:45 | `d595375` | `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = False`, `ROUNDED_BY_SYSTEM = True`, `REMITTED_FROM_PAYMENT = True` | 0/40 | 11/30 | ? |
-| 18.10 ~02:00 | `290312d` | as `d595375`, and `REMITTANCE` the 10th everywhere (was IT the 16th, CH 30 days after the month), `BASE_WITHOUT_TAX = True`, `BOLLO_FIX_PER_YEAR = True` | | | |
-| next | this commit | as `290312d`, and `BLENDED_RATES = ["SOS"]` (97 payouts, 95 annual rows), `REMITTANCE_SHIFTED = ["DE", "IT", "CH"]` (200 payouts) | | | |
+| 18.10 ~02:00 | `290312d` | as `d595375`, and `REMITTANCE` the 10th everywhere (was IT the 16th, CH 30 days after the month), `BASE_WITHOUT_TAX = True`, `BOLLO_FIX_PER_YEAR = True` | ? | ? | |
+| 18.10 | `d320801` | as `290312d`, and `BLENDED_RATES = ["SOS"]` (97 payouts, 95 annual rows), `REMITTANCE_SHIFTED = ["DE", "IT", "CH"]` (200 payouts) | 0 | 10/30 | |
+| next | this commit | as `d320801`, and only the date: `REMITTANCE` the days of the law (DE 10th, IT 16th, CH 30 days after the month), `REMITTED_FROM_PAYMENT = False` (the month of the effective date), the move to a business day kept. 608 of the 680 dated payouts change their date and nothing else; the annual table is identical | | | |
+
+The "0 and 10/30" reading may belong to `290312d` rather than `d320801` (to confirm). The next upload changes only the
+remittance date, so its payout score reads that one choice:
+
+- above 0: the date rule was the blocker. Next, the payouts with stamp duty alone without a date
+  (`STAMP_DUTY_REMITTED = False`, 182 rows), then the base 0 of the 8 death claims without tax (the labels say death
+  claims are tax free, except German contracts from 2010).
+- still 0: switch to isolation probes. The payout table scores 0, so a probe costs nothing: submit one pattern alone,
+  first the 257 CH VST rows (base and VST settled by the labels, so only the date is open).

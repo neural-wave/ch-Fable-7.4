@@ -245,10 +245,11 @@ the amount of every booking (`taxes.py`) and add them up per payout and per poli
   BL10000044 2019 = 421.57 + 194.54 = 616.11 either way, as in the example (rounding the difference of the rates
   every year gives 194.53). BOC collects the outstanding BOL, all of it at a payout that
   ends the policy, its share at a partial withdrawal. A negative amount rounds like its positive twin;
-- remittance: in the month after the payment day, the effective date + the payout business days `PD_PAYDAY` of
-  the product (`REMITTED_FROM_PAYMENT`), on the 10th everywhere, the day of Neuron's tax batch and of example 1
-  (`REMITTANCE`; the laws, IT the 16th and CH 30 days after the month end, are the other variant), moved to the
-  next business day of the tax office when it falls on a weekend or holiday (`REMITTANCE_SHIFTED`).
+- remittance: in the month after the effective date (`REMITTED_FROM_PAYMENT`; the payment day, the effective
+  date + the payout business days `PD_PAYDAY` of the product, is the other variant), on the day of the law: DE the
+  10th, as example 1, IT the 16th, CH 30 days after the month end (`REMITTANCE`; the 10th everywhere, the day of
+  Neuron's tax batch, is the other variant), moved to the next business day of the tax office when it falls on a
+  weekend or holiday (`REMITTANCE_SHIFTED`).
 
 Example 1 (BL10000086 #121: a USD policy, surrendered on 17.7.2006, gross 12'107.36 USD, 28 premiums of 420.00
 USD) decides the base. Every premium converted on its money date and truncated gives 5'628.16, as in the PDF;
@@ -266,8 +267,8 @@ base of the Bollo (`BOLLO_ON_SURRENDER_VALUE`: back to the policy value after 8 
 the rounding of the 2019 fix (`BOLLO_FIX_PER_YEAR`: per earlier BOL, as booked),
 the rounding by system instead of by country (`ROUNDED_BY_SYSTEM`, on: set by the targets of t0, t2, t3, too few
 rows for the actuary), the remittance day of a payout with stamp duty
-alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`), the month of the payment day
-instead of the effective date (`REMITTED_FROM_PAYMENT`, with the payout business days `PD_PAYDAY`) and the move to
+alone (`STAMP_DUTY_REMITTED`), the remittance days of IT and CH (`REMITTANCE`), the month of the effective date
+or of the payment day (`REMITTED_FROM_PAYMENT`, with the payout business days `PD_PAYDAY`) and the move to
 a business day (`REMITTANCE_SHIFTED`), the rounding of the IT conversion (`TRUNCATED_CONVERSION`) and HEV on the withholding
 (`HALF_INCOME_WITHHELD`). Also
 assumed: the first EUR rate for the days before 31.12.1998, and the pro-rata share of a partial withdrawal (no
