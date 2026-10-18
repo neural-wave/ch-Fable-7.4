@@ -1,5 +1,5 @@
 // Runs: every run of the pipeline, of step 5, of scoring, of ablation and of the agent. Newest first.
-import { cells, dialog, get, h, header, icons, loading, mount, pill, post, start, table, term, toast } from '../lib/h.js';
+import { cells, dialog, get, h, header, icons, loading, modelStatus, mount, pill, post, start, table, term, toast } from '../lib/h.js';
 import { modelSelect } from './wizard.js';
 
 const PAGE = 25;
@@ -127,6 +127,8 @@ async function unattended(data) {
   go.addEventListener('click', async () => {
     el.close();
     if (!(st.agent_models || []).length) { toast('Neither OpenCode nor Claude Code is installed: the agent cannot run.', true); return; }
+    const probed = (await modelStatus())?.uses?.agent;
+    if (probed && !probed.ok && (!model || model === probed.id)) { toast(`The model does not answer, the agent cannot run: ${probed.error}`, true); return; }
     const chosen = boxes.map((b) => b.querySelector('input')).filter((i) => i.checked).map((i) => i.value);
     if (!chosen.length) return;
     try {

@@ -192,6 +192,52 @@ def watch(process, trace, idle, total, poll=1.0):
     return process.returncode, None
 
 
+def connection(lines):
+    """The model of a stream-json trace and whether it answered: the `init` event names the model Claude Code is
+    connected to, the `result` event says if the request went through (its text is the error when it did not)."""
+    found = {"model": None, "source": None, "version": None, "ok": False, "error": "no init event in the trace"}
+    for line in lines:
+        if not line.startswith("{"):
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if event.get("type") == "system" and event.get("subtype") == "init":
+            found.update(model=event.get("model"), source=event.get("apiKeySource"),
+                         version=event.get("claude_code_version"), error="no result event in the trace")
+        elif event.get("type") == "result":
+            failed = event.get("is_error") or event.get("subtype") != "success"
+            found.update(ok=not failed, error=(str(event.get("result") or event.get("subtype")) if failed else None))
+    return found
+
+
+def probe(model="", claude=None):
+    """connection() of a one-word request: which model Claude Code answers with right now (about 0.01 USD on Claude).
+
+    A custom model works the same: Claude Code reads ANTHROPIC_BASE_URL, ANTHROPIC_AUTH_TOKEN and ANTHROPIC_MODEL
+    from the environment (.env.llm) and the `init` event names the model it asked the endpoint for."""
+    claude = claude or shutil.which("claude")
+    if not claude:
+        return dict(connection([]), error="Claude Code is not on PATH: install it and log in with `claude`")
+    prefix = list(claude) if isinstance(claude, (list, tuple)) else [claude]
+    command = [*prefix, "-p", "--output-format", "stream-json", "--verbose", "--tools", "", "--disable-slash-commands",
+               "--strict-mcp-config", "--no-session-persistence", "--system-prompt", "Answer with one word."]
+    if model:
+        command += ["--model", model]
+    try:
+        done = subprocess.run([*command, "ok"], stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=180,
+                              cwd=REPO)
+    except subprocess.TimeoutExpired:
+        return dict(connection([]), error="Claude Code did not answer in 180 s")
+    except OSError as e:
+        return dict(connection([]), error=f"Claude Code could not start: {e}")
+    found = connection(done.stdout.splitlines())
+    if not found["ok"] and found["model"] is None and done.stderr.strip():
+        found["error"] = done.stderr.strip().splitlines()[-1]
+    return found
+
+
 def session(task, runs=None, exe=None, which=None):
     """Run one session of a task, its trace into the run folder; returns the exit code (124: stopped by a timeout)."""
     which = which or backend()

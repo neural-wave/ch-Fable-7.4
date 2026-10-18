@@ -3,7 +3,8 @@
 GET  /                         the single page (static/index.html, ES modules, no build step)
 GET  /api/...                  view models (api.py, legacy.py), JSON
 GET  /api/jobs/<id>/events     server-sent events of a job: steps, progress, log lines, end
-POST /api/...                  actions: start or cancel a job, replay a row, check or save a task definition
+POST /api/...                  actions: start or cancel a job, replay a row, check or save a task definition, check
+                               the model
 
 The server listens on 127.0.0.1 only. A POST must carry the header `X-Ergo: 1` and a JSON body: a page of another
 site cannot send that without a CORS preflight, which this server never answers, and the Host header must name
@@ -66,8 +67,10 @@ def build_routes(runner):
     r.add("get", "/api/legacy", lambda q, b: legacy.overview())
     r.add("get", r"/api/legacy/tables/([^/]+)", lambda q, b, name: legacy.table(name))
     r.add("get", "/api/settings", lambda q, b: api.settings())
+    r.add("get", "/api/model", lambda q, b: api.model_status())
     r.add("post", "/api/jobs", lambda q, b: runner.submit(b["action"], b["task"], b.get("options") or {}))
     r.add("post", r"/api/jobs/([^/]+)/cancel", lambda q, b, job: {"cancelled": runner.cancel(job)})
+    r.add("post", "/api/model/check", lambda q, b: api.model_status(refresh=True))
     r.add("post", "/api/queue/stop", lambda q, b: {"cancelled": runner.stop_queue()})
     r.add("post", "/api/flow/eval", lambda q, b: api.flow_eval(b["run"], b.get("value"), b.get("candidate"),
                                                                b.get("key"), b.get("inputs")))

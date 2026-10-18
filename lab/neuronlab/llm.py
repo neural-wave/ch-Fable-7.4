@@ -81,12 +81,13 @@ def open_settings():
     return protocol, base.rstrip("/"), key, model
 
 
-def open_complete(prompt, system="", max_tokens=None):
+def open_complete(prompt, system="", max_tokens=None, model=None):
     """The endpoint's text answer to one prompt, at temperature 0.
 
     The default budget is OPEN_MAX_OUTPUT (8192): a reasoning model spends part of it thinking before it answers.
     """
-    protocol, base, key, model = open_settings()
+    protocol, base, key, configured = open_settings()
+    model = model or configured
     max_tokens = max_tokens or int(os.environ.get("OPEN_MAX_OUTPUT") or 8192)
     if protocol == "openai":
         url = base + "/chat/completions"

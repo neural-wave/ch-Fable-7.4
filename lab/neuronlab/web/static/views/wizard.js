@@ -1,7 +1,7 @@
 // New task in four steps: legacy data, task description, test pairs, review and run. One draft per task, kept in
 // memory and in this browser until it is saved as lab/tasks/<id>.json.
 import { zoomCanvas } from '../lib/canvas.js';
-import { card, edges, get, h, header, icons, loading, mount, post, table, tech, toast } from '../lib/h.js';
+import { card, edges, get, h, header, icons, loading, modelNotice, mount, post, table, tech, toast } from '../lib/h.js';
 
 const STEPS = [['legacy', 'Legacy data', 'required'], ['task', 'Task description', ''], ['pairs', 'Test pairs', 'optional'], ['review', 'Review and run', '']];
 const PIPELINE = [['profile', 'Profile keys and joins'], ['frame', 'Build the frame'], ['cluster', 'Cluster relations'], ['tree', 'Optimal decision trees'],
@@ -526,7 +526,8 @@ async function reviewStep(ctx) {
         h('label', { class: 'field', style: { flex: '1 1 200px' } }, 'Features per request', h('input', { class: 'input', type: 'number', min: 1, max: 3, value: def.run.max_features,
           onChange: (e) => { def.run.max_features = Math.max(1, Math.min(3, Number(e.target.value) || 3)); ctx.changed(); ctx.redraw(); } })),
         h('p', { class: 'small muted', style: { flex: '1 1 100%' } }, settings.models.length ? 'Step 5 runs only where the trees need a feature that is not in the data yet. Every proposal is parsed in the DSL and scored exactly, before and after.' :
-          'No model for step 5: install Claude Code (`claude`) or fill in the endpoint of .env.llm (OPEN_BASE_URL, OPEN_MODEL).')),
+          'No model for step 5: install Claude Code (`claude`) or fill in the endpoint of .env.llm (OPEN_BASE_URL, OPEN_MODEL).'),
+        modelNotice('suggest')),
       tech('cli', 'Same on the command line', h('pre', { class: 'code' }, commands.join('\n')))),
     h('div', { class: 'row-between', style: { padding: '16px 0' } }, h('a', { class: 'btn', href: href(ctx, 'pairs') }, 'Back'),
       h('div', { class: 'row' },

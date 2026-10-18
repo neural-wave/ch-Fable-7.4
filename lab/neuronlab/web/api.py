@@ -8,6 +8,7 @@ import datetime as dt
 import json
 import math
 import re
+import threading
 
 from .. import freeze, labels, paths
 from . import history, layout, runner as runner_module
@@ -796,8 +797,10 @@ def agent_timeline(job):
     if not traces:
         return {"trace": None, "items": []}
     trace = traces[-1]
+    from .. import agent
+    lines = trace.read_text(encoding="utf-8", errors="replace").splitlines()
     items = []
-    for line in trace.read_text(encoding="utf-8", errors="replace").splitlines():
+    for line in lines:
         if not line.startswith("{"):
             continue
         try:
@@ -820,7 +823,7 @@ def agent_timeline(job):
                     items.append({"tool": "says", "what": text})
         if event.get("type") == "result":
             items.append({"tool": "result", "what": history.last_line(event.get("result"), 200)})
-    return {"trace": trace.name, "items": items[-30:], "total": len(items)}
+    return {"trace": trace.name, "items": items[-30:], "total": len(items), "model": agent.connection(lines)["model"]}
 
 
 def tool_summary(arguments):
@@ -875,9 +878,53 @@ def settings():
     return {"legacy": str(paths.LEGACY), "targets": str(paths.TARGETS), "claude": bool(shutil.which("claude")),
             "opencode": bool(shutil.which("opencode")), "model": os.environ.get("LLM_MODEL", ""),
             "agent_model": os.environ.get("AGENT_MODEL", ""),
+            "endpoint": os.environ.get("ANTHROPIC_BASE_URL", ""), "custom_model": os.environ.get("ANTHROPIC_MODEL", ""),
             "models": models, "step5_default": next((m["id"] for m in models if m["id"].startswith(step5_default)),
                                                     None),
             "agent_models": agent_models, "agent_default": agent_default, "workspace": paths.REPO.name}
+
+
+# Which model each use of Claude Code answers with, read like the trace of a task run (agent.connection): one
+# one-word request per model when the page first asks, again on "Check again".
+MODEL_USES = {"suggest": "LLM_MODEL", "agent": "AGENT_MODEL"}
+model_check = {"state": "idle", "uses": {}, "checked": None}
+model_lock = threading.Lock()
+
+
+def model_status(refresh=False):
+    with model_lock:
+        if refresh and model_check["state"] != "checking" or model_check["state"] == "idle":
+            model_check["state"] = "checking"
+            threading.Thread(target=check_models, daemon=True).start()
+        return json.loads(json.dumps(model_check))
+
+
+def probe_open(model):
+    """agent.probe() of the open-weights endpoint of .env.llm: one short request to the model."""
+    from .. import llm
+    try:
+        _, base, _, configured = llm.open_settings()
+        model = model or configured
+        llm.open_complete("ok", "Answer with one word.", max_tokens=16, model=model)
+    except Exception as e:  # noqa: BLE001 - any failure means the model does not answer
+        return {"model": model or None, "source": None, "version": None, "ok": False, "error": str(e)}
+    return {"model": model, "source": base, "version": None, "ok": True, "error": None}
+
+
+def check_models():
+    """Each use asked on its own backend: Claude Code, or the open-weights endpoint (step 5 open, agent opencode).
+    `id` is the model as the pages name it (llm.models()), so a run on another model is not held by this check."""
+    import os
+    from .. import agent, llm
+    backends = {"suggest": "open" if llm.backend() == "open" else "claude",
+                "agent": "open" if agent.backend() == "opencode" else "claude"}
+    wanted = {use: (backends[use], os.environ.get(variable, "")) for use, variable in MODEL_USES.items()}
+    found = {key: (probe_open if key[0] == "open" else agent.probe)(key[1]) for key in set(wanted.values())}
+    uses = {use: dict(found[key], requested=key[1], variable=MODEL_USES[use], backend=key[0], id=f"{key[0]}:{key[1]}")
+            for use, key in wanted.items()}
+    with model_lock:
+        model_check.update(state="done", uses=uses, checked=dt.datetime.now().strftime("%H:%M:%S"),
+                           endpoint=os.environ.get("ANTHROPIC_BASE_URL") or None)
 
 
 def dsl_check(task, expr):
