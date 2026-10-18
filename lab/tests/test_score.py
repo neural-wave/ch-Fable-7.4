@@ -6,7 +6,10 @@ import pytest
 from neuronlab import paths, score
 
 TASK = "t0_commission"
-RECEIPT_DATE = 'valid(policy_headers[premium_item["PR_POLNR"]], "PH", premium_item["PR_RCVDT"])'
+RULE = "policies/commission.py"  # the rule of t0: submission.py only wires the tables to it
+RECEIPT_DATE = 'valid(self.policies.get(policy_id, []), "PH", received)'
+CURRENT = 'latest(self.policies.get(policy_id, []), "PH")'
+T0 = "def t0_commission(legacy_dir):\n"  # the signature stays the same whatever the body (freeze template or rule)
 
 
 @pytest.fixture(autouse=True, scope="module")
@@ -16,13 +19,14 @@ def pipeline():
         cli.run(TASK)
 
 
-def scratch(tmp_path, replace=None):
-    """A copy of the submission folder, with one piece of t0_commission replaced."""
+def scratch(tmp_path, *replacements, file="submission.py"):
+    """A copy of the submission folder, with the (old, new) `replacements` made in one of its files."""
     shutil.copytree(paths.SUBMISSION, tmp_path, dirs_exist_ok=True, ignore=shutil.ignore_patterns("__pycache__"))
-    if replace:
-        source = (tmp_path / "submission.py").read_text(encoding="utf-8")
-        assert replace[0] in source
-        (tmp_path / "submission.py").write_text(source.replace(*replace), encoding="utf-8")
+    source = (tmp_path / file).read_text(encoding="utf-8")
+    for old, new in replacements:
+        assert old in source
+        source = source.replace(old, new, 1)
+    (tmp_path / file).write_text(source, encoding="utf-8")
     return tmp_path
 
 
@@ -46,10 +50,8 @@ def test_the_differences_are_saved_for_the_charts(tmp_path):
 
 def test_a_wrong_rule_is_explained_by_the_missing_feature(tmp_path):
     """Current tier instead of the tier on the money date: the trees point at the receipt date."""
-    folder = scratch(tmp_path, (RECEIPT_DATE, 'latest(policy_headers[premium_item["PR_POLNR"]], "PH")'))
-    source = (folder / "submission.py").read_text(encoding="utf-8")
-    (folder / "submission.py").write_text(source.replace("from neuron import cents,", "from neuron import cents, latest,"),
-                                          encoding="utf-8")
+    folder = scratch(tmp_path, (RECEIPT_DATE, CURRENT), ("from neuron import cents,", "from neuron import cents, latest,"),
+                     file=RULE)
     text = score.score(TASK, folder=folder)
     assert "Exact rows: 224418 / 225858" in text
     assert "| x0.67 | 515 |" in text
@@ -58,8 +60,7 @@ def test_a_wrong_rule_is_explained_by_the_missing_feature(tmp_path):
 
 
 def test_reading_a_target_file_is_refused(tmp_path):
-    folder = scratch(tmp_path, ('    commission_rates = keyed(', '    open(r"%s")\n    commission_rates = keyed('
-                                % (paths.TARGETS / "t0_commission.csv")))
+    folder = scratch(tmp_path, (T0, f'{T0}    open(r"{paths.TARGETS / "t0_commission.csv"}")\n'))
     with pytest.raises(PermissionError):
         score.score(TASK, folder=folder)
 
