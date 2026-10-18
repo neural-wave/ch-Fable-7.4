@@ -1,0 +1,861 @@
+{
+ "task": "t2_projected_maturity_value",
+ "keys": [
+  "policy_id"
+ ],
+ "values": [
+  "maturity_value"
+ ],
+ "rows": 3019,
+ "wrong": 8,
+ "cards": [
+  {
+   "id": "system-change",
+   "rule": "Offers applied before the system change of 2007-08-11 were projected by the COBOL version: cents cut off, age from days / 365",
+   "off": "every offer projected like Neuron NG",
+   "where": "PH_APPDT",
+   "where_label": "application date of the offer",
+   "edits": [
+    {
+     "file": "neuron/eras.py",
+     "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)",
+     "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"
+    }
+   ],
+   "run": "t2_projected_maturity_value~off-system-change",
+   "wrong_on": 8,
+   "wrong_off": 835,
+   "broken": 827,
+   "fixed": 0,
+   "broken_by_value": {
+    "maturity_value": 827
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "maturity_value": {
+      "target": "59627.60",
+      "off": "59626.33"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "maturity_value": {
+      "target": "318098.32",
+      "off": "318097.31"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "maturity_value": {
+      "target": "11428.44",
+      "off": "11426.34"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "maturity_value": {
+      "target": "263083.67",
+      "off": "263080.72"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "maturity_value": {
+      "target": "232401.41",
+      "off": "232397.03"
+     }
+    },
+    {
+     "policy_id": "BL10000029",
+     "maturity_value": {
+      "target": "647929.36",
+      "off": "647928.31"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "maturity_value": {
+      "target": "426224.83",
+      "off": "426224.73"
+     }
+    },
+    {
+     "policy_id": "BL10000043",
+     "maturity_value": {
+      "target": "10745.98",
+      "off": "10744.02"
+     }
+    },
+    {
+     "policy_id": "BL10000044",
+     "maturity_value": {
+      "target": "487311.91",
+      "off": "487311.53"
+     }
+    },
+    {
+     "policy_id": "BL10000050",
+     "maturity_value": {
+      "target": "85177.21",
+      "off": "85176.62"
+     }
+    },
+    {
+     "policy_id": "BL10000052",
+     "maturity_value": {
+      "target": "287665.88",
+      "off": "287662.48"
+     }
+    },
+    {
+     "policy_id": "BL10000055",
+     "maturity_value": {
+      "target": "366715.17",
+      "off": "366714.93"
+     }
+    },
+    {
+     "policy_id": "BL10000059",
+     "maturity_value": {
+      "target": "375861.39",
+      "off": "375857.60"
+     }
+    },
+    {
+     "policy_id": "BL10000071",
+     "maturity_value": {
+      "target": "126395.53",
+      "off": "126393.16"
+     }
+    },
+    {
+     "policy_id": "BL10000076",
+     "maturity_value": {
+      "target": "337389.90",
+      "off": "337387.51"
+     }
+    },
+    {
+     "policy_id": "BL10000078",
+     "maturity_value": {
+      "target": "285826.72",
+      "off": "285822.34"
+     }
+    },
+    {
+     "policy_id": "BL10000086",
+     "maturity_value": {
+      "target": "111974.71",
+      "off": "111973.98"
+     }
+    },
+    {
+     "policy_id": "BL10000089",
+     "maturity_value": {
+      "target": "293222.28",
+      "off": "293220.53"
+     }
+    },
+    {
+     "policy_id": "BL10000095",
+     "maturity_value": {
+      "target": "245862.69",
+      "off": "245862.35"
+     }
+    },
+    {
+     "policy_id": "BL10000099",
+     "maturity_value": {
+      "target": "442772.59",
+      "off": "442769.12"
+     }
+    },
+    {
+     "policy_id": "BL10000100",
+     "maturity_value": {
+      "target": "300782.04",
+      "off": "300779.47"
+     }
+    },
+    {
+     "policy_id": "BL10000109",
+     "maturity_value": {
+      "target": "180158.23",
+      "off": "180157.55"
+     }
+    },
+    {
+     "policy_id": "BL10000113",
+     "maturity_value": {
+      "target": "192184.25",
+      "off": "192182.29"
+     }
+    },
+    {
+     "policy_id": "BL10000126",
+     "maturity_value": {
+      "target": "403858.40",
+      "off": "403858.07"
+     }
+    },
+    {
+     "policy_id": "BL10000127",
+     "maturity_value": {
+      "target": "572353.07",
+      "off": "572347.36"
+     }
+    }
+   ],
+   "trees": {
+    "maturity_value": [
+     "Where it is wrong: optimal tree errors 278, leaves 5 on {RK_TARKEY[5], PS_LANG, PS_LANG@RK_ENDDT}",
+     "RK_TARKEY[5] = 2 and PS_LANG = FR and PS_LANG@RK_ENDDT = EN -> x1.00 (10 rows, 2 of them not x1.00), e.g. [('BL10000260',), ('BL10000495',)]",
+     "RK_TARKEY[5] != 2 and RK_TARKEY[5] = 1 -> x1.00 (547 rows, 1 of them not x1.00), e.g. [('BL10000003',), ('BL10000022',)]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PS_LANG': 'EN', 'PS_LANG@RK_ENDDT': 'EN'}: {'ok': 164, 'x1.00': 61, 'x1.01': 1}; example ['BL10000007']",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PS_LANG': 'DE', 'PS_LANG@RK_ENDDT': 'DE'}: {'ok': 137, 'x1.00': 72, 'x1.01': 1}; example ['BL10000089']",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PS_LANG': 'FR', 'PS_LANG@RK_ENDDT': 'FR'}: {'ok': 136, 'x1.00': 65, 'x1.01': 1}; example ['BL10000012']"
+    ]
+   }
+  },
+  {
+   "id": "nearest-birthday",
+   "rule": "Neuron NG takes the age at the nearest birthday",
+   "off": "the age at the last birthday",
+   "where": "birthday_days(PS_BIRTH, PH_BEGDT)",
+   "where_label": "days from the begin date to the next birthday",
+   "edits": [
+    {
+     "file": "policies/insured.py",
+     "old": "return age(self.birth, add_months(start, 6))",
+     "new": "return age(self.birth, start)"
+    }
+   ],
+   "run": "t2_projected_maturity_value~off-nearest-birthday",
+   "wrong_on": 8,
+   "wrong_off": 1061,
+   "broken": 1053,
+   "fixed": 0,
+   "broken_by_value": {
+    "maturity_value": 1053
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000004",
+     "maturity_value": {
+      "target": "218180.36",
+      "off": "218742.01"
+     }
+    },
+    {
+     "policy_id": "BL10000005",
+     "maturity_value": {
+      "target": "41246.46",
+      "off": "41254.04"
+     }
+    },
+    {
+     "policy_id": "BL10000010",
+     "maturity_value": {
+      "target": "12345.74",
+      "off": "12348.09"
+     }
+    },
+    {
+     "policy_id": "BL10000025",
+     "maturity_value": {
+      "target": "41022.26",
+      "off": "41039.85"
+     }
+    },
+    {
+     "policy_id": "BL10000028",
+     "maturity_value": {
+      "target": "333740.58",
+      "off": "333746.42"
+     }
+    },
+    {
+     "policy_id": "BL10000030",
+     "maturity_value": {
+      "target": "30296.61",
+      "off": "30303.72"
+     }
+    },
+    {
+     "policy_id": "BL10000037",
+     "maturity_value": {
+      "target": "125364.56",
+      "off": "125370.78"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "maturity_value": {
+      "target": "167757.06",
+      "off": "167799.74"
+     }
+    },
+    {
+     "policy_id": "BL10000063",
+     "maturity_value": {
+      "target": "193065.54",
+      "off": "193312.37"
+     }
+    },
+    {
+     "policy_id": "BL10000065",
+     "maturity_value": {
+      "target": "80934.38",
+      "off": "80934.62"
+     }
+    },
+    {
+     "policy_id": "BL10000067",
+     "maturity_value": {
+      "target": "285876.31",
+      "off": "286018.88"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "maturity_value": {
+      "target": "141827.98",
+      "off": "142049.59"
+     }
+    },
+    {
+     "policy_id": "BL10000070",
+     "maturity_value": {
+      "target": "113720.67",
+      "off": "113794.73"
+     }
+    },
+    {
+     "policy_id": "BL10000079",
+     "maturity_value": {
+      "target": "421476.22",
+      "off": "421505.23"
+     }
+    },
+    {
+     "policy_id": "BL10000080",
+     "maturity_value": {
+      "target": "127376.21",
+      "off": "127376.92"
+     }
+    },
+    {
+     "policy_id": "BL10000081",
+     "maturity_value": {
+      "target": "67553.16",
+      "off": "67557.94"
+     }
+    },
+    {
+     "policy_id": "BL10000083",
+     "maturity_value": {
+      "target": "123976.42",
+      "off": "124014.48"
+     }
+    },
+    {
+     "policy_id": "BL10000084",
+     "maturity_value": {
+      "target": "274237.10",
+      "off": "278398.30"
+     }
+    },
+    {
+     "policy_id": "BL10000092",
+     "maturity_value": {
+      "target": "35613.61",
+      "off": "35613.86"
+     }
+    },
+    {
+     "policy_id": "BL10000101",
+     "maturity_value": {
+      "target": "215271.51",
+      "off": "215281.98"
+     }
+    },
+    {
+     "policy_id": "BL10000104",
+     "maturity_value": {
+      "target": "132440.57",
+      "off": "132449.17"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "maturity_value": {
+      "target": "303540.34",
+      "off": "303610.54"
+     }
+    },
+    {
+     "policy_id": "BL10000115",
+     "maturity_value": {
+      "target": "44809.00",
+      "off": "44809.29"
+     }
+    },
+    {
+     "policy_id": "BL10000119",
+     "maturity_value": {
+      "target": "146709.68",
+      "off": "146740.87"
+     }
+    },
+    {
+     "policy_id": "BL10000120",
+     "maturity_value": {
+      "target": "114502.28",
+      "off": "114503.49"
+     }
+    }
+   ],
+   "trees": {
+    "maturity_value": [
+     "Where it is wrong: optimal tree errors 1012, leaves 7 on {RK_TARKEY[5], PH_MKTCD, PS_LANG}",
+     "PS_LANG = DE and PH_MKTCD = XMAS and RK_TARKEY[5] = 4 -> x1.00 (27 rows, 11 of them not x1.00), e.g. [('BL10000375',), ('BL10000633',)]",
+     "PS_LANG = DE and PH_MKTCD != XMAS and RK_TARKEY[5] = 3 -> x1.00 (164 rows, 75 of them not x1.00), e.g. [('BL10000080',), ('BL10000115',)]",
+     "PS_LANG != DE and RK_TARKEY[5] = 4 and PH_MKTCD != WEB14 -> x1.00 (480 rows, 230 of them not x1.00), e.g. [('BL10000070',), ('BL10000081',)]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_MKTCD': None, 'PS_LANG': 'EN'}: {'ok': 61, 'x1.00': 22, 'x1.01': 1, 'x0.99': 1}; example ['BL10000395']",
+     "conflicting vector {'RK_TARKEY[5]': '4', 'PH_MKTCD': None, 'PS_LANG': 'IT'}: {'x1.00': 48, 'ok': 31}; example ['BL10000206']",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_MKTCD': None, 'PS_LANG': 'IT'}: {'ok': 50, 'x1.00': 27, 'x0.99': 1}; example ['BL10000068']"
+    ]
+   }
+  },
+  {
+   "id": "smoker-j",
+   "rule": "PS_SMOKE = J (German ja) is a smoker too",
+   "off": "only Y is a smoker",
+   "where": "PS_SMOKE",
+   "where_label": "smoker code",
+   "edits": [
+    {
+     "file": "policies/codes.py",
+     "old": "SMOKER = {\"Y\", \"J\"}",
+     "new": "SMOKER = {\"Y\"}"
+    }
+   ],
+   "run": "t2_projected_maturity_value~off-smoker-j",
+   "wrong_on": 8,
+   "wrong_off": 608,
+   "broken": 600,
+   "fixed": 0,
+   "broken_by_value": {
+    "maturity_value": 600
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "maturity_value": {
+      "target": "59627.60",
+      "off": "59630.95"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "maturity_value": {
+      "target": "318098.32",
+      "off": "318110.56"
+     }
+    },
+    {
+     "policy_id": "BL10000037",
+     "maturity_value": {
+      "target": "125364.56",
+      "off": "125389.38"
+     }
+    },
+    {
+     "policy_id": "BL10000063",
+     "maturity_value": {
+      "target": "193065.54",
+      "off": "193935.91"
+     }
+    },
+    {
+     "policy_id": "BL10000065",
+     "maturity_value": {
+      "target": "80934.38",
+      "off": "80935.79"
+     }
+    },
+    {
+     "policy_id": "BL10000080",
+     "maturity_value": {
+      "target": "127376.21",
+      "off": "127380.56"
+     }
+    },
+    {
+     "policy_id": "BL10000081",
+     "maturity_value": {
+      "target": "67553.16",
+      "off": "67573.21"
+     }
+    },
+    {
+     "policy_id": "BL10000086",
+     "maturity_value": {
+      "target": "111974.71",
+      "off": "112041.85"
+     }
+    },
+    {
+     "policy_id": "BL10000122",
+     "maturity_value": {
+      "target": "36669.66",
+      "off": "36673.44"
+     }
+    },
+    {
+     "policy_id": "BL10000126",
+     "maturity_value": {
+      "target": "403858.40",
+      "off": "403983.01"
+     }
+    },
+    {
+     "policy_id": "BL10000129",
+     "maturity_value": {
+      "target": "14333.97",
+      "off": "14350.46"
+     }
+    },
+    {
+     "policy_id": "BL10000169",
+     "maturity_value": {
+      "target": "478853.96",
+      "off": "479662.28"
+     }
+    },
+    {
+     "policy_id": "BL10000172",
+     "maturity_value": {
+      "target": "135863.70",
+      "off": "135900.36"
+     }
+    },
+    {
+     "policy_id": "BL10000174",
+     "maturity_value": {
+      "target": "48618.86",
+      "off": "48625.40"
+     }
+    },
+    {
+     "policy_id": "BL10000181",
+     "maturity_value": {
+      "target": "232251.61",
+      "off": "232358.41"
+     }
+    },
+    {
+     "policy_id": "BL10000182",
+     "maturity_value": {
+      "target": "32192.14",
+      "off": "32199.22"
+     }
+    },
+    {
+     "policy_id": "BL10000188",
+     "maturity_value": {
+      "target": "26114.67",
+      "off": "26122.99"
+     }
+    },
+    {
+     "policy_id": "BL10000200",
+     "maturity_value": {
+      "target": "39032.38",
+      "off": "39046.51"
+     }
+    },
+    {
+     "policy_id": "BL10000206",
+     "maturity_value": {
+      "target": "25383.30",
+      "off": "25390.17"
+     }
+    },
+    {
+     "policy_id": "BL10000226",
+     "maturity_value": {
+      "target": "536883.65",
+      "off": "537180.02"
+     }
+    },
+    {
+     "policy_id": "BL10000228",
+     "maturity_value": {
+      "target": "167568.83",
+      "off": "167651.29"
+     }
+    },
+    {
+     "policy_id": "BL10000240",
+     "maturity_value": {
+      "target": "288795.05",
+      "off": "288820.14"
+     }
+    },
+    {
+     "policy_id": "BL10000248",
+     "maturity_value": {
+      "target": "97779.02",
+      "off": "97960.91"
+     }
+    },
+    {
+     "policy_id": "BL10000282",
+     "maturity_value": {
+      "target": "263059.05",
+      "off": "263083.73"
+     }
+    },
+    {
+     "policy_id": "BL10000299",
+     "maturity_value": {
+      "target": "167213.75",
+      "off": "167481.77"
+     }
+    }
+   ],
+   "trees": {
+    "maturity_value": [
+     "Where it is wrong: optimal tree errors 68, leaves 4 on {PS_SMOKE, RK_TARKEY[7], AD_REGIO}",
+     "PS_SMOKE = J and RK_TARKEY[7] = C and AD_REGIO = BW -> x0.99 (2 rows, 0 of them not x0.99), e.g. [('BL10003374',), ('BL10003770',)]",
+     "PS_SMOKE = J and RK_TARKEY[7] = C and AD_REGIO != BW -> x1.00 (79 rows, 40 of them not x1.00), e.g. [('BL10000510',), ('BL10000565',)]",
+     "PS_SMOKE = J and RK_TARKEY[7] != C -> x1.00 (516 rows, 23 of them not x1.00), e.g. [('BL10000001',), ('BL10000003',)]",
+     "conflicting vector {'PS_SMOKE': 'N', 'RK_TARKEY[7]': 'A', 'AD_REGIO': 'TI'}: {'ok': 713, 'x1.01': 2}; example ['BL10000128']",
+     "conflicting vector {'PS_SMOKE': 'N', 'RK_TARKEY[7]': 'B', 'AD_REGIO': 'TI'}: {'ok': 592, 'x1.01': 1}; example ['BL10002973']",
+     "conflicting vector {'PS_SMOKE': 'J', 'RK_TARKEY[7]': 'A', 'AD_REGIO': 'TI'}: {'x1.00': 167, 'x0.99': 13}; example ['BL10000644']"
+    ]
+   }
+  },
+  {
+   "id": "application-date",
+   "rule": "The offer uses the tariff, entry charge and growth rate valid on its application date",
+   "off": "the parameters valid on the begin date",
+   "where": "PH_APPDT",
+   "where_label": "application date of the offer",
+   "edits": [
+    {
+     "file": "policies/projection.py",
+     "old": "portfolio.tariff(policy_id, applied)",
+     "new": "portfolio.tariff(policy_id, self.start)"
+    },
+    {
+     "file": "policies/projection.py",
+     "old": "portfolio.entry_rate(self.offer, applied)",
+     "new": "portfolio.entry_rate(self.offer, self.start)"
+    },
+    {
+     "file": "policies/projection.py",
+     "old": "valid(illustration_rates, \"IL\", applied)",
+     "new": "valid(illustration_rates, \"IL\", self.start)"
+    }
+   ],
+   "run": "t2_projected_maturity_value~off-application-date",
+   "wrong_on": 8,
+   "wrong_off": 91,
+   "broken": 83,
+   "fixed": 0,
+   "broken_by_value": {
+    "maturity_value": 83
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000155",
+     "maturity_value": {
+      "target": "134699.99",
+      "off": "134393.04"
+     }
+    },
+    {
+     "policy_id": "BL10000163",
+     "maturity_value": {
+      "target": "212712.22",
+      "off": "197892.31"
+     }
+    },
+    {
+     "policy_id": "BL10000174",
+     "maturity_value": {
+      "target": "48618.86",
+      "off": "42902.40"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "maturity_value": {
+      "target": "163278.27",
+      "off": "163028.36"
+     }
+    },
+    {
+     "policy_id": "BL10000538",
+     "maturity_value": {
+      "target": "145888.03",
+      "off": "147439.32"
+     }
+    },
+    {
+     "policy_id": "BL10000598",
+     "maturity_value": {
+      "target": "79385.32",
+      "off": "61746.07"
+     }
+    },
+    {
+     "policy_id": "BL10000741",
+     "maturity_value": {
+      "target": "75257.14",
+      "off": "74995.68"
+     }
+    },
+    {
+     "policy_id": "BL10000833",
+     "maturity_value": {
+      "target": "230871.25",
+      "off": "204921.28"
+     }
+    },
+    {
+     "policy_id": "BL10000838",
+     "maturity_value": {
+      "target": "170475.86",
+      "off": "157391.53"
+     }
+    },
+    {
+     "policy_id": "BL10000891",
+     "maturity_value": {
+      "target": "177023.86",
+      "off": "176717.36"
+     }
+    },
+    {
+     "policy_id": "BL10000902",
+     "maturity_value": {
+      "target": "157249.78",
+      "off": "158952.30"
+     }
+    },
+    {
+     "policy_id": "BL10000959",
+     "maturity_value": {
+      "target": "581743.57",
+      "off": "581330.20"
+     }
+    },
+    {
+     "policy_id": "BL10000982",
+     "maturity_value": {
+      "target": "236820.28",
+      "off": "220714.44"
+     }
+    },
+    {
+     "policy_id": "BL10000986",
+     "maturity_value": {
+      "target": "56896.80",
+      "off": "57517.03"
+     }
+    },
+    {
+     "policy_id": "BL10001004",
+     "maturity_value": {
+      "target": "52783.60",
+      "off": "45879.28"
+     }
+    },
+    {
+     "policy_id": "BL10001153",
+     "maturity_value": {
+      "target": "337578.26",
+      "off": "336858.82"
+     }
+    },
+    {
+     "policy_id": "BL10001184",
+     "maturity_value": {
+      "target": "113350.43",
+      "off": "108437.85"
+     }
+    },
+    {
+     "policy_id": "BL10001243",
+     "maturity_value": {
+      "target": "335072.00",
+      "off": "305520.48"
+     }
+    },
+    {
+     "policy_id": "BL10001438",
+     "maturity_value": {
+      "target": "63162.43",
+      "off": "62951.68"
+     }
+    },
+    {
+     "policy_id": "BL10001498",
+     "maturity_value": {
+      "target": "128912.13",
+      "off": "121626.40"
+     }
+    },
+    {
+     "policy_id": "BL10001597",
+     "maturity_value": {
+      "target": "115645.05",
+      "off": "100368.31"
+     }
+    },
+    {
+     "policy_id": "BL10001627",
+     "maturity_value": {
+      "target": "213842.23",
+      "off": "200723.95"
+     }
+    },
+    {
+     "policy_id": "BL10001839",
+     "maturity_value": {
+      "target": "100828.05",
+      "off": "92663.53"
+     }
+    },
+    {
+     "policy_id": "BL10001957",
+     "maturity_value": {
+      "target": "199129.97",
+      "off": "170582.46"
+     }
+    },
+    {
+     "policy_id": "BL10001961",
+     "maturity_value": {
+      "target": "376130.57",
+      "off": "375880.50"
+     }
+    }
+   ],
+   "trees": {
+    "maturity_value": [
+     "Where it is wrong: optimal tree errors 70, leaves 5 on {EC_RATE@RK_BEGDT, AD_REGIO@RK_BEGDT, AD_REGIO}",
+     "AD_REGIO = BY and EC_RATE@RK_BEGDT = 0.050000 and AD_REGIO@RK_BEGDT = LOM -> x1.00 (1 rows, 0 of them not x1.00), e.g. [('BL10003914',)]",
+     "AD_REGIO = BY and EC_RATE@RK_BEGDT != 0.050000 and AD_REGIO@RK_BEGDT = BE -> x1.00 (1 rows, 0 of them not x1.00), e.g. [('BL10001438',)]",
+     "conflicting vector {'EC_RATE@RK_BEGDT': '0.040000', 'AD_REGIO@RK_BEGDT': 'TI', 'AD_REGIO': 'TI'}: {'ok': 716, 'x1.00': 5, 'x1.07': 2, 'x1.17': 1, 'x1.01': 1, 'x1.08': 1}; example ['BL10000163']",
+     "conflicting vector {'EC_RATE@RK_BEGDT': '0.050000', 'AD_REGIO@RK_BEGDT': 'TI', 'AD_REGIO': 'TI'}: {'ok': 588, 'x1.00': 4, 'x1.01': 2, 'x1.17': 2}; example ['BL10000128']",
+     "conflicting vector {'EC_RATE@RK_BEGDT': '0.020000', 'AD_REGIO@RK_BEGDT': 'TI', 'AD_REGIO': 'TI'}: {'ok': 441, 'x1.01': 5, 'x1.00': 4, 'x1.07': 1, 'x1.05': 1}; example ['BL10000309']"
+    ]
+   }
+  }
+ ]
+}

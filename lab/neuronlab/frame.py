@@ -4,14 +4,15 @@ A temporal join (into a versioned table) is made once per anchor date of the gra
 version: `PH_BRKNR@PR_RCVDT` is the broker of the policy version valid on the money date, `PH_BRKNR` the broker of
 the latest version. Columns reached from an anchored column keep its anchor (`BR_TIER@PR_RCVDT`). Fixed-width code
 columns are split by position (`RK_TARKEY[6]`). `frame.json` keeps the lineage of every column, which `freeze`
-turns into code.
+turns into code. A task definition narrows the joined tables to its scope, casts the legacy columns whose type a
+person confirmed, and adds the values of other tasks as inputs (`<task>__<column>`).
 """
 import json
 import zlib
 
 import polars as pl
 
-from . import dsl, paths, profile, schema, store
+from . import dsl, paths, profile, schema, store, taskdef
 
 MAX_HOPS = 3
 CALENDAR = ("weekday", "day", "month", "month_end")  # features of the target's own dates
@@ -94,6 +95,7 @@ def build(task):
     edges = {}
     for e in prof["joins"]:
         edges.setdefault(e["from"], []).append(e)
+    scope = taskdef.scope_tables(task)
     reached = {(grain_table, LATEST)}
     frontier = [(c, LATEST) for c in lineage]
     for _ in range(MAX_HOPS):
@@ -102,7 +104,7 @@ def build(task):
             table, base = lineage[column]["table"], lineage[column]["column"]
             for e in edges.get(f"{table}.{base}", []):
                 target_table, key = profile.split(e["to"])
-                if target_table in NOT_JOINED:
+                if target_table in NOT_JOINED or (scope and target_table not in scope):
                     continue
                 # anchors start at the grain: a chain read on a date stays on that date, a latest chain stays latest
                 from_grain = not lineage[column]["path"]
@@ -114,6 +116,9 @@ def build(task):
                     frame, added = _attach(frame, column, target_table, key, e["kind"], a, lineage)
                     next_frontier += [(c, a) for c in added]
         frontier = next_frontier
+    frame = confirmed_types(frame, taskdef.column_types(task))
+    for other in taskdef.scope_tasks(task):
+        frame = other_task(frame, other, keys, lineage)
     for column in [c for c in frame.columns if frame[c].dtype == pl.String and c not in keys]:
         for name, series in profile.code_positions(frame, column).items():
             frame = frame.with_columns(series.alias(name))
@@ -136,6 +141,45 @@ def build(task):
             "lineage": lineage}
     (folder / "frame.json").write_text(json.dumps(meta, indent=1, default=str))
     return frame, meta
+
+
+def confirmed_types(frame, types):
+    """Cast the columns (and their anchored copies `COL@DATE`) whose type a person confirmed in the definition."""
+    for column, kind in types.items():
+        for name in [c for c in frame.columns if c == column or c.startswith(column + "@")]:
+            if frame[name].dtype != pl.String:
+                continue  # NRDICT typed it already
+            text = pl.col(name).str.strip_chars()
+            if kind == "date":
+                expr = text.str.to_date("%Y%m%d", strict=False).fill_null(text.str.to_date("%Y-%m-%d", strict=False))
+            elif kind == "int":
+                expr = text.cast(pl.Int64, strict=False)
+            elif kind.startswith("decimal"):
+                expr = text.cast(pl.Decimal(38, int(kind.split(":")[1]) if ":" in kind else 2), strict=False)
+            else:
+                continue
+            frame = frame.with_columns(expr.alias(name))
+    return frame
+
+
+def other_task(frame, other, keys, lineage):
+    """The values of another task's target as inputs, joined on the key columns both share.
+
+    When the other task is finer (more key columns, e.g. one row per fund), its values are summed per shared key.
+    """
+    other_keys, other_values = store.target_columns(other)
+    shared = [k for k in other_keys if k in keys]
+    if not shared:
+        return frame
+    df = store.target(other)
+    if set(other_keys) - set(shared):
+        df = df.group_by(shared).agg(pl.col(v).sum() for v in other_values)
+    names = {v: f"{other}__{v}" for v in other_values}
+    df = df.select(shared + other_values).rename(names)
+    frame = frame.join(df, on=shared, how="left").sort("_row")
+    for v, name in names.items():
+        lineage[name] = {"task": other, "column": v}
+    return frame
 
 
 def load(task):

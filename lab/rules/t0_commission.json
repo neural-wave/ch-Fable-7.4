@@ -1,0 +1,40 @@
+{
+ "task": "t0_commission",
+ "about": "Rule cards of t0: each card switches one rule off in a scratch copy of the submission (lab ablate).",
+ "cards": [
+  {
+   "id": "tier-on-money-date",
+   "rule": "The commission rate uses the broker tier of the policy version valid on the day the money was received",
+   "off": "the tier of the broker of the latest policy version",
+   "edits": [
+    {"file": "submission.py", "old": "valid(policy_headers[premium_item[\"PR_POLNR\"]], \"PH\", premium_item[\"PR_RCVDT\"])",
+     "new": "latest(policy_headers[premium_item[\"PR_POLNR\"]], \"PH\")"},
+    {"file": "submission.py", "old": "from neuron import cents, grouped, keyed, table, valid",
+     "new": "from neuron import cents, grouped, keyed, latest, table, valid"}
+   ],
+   "where": "days(PH_VLDFR, PR_RCVDT)",
+   "where_label": "days from the start of the latest policy version to the money date"
+  },
+  {
+   "id": "half-up",
+   "rule": "The commission is rounded half up to the cent",
+   "off": "rounded half to even",
+   "edits": [
+    {"file": "submission.py", "old": "cents(premium_item[\"PR_AMTRC\"] * commission_rate)",
+     "new": "cents(premium_item[\"PR_AMTRC\"] * commission_rate, \"ROUND_HALF_EVEN\")"}
+   ],
+   "where": "PR_AMTRC",
+   "where_label": "premium received"
+  },
+  {
+   "id": "system-change",
+   "rule": "Before the system change of 2007-08-11 the COBOL version computed differently",
+   "off": "every value computed like Neuron NG",
+   "edits": [
+    {"file": "neuron/eras.py", "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)", "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"}
+   ],
+   "where": "PR_RCVDT",
+   "where_label": "money date"
+  }
+ ]
+}

@@ -6,6 +6,7 @@ import pytest
 from neuronlab import paths, score
 
 TASK = "t0_commission"
+RUN = f"{TASK}~test"  # scratch scorings write here, never into the artifacts of the task
 RECEIPT_DATE = 'valid(policy_headers[premium_item["PR_POLNR"]], "PH", premium_item["PR_RCVDT"])'
 
 
@@ -18,8 +19,7 @@ def pipeline():
 
 def scratch(tmp_path, replace=None):
     """A copy of the submission folder, with one piece of t0_commission replaced."""
-    for name in ("submission.py", "neuron.py"):
-        shutil.copy(paths.SUBMISSION / name, tmp_path / name)
+    shutil.copytree(paths.SUBMISSION, tmp_path, dirs_exist_ok=True, ignore=shutil.ignore_patterns("__pycache__"))
     if replace:
         source = (tmp_path / "submission.py").read_text(encoding="utf-8")
         assert replace[0] in source
@@ -28,10 +28,21 @@ def scratch(tmp_path, replace=None):
 
 
 def test_the_frozen_rule_leaves_only_noise(tmp_path):
-    text = score.score(TASK, folder=scratch(tmp_path))
+    text = score.score(TASK, folder=scratch(tmp_path), run=RUN)
     assert "Exact rows: 225848 / 225858 (holdout 44051 / 44052)" in text
     assert "noise 10 (policies listed in NREXCP: 6)" in text
     assert "one cluster only" in text
+
+
+def test_the_differences_are_saved_for_the_charts(tmp_path):
+    """diffs.parquet: one row per target row, difference 0 exactly on the right rows, whole units on the others."""
+    import polars as pl
+    score.score(TASK, folder=scratch(tmp_path), run=RUN)
+    diffs = pl.read_parquet(paths.run_dir(RUN) / "diffs.parquet")
+    assert diffs.height == 225858
+    assert (diffs["target:amount"] == diffs["computed:amount"]).sum() == 225848
+    wrong = diffs.filter(pl.col("diff:amount") != 0)
+    assert wrong.height == 10 and (wrong["diff:amount"] % 1 == 0).all()
 
 
 def test_a_wrong_rule_is_explained_by_the_missing_feature(tmp_path):
@@ -40,7 +51,7 @@ def test_a_wrong_rule_is_explained_by_the_missing_feature(tmp_path):
     source = (folder / "submission.py").read_text(encoding="utf-8")
     (folder / "submission.py").write_text(source.replace("from neuron import cents,", "from neuron import cents, latest,"),
                                           encoding="utf-8")
-    text = score.score(TASK, folder=folder)
+    text = score.score(TASK, folder=folder, run=RUN)
     assert "Exact rows: 224418 / 225858" in text
     assert "| x0.67 | 515 |" in text
     where = next(line for line in text.splitlines() if line.startswith("Where it is wrong"))
@@ -51,7 +62,7 @@ def test_reading_a_target_file_is_refused(tmp_path):
     folder = scratch(tmp_path, ('    commission_rates = keyed(', '    open(r"%s")\n    commission_rates = keyed('
                                 % (paths.TARGETS / "t0_commission.csv")))
     with pytest.raises(PermissionError):
-        score.score(TASK, folder=folder)
+        score.score(TASK, folder=folder, run=RUN)
 
 
 def test_labels_of_dates_in_tuples_and_of_amounts():

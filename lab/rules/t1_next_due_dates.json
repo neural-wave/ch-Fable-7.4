@@ -1,0 +1,50 @@
+{
+ "task": "t1_next_due_dates",
+ "about": "Rule cards of t1: each card switches one rule off in a scratch copy of the submission (lab ablate).",
+ "cards": [
+  {
+   "id": "system-change",
+   "rule": "Due dates continue from the last due date of the COBOL version, which stepped from one due date to the next",
+   "off": "every due date counted from the begin date, like Neuron NG",
+   "edits": [
+    {"file": "neuron/eras.py", "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)", "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"}
+   ],
+   "where": "day(PH_BEGDT)",
+   "where_label": "day of the month of the begin date"
+  },
+  {
+   "id": "good-friday",
+   "rule": "Good Friday is a bank working day in Ticino",
+   "off": "Good Friday a bank holiday, as in most other cantons",
+   "edits": [
+    {"file": "policies/bank_calendar.py", "old": "EASTER_HOLIDAYS = (1, 39, 50, 60)", "new": "EASTER_HOLIDAYS = (-2, 1, 39, 50, 60)"}
+   ],
+   "where": "due_date",
+   "where_label": "due date"
+  },
+  {
+   "id": "ticino-holidays",
+   "rule": "Direct debits wait for the bank holidays of Ticino: Epiphany, St Joseph, Corpus Christi, St Peter and Paul, Assumption, All Saints, Immaculate Conception",
+   "off": "only the holidays common to all of Switzerland",
+   "edits": [
+    {"file": "policies/bank_calendar.py",
+     "old": "FIXED_HOLIDAYS = {(1, 1), (1, 6), (3, 19), (5, 1), (6, 29), (8, 1), (8, 15), (11, 1), (12, 8), (12, 25), (12, 26)}",
+     "new": "FIXED_HOLIDAYS = {(1, 1), (5, 1), (8, 1), (12, 25), (12, 26)}"},
+    {"file": "policies/bank_calendar.py", "old": "EASTER_HOLIDAYS = (1, 39, 50, 60)", "new": "EASTER_HOLIDAYS = (1, 39, 50)"}
+   ],
+   "where": "due_date",
+   "where_label": "due date"
+  },
+  {
+   "id": "transfer-on-due-date",
+   "rule": "Bank transfers (UB) are collected on the due date, only direct debits (LS) on the next bank working day",
+   "off": "every premium collected on the next bank working day",
+   "edits": [
+    {"file": "policies/schedule.py", "old": "return next_working_day(due_date) if payment_method == DIRECT_DEBIT else due_date",
+     "new": "return next_working_day(due_date)"}
+   ],
+   "where": "PH_PAYMT",
+   "where_label": "payment method"
+  }
+ ]
+}

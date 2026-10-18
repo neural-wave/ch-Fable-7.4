@@ -1,0 +1,1012 @@
+{
+ "task": "t7_payout_taxes",
+ "values": {
+  "KST": {
+   "candidate": "C2.1",
+   "residuals": 73,
+   "structure": {
+    "no -> yes": 62,
+    "yes -> no": 11
+   },
+   "noise": 0,
+   "ambiguous": 0,
+   "whole_unit_deltas": 0,
+   "in_NREXCP": 0,
+   "rows": [
+    {
+     "key": [
+      "BL10000086",
+      121
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000228",
+      175
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000247",
+      37
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000262",
+      168
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000301",
+      76
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000352",
+      203
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000435",
+      61
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000435",
+      72
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000626",
+      234
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000670",
+      90
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    }
+   ]
+  },
+  "SOL": {
+   "candidate": "C2.1",
+   "residuals": 73,
+   "structure": {
+    "no -> yes": 62,
+    "yes -> no": 11
+   },
+   "noise": 0,
+   "ambiguous": 0,
+   "whole_unit_deltas": 0,
+   "in_NREXCP": 0,
+   "rows": [
+    {
+     "key": [
+      "BL10000086",
+      121
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000228",
+      175
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000247",
+      37
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000262",
+      168
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000301",
+      76
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000352",
+      203
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000435",
+      61
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000435",
+      72
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000626",
+      234
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000670",
+      90
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    }
+   ]
+  },
+  "KIS": {
+   "candidate": "C2.3",
+   "residuals": 23,
+   "structure": {
+    "no -> yes": 23
+   },
+   "noise": 0,
+   "ambiguous": 0,
+   "whole_unit_deltas": 0,
+   "in_NREXCP": 0,
+   "rows": [
+    {
+     "key": [
+      "BL10000228",
+      175
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000231",
+      33
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000247",
+      37
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000262",
+      168
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000301",
+      76
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000352",
+      203
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000435",
+      141
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000626",
+      234
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000727",
+      306
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10001721",
+      123
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    }
+   ]
+  },
+  "VST": {
+   "candidate": "C1",
+   "residuals": 103,
+   "structure": {
+    "yes -> no": 86,
+    "no -> yes": 17
+   },
+   "noise": 0,
+   "ambiguous": 0,
+   "whole_unit_deltas": 0,
+   "in_NREXCP": 0,
+   "rows": [
+    {
+     "key": [
+      "BL10000058",
+      95
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000075",
+      62
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000174",
+      127
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000267",
+      99
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000328",
+      32
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000368",
+      214
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000393",
+      64
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000419",
+      84
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000496",
+      6
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000554",
+      7
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    }
+   ]
+  },
+  "SOS": {
+   "candidate": "C2.1",
+   "residuals": 122,
+   "structure": {
+    "no -> yes": 84,
+    "yes -> no": 38
+   },
+   "noise": 0,
+   "ambiguous": 0,
+   "whole_unit_deltas": 0,
+   "in_NREXCP": 0,
+   "rows": [
+    {
+     "key": [
+      "BL10000036",
+      20
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000036",
+      101
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000036",
+      258
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000051",
+      48
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000076",
+      43
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000093",
+      158
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000125",
+      171
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000168",
+      147
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000305",
+      179
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000312",
+      107
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    }
+   ]
+  },
+  "BOL": {
+   "candidate": "C2.1",
+   "residuals": 49,
+   "structure": {
+    "yes -> no": 48,
+    "no -> yes": 1
+   },
+   "noise": 0,
+   "ambiguous": 0,
+   "whole_unit_deltas": 0,
+   "in_NREXCP": 0,
+   "rows": [
+    {
+     "key": [
+      "BL10000051",
+      48
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000076",
+      43
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000093",
+      199
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000256",
+      9
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000455",
+      17
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000487",
+      96
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000506",
+      190
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000795",
+      225
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000974",
+      92
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10001120",
+      25
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    }
+   ]
+  },
+  "BOC": {
+   "candidate": "C2.1",
+   "residuals": 98,
+   "structure": {
+    "yes -> no": 53,
+    "no -> yes": 45
+   },
+   "noise": 0,
+   "ambiguous": 0,
+   "whole_unit_deltas": 0,
+   "in_NREXCP": 0,
+   "rows": [
+    {
+     "key": [
+      "BL10000036",
+      101
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000044",
+      667
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000076",
+      43
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000093",
+      199
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000168",
+      103
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000256",
+      9
+     ],
+     "target": "no",
+     "computed": "yes",
+     "class": "other regime",
+     "used": "yes",
+     "fits": "no",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000305",
+      179
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000316",
+      517
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000389",
+      135
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    },
+    {
+     "key": [
+      "BL10000487",
+      96
+     ],
+     "target": "yes",
+     "computed": "no",
+     "class": "other regime",
+     "used": "no",
+     "fits": "yes",
+     "delta": null,
+     "whole_units": false
+    }
+   ]
+  }
+ }
+}

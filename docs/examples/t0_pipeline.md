@@ -24,7 +24,7 @@ Gli stessi passi, generici e per qualsiasi task, sono in `lab/` (`uv run lab run
 | 2 Clustering | DBSCAN 1D + assegnazione esatta | 6 cluster: 0,005 (137 righe), 0,01 (253), 0,015 (185), 0,02 (53.683), 0,03 (102.865), 0,04 (68.725), più **10 punti di rumore** |
 | 3 Albero ottimo | GOSDT (qui DP esatta) | 0 errori, 6 foglie; insieme minimo {tier@RCVDT, tipo di premio}. Per confronto, CART: 6 foglie e 3 feature mescolate |
 | 4 Pool | harness | 6 schede (es. "tier A e tipo L → 4 % di `PR_AMTRC`"), ognuna pura al 100 %. Le 6 costanti sono in `NRCOMR.CR_RATE` con le chiavi `(CR_TIER, CR_PAYTP)` |
-| 5 LLM | nessuno | Non serve: il codice esce dai template del freeze. La data di riferimento e le chiavi della lookup le decidono i passi 1 e 3; l'arrotondamento lo decide lo scorer (HALF_UP batte HALF_EVEN su una riga: BL10000869 #1, 399,205 → 399,21). Il modello open-weights può solo migliorare nomi e docstring |
+| 5 LLM | nessuno | Non serve: il codice esce dai template del freeze. La data di riferimento e le chiavi della lookup le decidono i passi 1 e 3; l'arrotondamento lo decide lo scorer (HALF_UP batte HALF_EVEN su una riga: BL10000869 #1, 399,205 → 399,21). Il modello (Claude Code) può solo migliorare nomi e docstring |
 | 6 Score | scorer esatto | **225.848 / 225.858** |
 | 7 Iterazione | harness | I 10 residui sono i punti di rumore, tutti con una differenza positiva di unità intere. 6 sono in NREXCP, 4 no (BL10001299, BL10001328, BL10002438, BL10004554). Vanno a t5 e il loop si ferma |
 

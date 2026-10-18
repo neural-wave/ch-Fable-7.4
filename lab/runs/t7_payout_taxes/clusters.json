@@ -1,0 +1,293 @@
+{
+ "task": "t7_payout_taxes",
+ "rows": 2493,
+ "values": {
+  "KST": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "relation_name": "value",
+   "centers": [
+    {
+     "center": "no",
+     "rows": 2405,
+     "modes": {
+      "HALF_UP": 2405,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    },
+    {
+     "center": "yes",
+     "rows": 88,
+     "modes": {
+      "HALF_UP": 88,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    }
+   ],
+   "assigned": 2493,
+   "noise": 0,
+   "ambiguous": 0,
+   "noise_examples": [],
+   "identities": [],
+   "alternatives": []
+  },
+  "SOL": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "relation_name": "value",
+   "centers": [
+    {
+     "center": "no",
+     "rows": 2405,
+     "modes": {
+      "HALF_UP": 2405,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    },
+    {
+     "center": "yes",
+     "rows": 88,
+     "modes": {
+      "HALF_UP": 88,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    }
+   ],
+   "assigned": 2493,
+   "noise": 0,
+   "ambiguous": 0,
+   "noise_examples": [],
+   "identities": [],
+   "alternatives": []
+  },
+  "KIS": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "relation_name": "value",
+   "centers": [
+    {
+     "center": "no",
+     "rows": 2464,
+     "modes": {
+      "HALF_UP": 2464,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    },
+    {
+     "center": "yes",
+     "rows": 29,
+     "modes": {
+      "HALF_UP": 29,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    }
+   ],
+   "assigned": 2493,
+   "noise": 0,
+   "ambiguous": 0,
+   "noise_examples": [],
+   "identities": [],
+   "alternatives": []
+  },
+  "VST": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "relation_name": "value",
+   "centers": [
+    {
+     "center": "no",
+     "rows": 2236,
+     "modes": {
+      "HALF_UP": 2236,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    },
+    {
+     "center": "yes",
+     "rows": 257,
+     "modes": {
+      "HALF_UP": 257,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    }
+   ],
+   "assigned": 2493,
+   "noise": 0,
+   "ambiguous": 0,
+   "noise_examples": [],
+   "identities": [],
+   "alternatives": []
+  },
+  "SOS": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "relation_name": "value",
+   "centers": [
+    {
+     "center": "no",
+     "rows": 2340,
+     "modes": {
+      "HALF_UP": 2340,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    },
+    {
+     "center": "yes",
+     "rows": 153,
+     "modes": {
+      "HALF_UP": 153,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    }
+   ],
+   "assigned": 2493,
+   "noise": 0,
+   "ambiguous": 0,
+   "noise_examples": [],
+   "identities": [],
+   "alternatives": []
+  },
+  "BOL": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "relation_name": "value",
+   "centers": [
+    {
+     "center": "no",
+     "rows": 2359,
+     "modes": {
+      "HALF_UP": 2359,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    },
+    {
+     "center": "yes",
+     "rows": 134,
+     "modes": {
+      "HALF_UP": 134,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    }
+   ],
+   "assigned": 2493,
+   "noise": 0,
+   "ambiguous": 0,
+   "noise_examples": [],
+   "identities": [],
+   "alternatives": []
+  },
+  "BOC": {
+   "relation": {
+    "kind": "label",
+    "input": null
+   },
+   "relation_name": "value",
+   "centers": [
+    {
+     "center": "no",
+     "rows": 2198,
+     "modes": {
+      "HALF_UP": 2198,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    },
+    {
+     "center": "yes",
+     "rows": 295,
+     "modes": {
+      "HALF_UP": 295,
+      "HALF_EVEN": 0,
+      "HALF_DOWN": 0,
+      "DOWN": 0,
+      "UP": 0,
+      "FLOOR": 0,
+      "CEILING": 0
+     }
+    }
+   ],
+   "assigned": 2493,
+   "noise": 0,
+   "ambiguous": 0,
+   "noise_examples": [],
+   "identities": [],
+   "alternatives": []
+  }
+ }
+}

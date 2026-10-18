@@ -30,7 +30,7 @@ from decimal import Decimal
 
 import polars as pl
 
-from . import dsl, evaluate, frame as frames, iterate, paths, store, tree
+from . import dsl, evaluate, frame as frames, iterate, paths, store, taskdef, tree
 from .store import scoring
 
 MIN_POLICIES = 3
@@ -41,8 +41,10 @@ SHOWN = 8
 def load_submission(folder=paths.SUBMISSION):
     """The submission module, loaded like check.py loads it: fresh, with its folder first on sys.path."""
     sys.path.insert(0, str(folder))
-    for helper in pathlib.Path(folder).glob("*.py"):
-        sys.modules.pop(helper.stem, None)  # a helper module loaded from another folder must not be reused
+    helpers = {path.stem for path in pathlib.Path(folder).glob("*.py")}
+    helpers |= {path.parent.name for path in pathlib.Path(folder).glob("*/__init__.py")}
+    for name in [name for name in sys.modules if name.split(".")[0] in helpers]:
+        sys.modules.pop(name)  # a helper module or package loaded from another folder must not be reused
     spec = importlib.util.spec_from_file_location("submission", pathlib.Path(folder) / "submission.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -114,6 +116,34 @@ def compare(task, targets, predictions):
     return out
 
 
+def difference(target, computed):
+    """target - computed as a number: whole days for dates, currency units for amounts, None if not comparable."""
+    if computed is None or target is None:
+        return None
+    if isinstance(target, dt.date):
+        return float((target - computed).days)
+    if isinstance(target, Decimal):
+        return float(target - computed)
+    return None
+
+
+def differences(task, targets, predictions, keys, dtypes):
+    """One row per target row: the keys and, per value column, the target, the computed value and their difference.
+
+    The values are kept as text, so that they stay exact; the difference is a float, for the charts of `lab viz`.
+    """
+    _, values = store.target_columns(task)
+    columns = {}
+    for i, value in enumerate(values):
+        def part(v):
+            return v if v is None or len(values) == 1 else v[i]
+        pairs = [(part(t), part(predictions.get(k))) for k, t in targets.items()]
+        columns[f"target:{value}"] = pl.Series([None if t is None else str(t) for t, _ in pairs], dtype=pl.String)
+        columns[f"computed:{value}"] = pl.Series([None if c is None else str(c) for _, c in pairs], dtype=pl.String)
+        columns[f"diff:{value}"] = pl.Series([difference(t, c) for t, c in pairs], dtype=pl.Float64)
+    return key_frame(targets, keys, dtypes).with_columns(**columns)
+
+
 def key_frame(targets, keys, dtypes):
     """The target keys as a DataFrame with the dtypes of the frame's key columns."""
     parts = [k if isinstance(k, tuple) else (k,) for k in targets]
@@ -134,9 +164,9 @@ def with_features(df, meta, extra):
     return df, dict(meta, lineage=lineage)
 
 
-def explain(task, df, meta, labels):
-    """Run steps 3 (optimal trees) on the labels in the scratch run `<task>~score`, return its trees.json."""
-    run = f"{task}~score"
+def explain(run, df, meta, labels):
+    """Run steps 3 (optimal trees) on the labels in the scratch run `<run>~score`, return its trees.json."""
+    run = f"{run}~score"
     folder = paths.run_dir(run)
     df.write_parquet(folder / "frame.parquet")
     (folder / "frame.json").write_text(json.dumps(meta, indent=1, default=str))
@@ -191,11 +221,53 @@ def record(task, source, ok, held, wrong):
     return entry
 
 
-def score(task, extra=None, folder=None):
-    """Score the task function of submission.py, explain its wrong rows, write runs/<task>/score.md.
+def pair_lines(task, predictions):
+    """Lines of score.md for the acceptance pairs of the task definition: keys a person checked by hand.
 
-    `folder` scores another submission folder (a scratch copy): nothing is written to the ledger then.
+    A pair marked as typed by hand is shown but not counted: the rules are not meant to reproduce it.
     """
+    hand = taskdef.pairs(task, use="acceptance")
+    if not hand or task not in scoring.TASKS:
+        return []
+    spec = scoring.TASKS[task]
+    keys, values = store.target_columns(task)
+    lines, ok, counted = ["", "## acceptance pairs", "", "| key | expected | computed | |", "|---|---|---|---|"], 0, 0
+    for p in hand:
+        try:
+            key = spec.make_key([p["in"][k] for k in keys])
+            expected = spec.make_value([p["out"][v] for v in values])
+        except (KeyError, TypeError, ValueError, ArithmeticError) as e:
+            lines.append(f"| {p.get('in')} | | | unreadable pair: {e} |")
+            continue
+        got = predictions.get(key)
+        same = got == expected
+        if not p.get("noise"):
+            counted += 1
+            ok += same
+        verdict = "ok" if same else ("typed by hand, not counted" if p.get("noise") else "wrong")
+        lines.append(f"| {key} | {expected} | {got} | {verdict} |")
+    lines.insert(2, f"Pairs: {ok} / {counted} exact")
+    return lines
+
+
+def refusal(task):
+    """Why `lab score` cannot score a task, or None: only the tasks of the official scoring have a function to run."""
+    if task in scoring.TASKS:
+        return None
+    return (f"{task} has no function in submission.py: `lab score` runs the tasks of the official scoring "
+            f"({', '.join(scoring.TASKS)}). The candidates of {task} are scored exactly by `lab run {task}` (pool.json).")
+
+
+def score(task, extra=None, folder=None, run=None):
+    """Score the task function of submission.py, explain its wrong rows, write runs/<task>/score.md and diffs.parquet.
+
+    `folder` scores another submission folder (a scratch copy): nothing is written to the ledger then. `run` writes
+    score.md and diffs.parquet into another run folder, e.g. `<task>~off-<card>` of `lab ablate`.
+    """
+    reason = refusal(task)
+    if reason:
+        raise ValueError(reason)
+    out = paths.run_dir(run or task)
     module = load_submission(folder or paths.SUBMISSION)
     targets = scoring.read_targets(paths.TARGETS, task)
     started = time.time()
@@ -207,13 +279,14 @@ def score(task, extra=None, folder=None):
     df, meta = frames.load(task)
     keys = meta["keys"]
     per_value = compare(task, targets, predictions)
+    differences(task, targets, predictions, keys, df.schema).write_parquet(out / "diffs.parquet")
     labels = key_frame(targets, keys, df.schema).with_columns(
         pl.Series(f"label:{v}", per_value[v]) for v in per_value)
     df = df.with_row_index("_order").join(labels, on=keys, how="left").sort("_order").drop("_order")
     labels = df.select(keys + [f"label:{v}" for v in per_value])
     df = df.drop([f"label:{v}" for v in per_value])
     df, meta = with_features(df, meta, extra or {})
-    trees = explain(task, df, meta, labels)
+    trees = explain(run or task, df, meta, labels)
     ok = pl.all_horizontal([pl.col(f"label:{v}") == "ok" for v in per_value])
     flags = labels.select(ok.alias("ok"))["ok"]
     held = evaluate.holdout(labels, keys[0])
@@ -230,6 +303,7 @@ def score(task, extra=None, folder=None):
     for value in per_value:
         work = df.with_columns(labels[f"label:{value}"].alias("_label"))
         lines += describe(task, value, work, keys, per_value[value], trees)
-    text = "\n".join(lines) + "\n"
-    (paths.run_dir(task) / "score.md").write_text(text)
+    lines += pair_lines(task, predictions)
+    text ="\n".join(lines) + "\n"
+    (out / "score.md").write_text(text)
     return text

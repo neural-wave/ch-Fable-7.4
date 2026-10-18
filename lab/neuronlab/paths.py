@@ -9,6 +9,7 @@ STARTER_KIT = REPO / "starter_kit"
 SUBMISSION = STARTER_KIT / "my_solution"
 CACHE = REPO / "lab" / ".cache"
 RUNS = REPO / "lab" / "runs"
+RULES = REPO / "lab" / "rules"  # the rule cards of `lab ablate`, one file per task
 
 
 def run_dir(task):

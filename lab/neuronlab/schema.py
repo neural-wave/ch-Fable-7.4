@@ -75,3 +75,29 @@ def validity(table):
     if "VLDFR" in names and "VLDTO" in names:
         return names["VLDFR"], names["VLDTO"], names.get("VRSNR")
     return None
+
+
+DECLARED_KEY = re.compile(r"^### (NR\w{4}):.*\(key ([^)]+)\)")
+
+
+@functools.cache
+def declared_keys():
+    """{table: [key columns]} from the headings of SCHEMA.md, e.g. NRPOLH -> [PH_POLNR, PH_VRSNR]."""
+    path = paths.REPO / "SCHEMA.md"
+    if not path.exists():
+        return {}
+    found = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        m = DECLARED_KEY.match(line)
+        if m:
+            found[m.group(1)] = [c.strip() for c in m.group(2).split(",")]
+    return found
+
+
+def key_of(table, uccs):
+    """The key of a table: the one SCHEMA.md declares when profiling confirms it (or did not run), else the first UCC."""
+    mined = [sorted(u) for u in uccs or []]
+    declared = declared_keys().get(table)
+    if declared and (not mined or sorted(declared) in mined):
+        return declared
+    return mined[0] if mined else None

@@ -15,9 +15,10 @@ from decimal import Decimal
 
 import polars as pl
 
-from . import evaluate, exact, frame as frames, paths, profile, schema, store
+from . import evaluate, events, exact, frame as frames, paths, profile, schema, store, taskdef
 
 MAX_PARAM_ROWS = 2000
+PROGRESS = 20  # a progress event every this many scored candidates (lab serve)
 
 
 def leaf_rules(leaves):
@@ -162,22 +163,26 @@ def run(task):
                 base.append({"id": f"C3.{i + 1}.{j + 1}", "lookup": g["lookup"],
                              "origin": f"generalization of C2.{i + 1}: constants = {g['lookup']['table']}."
                                        f"{g['lookup']['column']} (agreement {g['agreement']})"})
+        declared = taskdef.rounding(task, value)  # a rounding the person knows replaces the variants
         for c in base:
-            c.update(relation=relation, value=value, rounding=c.get("rounding", "ROUND_HALF_UP"))
+            c.update(relation=relation, value=value, rounding=declared or c.get("rounding", "ROUND_HALF_UP"))
         pool = list(base)
         for c in base:
-            pool += rounding_variants(c) + anchor_variants(c, meta["anchors"])
+            pool += ([] if declared else rounding_variants(c)) + anchor_variants(c, meta["anchors"])
         unique = {}
         for c in pool:
             unique.setdefault(json.dumps({k: c.get(k) for k in ("rules", "lookup", "rounding", "relation")},
                                          sort_keys=True), c)
-        scored = []
-        for c in unique.values():
+        scored, top = [], None
+        for i, c in enumerate(unique.values()):
             result = evaluate.score(df, meta, c, value)
             evaluate.record(task, value, c, result)
             c["score"] = {k: result[k] for k in ("discovery", "holdout", "total", "fingerprint")}
             c["features"] = features_of(c)
             scored.append(c)
+            top = max(top or result["discovery"], result["discovery"], key=lambda pair: pair[0])
+            if (i + 1) % PROGRESS == 0 or i + 1 == len(unique):
+                events.emit("progress", step="pool", run=task, value=value, done=i + 1, total=len(unique), best=top)
         scored.sort(key=lambda c: (-c["score"]["holdout"][0], -c["score"]["discovery"][0], complexity(c)))
         best = scored[0]
         minimal = (tinfo.get("minimal_sets") or [None])[0]

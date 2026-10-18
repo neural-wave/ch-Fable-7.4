@@ -1,7 +1,7 @@
 # t0_commission
 
 Grain: NRPREM {'policy_id': 'PR_POLNR', 'due_nr': 'PR_DUENR'} (reverse coverage 94.8%; others: NREVNT 34.9%, NRBOOK 4.5%)
-Filter: PR_STATE in ['P'] (excluded rows {'R': 5816, 'O': 3614, 'W': 3056}, errors 0)
+Filter: PR_STATE in ['P'] (excluded rows {'O': 3614, 'R': 5816, 'W': 3056}, errors 0)
 
 ## amount
 

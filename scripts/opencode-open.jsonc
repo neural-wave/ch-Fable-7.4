@@ -1,5 +1,6 @@
-// OpenCode config of scripts/opencode-open.sh and .ps1: one provider, "open", with the model of .env.llm.
-// The script exports the variables; {env:...} is replaced as text before parsing, so the numbers stay unquoted.
+// OpenCode config of `lab agent` and scripts/opencode-open.sh/.ps1: one provider, "open", with the model of .env.llm,
+// and the guardrails of an unattended session. The caller exports the variables; {env:...} is replaced as text before
+// parsing, so the numbers stay unquoted.
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "open/model",
@@ -7,6 +8,60 @@
   "policies": [
     { "action": "provider.use", "resource": "*", "effect": "deny" },
     { "action": "provider.use", "resource": "open", "effect": "allow" }
+  ],
+  // Tool permissions, read in order: the last rule that matches wins. `opencode run --auto` approves every action that
+  // is not denied here, so these denials are the guardrails: what the agent of rule-discovery never needs.
+  "permissions": [
+    // nothing outside the repository, no network, nobody to answer a question
+    { "action": "external_directory", "resource": "*", "effect": "deny" },
+    { "action": "webfetch", "resource": "*", "effect": "deny" },
+    { "action": "websearch", "resource": "*", "effect": "deny" },
+    { "action": "browser", "resource": "*", "effect": "deny" },
+    { "action": "question", "resource": "*", "effect": "deny" },
+    // secrets: the keys of .env.llm and any other .env file
+    { "action": "read", "resource": "*.env", "effect": "deny" },
+    { "action": "read", "resource": "*.env.*", "effect": "deny" },
+    { "action": "read", "resource": "*.env.example", "effect": "allow" },
+    // edits: only the submission, the run folders and the rule cards, as relative or absolute paths (? is / or \)
+    { "action": "edit", "resource": "*", "effect": "deny" },
+    { "action": "edit", "resource": "*?starter_kit?my_solution?*", "effect": "allow" },
+    { "action": "edit", "resource": "starter_kit?my_solution?*", "effect": "allow" },
+    { "action": "edit", "resource": "*?lab?runs?*", "effect": "allow" },
+    { "action": "edit", "resource": "lab?runs?*", "effect": "allow" },
+    { "action": "edit", "resource": "*?lab?rules?*", "effect": "allow" },
+    { "action": "edit", "resource": "lab?rules?*", "effect": "allow" },
+    { "action": "edit", "resource": "*.env*", "effect": "deny" },
+    { "action": "write", "resource": "*", "effect": "deny" },  // in case a version names the write tool apart
+    { "action": "write", "resource": "*?starter_kit?my_solution?*", "effect": "allow" },
+    { "action": "write", "resource": "starter_kit?my_solution?*", "effect": "allow" },
+    { "action": "write", "resource": "*?lab?runs?*", "effect": "allow" },
+    { "action": "write", "resource": "lab?runs?*", "effect": "allow" },
+    { "action": "write", "resource": "*?lab?rules?*", "effect": "allow" },
+    { "action": "write", "resource": "lab?rules?*", "effect": "allow" },
+    // commands that publish, rewrite history, delete in bulk, install, download or start another agent
+    { "action": "shell", "resource": "*git push*", "effect": "deny" },
+    { "action": "shell", "resource": "*git commit*", "effect": "deny" },
+    { "action": "shell", "resource": "*git reset*", "effect": "deny" },
+    { "action": "shell", "resource": "*git rebase*", "effect": "deny" },
+    { "action": "shell", "resource": "*git checkout*", "effect": "deny" },
+    { "action": "shell", "resource": "*git switch*", "effect": "deny" },
+    { "action": "shell", "resource": "*git restore*", "effect": "deny" },
+    { "action": "shell", "resource": "*git clean*", "effect": "deny" },
+    { "action": "shell", "resource": "*git stash*", "effect": "deny" },
+    { "action": "shell", "resource": "*rm -r*", "effect": "deny" },
+    { "action": "shell", "resource": "*rm -fr*", "effect": "deny" },
+    { "action": "shell", "resource": "*rmdir*", "effect": "deny" },
+    { "action": "shell", "resource": "*Remove-Item*", "effect": "deny" },
+    { "action": "shell", "resource": "*del /*", "effect": "deny" },
+    { "action": "shell", "resource": "*pip install*", "effect": "deny" },
+    { "action": "shell", "resource": "*uv add*", "effect": "deny" },
+    { "action": "shell", "resource": "*npm *", "effect": "deny" },
+    { "action": "shell", "resource": "*curl *", "effect": "deny" },
+    { "action": "shell", "resource": "*wget *", "effect": "deny" },
+    { "action": "shell", "resource": "*Invoke-WebRequest*", "effect": "deny" },
+    { "action": "shell", "resource": "*opencode*", "effect": "deny" },
+    { "action": "shell", "resource": "*claude *", "effect": "deny" },
+    { "action": "shell", "resource": "*.env.llm*", "effect": "deny" }
   ],
   "providers": {
     "open": {
