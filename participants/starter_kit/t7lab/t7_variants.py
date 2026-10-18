@@ -22,7 +22,7 @@ NEURON_CALENDAR = dict(CALENDAR, years=list(CALENDAR["years"]))  # Neuron's own 
 VARIANTS = {  # name -> {convention: value} to flip
     "base 0 without withholding": {"BASE_WITHOUT_TAX": False},
     "Bollo fix rounded once on the total": {"BOLLO_FIX_PER_YEAR": False},
-    "no remittance day for stamp duty alone": {"STAMP_DUTY_REMITTED": False},
+    "a remittance day for stamp duty alone": {"STAMP_DUTY_REMITTED": True},
     "remittance on the day as it falls, weekend or not": {"REMITTANCE_SHIFTED": []},
     "remittance on a business day of Neuron, not of the tax office": {
         "REMITTANCE_CALENDARS": dict.fromkeys(["DE", "IT", "CH"], NEURON_CALENDAR)},
@@ -43,7 +43,7 @@ VARIANTS = {  # name -> {convention: value} to flip
     "premiums rounded by the system of their money date": {"PREMIUMS_ROUNDED_AT_RECEIPT": True},
     "HEV not in the withholding": {"HALF_INCOME_WITHHELD": False},
     "Bollo on the surrender value": {"BOLLO_ON_SURRENDER_VALUE": True},
-    "remittance month from the effective date, not the payment day": {"REMITTED_FROM_PAYMENT": False},
+    "remittance from the payment day, not the effective date": {"REMITTED_FROM_PAYMENT": True},
     "KST plain, the church tax on top": {"CHURCH_REDUCES_KST": False},
     "Bollo collected in the annual Bollo": {"COLLECTED_IN_ANNUAL": True},
     "SOS averaged over the periods of the policy, not at the rate of the payout day": {"BLENDED_RATES": ["SOS"]},

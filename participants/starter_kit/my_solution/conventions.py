@@ -80,18 +80,18 @@ BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calc
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
 STAMP_DUTY_ALONE = "stamp duty alone"  # the key of REMITTANCE for a payout with stamp duty and no withholding
-REMITTANCE = {"DE": ("month", 10), "IT": ("month", 10), "CH": ("quarter", 30),
-              STAMP_DUTY_ALONE: ("month", 16)}  # country, or STAMP_DUTY_ALONE -> (anchor, days): the
+REMITTANCE = {"DE": ("month", 10), "IT": ("month_end", 0), "CH": ("day", 30),
+              STAMP_DUTY_ALONE: ("month_end", 0)}  # country, or STAMP_DUTY_ALONE -> (anchor, days): the
 # day Neuron paid the taxes of a payout is the anchor plus the days. "month": the last day of the month of the payout
 # day (so 10 = the 10th of the month after: DE, section 44 EStG and the example 2006-07-17 -> 2006-08-10; 16 = the
 # 16th, the F24 of Italy; 30 = the law's 30 days after the month for CH, art. 16 VStG). "month_end": the last day of
 # the month after (CH: the reading "by the end of the next month" of the same article). "day": the payout day itself
 # ("30 days after the benefit"). "quarter": the last day of the quarter (CH: 30 days after the quarter, the rule of
 # the bank interests). Read 0 of 40 by the actuary: ("month", 10) everywhere and CH ("month", 30) (assumption, to test)
-REMITTED_FROM_PAYMENT = True  # the remittance month follows the day the money was paid, the effective date + the
-# payout business days PD_PAYDAY of the product (NRPROD, read by no other rule; the law of all three countries
-# counts from the payment); False: from the effective date. The example fits both: paid 2006-07-24, still in July
-# (assumption, to test: it moves the month of about a fifth of the payouts with tax)
+REMITTED_FROM_PAYMENT = False  # the remittance counts from the effective date TB_EFFDT of the booking; True: from
+# the day the money was paid, the effective date + the payout business days PD_PAYDAY of the product (NRPROD, read
+# by no other rule; the law of all three countries counts from the payment). The example fits both: paid
+# 2006-07-24, still in July (assumption, to test: it moves the month of about a fifth of the payouts with tax)
 REMITTANCE_SHIFTED = ["DE", "IT", "CH"]  # countries whose remittance day moves to the next business day of its
 # calendar: the law moves a deadline that falls on a weekend or holiday, about 30 % of the days (law; the example, a
 # Thursday, fits both). [] keeps the day as it is, as Neuron's own batches that run on weekends (assumption, to test)
@@ -99,9 +99,9 @@ REMITTANCE_CALENDARS = {"DE": {"country": "DE", "years": range(1994, 2100)},
                         "IT": {"country": "IT", "years": range(1994, 2100)}, "CH": CALENDAR}  # the tax offices; the
 # other variant is Neuron's own calendar CALENDAR for every country, as for the direct debits
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
-STAMP_DUTY_REMITTED = True  # a payout with stamp duty alone has a remittance day, the rule STAMP_DUTY_ALONE of
-# REMITTANCE in the calendar of STAMP_DUTY_COUNTRY; False: None, as the PDF says "None if nothing was withheld" when
-# the stamp duty collected does not count as withheld (assumption, to test: 182 payouts)
+STAMP_DUTY_REMITTED = False  # a payout with stamp duty alone has no remittance day (None), as the PDF says "None if
+# nothing was withheld" when the stamp duty collected does not count as withheld; True: the rule STAMP_DUTY_ALONE of
+# REMITTANCE in the calendar of STAMP_DUTY_COUNTRY (assumption, to test: 182 payouts)
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 CHURCH_REDUCES_KST = True  # DE: the KIS booking reduces the KST as above (law, from 2009); False: base x KST and the
