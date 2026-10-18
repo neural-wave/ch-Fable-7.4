@@ -205,3 +205,4 @@ upload, write down the commit and its switches here; after the evaluation, its t
 | 18.10 00:45 | `d595375` | `BASE_WITHOUT_TAX = False`, `BOLLO_ON_SURRENDER_VALUE = False`, `ROUNDED_BY_SYSTEM = True`, `REMITTED_FROM_PAYMENT = True` | 0/40 | 11/30 | ? |
 | 18.10 ~02:00 | `290312d` | as `d595375`, and `REMITTANCE` the 10th everywhere (was IT the 16th, CH 30 days after the month), `BASE_WITHOUT_TAX = True`, `BOLLO_FIX_PER_YEAR = True` | | | |
 | next | this commit | as `290312d`, and `BLENDED_RATES = ["SOS"]` (97 payouts, 95 annual rows), `REMITTANCE_SHIFTED = ["DE", "IT", "CH"]` (200 payouts) | | | |
+| hedge, if the 10th was read as 0 | this commit (branch `t7-next`) | as `d320801`, and `REMITTANCE_MONTH_END = ["CH"]` (CH the last day of the next month), `REMITTANCE` IT 15 (the 16th): 592 payout rows change in the remittance only, annual unchanged | | | |
