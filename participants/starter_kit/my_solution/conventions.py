@@ -79,7 +79,7 @@ BLENDED_RATES = []  # tax types whose rate is averaged by days over the life of 
 BASE_WITHOUT_TAX = True  # a payout without withholding reports the base as calculated: what Neuron calculated and,
 # for the holders on the reporting procedure (AD_TAXST M), reported; False reports 0 (assumption: the payout table
 # scored 1 of 20 with it and 0 of 40 with 0, on samples made mostly of payouts with tax)
-REMITTANCE = {"DE": ("month", 10), "IT": ("month", 16), "CH": ("month_end", 0)}  # country -> (anchor, days): the
+REMITTANCE = {"DE": ("month", 10), "IT": ("month_end", 0), "CH": ("day", 30)}  # country -> (anchor, days): the
 # day Neuron paid the taxes of a payout is the anchor plus the days. "month": the last day of the month of the payout
 # day (so 10 = the 10th of the month after: DE, section 44 EStG and the example 2006-07-17 -> 2006-08-10; 16 = the
 # 16th, the F24 of Italy; 30 = the law's 30 days after the month for CH, art. 16 VStG). "month_end": the last day of
@@ -97,8 +97,9 @@ REMITTANCE_CALENDARS = {"DE": {"country": "DE", "years": range(1994, 2100)},
                         "IT": {"country": "IT", "years": range(1994, 2100)}, "CH": CALENDAR}  # the tax offices; the
 # other variant is Neuron's own calendar CALENDAR for every country, as for the direct debits
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
-STAMP_DUTY_REMITTED = True  # a payout with stamp duty alone has a remittance day; False: None, as the PDF says
-# "None if nothing was withheld" if the stamp duty collected does not count as withheld (assumption)
+STAMP_DUTY_REMITTED = False  # a payout with stamp duty alone has no remittance day (None), as the PDF says "None if
+# nothing was withheld" when the stamp duty collected does not count as withheld; True: the day of Italy
+# (assumption, to test: 182 payouts)
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 CHURCH_REDUCES_KST = True  # DE: the KIS booking reduces the KST as above (law, from 2009); False: base x KST and the

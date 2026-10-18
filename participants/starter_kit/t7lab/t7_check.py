@@ -10,7 +10,8 @@ It runs like the evaluator: t0 to t4 and then the two t7 functions in one proces
 Then it checks:
 
 - the two examples of the task PDF, to the cent and to the day;
-- the format of every row: a country, four amounts to the cent, a date or None, None exactly when no tax is due;
+- the format of every row: a country, four amounts to the cent, a date or None, None exactly when nothing was
+  remitted (the stamp duty alone counts with `conventions.STAMP_DUTY_REMITTED`);
 - that every tax booking of NRTAXB gets an amount: nothing dropped or zeroed silently;
 - that the labels agree with the bases: a tax booked exactly where the calculated base says it was due
   (`due_against_booked`, with no contradiction).
@@ -30,7 +31,7 @@ from decimal import Decimal
 import polars as pl
 
 import submission
-from conventions import TAXES
+from conventions import STAMP_DUTY_REMITTED, TAXES
 from legacy import table
 from neuron.load import LEGACY
 from neuron.targets import TARGETS, scoring
@@ -87,8 +88,9 @@ def is_amount(value) -> bool:
 
 def payout_row_ok(value) -> bool:
     country, *amounts, remittance = value
-    no_tax = not any(amounts[1:])
-    return (isinstance(country, str) and all(map(is_amount, amounts)) and (remittance is None) == no_tax
+    remitted = amounts[1:] if STAMP_DUTY_REMITTED else amounts[1:3]  # the withholding and surcharges, the stamp duty
+    nothing_remitted = not any(remitted)
+    return (isinstance(country, str) and all(map(is_amount, amounts)) and (remittance is None) == nothing_remitted
             and (remittance is None or isinstance(remittance, dt.date)))
 
 
@@ -171,7 +173,7 @@ def result_checks(results: dict, debug: bool) -> list[bool]:
     payout, annual = results["t7_tax_payout"], results["t7_tax_annual"]
     if payout is None or annual is None:
         return [False]
-    oks = [failures("payout rows: country, 4 amounts to the cent, a date or None (None exactly without tax)",
+    oks = [failures("payout rows: country, 4 amounts to the cent, a date or None (None exactly when nothing remitted)",
                     sum(not payout_row_ok(value) for value in payout.values()), debug),
            failures("annual rows: 7 amounts to the cent, at least one not 0",
                     sum(not (all(map(is_amount, value)) and any(value)) for value in annual.values()), debug)]

@@ -22,7 +22,7 @@ NEURON_CALENDAR = dict(CALENDAR, years=list(CALENDAR["years"]))  # Neuron's own 
 VARIANTS = {  # name -> {convention: value} to flip
     "base 0 without withholding": {"BASE_WITHOUT_TAX": False},
     "Bollo fix rounded once on the total": {"BOLLO_FIX_PER_YEAR": False},
-    "no remittance for stamp duty alone": {"STAMP_DUTY_REMITTED": False},
+    "a remittance day for stamp duty alone": {"STAMP_DUTY_REMITTED": True},
     "remittance on the day as it falls, weekend or not": {"REMITTANCE_SHIFTED": []},
     "remittance on a business day of Neuron, not of the tax office": {
         "REMITTANCE_CALENDARS": dict.fromkeys(["DE", "IT", "CH"], NEURON_CALENDAR)},
