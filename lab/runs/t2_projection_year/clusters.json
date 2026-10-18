@@ -1,0 +1,12 @@
+{
+ "task": "t2_projection_year",
+ "rows": 79040,
+ "values": {
+  "value": {
+   "relation": null,
+   "note": "no clusterable relation",
+   "approximate": null,
+   "identities": []
+  }
+ }
+}

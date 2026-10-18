@@ -1,0 +1,58 @@
+{
+ "task": "t4_annual_statement",
+ "about": "Rule cards of t4: each card switches one rule off in a scratch copy of the submission (lab ablate).",
+ "cards": [
+  {
+   "id": "system-change",
+   "rule": "Before the system change of 2007-08-11 COBOL cut cents off and charged management fees by days / 360",
+   "off": "every charge computed like Neuron NG",
+   "edits": [
+    {"file": "neuron/eras.py", "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)", "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"}
+   ],
+   "where": "year",
+   "where_label": "statement year"
+  },
+  {
+   "id": "entry-charge-trade-year",
+   "rule": "The entry charge counts in the year of the trade date of the premium",
+   "off": "in the year the money was received",
+   "edits": [
+    {"file": "funds/replay.py", "old": "self.record(\"entry\", trade_day, entry_charge)", "new": "self.record(\"entry\", received, entry_charge)"}
+   ],
+   "where": "year",
+   "where_label": "statement year"
+  },
+  {
+   "id": "risk-cap",
+   "rule": "The monthly risk charge is at most the value left in the policy",
+   "off": "the full risk charge, even above the value",
+   "edits": [
+    {"file": "funds/charges.py",
+     "old": "return min(risk_charge(self.insured, tariff, value, insured_age, era_rounding(day_)), max(value, 0))",
+     "new": "return risk_charge(self.insured, tariff, value, insured_age, era_rounding(day_))"}
+   ],
+   "where": "year",
+   "where_label": "statement year"
+  },
+  {
+   "id": "entry-agreements",
+   "rule": "An individual agreement (NRAGRE) replaces the entry charge rate of the broker tier",
+   "off": "the rate of the broker tier for every policy",
+   "edits": [
+    {"file": "funds/replay.py", "old": "entry_rate = self.rules.agreed_rate(\"ENT\", received, tier_rate)", "new": "entry_rate = tier_rate"}
+   ],
+   "where": "year",
+   "where_label": "statement year"
+  },
+  {
+   "id": "amc-agreements",
+   "rule": "An individual agreement (NRAGRE) replaces the management charge rate of the tariff",
+   "off": "the rate of the tariff for every policy",
+   "edits": [
+    {"file": "funds/charges.py", "old": "self.agreed_rate(\"AMC\", day_, tariff[POT_RATE[key[1]]])", "new": "tariff[POT_RATE[key[1]]]"}
+   ],
+   "where": "year",
+   "where_label": "statement year"
+  }
+ ]
+}

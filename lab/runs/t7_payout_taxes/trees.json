@@ -1,0 +1,3643 @@
+{
+ "task": "t7_payout_taxes",
+ "values": {
+  "KST": {
+   "rows": 2493,
+   "screened": [
+    "AD_REGIO@EV_EFFDT",
+    "EV_PCTG",
+    "AD_REGIO",
+    "AD_CNTRY@EV_EFFDT",
+    "PH_FREQ",
+    "RK_TARKEY[5]",
+    "RK_TARKEY[3]",
+    "RK_TARKEY[7]",
+    "EC_RATE@EV_EFFDT",
+    "PS_CNTRY"
+   ],
+   "best": {
+    "errors": 73,
+    "leaves": 7
+   },
+   "conflicts": [
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "BY",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "M"
+     },
+     "clusters": {
+      "no": 18,
+      "yes": 6
+     },
+     "example": [
+      "BL10001241",
+      273
+     ]
+    },
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "BW",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "M"
+     },
+     "clusters": {
+      "no": 12,
+      "yes": 4
+     },
+     "example": [
+      "BL10000992",
+      76
+     ]
+    },
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "NW",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "M"
+     },
+     "clusters": {
+      "no": 10,
+      "yes": 3
+     },
+     "example": [
+      "BL10002508",
+      159
+     ]
+    },
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "BY",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "E"
+     },
+     "clusters": {
+      "no": 6,
+      "yes": 5
+     },
+     "example": [
+      "BL10000306",
+      291
+     ]
+    },
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "HE",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "M"
+     },
+     "clusters": {
+      "no": 8,
+      "yes": 2
+     },
+     "example": [
+      "BL10002604",
+      258
+     ]
+    }
+   ],
+   "minimal_sets": [
+    {
+     "features": [
+      "AD_REGIO@EV_EFFDT",
+      "EV_PCTG",
+      "PH_FREQ"
+     ],
+     "errors": 73,
+     "leaves": 7,
+     "optimal_trees": 2,
+     "vectors": 416,
+     "conflicting_vectors": 24,
+     "tree": {
+      "split": [
+       "AD_REGIO@EV_EFFDT",
+       "HE"
+      ],
+      "yes": {
+       "split": [
+        "EV_PCTG",
+        "1.000000"
+       ],
+       "yes": {
+        "split": [
+         "PH_FREQ",
+         "M"
+        ],
+        "yes": {
+         "leaf": "no",
+         "rows": 10,
+         "errors": 2
+        },
+        "no": {
+         "leaf": "yes",
+         "rows": 14,
+         "errors": 3
+        }
+       },
+       "no": {
+        "split": [
+         "EV_PCTG",
+         "0.110000"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 2,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 23,
+         "errors": 2
+        }
+       }
+      },
+      "no": {
+       "split": [
+        "AD_REGIO@EV_EFFDT",
+        "BY"
+       ],
+       "yes": {
+        "split": [
+         "PH_FREQ",
+         "E"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 21,
+         "errors": 8
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 84,
+         "errors": 23
+        }
+       },
+       "no": {
+        "leaf": "no",
+        "rows": 2339,
+        "errors": 35
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "label": "no",
+       "rows": 10,
+       "errors": 2
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "label": "yes",
+       "rows": 14,
+       "errors": 3
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "label": "yes",
+       "rows": 2,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "label": "no",
+       "rows": 23,
+       "errors": 2
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ]
+       ],
+       "label": "yes",
+       "rows": 21,
+       "errors": 8
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ]
+       ],
+       "label": "no",
+       "rows": 84,
+       "errors": 23
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "BY"
+        ]
+       ],
+       "label": "no",
+       "rows": 2339,
+       "errors": 35
+      }
+     ],
+     "equivalents": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "AD_REGIO@EV_EFFDT",
+     "EV_PCTG",
+     "AD_REGIO",
+     "AD_CNTRY@EV_EFFDT",
+     "PH_FREQ",
+     "RK_TARKEY[5]"
+    ],
+    "errors": 73,
+    "leaves": 7,
+    "optimal_trees": 2
+   },
+   "cart": {
+    "features": [
+     "AD_CNTRY@EV_EFFDT",
+     "EV_PCTG",
+     "PH_FREQ",
+     "RK_TARKEY[3]"
+    ],
+    "errors": 75,
+    "leaves": 5,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "DE"
+       ],
+       [
+        "PH_FREQ",
+        "=",
+        "E"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "=",
+        "U"
+       ]
+      ],
+      "label": "no",
+      "rows": 13
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "DE"
+       ],
+       [
+        "PH_FREQ",
+        "=",
+        "E"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "!=",
+        "U"
+       ]
+      ],
+      "label": "yes",
+      "rows": 43
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "DE"
+       ],
+       [
+        "PH_FREQ",
+        "!=",
+        "E"
+       ],
+       [
+        "EV_PCTG",
+        "=",
+        "0.110000"
+       ]
+      ],
+      "label": "yes",
+      "rows": 10
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "DE"
+       ],
+       [
+        "PH_FREQ",
+        "!=",
+        "E"
+       ],
+       [
+        "EV_PCTG",
+        "!=",
+        "0.110000"
+       ]
+      ],
+      "label": "no",
+      "rows": 221
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "DE"
+       ]
+      ],
+      "label": "no",
+      "rows": 2206
+     }
+    ]
+   }
+  },
+  "SOL": {
+   "rows": 2493,
+   "screened": [
+    "AD_REGIO@EV_EFFDT",
+    "EV_PCTG",
+    "AD_REGIO",
+    "AD_CNTRY@EV_EFFDT",
+    "PH_FREQ",
+    "RK_TARKEY[5]",
+    "RK_TARKEY[3]",
+    "RK_TARKEY[7]",
+    "PS_CNTRY",
+    "AD_CNTRY"
+   ],
+   "best": {
+    "errors": 73,
+    "leaves": 7
+   },
+   "conflicts": [
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "BY",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "M"
+     },
+     "clusters": {
+      "no": 18,
+      "yes": 6
+     },
+     "example": [
+      "BL10001241",
+      273
+     ]
+    },
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "BW",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "M"
+     },
+     "clusters": {
+      "no": 12,
+      "yes": 4
+     },
+     "example": [
+      "BL10000992",
+      76
+     ]
+    },
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "NW",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "M"
+     },
+     "clusters": {
+      "no": 10,
+      "yes": 3
+     },
+     "example": [
+      "BL10002508",
+      159
+     ]
+    },
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "BY",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "E"
+     },
+     "clusters": {
+      "no": 6,
+      "yes": 5
+     },
+     "example": [
+      "BL10000306",
+      291
+     ]
+    },
+    {
+     "vector": {
+      "AD_REGIO@EV_EFFDT": "HE",
+      "EV_PCTG": "1.000000",
+      "PH_FREQ": "M"
+     },
+     "clusters": {
+      "no": 8,
+      "yes": 2
+     },
+     "example": [
+      "BL10002604",
+      258
+     ]
+    }
+   ],
+   "minimal_sets": [
+    {
+     "features": [
+      "AD_REGIO@EV_EFFDT",
+      "EV_PCTG",
+      "PH_FREQ"
+     ],
+     "errors": 73,
+     "leaves": 7,
+     "optimal_trees": 2,
+     "vectors": 416,
+     "conflicting_vectors": 24,
+     "tree": {
+      "split": [
+       "AD_REGIO@EV_EFFDT",
+       "HE"
+      ],
+      "yes": {
+       "split": [
+        "EV_PCTG",
+        "1.000000"
+       ],
+       "yes": {
+        "split": [
+         "PH_FREQ",
+         "M"
+        ],
+        "yes": {
+         "leaf": "no",
+         "rows": 10,
+         "errors": 2
+        },
+        "no": {
+         "leaf": "yes",
+         "rows": 14,
+         "errors": 3
+        }
+       },
+       "no": {
+        "split": [
+         "EV_PCTG",
+         "0.110000"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 2,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 23,
+         "errors": 2
+        }
+       }
+      },
+      "no": {
+       "split": [
+        "AD_REGIO@EV_EFFDT",
+        "BY"
+       ],
+       "yes": {
+        "split": [
+         "PH_FREQ",
+         "E"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 21,
+         "errors": 8
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 84,
+         "errors": 23
+        }
+       },
+       "no": {
+        "leaf": "no",
+        "rows": 2339,
+        "errors": 35
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "M"
+        ]
+       ],
+       "label": "no",
+       "rows": 10,
+       "errors": 2
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "M"
+        ]
+       ],
+       "label": "yes",
+       "rows": 14,
+       "errors": 3
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "label": "yes",
+       "rows": 2,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "label": "no",
+       "rows": 23,
+       "errors": 2
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "=",
+         "E"
+        ]
+       ],
+       "label": "yes",
+       "rows": 21,
+       "errors": 8
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "BY"
+        ],
+        [
+         "PH_FREQ",
+         "!=",
+         "E"
+        ]
+       ],
+       "label": "no",
+       "rows": 84,
+       "errors": 23
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "HE"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "BY"
+        ]
+       ],
+       "label": "no",
+       "rows": 2339,
+       "errors": 35
+      }
+     ],
+     "equivalents": {
+      "AD_REGIO@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "PH_FREQ": [
+       "PH_FREQ@EV_EFFDT"
+      ]
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "AD_REGIO@EV_EFFDT",
+     "EV_PCTG",
+     "AD_REGIO",
+     "AD_CNTRY@EV_EFFDT",
+     "PH_FREQ",
+     "RK_TARKEY[5]"
+    ],
+    "errors": 73,
+    "leaves": 7,
+    "optimal_trees": 2
+   },
+   "cart": {
+    "features": [
+     "AD_CNTRY@EV_EFFDT",
+     "EV_PCTG",
+     "PH_FREQ",
+     "RK_TARKEY[3]"
+    ],
+    "errors": 75,
+    "leaves": 5,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "DE"
+       ],
+       [
+        "PH_FREQ",
+        "=",
+        "E"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "=",
+        "U"
+       ]
+      ],
+      "label": "no",
+      "rows": 13
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "DE"
+       ],
+       [
+        "PH_FREQ",
+        "=",
+        "E"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "!=",
+        "U"
+       ]
+      ],
+      "label": "yes",
+      "rows": 43
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "DE"
+       ],
+       [
+        "PH_FREQ",
+        "!=",
+        "E"
+       ],
+       [
+        "EV_PCTG",
+        "=",
+        "0.110000"
+       ]
+      ],
+      "label": "yes",
+      "rows": 10
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "DE"
+       ],
+       [
+        "PH_FREQ",
+        "!=",
+        "E"
+       ],
+       [
+        "EV_PCTG",
+        "!=",
+        "0.110000"
+       ]
+      ],
+      "label": "no",
+      "rows": 221
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "DE"
+       ]
+      ],
+      "label": "no",
+      "rows": 2206
+     }
+    ]
+   }
+  },
+  "KIS": {
+   "rows": 2493,
+   "screened": [
+    "AD_CHURCH@EV_EFFDT",
+    "EV_PCTG",
+    "AD_CHURCH",
+    "PS_CNTRY",
+    "RK_LOAD",
+    "PS_LANG@EV_EFFDT",
+    "PS_LANG",
+    "PH_FREQ",
+    "PS_CNTRY@EV_EFFDT",
+    "AD_REGIO"
+   ],
+   "best": {
+    "errors": 23,
+    "leaves": 7
+   },
+   "conflicts": [
+    {
+     "vector": {
+      "EV_PCTG": "1.000000",
+      "AD_CHURCH": "J",
+      "AD_REGIO": "BY"
+     },
+     "clusters": {
+      "no": 14,
+      "yes": 4
+     },
+     "example": [
+      "BL10000247",
+      37
+     ]
+    },
+    {
+     "vector": {
+      "EV_PCTG": "1.000000",
+      "AD_CHURCH": "J",
+      "AD_REGIO": "BW"
+     },
+     "clusters": {
+      "no": 10,
+      "yes": 5
+     },
+     "example": [
+      "BL10000228",
+      175
+     ]
+    },
+    {
+     "vector": {
+      "EV_PCTG": "1.000000",
+      "AD_CHURCH": "J",
+      "AD_REGIO": "NW"
+     },
+     "clusters": {
+      "no": 10,
+      "yes": 1
+     },
+     "example": [
+      "BL10004928",
+      195
+     ]
+    },
+    {
+     "vector": {
+      "EV_PCTG": "1.000000",
+      "AD_CHURCH": "J",
+      "AD_REGIO": "HE"
+     },
+     "clusters": {
+      "no": 6,
+      "yes": 3
+     },
+     "example": [
+      "BL10001204",
+      10
+     ]
+    },
+    {
+     "vector": {
+      "EV_PCTG": "1.000000",
+      "AD_CHURCH": "J",
+      "AD_REGIO": "BE"
+     },
+     "clusters": {
+      "no": 5,
+      "yes": 1
+     },
+     "example": [
+      "BL10000626",
+      234
+     ]
+    }
+   ],
+   "minimal_sets": [
+    {
+     "features": [
+      "EV_PCTG",
+      "AD_CHURCH",
+      "AD_REGIO"
+     ],
+     "errors": 23,
+     "leaves": 7,
+     "optimal_trees": 4,
+     "vectors": 210,
+     "conflicting_vectors": 12,
+     "tree": {
+      "split": [
+       "AD_CHURCH",
+       "J"
+      ],
+      "yes": {
+       "split": [
+        "EV_PCTG",
+        "0.110000"
+       ],
+       "yes": {
+        "split": [
+         "AD_REGIO",
+         "BW"
+        ],
+        "yes": {
+         "leaf": "no",
+         "rows": 2,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "yes",
+         "rows": 3,
+         "errors": 0
+        }
+       },
+       "no": {
+        "split": [
+         "EV_PCTG",
+         "0.260000"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 2,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 119,
+         "errors": 22
+        }
+       }
+      },
+      "no": {
+       "split": [
+        "EV_PCTG",
+        "0.300000"
+       ],
+       "yes": {
+        "split": [
+         "AD_REGIO",
+         "PIE"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 1,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 68,
+         "errors": 0
+        }
+       },
+       "no": {
+        "leaf": "no",
+        "rows": 2298,
+        "errors": 1
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_CHURCH",
+         "=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "BW"
+        ]
+       ],
+       "label": "no",
+       "rows": 2,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CHURCH",
+         "=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "BW"
+        ]
+       ],
+       "label": "yes",
+       "rows": 3,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CHURCH",
+         "=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.260000"
+        ]
+       ],
+       "label": "yes",
+       "rows": 2,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CHURCH",
+         "=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.260000"
+        ]
+       ],
+       "label": "no",
+       "rows": 119,
+       "errors": 22
+      },
+      {
+       "path": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "PIE"
+        ]
+       ],
+       "label": "yes",
+       "rows": 1,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "label": "no",
+       "rows": 68,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CHURCH",
+         "!=",
+         "J"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.300000"
+        ]
+       ],
+       "label": "no",
+       "rows": 2298,
+       "errors": 1
+      }
+     ],
+     "equivalents": {
+      "EV_PCTG": [],
+      "AD_CHURCH": [],
+      "AD_REGIO": []
+     }
+    },
+    {
+     "features": [
+      "EV_PCTG",
+      "PS_LANG@EV_EFFDT",
+      "AD_REGIO"
+     ],
+     "errors": 23,
+     "leaves": 7,
+     "optimal_trees": 2,
+     "vectors": 435,
+     "conflicting_vectors": 15,
+     "tree": {
+      "split": [
+       "AD_REGIO",
+       "HE"
+      ],
+      "yes": {
+       "split": [
+        "EV_PCTG",
+        "1.000000"
+       ],
+       "yes": {
+        "split": [
+         "PS_LANG@EV_EFFDT",
+         "FR"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 3,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 20,
+         "errors": 0
+        }
+       },
+       "no": {
+        "split": [
+         "EV_PCTG",
+         "0.110000"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 2,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 25,
+         "errors": 0
+        }
+       }
+      },
+      "no": {
+       "split": [
+        "EV_PCTG",
+        "0.300000"
+       ],
+       "yes": {
+        "split": [
+         "AD_REGIO",
+         "PIE"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 1,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 66,
+         "errors": 0
+        }
+       },
+       "no": {
+        "leaf": "no",
+        "rows": 2376,
+        "errors": 23
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_LANG@EV_EFFDT",
+         "=",
+         "FR"
+        ]
+       ],
+       "label": "yes",
+       "rows": 3,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_LANG@EV_EFFDT",
+         "!=",
+         "FR"
+        ]
+       ],
+       "label": "no",
+       "rows": 20,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "label": "yes",
+       "rows": 2,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "label": "no",
+       "rows": 25,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "PIE"
+        ]
+       ],
+       "label": "yes",
+       "rows": 1,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "label": "no",
+       "rows": 66,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.300000"
+        ]
+       ],
+       "label": "no",
+       "rows": 2376,
+       "errors": 23
+      }
+     ],
+     "equivalents": {
+      "EV_PCTG": [],
+      "PS_LANG@EV_EFFDT": [],
+      "AD_REGIO": []
+     }
+    },
+    {
+     "features": [
+      "EV_PCTG",
+      "PS_LANG",
+      "AD_REGIO"
+     ],
+     "errors": 23,
+     "leaves": 7,
+     "optimal_trees": 2,
+     "vectors": 435,
+     "conflicting_vectors": 16,
+     "tree": {
+      "split": [
+       "AD_REGIO",
+       "HE"
+      ],
+      "yes": {
+       "split": [
+        "EV_PCTG",
+        "1.000000"
+       ],
+       "yes": {
+        "split": [
+         "PS_LANG",
+         "FR"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 3,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 20,
+         "errors": 0
+        }
+       },
+       "no": {
+        "split": [
+         "EV_PCTG",
+         "0.110000"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 2,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 25,
+         "errors": 0
+        }
+       }
+      },
+      "no": {
+       "split": [
+        "EV_PCTG",
+        "0.300000"
+       ],
+       "yes": {
+        "split": [
+         "AD_REGIO",
+         "PIE"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 1,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 66,
+         "errors": 0
+        }
+       },
+       "no": {
+        "leaf": "no",
+        "rows": 2376,
+        "errors": 23
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_LANG",
+         "=",
+         "FR"
+        ]
+       ],
+       "label": "yes",
+       "rows": 3,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "PS_LANG",
+         "!=",
+         "FR"
+        ]
+       ],
+       "label": "no",
+       "rows": 20,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.110000"
+        ]
+       ],
+       "label": "yes",
+       "rows": 2,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.110000"
+        ]
+       ],
+       "label": "no",
+       "rows": 25,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "PIE"
+        ]
+       ],
+       "label": "yes",
+       "rows": 1,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.300000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "label": "no",
+       "rows": 66,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_REGIO",
+         "!=",
+         "HE"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.300000"
+        ]
+       ],
+       "label": "no",
+       "rows": 2376,
+       "errors": 23
+      }
+     ],
+     "equivalents": {
+      "EV_PCTG": [],
+      "PS_LANG": [],
+      "AD_REGIO": []
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "AD_CHURCH@EV_EFFDT",
+     "EV_PCTG",
+     "AD_CHURCH",
+     "PS_CNTRY",
+     "RK_LOAD",
+     "PS_LANG@EV_EFFDT"
+    ],
+    "errors": 24,
+    "leaves": 5,
+    "optimal_trees": 6
+   },
+   "cart": {
+    "features": [
+     "AD_CHURCH@EV_EFFDT",
+     "EV_PCTG",
+     "PH_FREQ",
+     "PS_CNTRY"
+    ],
+    "errors": 23,
+    "leaves": 5,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "AD_CHURCH@EV_EFFDT",
+        "=",
+        "N"
+       ]
+      ],
+      "label": "no",
+      "rows": 2371
+     },
+     {
+      "path": [
+       [
+        "AD_CHURCH@EV_EFFDT",
+        "!=",
+        "N"
+       ],
+       [
+        "PS_CNTRY",
+        "=",
+        "IT"
+       ],
+       [
+        "PH_FREQ",
+        "=",
+        "M"
+       ]
+      ],
+      "label": "no",
+      "rows": 2
+     },
+     {
+      "path": [
+       [
+        "AD_CHURCH@EV_EFFDT",
+        "!=",
+        "N"
+       ],
+       [
+        "PS_CNTRY",
+        "=",
+        "IT"
+       ],
+       [
+        "PH_FREQ",
+        "!=",
+        "M"
+       ]
+      ],
+      "label": "yes",
+      "rows": 6
+     },
+     {
+      "path": [
+       [
+        "AD_CHURCH@EV_EFFDT",
+        "!=",
+        "N"
+       ],
+       [
+        "PS_CNTRY",
+        "!=",
+        "IT"
+       ],
+       [
+        "EV_PCTG",
+        "=",
+        "0.260000"
+       ]
+      ],
+      "label": "yes",
+      "rows": 2
+     },
+     {
+      "path": [
+       [
+        "AD_CHURCH@EV_EFFDT",
+        "!=",
+        "N"
+       ],
+       [
+        "PS_CNTRY",
+        "!=",
+        "IT"
+       ],
+       [
+        "EV_PCTG",
+        "!=",
+        "0.260000"
+       ]
+      ],
+      "label": "no",
+      "rows": 112
+     }
+    ]
+   }
+  },
+  "VST": {
+   "rows": 2493,
+   "screened": [
+    "AD_TAXST@EV_EFFDT",
+    "EV_PCTG",
+    "PH_STATE@EV_EFFDT",
+    "EV_EVTTP",
+    "PH_VRSNR@EV_EFFDT",
+    "RK_TARKEY[5]",
+    "RK_TARKEY[3]",
+    "PH_VRSNR",
+    "PH_STATE",
+    "PH_PRDCD"
+   ],
+   "best": {
+    "errors": 98,
+    "leaves": 5
+   },
+   "conflicts": [
+    {
+     "vector": {
+      "AD_TAXST@EV_EFFDT": "E",
+      "EV_PCTG": "1.000000",
+      "RK_TARKEY[3]": "W"
+     },
+     "clusters": {
+      "yes": 63,
+      "no": 6
+     },
+     "example": [
+      "BL10000328",
+      32
+     ]
+    },
+    {
+     "vector": {
+      "AD_TAXST@EV_EFFDT": "E",
+      "EV_PCTG": "1.000000",
+      "RK_TARKEY[3]": "M"
+     },
+     "clusters": {
+      "yes": 57,
+      "no": 4
+     },
+     "example": [
+      "BL10000554",
+      7
+     ]
+    },
+    {
+     "vector": {
+      "AD_TAXST@EV_EFFDT": "E",
+      "EV_PCTG": "1.000000",
+      "RK_TARKEY[3]": "U"
+     },
+     "clusters": {
+      "yes": 35,
+      "no": 17
+     },
+     "example": [
+      "BL10000393",
+      64
+     ]
+    },
+    {
+     "vector": {
+      "AD_TAXST@EV_EFFDT": "E",
+      "EV_PCTG": "0.120000",
+      "RK_TARKEY[3]": "M"
+     },
+     "clusters": {
+      "yes": 4,
+      "no": 3
+     },
+     "example": [
+      "BL10002724",
+      98
+     ]
+    },
+    {
+     "vector": {
+      "AD_TAXST@EV_EFFDT": "E",
+      "EV_PCTG": "0.140000",
+      "RK_TARKEY[3]": "W"
+     },
+     "clusters": {
+      "yes": 5,
+      "no": 2
+     },
+     "example": [
+      "BL10000685",
+      109
+     ]
+    }
+   ],
+   "minimal_sets": [
+    {
+     "features": [
+      "AD_TAXST@EV_EFFDT",
+      "EV_PCTG",
+      "RK_TARKEY[3]"
+     ],
+     "errors": 98,
+     "leaves": 5,
+     "optimal_trees": 2,
+     "vectors": 129,
+     "conflicting_vectors": 37,
+     "tree": {
+      "split": [
+       "AD_TAXST@EV_EFFDT",
+       "E"
+      ],
+      "yes": {
+       "split": [
+        "RK_TARKEY[3]",
+        "W"
+       ],
+       "yes": {
+        "split": [
+         "EV_PCTG",
+         "0.100000"
+        ],
+        "yes": {
+         "leaf": "no",
+         "rows": 4,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "yes",
+         "rows": 152,
+         "errors": 32
+        }
+       },
+       "no": {
+        "split": [
+         "EV_PCTG",
+         "1.000000"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 113,
+         "errors": 21
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 117,
+         "errors": 45
+        }
+       }
+      },
+      "no": {
+       "leaf": "no",
+       "rows": 2107,
+       "errors": 0
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "0.100000"
+        ]
+       ],
+       "label": "no",
+       "rows": 4,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "0.100000"
+        ]
+       ],
+       "label": "yes",
+       "rows": 152,
+       "errors": 32
+      },
+      {
+       "path": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ]
+       ],
+       "label": "yes",
+       "rows": 113,
+       "errors": 21
+      },
+      {
+       "path": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "=",
+         "E"
+        ],
+        [
+         "RK_TARKEY[3]",
+         "!=",
+         "W"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "label": "no",
+       "rows": 117,
+       "errors": 45
+      },
+      {
+       "path": [
+        [
+         "AD_TAXST@EV_EFFDT",
+         "!=",
+         "E"
+        ]
+       ],
+       "label": "no",
+       "rows": 2107,
+       "errors": 0
+      }
+     ],
+     "equivalents": {
+      "AD_TAXST@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "RK_TARKEY[3]": []
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "AD_TAXST@EV_EFFDT",
+     "EV_PCTG",
+     "PH_STATE@EV_EFFDT",
+     "EV_EVTTP",
+     "PH_VRSNR@EV_EFFDT",
+     "RK_TARKEY[5]"
+    ],
+    "errors": 106,
+    "leaves": 5,
+    "optimal_trees": 12
+   },
+   "cart": {
+    "features": [
+     "AD_TAXST@EV_EFFDT",
+     "EV_PCTG",
+     "RK_TARKEY[3]"
+    ],
+    "errors": 103,
+    "leaves": 5,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "AD_TAXST@EV_EFFDT",
+        "=",
+        "M"
+       ]
+      ],
+      "label": "no",
+      "rows": 2107
+     },
+     {
+      "path": [
+       [
+        "AD_TAXST@EV_EFFDT",
+        "!=",
+        "M"
+       ],
+       [
+        "EV_PCTG",
+        "=",
+        "1.000000"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "=",
+        "U"
+       ]
+      ],
+      "label": "yes",
+      "rows": 52
+     },
+     {
+      "path": [
+       [
+        "AD_TAXST@EV_EFFDT",
+        "!=",
+        "M"
+       ],
+       [
+        "EV_PCTG",
+        "=",
+        "1.000000"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "!=",
+        "U"
+       ]
+      ],
+      "label": "yes",
+      "rows": 130
+     },
+     {
+      "path": [
+       [
+        "AD_TAXST@EV_EFFDT",
+        "!=",
+        "M"
+       ],
+       [
+        "EV_PCTG",
+        "!=",
+        "1.000000"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "=",
+        "U"
+       ]
+      ],
+      "label": "no",
+      "rows": 60
+     },
+     {
+      "path": [
+       [
+        "AD_TAXST@EV_EFFDT",
+        "!=",
+        "M"
+       ],
+       [
+        "EV_PCTG",
+        "!=",
+        "1.000000"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "!=",
+        "U"
+       ]
+      ],
+      "label": "yes",
+      "rows": 144
+     }
+    ]
+   }
+  },
+  "SOS": {
+   "rows": 2493,
+   "screened": [
+    "AD_CNTRY@EV_EFFDT",
+    "RK_TARKEY[5]",
+    "AD_REGIO@EV_EFFDT",
+    "EV_PCTG",
+    "PH_MKTCD",
+    "RK_TARKEY[3]",
+    "PH_PRDCD",
+    "PH_STATE@EV_EFFDT",
+    "PH_STATE",
+    "PH_CCY"
+   ],
+   "best": {
+    "errors": 122,
+    "leaves": 7
+   },
+   "conflicts": [
+    {
+     "vector": {
+      "RK_TARKEY[5]": "2",
+      "AD_REGIO@EV_EFFDT": "LOM",
+      "PH_MKTCD": null
+     },
+     "clusters": {
+      "no": 23,
+      "yes": 17
+     },
+     "example": [
+      "BL10000076",
+      43
+     ]
+    },
+    {
+     "vector": {
+      "RK_TARKEY[5]": "1",
+      "AD_REGIO@EV_EFFDT": "LOM",
+      "PH_MKTCD": null
+     },
+     "clusters": {
+      "no": 21,
+      "yes": 17
+     },
+     "example": [
+      "BL10000795",
+      225
+     ]
+    },
+    {
+     "vector": {
+      "RK_TARKEY[5]": "1",
+      "AD_REGIO@EV_EFFDT": "LOM",
+      "PH_MKTCD": "BANK21"
+     },
+     "clusters": {
+      "yes": 19,
+      "no": 3
+     },
+     "example": [
+      "BL10001536",
+      536
+     ]
+    },
+    {
+     "vector": {
+      "RK_TARKEY[5]": "2",
+      "AD_REGIO@EV_EFFDT": "LOM",
+      "PH_MKTCD": "BANK21"
+     },
+     "clusters": {
+      "no": 11,
+      "yes": 8
+     },
+     "example": [
+      "BL10000125",
+      171
+     ]
+    },
+    {
+     "vector": {
+      "RK_TARKEY[5]": "2",
+      "AD_REGIO@EV_EFFDT": "LOM",
+      "PH_MKTCD": "WEB14"
+     },
+     "clusters": {
+      "no": 12,
+      "yes": 5
+     },
+     "example": [
+      "BL10001720",
+      525
+     ]
+    }
+   ],
+   "minimal_sets": [
+    {
+     "features": [
+      "RK_TARKEY[5]",
+      "AD_REGIO@EV_EFFDT",
+      "PH_MKTCD"
+     ],
+     "errors": 122,
+     "leaves": 7,
+     "optimal_trees": 4,
+     "vectors": 179,
+     "conflicting_vectors": 33,
+     "tree": {
+      "split": [
+       "PH_MKTCD",
+       "TV2017"
+      ],
+      "yes": {
+       "split": [
+        "AD_REGIO@EV_EFFDT",
+        "LAZ"
+       ],
+       "yes": {
+        "split": [
+         "RK_TARKEY[5]",
+         "1"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 6,
+         "errors": 1
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 2,
+         "errors": 0
+        }
+       },
+       "no": {
+        "split": [
+         "AD_REGIO@EV_EFFDT",
+         "PIE"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 14,
+         "errors": 4
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 387,
+         "errors": 10
+        }
+       }
+      },
+      "no": {
+       "split": [
+        "RK_TARKEY[5]",
+        "1"
+       ],
+       "yes": {
+        "split": [
+         "AD_REGIO@EV_EFFDT",
+         "LOM"
+        ],
+        "yes": {
+         "leaf": "yes",
+         "rows": 87,
+         "errors": 33
+        },
+        "no": {
+         "leaf": "no",
+         "rows": 582,
+         "errors": 10
+        }
+       },
+       "no": {
+        "leaf": "no",
+        "rows": 1415,
+        "errors": 64
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "LAZ"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "label": "yes",
+       "rows": 6,
+       "errors": 1
+      },
+      {
+       "path": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "LAZ"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "label": "no",
+       "rows": 2,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "LAZ"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "PIE"
+        ]
+       ],
+       "label": "yes",
+       "rows": 14,
+       "errors": 4
+      },
+      {
+       "path": [
+        [
+         "PH_MKTCD",
+         "=",
+         "TV2017"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "LAZ"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "PIE"
+        ]
+       ],
+       "label": "no",
+       "rows": 387,
+       "errors": 10
+      },
+      {
+       "path": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "=",
+         "LOM"
+        ]
+       ],
+       "label": "yes",
+       "rows": 87,
+       "errors": 33
+      },
+      {
+       "path": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ],
+        [
+         "AD_REGIO@EV_EFFDT",
+         "!=",
+         "LOM"
+        ]
+       ],
+       "label": "no",
+       "rows": 582,
+       "errors": 10
+      },
+      {
+       "path": [
+        [
+         "PH_MKTCD",
+         "!=",
+         "TV2017"
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "label": "no",
+       "rows": 1415,
+       "errors": 64
+      }
+     ],
+     "equivalents": {
+      "RK_TARKEY[5]": [],
+      "AD_REGIO@EV_EFFDT": [],
+      "PH_MKTCD": [
+       "PH_MKTCD@EV_EFFDT"
+      ]
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "AD_CNTRY@EV_EFFDT",
+     "RK_TARKEY[5]",
+     "AD_REGIO@EV_EFFDT",
+     "EV_PCTG",
+     "PH_MKTCD",
+     "RK_TARKEY[3]"
+    ],
+    "errors": 120,
+    "leaves": 7,
+    "optimal_trees": 2
+   },
+   "cart": {
+    "features": [
+     "AD_CNTRY@EV_EFFDT",
+     "EV_PCTG",
+     "PH_PRDCD",
+     "RK_TARKEY[3]"
+    ],
+    "errors": 127,
+    "leaves": 5,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "=",
+        "U"
+       ],
+       [
+        "EV_PCTG",
+        "=",
+        "0.150000"
+       ]
+      ],
+      "label": "yes",
+      "rows": 3
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "=",
+        "U"
+       ],
+       [
+        "EV_PCTG",
+        "!=",
+        "0.150000"
+       ]
+      ],
+      "label": "no",
+      "rows": 113
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "!=",
+        "U"
+       ],
+       [
+        "PH_PRDCD",
+        "=",
+        "FLKL"
+       ]
+      ],
+      "label": "no",
+      "rows": 133
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "RK_TARKEY[3]",
+        "!=",
+        "U"
+       ],
+       [
+        "PH_PRDCD",
+        "!=",
+        "FLKL"
+       ]
+      ],
+      "label": "yes",
+      "rows": 143
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "IT"
+       ]
+      ],
+      "label": "no",
+      "rows": 2101
+     }
+    ]
+   }
+  },
+  "BOL": {
+   "rows": 2493,
+   "screened": [
+    "AD_CNTRY@EV_EFFDT",
+    "EV_EVTTP",
+    "PH_STATE@EV_EFFDT",
+    "EV_PCTG",
+    "AD_REGIO@EV_EFFDT",
+    "PH_VRSNR@EV_EFFDT",
+    "AD_CNTRY",
+    "PH_STATE",
+    "AD_REGIO",
+    "PS_CNTRY"
+   ],
+   "best": {
+    "errors": 49,
+    "leaves": 4
+   },
+   "conflicts": [
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "IT",
+      "EV_EVTTP": "410",
+      "AD_REGIO": "LOM"
+     },
+     "clusters": {
+      "yes": 86,
+      "no": 33
+     },
+     "example": [
+      "BL10000051",
+      48
+     ]
+    },
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "IT",
+      "EV_EVTTP": "410",
+      "AD_REGIO": "PIE"
+     },
+     "clusters": {
+      "yes": 26,
+      "no": 8
+     },
+     "example": [
+      "BL10000455",
+      17
+     ]
+    },
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "IT",
+      "EV_EVTTP": "410",
+      "AD_REGIO": "LAZ"
+     },
+     "clusters": {
+      "yes": 10,
+      "no": 5
+     },
+     "example": [
+      "BL10002217",
+      173
+     ]
+    },
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "IT",
+      "EV_EVTTP": "410",
+      "AD_REGIO": "TI"
+     },
+     "clusters": {
+      "yes": 3,
+      "no": 2
+     },
+     "example": [
+      "BL10001378",
+      57
+     ]
+    }
+   ],
+   "minimal_sets": [
+    {
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "EV_EVTTP",
+      "AD_REGIO"
+     ],
+     "errors": 49,
+     "leaves": 4,
+     "optimal_trees": 6,
+     "vectors": 76,
+     "conflicting_vectors": 4,
+     "tree": {
+      "split": [
+       "AD_CNTRY@EV_EFFDT",
+       "IT"
+      ],
+      "yes": {
+       "split": [
+        "EV_EVTTP",
+        "400"
+       ],
+       "yes": {
+        "leaf": "no",
+        "rows": 210,
+        "errors": 0
+       },
+       "no": {
+        "split": [
+         "AD_REGIO",
+         "GR"
+        ],
+        "yes": {
+         "leaf": "no",
+         "rows": 1,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "yes",
+         "rows": 181,
+         "errors": 48
+        }
+       }
+      },
+      "no": {
+       "leaf": "no",
+       "rows": 2101,
+       "errors": 1
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "=",
+         "400"
+        ]
+       ],
+       "label": "no",
+       "rows": 210,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "!=",
+         "400"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "GR"
+        ]
+       ],
+       "label": "no",
+       "rows": 1,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_EVTTP",
+         "!=",
+         "400"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "GR"
+        ]
+       ],
+       "label": "yes",
+       "rows": 181,
+       "errors": 48
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ]
+       ],
+       "label": "no",
+       "rows": 2101,
+       "errors": 1
+      }
+     ],
+     "equivalents": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "EV_EVTTP": [],
+      "AD_REGIO": []
+     }
+    },
+    {
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "EV_PCTG",
+      "AD_REGIO"
+     ],
+     "errors": 49,
+     "leaves": 4,
+     "optimal_trees": 6,
+     "vectors": 259,
+     "conflicting_vectors": 4,
+     "tree": {
+      "split": [
+       "AD_CNTRY@EV_EFFDT",
+       "IT"
+      ],
+      "yes": {
+       "split": [
+        "EV_PCTG",
+        "1.000000"
+       ],
+       "yes": {
+        "split": [
+         "AD_REGIO",
+         "GR"
+        ],
+        "yes": {
+         "leaf": "no",
+         "rows": 1,
+         "errors": 0
+        },
+        "no": {
+         "leaf": "yes",
+         "rows": 181,
+         "errors": 48
+        }
+       },
+       "no": {
+        "leaf": "no",
+        "rows": 210,
+        "errors": 0
+       }
+      },
+      "no": {
+       "leaf": "no",
+       "rows": 2101,
+       "errors": 1
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "AD_REGIO",
+         "=",
+         "GR"
+        ]
+       ],
+       "label": "no",
+       "rows": 1,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "=",
+         "1.000000"
+        ],
+        [
+         "AD_REGIO",
+         "!=",
+         "GR"
+        ]
+       ],
+       "label": "yes",
+       "rows": 181,
+       "errors": 48
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "EV_PCTG",
+         "!=",
+         "1.000000"
+        ]
+       ],
+       "label": "no",
+       "rows": 210,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ]
+       ],
+       "label": "no",
+       "rows": 2101,
+       "errors": 1
+      }
+     ],
+     "equivalents": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "EV_PCTG": [],
+      "AD_REGIO": []
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "AD_CNTRY@EV_EFFDT",
+     "EV_EVTTP",
+     "PH_STATE@EV_EFFDT",
+     "EV_PCTG",
+     "AD_REGIO@EV_EFFDT",
+     "PH_VRSNR@EV_EFFDT"
+    ],
+    "errors": 50,
+    "leaves": 3,
+    "optimal_trees": 4
+   },
+   "cart": {
+    "features": [
+     "AD_CNTRY",
+     "AD_CNTRY@EV_EFFDT",
+     "AD_REGIO@EV_EFFDT",
+     "EV_PCTG",
+     "PS_CNTRY"
+    ],
+    "errors": 49,
+    "leaves": 6,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "EV_PCTG",
+        "=",
+        "1.000000"
+       ],
+       [
+        "PS_CNTRY",
+        "=",
+        "IT"
+       ]
+      ],
+      "label": "yes",
+      "rows": 153
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "EV_PCTG",
+        "=",
+        "1.000000"
+       ],
+       [
+        "PS_CNTRY",
+        "!=",
+        "IT"
+       ]
+      ],
+      "label": "yes",
+      "rows": 29
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "EV_PCTG",
+        "!=",
+        "1.000000"
+       ]
+      ],
+      "label": "no",
+      "rows": 210
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "IT"
+       ],
+       [
+        "AD_REGIO@EV_EFFDT",
+        "=",
+        "BE"
+       ],
+       [
+        "AD_CNTRY",
+        "=",
+        "IT"
+       ]
+      ],
+      "label": "yes",
+      "rows": 1
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "IT"
+       ],
+       [
+        "AD_REGIO@EV_EFFDT",
+        "=",
+        "BE"
+       ],
+       [
+        "AD_CNTRY",
+        "!=",
+        "IT"
+       ]
+      ],
+      "label": "no",
+      "rows": 19
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "IT"
+       ],
+       [
+        "AD_REGIO@EV_EFFDT",
+        "!=",
+        "BE"
+       ]
+      ],
+      "label": "no",
+      "rows": 2081
+     }
+    ]
+   }
+  },
+  "BOC": {
+   "rows": 2493,
+   "screened": [
+    "AD_CNTRY@EV_EFFDT",
+    "PH_MKTCD",
+    "AD_REGIO@EV_EFFDT",
+    "previous(SOS)",
+    "RK_TARKEY[5]",
+    "previous(VST)",
+    "AD_VRSNR@EV_EFFDT",
+    "EC_RATE@EV_EFFDT",
+    "AD_REGIO",
+    "AD_CNTRY"
+   ],
+   "best": {
+    "errors": 98,
+    "leaves": 5
+   },
+   "conflicts": [
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "CH",
+      "previous(SOS)": null,
+      "RK_TARKEY[5]": "2"
+     },
+     "clusters": {
+      "no": 510,
+      "yes": 3
+     },
+     "example": [
+      "BL10000550",
+      229
+     ]
+    },
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "CH",
+      "previous(SOS)": null,
+      "RK_TARKEY[5]": "1"
+     },
+     "clusters": {
+      "no": 398,
+      "yes": 1
+     },
+     "example": [
+      "BL10000316",
+      517
+     ]
+    },
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "CH",
+      "previous(SOS)": null,
+      "RK_TARKEY[5]": "3"
+     },
+     "clusters": {
+      "no": 271,
+      "yes": 2
+     },
+     "example": [
+      "BL10000389",
+      135
+     ]
+    },
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "CH",
+      "previous(SOS)": null,
+      "RK_TARKEY[5]": "4"
+     },
+     "clusters": {
+      "no": 137,
+      "yes": 1
+     },
+     "example": [
+      "BL10003014",
+      31
+     ]
+    },
+    {
+     "vector": {
+      "AD_CNTRY@EV_EFFDT": "CH",
+      "previous(SOS)": "no",
+      "RK_TARKEY[5]": "1"
+     },
+     "clusters": {
+      "no": 132,
+      "yes": 1
+     },
+     "example": [
+      "BL10001600",
+      497
+     ]
+    }
+   ],
+   "minimal_sets": [
+    {
+     "features": [
+      "AD_CNTRY@EV_EFFDT",
+      "previous(SOS)",
+      "RK_TARKEY[5]"
+     ],
+     "errors": 98,
+     "leaves": 5,
+     "optimal_trees": 2,
+     "vectors": 35,
+     "conflicting_vectors": 17,
+     "tree": {
+      "split": [
+       "AD_CNTRY@EV_EFFDT",
+       "IT"
+      ],
+      "yes": {
+       "split": [
+        "previous(SOS)",
+        null
+       ],
+       "yes": {
+        "split": [
+         "RK_TARKEY[5]",
+         "1"
+        ],
+        "yes": {
+         "leaf": "no",
+         "rows": 90,
+         "errors": 33
+        },
+        "no": {
+         "leaf": "yes",
+         "rows": 228,
+         "errors": 36
+        }
+       },
+       "no": {
+        "leaf": "yes",
+        "rows": 74,
+        "errors": 17
+       }
+      },
+      "no": {
+       "split": [
+        "previous(SOS)",
+        "yes"
+       ],
+       "yes": {
+        "leaf": "yes",
+        "rows": 1,
+        "errors": 0
+       },
+       "no": {
+        "leaf": "no",
+        "rows": 2100,
+        "errors": 12
+       }
+      }
+     },
+     "leaf_rules": [
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         null
+        ],
+        [
+         "RK_TARKEY[5]",
+         "=",
+         "1"
+        ]
+       ],
+       "label": "no",
+       "rows": 90,
+       "errors": 33
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         null
+        ],
+        [
+         "RK_TARKEY[5]",
+         "!=",
+         "1"
+        ]
+       ],
+       "label": "yes",
+       "rows": 228,
+       "errors": 36
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         null
+        ]
+       ],
+       "label": "yes",
+       "rows": 74,
+       "errors": 17
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "=",
+         "yes"
+        ]
+       ],
+       "label": "yes",
+       "rows": 1,
+       "errors": 0
+      },
+      {
+       "path": [
+        [
+         "AD_CNTRY@EV_EFFDT",
+         "!=",
+         "IT"
+        ],
+        [
+         "previous(SOS)",
+         "!=",
+         "yes"
+        ]
+       ],
+       "label": "no",
+       "rows": 2100,
+       "errors": 12
+      }
+     ],
+     "equivalents": {
+      "AD_CNTRY@EV_EFFDT": [],
+      "previous(SOS)": [],
+      "RK_TARKEY[5]": []
+     }
+    }
+   ],
+   "with_top6_features": {
+    "features": [
+     "AD_CNTRY@EV_EFFDT",
+     "PH_MKTCD",
+     "AD_REGIO@EV_EFFDT",
+     "previous(SOS)",
+     "RK_TARKEY[5]",
+     "previous(VST)"
+    ],
+    "errors": 96,
+    "leaves": 7,
+    "optimal_trees": 6
+   },
+   "cart": {
+    "features": [
+     "AD_CNTRY@EV_EFFDT",
+     "AD_REGIO@EV_EFFDT",
+     "AD_VRSNR@EV_EFFDT",
+     "EC_RATE@EV_EFFDT",
+     "RK_TARKEY[5]",
+     "previous(SOS)"
+    ],
+    "errors": 102,
+    "leaves": 8,
+    "leaf_rules": [
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "RK_TARKEY[5]",
+        "=",
+        "1"
+       ],
+       [
+        "EC_RATE@EV_EFFDT",
+        "=",
+        "0.030000"
+       ]
+      ],
+      "label": "yes",
+      "rows": 6
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "RK_TARKEY[5]",
+        "=",
+        "1"
+       ],
+       [
+        "EC_RATE@EV_EFFDT",
+        "!=",
+        "0.030000"
+       ]
+      ],
+      "label": "no",
+      "rows": 122
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "RK_TARKEY[5]",
+        "!=",
+        "1"
+       ],
+       [
+        "RK_TARKEY[5]",
+        "=",
+        "2"
+       ]
+      ],
+      "label": "yes",
+      "rows": 148
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "=",
+        "IT"
+       ],
+       [
+        "RK_TARKEY[5]",
+        "!=",
+        "1"
+       ],
+       [
+        "RK_TARKEY[5]",
+        "!=",
+        "2"
+       ]
+      ],
+      "label": "yes",
+      "rows": 116
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "IT"
+       ],
+       [
+        "AD_VRSNR@EV_EFFDT",
+        "=",
+        "3"
+       ],
+       [
+        "AD_REGIO@EV_EFFDT",
+        "=",
+        "TI"
+       ]
+      ],
+      "label": "no",
+      "rows": 8
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "IT"
+       ],
+       [
+        "AD_VRSNR@EV_EFFDT",
+        "=",
+        "3"
+       ],
+       [
+        "AD_REGIO@EV_EFFDT",
+        "!=",
+        "TI"
+       ]
+      ],
+      "label": "no",
+      "rows": 13
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "IT"
+       ],
+       [
+        "AD_VRSNR@EV_EFFDT",
+        "!=",
+        "3"
+       ],
+       [
+        "previous(SOS)",
+        "=",
+        "yes"
+       ]
+      ],
+      "label": "yes",
+      "rows": 1
+     },
+     {
+      "path": [
+       [
+        "AD_CNTRY@EV_EFFDT",
+        "!=",
+        "IT"
+       ],
+       [
+        "AD_VRSNR@EV_EFFDT",
+        "!=",
+        "3"
+       ],
+       [
+        "previous(SOS)",
+        "!=",
+        "yes"
+       ]
+      ],
+      "label": "no",
+      "rows": 2079
+     }
+    ]
+   }
+  }
+ }
+}

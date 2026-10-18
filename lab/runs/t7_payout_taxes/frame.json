@@ -1,0 +1,2088 @@
+{
+ "task": "t7_payout_taxes",
+ "keys": [
+  "policy_id",
+  "event_nr"
+ ],
+ "values": [
+  "KST",
+  "SOL",
+  "KIS",
+  "VST",
+  "SOS",
+  "BOL",
+  "BOC"
+ ],
+ "grain": "NREVNT",
+ "mapping": {
+  "policy_id": "EV_POLNR",
+  "event_nr": "EV_EVTNR"
+ },
+ "anchors": [
+  "EV_EFFDT"
+ ],
+ "filter": {
+  "column": "EV_EVTTP",
+  "keep": [
+   "400",
+   "410",
+   "500"
+  ],
+  "excluded_rows": {
+   "100": 1977,
+   "800": 676,
+   "990": 89,
+   "300": 275721,
+   "600": 52,
+   "900": 4201,
+   "210": 1864,
+   "110": 162583,
+   "200": 2227,
+   "700": 33,
+   "610": 40,
+   "620": 35
+  },
+  "errors": 0
+ },
+ "rows": 2493,
+ "unmatched": 0,
+ "sampled": false,
+ "lineage": {
+  "EV_POLNR": {
+   "table": "NREVNT",
+   "column": "EV_POLNR",
+   "path": []
+  },
+  "EV_EVTNR": {
+   "table": "NREVNT",
+   "column": "EV_EVTNR",
+   "path": []
+  },
+  "EV_EVTTP": {
+   "table": "NREVNT",
+   "column": "EV_EVTTP",
+   "path": []
+  },
+  "EV_EFFDT": {
+   "table": "NREVNT",
+   "column": "EV_EFFDT",
+   "path": []
+  },
+  "EV_REVNR": {
+   "table": "NREVNT",
+   "column": "EV_REVNR",
+   "path": []
+  },
+  "EV_SRC": {
+   "table": "NREVNT",
+   "column": "EV_SRC",
+   "path": []
+  },
+  "EV_USRID": {
+   "table": "NREVNT",
+   "column": "EV_USRID",
+   "path": []
+  },
+  "EV_FNDID": {
+   "table": "NREVNT",
+   "column": "EV_FNDID",
+   "path": []
+  },
+  "EV_TOFND": {
+   "table": "NREVNT",
+   "column": "EV_TOFND",
+   "path": []
+  },
+  "EV_PCTG": {
+   "table": "NREVNT",
+   "column": "EV_PCTG",
+   "path": []
+  },
+  "HD_VRSNR": {
+   "table": "NRHOLD",
+   "column": "HD_VRSNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "HD_VLDFR": {
+   "table": "NRHOLD",
+   "column": "HD_VLDFR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "HD_VLDTO": {
+   "table": "NRHOLD",
+   "column": "HD_VLDTO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "HD_PERNR": {
+   "table": "NRHOLD",
+   "column": "HD_PERNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "HD_VRSNR@EV_EFFDT": {
+   "table": "NRHOLD",
+   "column": "HD_VRSNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "HD_VLDFR@EV_EFFDT": {
+   "table": "NRHOLD",
+   "column": "HD_VLDFR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "HD_VLDTO@EV_EFFDT": {
+   "table": "NRHOLD",
+   "column": "HD_VLDTO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "HD_PERNR@EV_EFFDT": {
+   "table": "NRHOLD",
+   "column": "HD_PERNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_VRSNR": {
+   "table": "NRPOLH",
+   "column": "PH_VRSNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_VRSST": {
+   "table": "NRPOLH",
+   "column": "PH_VRSST",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_VLDFR": {
+   "table": "NRPOLH",
+   "column": "PH_VLDFR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_VLDTO": {
+   "table": "NRPOLH",
+   "column": "PH_VLDTO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_EVTNR": {
+   "table": "NRPOLH",
+   "column": "PH_EVTNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_PRDCD": {
+   "table": "NRPOLH",
+   "column": "PH_PRDCD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_STATE": {
+   "table": "NRPOLH",
+   "column": "PH_STATE",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_CCY": {
+   "table": "NRPOLH",
+   "column": "PH_CCY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_APPDT": {
+   "table": "NRPOLH",
+   "column": "PH_APPDT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_BEGDT": {
+   "table": "NRPOLH",
+   "column": "PH_BEGDT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_ENDDT": {
+   "table": "NRPOLH",
+   "column": "PH_ENDDT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_FREQ": {
+   "table": "NRPOLH",
+   "column": "PH_FREQ",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_PAYMT": {
+   "table": "NRPOLH",
+   "column": "PH_PAYMT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_PREMI": {
+   "table": "NRPOLH",
+   "column": "PH_PREMI",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_BRKNR": {
+   "table": "NRPOLH",
+   "column": "PH_BRKNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_MKTCD": {
+   "table": "NRPOLH",
+   "column": "PH_MKTCD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_USRID": {
+   "table": "NRPOLH",
+   "column": "PH_USRID",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PH_VRSNR@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_VRSNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_VRSST@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_VRSST",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_VLDFR@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_VLDFR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_VLDTO@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_VLDTO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_EVTNR@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_EVTNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_PRDCD@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_PRDCD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_STATE@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_STATE",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_CCY@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_CCY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_APPDT@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_APPDT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_BEGDT@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_BEGDT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_ENDDT@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_ENDDT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_FREQ@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_FREQ",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_PAYMT@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_PAYMT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_PREMI@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_PREMI",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_BRKNR@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_BRKNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_MKTCD@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_MKTCD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_USRID@EV_EFFDT": {
+   "table": "NRPOLH",
+   "column": "PH_USRID",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "RK_RSKNR": {
+   "table": "NRRISK",
+   "column": "RK_RSKNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "RK_TARKEY": {
+   "table": "NRRISK",
+   "column": "RK_TARKEY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "RK_PERNR": {
+   "table": "NRRISK",
+   "column": "RK_PERNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "RK_SUMIN": {
+   "table": "NRRISK",
+   "column": "RK_SUMIN",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "RK_BEGDT": {
+   "table": "NRRISK",
+   "column": "RK_BEGDT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "RK_ENDDT": {
+   "table": "NRRISK",
+   "column": "RK_ENDDT",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "RK_LOAD": {
+   "table": "NRRISK",
+   "column": "RK_LOAD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "RK_UWCLS": {
+   "table": "NRRISK",
+   "column": "RK_UWCLS",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "FD_CCY": {
+   "table": "NRFUND",
+   "column": "FD_CCY",
+   "path": [
+    {
+     "from": "EV_FNDID",
+     "to": "NRFUND.FD_FNDID",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "FD_ASSCL": {
+   "table": "NRFUND",
+   "column": "FD_ASSCL",
+   "path": [
+    {
+     "from": "EV_FNDID",
+     "to": "NRFUND.FD_FNDID",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "FD_ISIN": {
+   "table": "NRFUND",
+   "column": "FD_ISIN",
+   "path": [
+    {
+     "from": "EV_FNDID",
+     "to": "NRFUND.FD_FNDID",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "FD_LNCDT": {
+   "table": "NRFUND",
+   "column": "FD_LNCDT",
+   "path": [
+    {
+     "from": "EV_FNDID",
+     "to": "NRFUND.FD_FNDID",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_VRSNR": {
+   "table": "NRADDR",
+   "column": "AD_VRSNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_VLDFR": {
+   "table": "NRADDR",
+   "column": "AD_VLDFR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_VLDTO": {
+   "table": "NRADDR",
+   "column": "AD_VLDTO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_CNTRY": {
+   "table": "NRADDR",
+   "column": "AD_CNTRY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_REGIO": {
+   "table": "NRADDR",
+   "column": "AD_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_ZIP": {
+   "table": "NRADDR",
+   "column": "AD_ZIP",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_TAXST": {
+   "table": "NRADDR",
+   "column": "AD_TAXST",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_CHURCH": {
+   "table": "NRADDR",
+   "column": "AD_CHURCH",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "PS_BIRTH": {
+   "table": "NRPERS",
+   "column": "PS_BIRTH",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PS_SEX": {
+   "table": "NRPERS",
+   "column": "PS_SEX",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PS_SMOKE": {
+   "table": "NRPERS",
+   "column": "PS_SMOKE",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PS_CNTRY": {
+   "table": "NRPERS",
+   "column": "PS_CNTRY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PS_LANG": {
+   "table": "NRPERS",
+   "column": "PS_LANG",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PS_ZIP": {
+   "table": "NRPERS",
+   "column": "PS_ZIP",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PS_NAMEH": {
+   "table": "NRPERS",
+   "column": "PS_NAMEH",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PS_BIRTH_RAW": {
+   "table": "NRPERS",
+   "column": "PS_BIRTH_RAW",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "HD_PERNR",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "AD_VRSNR@EV_EFFDT": {
+   "table": "NRADDR",
+   "column": "AD_VRSNR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "AD_VLDFR@EV_EFFDT": {
+   "table": "NRADDR",
+   "column": "AD_VLDFR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "AD_VLDTO@EV_EFFDT": {
+   "table": "NRADDR",
+   "column": "AD_VLDTO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "AD_CNTRY@EV_EFFDT": {
+   "table": "NRADDR",
+   "column": "AD_CNTRY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "AD_REGIO@EV_EFFDT": {
+   "table": "NRADDR",
+   "column": "AD_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "AD_ZIP@EV_EFFDT": {
+   "table": "NRADDR",
+   "column": "AD_ZIP",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "AD_TAXST@EV_EFFDT": {
+   "table": "NRADDR",
+   "column": "AD_TAXST",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "AD_CHURCH@EV_EFFDT": {
+   "table": "NRADDR",
+   "column": "AD_CHURCH",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRADDR.AD_PERNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PS_BIRTH@EV_EFFDT": {
+   "table": "NRPERS",
+   "column": "PS_BIRTH",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PS_SEX@EV_EFFDT": {
+   "table": "NRPERS",
+   "column": "PS_SEX",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PS_SMOKE@EV_EFFDT": {
+   "table": "NRPERS",
+   "column": "PS_SMOKE",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PS_CNTRY@EV_EFFDT": {
+   "table": "NRPERS",
+   "column": "PS_CNTRY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PS_LANG@EV_EFFDT": {
+   "table": "NRPERS",
+   "column": "PS_LANG",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PS_ZIP@EV_EFFDT": {
+   "table": "NRPERS",
+   "column": "PS_ZIP",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PS_NAMEH@EV_EFFDT": {
+   "table": "NRPERS",
+   "column": "PS_NAMEH",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PS_BIRTH_RAW@EV_EFFDT": {
+   "table": "NRPERS",
+   "column": "PS_BIRTH_RAW",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRHOLD.HD_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "HD_PERNR@EV_EFFDT",
+     "to": "NRPERS.PS_PERNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PD_TARFAM": {
+   "table": "NRPROD",
+   "column": "PD_TARFAM",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_PRDCD",
+     "to": "NRPROD.PD_PRDCD",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PD_INIMON": {
+   "table": "NRPROD",
+   "column": "PD_INIMON",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_PRDCD",
+     "to": "NRPROD.PD_PRDCD",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PD_SRPSCL": {
+   "table": "NRPROD",
+   "column": "PD_SRPSCL",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_PRDCD",
+     "to": "NRPROD.PD_PRDCD",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PD_PAYDAY": {
+   "table": "NRPROD",
+   "column": "PD_PAYDAY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_PRDCD",
+     "to": "NRPROD.PD_PRDCD",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "BR_TIER": {
+   "table": "NRBROK",
+   "column": "BR_TIER",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "BR_CHNL": {
+   "table": "NRBROK",
+   "column": "BR_CHNL",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "BR_REGIO": {
+   "table": "NRBROK",
+   "column": "BR_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "BR_SINCE": {
+   "table": "NRBROK",
+   "column": "BR_SINCE",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ]
+  },
+  "PD_TARFAM@EV_EFFDT": {
+   "table": "NRPROD",
+   "column": "PD_TARFAM",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_PRDCD@EV_EFFDT",
+     "to": "NRPROD.PD_PRDCD",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PD_INIMON@EV_EFFDT": {
+   "table": "NRPROD",
+   "column": "PD_INIMON",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_PRDCD@EV_EFFDT",
+     "to": "NRPROD.PD_PRDCD",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PD_SRPSCL@EV_EFFDT": {
+   "table": "NRPROD",
+   "column": "PD_SRPSCL",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_PRDCD@EV_EFFDT",
+     "to": "NRPROD.PD_PRDCD",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PD_PAYDAY@EV_EFFDT": {
+   "table": "NRPROD",
+   "column": "PD_PAYDAY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_PRDCD@EV_EFFDT",
+     "to": "NRPROD.PD_PRDCD",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "BR_TIER@EV_EFFDT": {
+   "table": "NRBROK",
+   "column": "BR_TIER",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "BR_CHNL@EV_EFFDT": {
+   "table": "NRBROK",
+   "column": "BR_CHNL",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "BR_REGIO@EV_EFFDT": {
+   "table": "NRBROK",
+   "column": "BR_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "BR_SINCE@EV_EFFDT": {
+   "table": "NRBROK",
+   "column": "BR_SINCE",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "EC_VLDFR": {
+   "table": "NRENTC",
+   "column": "EC_VLDFR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    },
+    {
+     "from": "BR_TIER",
+     "to": "NRENTC.EC_TIER",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "EC_VLDTO": {
+   "table": "NRENTC",
+   "column": "EC_VLDTO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    },
+    {
+     "from": "BR_TIER",
+     "to": "NRENTC.EC_TIER",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "EC_RATE": {
+   "table": "NRENTC",
+   "column": "EC_RATE",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    },
+    {
+     "from": "BR_TIER",
+     "to": "NRENTC.EC_TIER",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ]
+  },
+  "EC_VLDFR@EV_EFFDT": {
+   "table": "NRENTC",
+   "column": "EC_VLDFR",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "BR_TIER@EV_EFFDT",
+     "to": "NRENTC.EC_TIER",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "EC_VLDTO@EV_EFFDT": {
+   "table": "NRENTC",
+   "column": "EC_VLDTO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "BR_TIER@EV_EFFDT",
+     "to": "NRENTC.EC_TIER",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "EC_RATE@EV_EFFDT": {
+   "table": "NRENTC",
+   "column": "EC_RATE",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "BR_TIER@EV_EFFDT",
+     "to": "NRENTC.EC_TIER",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ]
+  },
+  "PH_PRDCD[3]": {
+   "table": "NRPOLH",
+   "column": "PH_PRDCD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ],
+   "position": 3
+  },
+  "PH_PRDCD[4]": {
+   "table": "NRPOLH",
+   "column": "PH_PRDCD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ],
+   "position": 4
+  },
+  "PH_CCY[1]": {
+   "table": "NRPOLH",
+   "column": "PH_CCY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ],
+   "position": 1
+  },
+  "PH_CCY[2]": {
+   "table": "NRPOLH",
+   "column": "PH_CCY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ],
+   "position": 2
+  },
+  "PH_CCY[3]": {
+   "table": "NRPOLH",
+   "column": "PH_CCY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    }
+   ],
+   "position": 3
+  },
+  "PH_PRDCD@EV_EFFDT[3]": {
+   "table": "NRPOLH",
+   "column": "PH_PRDCD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ],
+   "position": 3
+  },
+  "PH_PRDCD@EV_EFFDT[4]": {
+   "table": "NRPOLH",
+   "column": "PH_PRDCD",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ],
+   "position": 4
+  },
+  "PH_CCY@EV_EFFDT[1]": {
+   "table": "NRPOLH",
+   "column": "PH_CCY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ],
+   "position": 1
+  },
+  "PH_CCY@EV_EFFDT[2]": {
+   "table": "NRPOLH",
+   "column": "PH_CCY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ],
+   "position": 2
+  },
+  "PH_CCY@EV_EFFDT[3]": {
+   "table": "NRPOLH",
+   "column": "PH_CCY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    }
+   ],
+   "position": 3
+  },
+  "RK_TARKEY[2]": {
+   "table": "NRRISK",
+   "column": "RK_TARKEY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ],
+   "position": 2
+  },
+  "RK_TARKEY[3]": {
+   "table": "NRRISK",
+   "column": "RK_TARKEY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ],
+   "position": 3
+  },
+  "RK_TARKEY[5]": {
+   "table": "NRRISK",
+   "column": "RK_TARKEY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ],
+   "position": 5
+  },
+  "RK_TARKEY[6]": {
+   "table": "NRRISK",
+   "column": "RK_TARKEY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ],
+   "position": 6
+  },
+  "RK_TARKEY[7]": {
+   "table": "NRRISK",
+   "column": "RK_TARKEY",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRRISK.RK_POLNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ],
+   "position": 7
+  },
+  "BR_REGIO[1]": {
+   "table": "NRBROK",
+   "column": "BR_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ],
+   "position": 1
+  },
+  "BR_REGIO[2]": {
+   "table": "NRBROK",
+   "column": "BR_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ],
+   "position": 2
+  },
+  "BR_REGIO[3]": {
+   "table": "NRBROK",
+   "column": "BR_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": null
+    },
+    {
+     "from": "PH_BRKNR",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": null
+    }
+   ],
+   "position": 3
+  },
+  "BR_REGIO@EV_EFFDT[1]": {
+   "table": "NRBROK",
+   "column": "BR_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ],
+   "position": 1
+  },
+  "BR_REGIO@EV_EFFDT[2]": {
+   "table": "NRBROK",
+   "column": "BR_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ],
+   "position": 2
+  },
+  "BR_REGIO@EV_EFFDT[3]": {
+   "table": "NRBROK",
+   "column": "BR_REGIO",
+   "path": [
+    {
+     "from": "EV_POLNR",
+     "to": "NRPOLH.PH_POLNR",
+     "kind": "temporal",
+     "anchor": "EV_EFFDT"
+    },
+    {
+     "from": "PH_BRKNR@EV_EFFDT",
+     "to": "NRBROK.BR_BRKNR",
+     "kind": "plain",
+     "anchor": "EV_EFFDT"
+    }
+   ],
+   "position": 3
+  },
+  "previous(KST)": {
+   "dsl": "previous(KST)"
+  },
+  "previous(SOL)": {
+   "dsl": "previous(SOL)"
+  },
+  "previous(KIS)": {
+   "dsl": "previous(KIS)"
+  },
+  "previous(VST)": {
+   "dsl": "previous(VST)"
+  },
+  "previous(SOS)": {
+   "dsl": "previous(SOS)"
+  },
+  "previous(BOL)": {
+   "dsl": "previous(BOL)"
+  },
+  "previous(BOC)": {
+   "dsl": "previous(BOC)"
+  }
+ }
+}

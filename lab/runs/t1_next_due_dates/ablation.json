@@ -1,0 +1,1054 @@
+{
+ "task": "t1_next_due_dates",
+ "keys": [
+  "policy_id",
+  "n"
+ ],
+ "values": [
+  "due_date",
+  "collection_date"
+ ],
+ "rows": 15028,
+ "wrong": 0,
+ "cards": [
+  {
+   "id": "system-change",
+   "rule": "Due dates continue from the last due date of the COBOL version, which stepped from one due date to the next",
+   "off": "every due date counted from the begin date, like Neuron NG",
+   "where": "day(PH_BEGDT)",
+   "where_label": "day of the month of the begin date",
+   "edits": [
+    {
+     "file": "neuron/eras.py",
+     "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)",
+     "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"
+    }
+   ],
+   "run": "t1_next_due_dates~off-system-change",
+   "wrong_on": 0,
+   "wrong_off": 248,
+   "broken": 248,
+   "fixed": 0,
+   "broken_by_value": {
+    "due_date": 248,
+    "collection_date": 218
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000267",
+     "n": "1",
+     "due_date": {
+      "target": "2026-07-28",
+      "off": "2026-07-31"
+     },
+     "collection_date": {
+      "target": "2026-07-28",
+      "off": "2026-07-31"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "2",
+     "due_date": {
+      "target": "2026-08-28",
+      "off": "2026-08-31"
+     },
+     "collection_date": {
+      "target": "2026-08-28",
+      "off": "2026-08-31"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "3",
+     "due_date": {
+      "target": "2026-09-28",
+      "off": "2026-09-30"
+     },
+     "collection_date": {
+      "target": "2026-09-28",
+      "off": "2026-09-30"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "4",
+     "due_date": {
+      "target": "2026-10-28",
+      "off": "2026-10-31"
+     },
+     "collection_date": {
+      "target": "2026-10-28",
+      "off": "2026-10-31"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "5",
+     "due_date": {
+      "target": "2026-11-28",
+      "off": "2026-11-30"
+     },
+     "collection_date": {
+      "target": "2026-11-28",
+      "off": "2026-11-30"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "6",
+     "due_date": {
+      "target": "2026-12-28",
+      "off": "2026-12-31"
+     },
+     "collection_date": {
+      "target": "2026-12-28",
+      "off": "2026-12-31"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "7",
+     "due_date": {
+      "target": "2027-01-28",
+      "off": "2027-01-31"
+     },
+     "collection_date": {
+      "target": "2027-01-28",
+      "off": "2027-01-31"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "9",
+     "due_date": {
+      "target": "2027-03-28",
+      "off": "2027-03-31"
+     },
+     "collection_date": {
+      "target": "2027-03-28",
+      "off": "2027-03-31"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "10",
+     "due_date": {
+      "target": "2027-04-28",
+      "off": "2027-04-30"
+     },
+     "collection_date": {
+      "target": "2027-04-28",
+      "off": "2027-04-30"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "11",
+     "due_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-31"
+     },
+     "collection_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-31"
+     }
+    },
+    {
+     "policy_id": "BL10000267",
+     "n": "12",
+     "due_date": {
+      "target": "2027-06-28",
+      "off": "2027-06-30"
+     },
+     "collection_date": {
+      "target": "2027-06-28",
+      "off": "2027-06-30"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "1",
+     "due_date": {
+      "target": "2026-07-28",
+      "off": "2026-07-31"
+     },
+     "collection_date": {
+      "target": "2026-07-28",
+      "off": "2026-07-31"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "2",
+     "due_date": {
+      "target": "2026-08-28",
+      "off": "2026-08-31"
+     },
+     "collection_date": {
+      "target": "2026-08-28",
+      "off": "2026-08-31"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "3",
+     "due_date": {
+      "target": "2026-09-28",
+      "off": "2026-09-30"
+     },
+     "collection_date": {
+      "target": "2026-09-28",
+      "off": "2026-09-30"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "4",
+     "due_date": {
+      "target": "2026-10-28",
+      "off": "2026-10-31"
+     },
+     "collection_date": {
+      "target": "2026-10-28",
+      "off": "2026-11-02"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "5",
+     "due_date": {
+      "target": "2026-11-28",
+      "off": "2026-11-30"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "6",
+     "due_date": {
+      "target": "2026-12-28",
+      "off": "2026-12-31"
+     },
+     "collection_date": {
+      "target": "2026-12-28",
+      "off": "2026-12-31"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "7",
+     "due_date": {
+      "target": "2027-01-28",
+      "off": "2027-01-31"
+     },
+     "collection_date": {
+      "target": "2027-01-28",
+      "off": "2027-02-01"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "9",
+     "due_date": {
+      "target": "2027-03-28",
+      "off": "2027-03-31"
+     },
+     "collection_date": {
+      "target": "2027-03-30",
+      "off": "2027-03-31"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "10",
+     "due_date": {
+      "target": "2027-04-28",
+      "off": "2027-04-30"
+     },
+     "collection_date": {
+      "target": "2027-04-28",
+      "off": "2027-04-30"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "11",
+     "due_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-31"
+     },
+     "collection_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-31"
+     }
+    },
+    {
+     "policy_id": "BL10000339",
+     "n": "12",
+     "due_date": {
+      "target": "2027-06-28",
+      "off": "2027-06-30"
+     },
+     "collection_date": {
+      "target": "2027-06-28",
+      "off": "2027-06-30"
+     }
+    },
+    {
+     "policy_id": "BL10000495",
+     "n": "1",
+     "due_date": {
+      "target": "2026-08-28",
+      "off": "2026-08-30"
+     },
+     "collection_date": {
+      "target": "2026-08-28",
+      "off": "2026-08-31"
+     }
+    },
+    {
+     "policy_id": "BL10000495",
+     "n": "2",
+     "due_date": {
+      "target": "2026-11-28",
+      "off": "2026-11-30"
+     }
+    },
+    {
+     "policy_id": "BL10000495",
+     "n": "4",
+     "due_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-30"
+     },
+     "collection_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-31"
+     }
+    }
+   ],
+   "trees": {
+    "due_date": [
+     "Where it is wrong: optimal tree errors 228, leaves 6 on {RK_TARKEY, BR_REGIO@RK_ENDDT, RK_UWCLS}",
+     "RK_UWCLS = E2 and RK_TARKEY = FKW01LB and BR_REGIO@RK_ENDDT = MIT -> -1 days (12 rows, 1 of them not -1 days), e.g. [('BL10003442', 1), ('BL10003442', 2)]",
+     "RK_UWCLS != E2 and RK_TARKEY = FKW01LA and BR_REGIO@RK_ENDDT = OST -> -2 days (12 rows, 1 of them not -2 days), e.g. [('BL10001170', 1), ('BL10001170', 2)]",
+     "conflicting vector {'RK_TARKEY': 'FXW02LB', 'BR_REGIO@RK_ENDDT': 'OST', 'RK_UWCLS': 'N1'}: {'ok': 61, '-3 days': 2, '-2 days': 1}; example ['BL10002330', 1]",
+     "conflicting vector {'RK_TARKEY': 'FKM01LB', 'BR_REGIO@RK_ENDDT': 'OST', 'RK_UWCLS': 'E1'}: {'ok': 42, '-1 days': 11, '-3 days': 7, '-2 days': 4}; example ['BL10001420', 1]",
+     "conflicting vector {'RK_TARKEY': 'FXW02LC', 'BR_REGIO@RK_ENDDT': 'OST', 'RK_UWCLS': 'N1'}: {'ok': 26, '-2 days': 15, '-3 days': 7}; example ['BL10000339', 1]"
+    ],
+    "collection_date": [
+     "Where it is wrong: optimal tree errors 171, leaves 4 on {day(due_date), weekday(due_date), RK_TARKEY[5]}",
+     "day(due_date) = 28 and RK_TARKEY[5] = 1 and weekday(due_date) = 5 -> -3 days (38 rows, 4 of them not -3 days), e.g. [('BL10000590', 2), ('BL10000590', 11)]",
+     "day(due_date) = 28 and RK_TARKEY[5] = 1 and weekday(due_date) != 5 -> -2 days (174 rows, 108 of them not -2 days), e.g. [('BL10000590', 1), ('BL10000590', 3)]",
+     "conflicting vector {'day(due_date)': '30', 'weekday(due_date)': '3', 'RK_TARKEY[5]': '2'}: {'ok': 63, '-1 days': 1}; example ['BL10001245', 2]",
+     "conflicting vector {'day(due_date)': '28', 'weekday(due_date)': '7', 'RK_TARKEY[5]': '2'}: {'ok': 49, '-1 days': 3, '-3 days': 1}; example ['BL10000267', 9]",
+     "conflicting vector {'day(due_date)': '28', 'weekday(due_date)': '1', 'RK_TARKEY[5]': '1'}: {'-2 days': 36, '-3 days': 8, '-1 days': 4, 'ok': 3}; example ['BL10000777', 6]"
+    ]
+   }
+  },
+  {
+   "id": "good-friday",
+   "rule": "Good Friday is a bank working day in Ticino",
+   "off": "Good Friday a bank holiday, as in most other cantons",
+   "where": "due_date",
+   "where_label": "due date",
+   "edits": [
+    {
+     "file": "policies/bank_calendar.py",
+     "old": "EASTER_HOLIDAYS = (1, 39, 50, 60)",
+     "new": "EASTER_HOLIDAYS = (-2, 1, 39, 50, 60)"
+    }
+   ],
+   "run": "t1_next_due_dates~off-good-friday",
+   "wrong_on": 0,
+   "wrong_off": 158,
+   "broken": 158,
+   "fixed": 0,
+   "broken_by_value": {
+    "due_date": 0,
+    "collection_date": 158
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000010",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000037",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000222",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000364",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000404",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000442",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000449",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000492",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000503",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000526",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000546",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000593",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000608",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000633",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000687",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000709",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000719",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000721",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000725",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000746",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000754",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000781",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000786",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-26",
+      "off": "2027-03-30"
+     }
+    }
+   ],
+   "trees": {
+    "collection_date": [
+     "Where it is wrong: optimal tree errors 0, leaves 4 on {month(due_date), day(due_date), PH_PAYMT}",
+     "month(due_date) = 3 and day(due_date) = 26 and PH_PAYMT = LS -> -4 days (158 rows, 0 of them not -4 days), e.g. [('BL10000001', 9), ('BL10000010', 9)]"
+    ]
+   }
+  },
+  {
+   "id": "ticino-holidays",
+   "rule": "Direct debits wait for the bank holidays of Ticino: Epiphany, St Joseph, Corpus Christi, St Peter and Paul, Assumption, All Saints, Immaculate Conception",
+   "off": "only the holidays common to all of Switzerland",
+   "where": "due_date",
+   "where_label": "due date",
+   "edits": [
+    {
+     "file": "policies/bank_calendar.py",
+     "old": "FIXED_HOLIDAYS = {(1, 1), (1, 6), (3, 19), (5, 1), (6, 29), (8, 1), (8, 15), (11, 1), (12, 8), (12, 25), (12, 26)}",
+     "new": "FIXED_HOLIDAYS = {(1, 1), (5, 1), (8, 1), (12, 25), (12, 26)}"
+    },
+    {
+     "file": "policies/bank_calendar.py",
+     "old": "EASTER_HOLIDAYS = (1, 39, 50, 60)",
+     "new": "EASTER_HOLIDAYS = (1, 39, 50)"
+    }
+   ],
+   "run": "t1_next_due_dates~off-ticino-holidays",
+   "wrong_on": 0,
+   "wrong_off": 25,
+   "broken": 25,
+   "fixed": 0,
+   "broken_by_value": {
+    "due_date": 0,
+    "collection_date": 25
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000198",
+     "n": "12",
+     "collection_date": {
+      "target": "2027-06-30",
+      "off": "2027-06-29"
+     }
+    },
+    {
+     "policy_id": "BL10000206",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-22",
+      "off": "2027-03-19"
+     }
+    },
+    {
+     "policy_id": "BL10000363",
+     "n": "4",
+     "collection_date": {
+      "target": "2027-06-30",
+      "off": "2027-06-29"
+     }
+    },
+    {
+     "policy_id": "BL10000427",
+     "n": "11",
+     "collection_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-27"
+     }
+    },
+    {
+     "policy_id": "BL10000948",
+     "n": "11",
+     "collection_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-27"
+     }
+    },
+    {
+     "policy_id": "BL10001234",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-22",
+      "off": "2027-03-19"
+     }
+    },
+    {
+     "policy_id": "BL10001606",
+     "n": "12",
+     "collection_date": {
+      "target": "2027-06-30",
+      "off": "2027-06-29"
+     }
+    },
+    {
+     "policy_id": "BL10001654",
+     "n": "12",
+     "collection_date": {
+      "target": "2027-06-30",
+      "off": "2027-06-29"
+     }
+    },
+    {
+     "policy_id": "BL10001733",
+     "n": "12",
+     "collection_date": {
+      "target": "2027-06-30",
+      "off": "2027-06-29"
+     }
+    },
+    {
+     "policy_id": "BL10001767",
+     "n": "3",
+     "collection_date": {
+      "target": "2027-01-07",
+      "off": "2027-01-06"
+     }
+    },
+    {
+     "policy_id": "BL10001979",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-22",
+      "off": "2027-03-19"
+     }
+    },
+    {
+     "policy_id": "BL10002687",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-22",
+      "off": "2027-03-19"
+     }
+    },
+    {
+     "policy_id": "BL10002771",
+     "n": "7",
+     "collection_date": {
+      "target": "2027-01-07",
+      "off": "2027-01-06"
+     }
+    },
+    {
+     "policy_id": "BL10003374",
+     "n": "7",
+     "collection_date": {
+      "target": "2027-01-07",
+      "off": "2027-01-06"
+     }
+    },
+    {
+     "policy_id": "BL10003419",
+     "n": "3",
+     "collection_date": {
+      "target": "2027-03-22",
+      "off": "2027-03-19"
+     }
+    },
+    {
+     "policy_id": "BL10003488",
+     "n": "12",
+     "collection_date": {
+      "target": "2027-06-30",
+      "off": "2027-06-29"
+     }
+    },
+    {
+     "policy_id": "BL10003887",
+     "n": "11",
+     "collection_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-27"
+     }
+    },
+    {
+     "policy_id": "BL10004263",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-22",
+      "off": "2027-03-19"
+     }
+    },
+    {
+     "policy_id": "BL10004320",
+     "n": "4",
+     "collection_date": {
+      "target": "2027-05-28",
+      "off": "2027-05-27"
+     }
+    },
+    {
+     "policy_id": "BL10004398",
+     "n": "12",
+     "collection_date": {
+      "target": "2027-06-30",
+      "off": "2027-06-29"
+     }
+    },
+    {
+     "policy_id": "BL10004546",
+     "n": "6",
+     "collection_date": {
+      "target": "2026-12-09",
+      "off": "2026-12-08"
+     }
+    },
+    {
+     "policy_id": "BL10004731",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-22",
+      "off": "2027-03-19"
+     }
+    },
+    {
+     "policy_id": "BL10004799",
+     "n": "6",
+     "collection_date": {
+      "target": "2026-12-09",
+      "off": "2026-12-08"
+     }
+    },
+    {
+     "policy_id": "BL10004995",
+     "n": "2",
+     "collection_date": {
+      "target": "2026-12-09",
+      "off": "2026-12-08"
+     }
+    },
+    {
+     "policy_id": "BL10004997",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-22",
+      "off": "2027-03-19"
+     }
+    }
+   ],
+   "trees": {
+    "collection_date": [
+     "Where it is wrong: optimal tree errors 12, leaves 6 on {day(due_date), month(due_date), PH_PAYMT}",
+     "day(due_date) = 19 and month(due_date) = 3 and PH_PAYMT = LS -> +3 days (8 rows, 0 of them not +3 days), e.g. [('BL10000206', 9), ('BL10001234', 9)]",
+     "day(due_date) != 19 and day(due_date) = 29 and month(due_date) = 6 -> +1 days (9 rows, 2 of them not +1 days), e.g. [('BL10000198', 12), ('BL10000363', 4)]"
+    ]
+   }
+  },
+  {
+   "id": "transfer-on-due-date",
+   "rule": "Bank transfers (UB) are collected on the due date, only direct debits (LS) on the next bank working day",
+   "off": "every premium collected on the next bank working day",
+   "where": "PH_PAYMT",
+   "where_label": "payment method",
+   "edits": [
+    {
+     "file": "policies/schedule.py",
+     "old": "return next_working_day(due_date) if payment_method == DIRECT_DEBIT else due_date",
+     "new": "return next_working_day(due_date)"
+    }
+   ],
+   "run": "t1_next_due_dates~off-transfer-on-due-date",
+   "wrong_on": 0,
+   "wrong_off": 831,
+   "broken": 831,
+   "fixed": 0,
+   "broken_by_value": {
+    "due_date": 0,
+    "collection_date": 831
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000022",
+     "n": "2",
+     "collection_date": {
+      "target": "2026-08-01",
+      "off": "2026-08-03"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "n": "5",
+     "collection_date": {
+      "target": "2026-11-01",
+      "off": "2026-11-02"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "n": "7",
+     "collection_date": {
+      "target": "2027-01-01",
+      "off": "2027-01-04"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "n": "11",
+     "collection_date": {
+      "target": "2027-05-01",
+      "off": "2027-05-03"
+     }
+    },
+    {
+     "policy_id": "BL10000054",
+     "n": "1",
+     "collection_date": {
+      "target": "2026-08-01",
+      "off": "2026-08-03"
+     }
+    },
+    {
+     "policy_id": "BL10000054",
+     "n": "2",
+     "collection_date": {
+      "target": "2026-11-01",
+      "off": "2026-11-02"
+     }
+    },
+    {
+     "policy_id": "BL10000054",
+     "n": "4",
+     "collection_date": {
+      "target": "2027-05-01",
+      "off": "2027-05-03"
+     }
+    },
+    {
+     "policy_id": "BL10000062",
+     "n": "2",
+     "collection_date": {
+      "target": "2026-11-28",
+      "off": "2026-11-30"
+     }
+    },
+    {
+     "policy_id": "BL10000062",
+     "n": "3",
+     "collection_date": {
+      "target": "2027-02-28",
+      "off": "2027-03-01"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "n": "2",
+     "collection_date": {
+      "target": "2026-08-29",
+      "off": "2026-08-31"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "n": "5",
+     "collection_date": {
+      "target": "2026-11-29",
+      "off": "2026-11-30"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "n": "8",
+     "collection_date": {
+      "target": "2027-02-28",
+      "off": "2027-03-01"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "n": "9",
+     "collection_date": {
+      "target": "2027-03-29",
+      "off": "2027-03-30"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "n": "11",
+     "collection_date": {
+      "target": "2027-05-29",
+      "off": "2027-05-31"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "n": "12",
+     "collection_date": {
+      "target": "2027-06-29",
+      "off": "2027-06-30"
+     }
+    },
+    {
+     "policy_id": "BL10000070",
+     "n": "2",
+     "collection_date": {
+      "target": "2026-08-01",
+      "off": "2026-08-03"
+     }
+    },
+    {
+     "policy_id": "BL10000070",
+     "n": "5",
+     "collection_date": {
+      "target": "2026-11-01",
+      "off": "2026-11-02"
+     }
+    },
+    {
+     "policy_id": "BL10000070",
+     "n": "7",
+     "collection_date": {
+      "target": "2027-01-01",
+      "off": "2027-01-04"
+     }
+    },
+    {
+     "policy_id": "BL10000070",
+     "n": "11",
+     "collection_date": {
+      "target": "2027-05-01",
+      "off": "2027-05-03"
+     }
+    },
+    {
+     "policy_id": "BL10000082",
+     "n": "2",
+     "collection_date": {
+      "target": "2026-08-16",
+      "off": "2026-08-17"
+     }
+    },
+    {
+     "policy_id": "BL10000082",
+     "n": "7",
+     "collection_date": {
+      "target": "2027-01-16",
+      "off": "2027-01-18"
+     }
+    },
+    {
+     "policy_id": "BL10000082",
+     "n": "11",
+     "collection_date": {
+      "target": "2027-05-16",
+      "off": "2027-05-18"
+     }
+    },
+    {
+     "policy_id": "BL10000085",
+     "n": "1",
+     "collection_date": {
+      "target": "2026-07-05",
+      "off": "2026-07-06"
+     }
+    },
+    {
+     "policy_id": "BL10000085",
+     "n": "3",
+     "collection_date": {
+      "target": "2026-09-05",
+      "off": "2026-09-07"
+     }
+    },
+    {
+     "policy_id": "BL10000085",
+     "n": "6",
+     "collection_date": {
+      "target": "2026-12-05",
+      "off": "2026-12-07"
+     }
+    }
+   ],
+   "trees": {
+    "collection_date": [
+     "Where it is wrong: optimal tree errors 165, leaves 5 on {weekday(due_date), PH_PAYMT, month(due_date)}",
+     "PH_PAYMT != LS and weekday(due_date) = 7 and month(due_date) = 3 -> -2 days (11 rows, 4 of them not -2 days), e.g. [('BL10000262', 9), ('BL10000267', 9)]",
+     "PH_PAYMT != LS and weekday(due_date) = 7 and month(due_date) != 3 -> -1 days (265 rows, 3 of them not -1 days), e.g. [('BL10000022', 5), ('BL10000054', 2)]",
+     "PH_PAYMT != LS and weekday(due_date) != 7 and weekday(due_date) = 6 -> -2 days (399 rows, 2 of them not -2 days), e.g. [('BL10000022', 2), ('BL10000022', 11)]",
+     "conflicting vector {'weekday(due_date)': '6', 'PH_PAYMT': 'UB', 'month(due_date)': '5'}: {'-2 days': 154, '-3 days': 1}; example ['BL10001376', 11]",
+     "conflicting vector {'weekday(due_date)': '5', 'PH_PAYMT': 'UB', 'month(due_date)': '1'}: {'-3 days': 144, 'ok': 6}; example ['BL10000068', 7]",
+     "conflicting vector {'weekday(due_date)': '1', 'PH_PAYMT': 'UB', 'month(due_date)': '3'}: {'ok': 143, '-1 days': 2}; example ['BL10000068', 9]"
+    ]
+   }
+  }
+ ]
+}

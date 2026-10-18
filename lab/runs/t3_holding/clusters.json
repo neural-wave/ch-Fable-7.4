@@ -1,0 +1,12 @@
+{
+ "task": "t3_holding",
+ "rows": 31578,
+ "values": {
+  "units": {
+   "relation": null,
+   "note": "no clusterable relation",
+   "approximate": null,
+   "identities": []
+  }
+ }
+}

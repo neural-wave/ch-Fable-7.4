@@ -1,0 +1,1737 @@
+{
+ "task": "t4_annual_statement",
+ "keys": [
+  "policy_id",
+  "year"
+ ],
+ "values": [
+  "premiums",
+  "entry_charges",
+  "admin_fees",
+  "management_fees",
+  "risk_charges",
+  "total_charges"
+ ],
+ "rows": 34145,
+ "wrong": 23,
+ "cards": [
+  {
+   "id": "system-change",
+   "rule": "Before the system change of 2007-08-11 COBOL cut cents off and charged management fees by days / 360",
+   "off": "every charge computed like Neuron NG",
+   "where": "year",
+   "where_label": "statement year",
+   "edits": [
+    {
+     "file": "neuron/eras.py",
+     "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)",
+     "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"
+    }
+   ],
+   "run": "t4_annual_statement~off-system-change",
+   "wrong_on": 23,
+   "wrong_off": 13823,
+   "broken": 13800,
+   "fixed": 0,
+   "broken_by_value": {
+    "premiums": 0,
+    "entry_charges": 699,
+    "admin_fees": 0,
+    "management_fees": 13777,
+    "risk_charges": 4891,
+    "total_charges": 13774
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "year": "2007",
+     "entry_charges": {
+      "target": "33.29",
+      "off": "33.21"
+     },
+     "management_fees": {
+      "target": "15.55",
+      "off": "15.58"
+     },
+     "total_charges": {
+      "target": "108.84",
+      "off": "108.79"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "year": "2013",
+     "management_fees": {
+      "target": "163.49",
+      "off": "163.50"
+     },
+     "total_charges": {
+      "target": "302.51",
+      "off": "302.52"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "year": "2014",
+     "management_fees": {
+      "target": "179.85",
+      "off": "179.84"
+     },
+     "total_charges": {
+      "target": "322.56",
+      "off": "322.55"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "year": "2021",
+     "management_fees": {
+      "target": "302.28",
+      "off": "302.29"
+     },
+     "total_charges": {
+      "target": "448.90",
+      "off": "448.91"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "1997",
+     "management_fees": {
+      "target": "53.33",
+      "off": "52.54"
+     },
+     "risk_charges": {
+      "target": "6.93",
+      "off": "6.99"
+     },
+     "total_charges": {
+      "target": "363.26",
+      "off": "362.53"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "1998",
+     "management_fees": {
+      "target": "151.72",
+      "off": "149.78"
+     },
+     "risk_charges": {
+      "target": "4.30",
+      "off": "4.37"
+     },
+     "total_charges": {
+      "target": "446.02",
+      "off": "444.15"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "1999",
+     "management_fees": {
+      "target": "211.65",
+      "off": "209.00"
+     },
+     "risk_charges": {
+      "target": "0.32",
+      "off": "0.35"
+     },
+     "total_charges": {
+      "target": "549.47",
+      "off": "546.85"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "2000",
+     "management_fees": {
+      "target": "234.80",
+      "off": "231.27"
+     },
+     "total_charges": {
+      "target": "547.80",
+      "off": "544.27"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "2001",
+     "management_fees": {
+      "target": "253.73",
+      "off": "250.66"
+     },
+     "total_charges": {
+      "target": "589.73",
+      "off": "586.66"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "2002",
+     "management_fees": {
+      "target": "297.65",
+      "off": "293.97"
+     },
+     "total_charges": {
+      "target": "634.85",
+      "off": "631.17"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "2003",
+     "management_fees": {
+      "target": "388.89",
+      "off": "384.09"
+     },
+     "total_charges": {
+      "target": "707.89",
+      "off": "703.09"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "2004",
+     "management_fees": {
+      "target": "485.17",
+      "off": "477.75"
+     },
+     "total_charges": {
+      "target": "827.17",
+      "off": "819.75"
+     }
+    },
+    {
+     "policy_id": "BL10000003",
+     "year": "2005",
+     "management_fees": {
+      "target": "162.47",
+      "off": "161.43"
+     },
+     "total_charges": {
+      "target": "253.47",
+      "off": "252.43"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2006",
+     "management_fees": {
+      "target": "18.67",
+      "off": "18.32"
+     },
+     "total_charges": {
+      "target": "308.67",
+      "off": "308.32"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2007",
+     "management_fees": {
+      "target": "44.08",
+      "off": "43.76"
+     },
+     "total_charges": {
+      "target": "80.08",
+      "off": "79.76"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2010",
+     "management_fees": {
+      "target": "69.88",
+      "off": "69.89"
+     },
+     "total_charges": {
+      "target": "105.94",
+      "off": "105.95"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2011",
+     "management_fees": {
+      "target": "69.34",
+      "off": "69.36"
+     },
+     "total_charges": {
+      "target": "105.42",
+      "off": "105.44"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2014",
+     "management_fees": {
+      "target": "77.60",
+      "off": "77.61"
+     },
+     "total_charges": {
+      "target": "125.72",
+      "off": "125.73"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2015",
+     "management_fees": {
+      "target": "74.11",
+      "off": "74.13"
+     },
+     "total_charges": {
+      "target": "122.23",
+      "off": "122.25"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2017",
+     "management_fees": {
+      "target": "32.32",
+      "off": "32.33"
+     },
+     "total_charges": {
+      "target": "80.32",
+      "off": "80.33"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2018",
+     "management_fees": {
+      "target": "25.56",
+      "off": "25.57"
+     },
+     "total_charges": {
+      "target": "73.56",
+      "off": "73.57"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2020",
+     "management_fees": {
+      "target": "27.25",
+      "off": "27.26"
+     },
+     "total_charges": {
+      "target": "75.25",
+      "off": "75.26"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "year": "2022",
+     "management_fees": {
+      "target": "24.46",
+      "off": "24.47"
+     },
+     "total_charges": {
+      "target": "68.46",
+      "off": "68.47"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "year": "2006",
+     "management_fees": {
+      "target": "898.05",
+      "off": "889.22"
+     },
+     "risk_charges": {
+      "target": "2.31",
+      "off": "2.35"
+     },
+     "total_charges": {
+      "target": "5726.36",
+      "off": "5717.57"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "year": "2007",
+     "management_fees": {
+      "target": "1144.42",
+      "off": "1135.21"
+     },
+     "risk_charges": {
+      "target": "3.21",
+      "off": "3.25"
+     },
+     "total_charges": {
+      "target": "1183.63",
+      "off": "1174.46"
+     }
+    }
+   ],
+   "trees": {
+    "entry_charges": [
+     "Where it is wrong: optimal tree errors 696, leaves 4 on {BR_TIER@RK_BEGDT, AD_REGIO, PH_PRDCD}",
+     "BR_TIER@RK_BEGDT = C and AD_REGIO = BE and PH_PRDCD = FLFX -> x1.00 (17 rows, 7 of them not x1.00), e.g. [('BL10000611', 1998), ('BL10000611', 1999)]",
+     "conflicting vector {'BR_TIER@RK_BEGDT': 'B', 'AD_REGIO': 'TI', 'PH_PRDCD': 'FLKL'}: {'ok': 5128, 'x1.00': 28}; example ['BL10000223', 2002]",
+     "conflicting vector {'BR_TIER@RK_BEGDT': 'A', 'AD_REGIO': 'TI', 'PH_PRDCD': 'FLKL'}: {'ok': 3438, 'x1.00': 177, '+0.22': 2, '+0.14': 1, '+0.16': 1}; example ['BL10000050', 1997]",
+     "conflicting vector {'BR_TIER@RK_BEGDT': 'B', 'AD_REGIO': 'TI', 'PH_PRDCD': 'FLFX'}: {'ok': 3072, 'x1.00': 22, '+0.22': 3, '+0.24': 3, 'x1.01': 2, '+0.10': 1, '+0.16': 1}; example ['BL10000260', 2005]"
+    ],
+    "management_fees": [
+     "Where it is wrong: optimal tree errors 7332, leaves 6 on {RK_TARKEY[5], PH_STATE@RK_ENDDT, PH_FREQ}",
+     "RK_TARKEY[5] = 1 and PH_STATE@RK_ENDDT = 60 and PH_FREQ = E -> x1.00 (818 rows, 457 of them not x1.00), e.g. [('BL10000059', 2008), ('BL10000059', 2009)]",
+     "RK_TARKEY[5] = 1 and PH_STATE@RK_ENDDT = 60 and PH_FREQ != E -> x1.01 (2357 rows, 1183 of them not x1.01), e.g. [('BL10000029', 1999), ('BL10000029', 2001)]",
+     "RK_TARKEY[5] = 1 and PH_STATE@RK_ENDDT != 60 -> x1.00 (7426 rows, 2402 of them not x1.00), e.g. [('BL10000022', 2008), ('BL10000022', 2009)]",
+     "RK_TARKEY[5] != 1 and PH_STATE@RK_ENDDT = 20 and PH_FREQ = J -> x1.00 (20 rows, 5 of them not x1.00), e.g. [('BL10002811', 2008), ('BL10002811', 2009)]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_STATE@RK_ENDDT': '10', 'PH_FREQ': 'M'}: {'ok': 4083, 'x1.00': 982, 'x1.01': 101, 'x1.02': 9, '-0.01': 3}; example ['BL10000001', 2007]",
+     "conflicting vector {'RK_TARKEY[5]': '1', 'PH_STATE@RK_ENDDT': '10', 'PH_FREQ': 'M'}: {'x1.00': 2547, 'x1.01': 995, 'x1.02': 122, 'ok': 38, '-0.01': 8, '-0.02': 4, '-0.10': 1, '-0.05': 1, '-0.42': 1, '-0.39': 1, '-0.27': 1, '-0.24': 1}; example ['BL10000022', 1998]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_STATE@RK_ENDDT': '10', 'PH_FREQ': 'E'}: {'ok': 1236, 'x1.00': 545, 'x1.01': 59, 'x1.02': 14}; example ['BL10000012', 2006]"
+    ],
+    "risk_charges": [
+     "Where it is wrong: optimal tree errors 4869, leaves 4 on {RK_TARKEY[5], PH_FREQ, AD_REGIO}",
+     "RK_TARKEY[5] = 1 and PH_FREQ = H and AD_REGIO = LOM -> x1.00 (30 rows, 6 of them not x1.00), e.g. [('BL10003269', 2002), ('BL10003269', 2003)]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_FREQ': 'M', 'AD_REGIO': 'TI'}: {'ok': 4565, 'x1.00': 136, 'x0.99': 28, 'x1.10': 15, 'x1.09': 11, '-0.04': 9, '-0.03': 9, '-0.05': 6, '-0.01': 6, '-0.06': 5, '-0.08': 4, 'x1.07': 4, '+0.01': 3, '-0.07': 3, 'x0.98': 3, '-0.02': 2, '+0.04': 2, 'x1.11': 2, 'x1.12': 2, '-0.09': 1, '+0.02': 1, '+0.03': 1, '+0.07': 1, '+0.18': 1, 'x1.08': 1}; example ['BL10000207', 2006]",
+     "conflicting vector {'RK_TARKEY[5]': '1', 'PH_FREQ': 'M', 'AD_REGIO': 'TI'}: {'ok': 2336, 'x1.00': 589, 'x0.99': 163, '-0.06': 67, '-0.05': 55, '-0.07': 47, '-0.04': 44, '-0.01': 41, '-0.08': 41, '-0.12': 34, '-0.02': 32, 'x1.10': 32, '-0.03': 27, '-0.09': 25, 'x0.98': 18, 'x1.01': 9, '+0.01': 7, '-0.10': 6, 'x0.00': 6, '-0.11': 5, 'x0.97': 4, 'x0.96': 4, 'x1.07': 3, 'x1.11': 3, '+0.02': 2, '+0.10': 1, '+0.08': 1, '+0.04': 1, '+0.06': 1, '+0.05': 1, 'x1.09': 1, 'x0.95': 1, '+0.03': 1}; example ['BL10000003', 1997]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_FREQ': 'E', 'AD_REGIO': 'TI'}: {'ok': 1513, 'x1.00': 49, 'x0.99': 15, '-0.07': 8, '-0.01': 8, '-0.02': 8, '-0.12': 6, '-0.08': 5, '-0.06': 5, '-0.09': 4, '-0.05': 3, '-0.03': 3, '-0.11': 1, '-0.10': 1, '-0.04': 1}; example ['BL10000043', 2007]"
+    ],
+    "total_charges": [
+     "Where it is wrong: optimal tree errors 6171, leaves 5 on {RK_TARKEY[5], PH_FREQ, PH_VRSNR}",
+     "RK_TARKEY[5] = 2 and PH_FREQ = J and PH_VRSNR = 4 -> x1.00 (18 rows, 0 of them not x1.00), e.g. [('BL10002057', 2006), ('BL10002057', 2007)]",
+     "RK_TARKEY[5] != 2 and RK_TARKEY[5] = 1 -> x1.00 (10598 rows, 2890 of them not x1.00), e.g. [('BL10000003', 1997), ('BL10000003', 1998)]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_FREQ': 'M', 'PH_VRSNR': '1'}: {'ok': 3888, 'x1.00': 1042, 'x1.01': 21, 'x1.02': 4, 'x1.03': 1}; example ['BL10000001', 2007]",
+     "conflicting vector {'RK_TARKEY[5]': '1', 'PH_FREQ': 'M', 'PH_VRSNR': '1'}: {'x1.00': 2815, 'x1.01': 698, 'ok': 30}; example ['BL10000022', 1999]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_FREQ': 'M', 'PH_VRSNR': '2'}: {'ok': 1498, 'x1.00': 500, 'x1.01': 22}; example ['BL10000055', 2005]"
+    ]
+   }
+  },
+  {
+   "id": "entry-charge-trade-year",
+   "rule": "The entry charge counts in the year of the trade date of the premium",
+   "off": "in the year the money was received",
+   "where": "year",
+   "where_label": "statement year",
+   "edits": [
+    {
+     "file": "funds/replay.py",
+     "old": "self.record(\"entry\", trade_day, entry_charge)",
+     "new": "self.record(\"entry\", received, entry_charge)"
+    }
+   ],
+   "run": "t4_annual_statement~off-entry-charge-trade-year",
+   "wrong_on": 23,
+   "wrong_off": 1963,
+   "broken": 1940,
+   "fixed": 0,
+   "broken_by_value": {
+    "premiums": 0,
+    "entry_charges": 1941,
+    "admin_fees": 0,
+    "management_fees": 0,
+    "risk_charges": 0,
+    "total_charges": 1940
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "year": "2023",
+     "entry_charges": {
+      "target": "33.30",
+      "off": "37.00"
+     },
+     "total_charges": {
+      "target": "613.43",
+      "off": "617.13"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "year": "2024",
+     "entry_charges": {
+      "target": "48.10",
+      "off": "44.40"
+     },
+     "total_charges": {
+      "target": "675.74",
+      "off": "672.04"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "year": "2025",
+     "entry_charges": {
+      "target": "40.70",
+      "off": "44.40"
+     },
+     "total_charges": {
+      "target": "678.89",
+      "off": "682.59"
+     }
+    },
+    {
+     "policy_id": "BL10000010",
+     "year": "2022",
+     "entry_charges": {
+      "target": "26.05",
+      "off": "29.30"
+     },
+     "total_charges": {
+      "target": "113.53",
+      "off": "116.78"
+     }
+    },
+    {
+     "policy_id": "BL10000010",
+     "year": "2023",
+     "entry_charges": {
+      "target": "35.68",
+      "off": "35.67"
+     },
+     "total_charges": {
+      "target": "183.84",
+      "off": "183.83"
+     }
+    },
+    {
+     "policy_id": "BL10000010",
+     "year": "2024",
+     "entry_charges": {
+      "target": "38.88",
+      "off": "35.64"
+     },
+     "total_charges": {
+      "target": "198.51",
+      "off": "195.27"
+     }
+    },
+    {
+     "policy_id": "BL10000010",
+     "year": "2025",
+     "entry_charges": {
+      "target": "32.40",
+      "off": "35.64"
+     },
+     "total_charges": {
+      "target": "193.09",
+      "off": "196.33"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "year": "2000",
+     "entry_charges": {
+      "target": "84.60",
+      "off": "126.90"
+     },
+     "total_charges": {
+      "target": "156.99",
+      "off": "199.29"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "year": "2001",
+     "entry_charges": {
+      "target": "211.50",
+      "off": "169.20"
+     },
+     "total_charges": {
+      "target": "464.02",
+      "off": "421.72"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "year": "2005",
+     "entry_charges": {
+      "target": "126.90",
+      "off": "169.20"
+     },
+     "total_charges": {
+      "target": "624.37",
+      "off": "666.67"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "year": "2007",
+     "entry_charges": {
+      "target": "211.50",
+      "off": "169.20"
+     },
+     "total_charges": {
+      "target": "764.97",
+      "off": "722.67"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "year": "2011",
+     "entry_charges": {
+      "target": "126.90",
+      "off": "169.20"
+     },
+     "total_charges": {
+      "target": "1011.36",
+      "off": "1053.66"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "year": "2012",
+     "entry_charges": {
+      "target": "211.50",
+      "off": "169.20"
+     },
+     "total_charges": {
+      "target": "1206.40",
+      "off": "1164.10"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "year": "2017",
+     "entry_charges": {
+      "target": "349.80",
+      "off": "381.60"
+     },
+     "total_charges": {
+      "target": "1072.41",
+      "off": "1104.21"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "year": "2018",
+     "entry_charges": {
+      "target": "413.40",
+      "off": "381.60"
+     },
+     "total_charges": {
+      "target": "1165.11",
+      "off": "1133.31"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "year": "2020",
+     "entry_charges": {
+      "target": "349.80",
+      "off": "381.60"
+     },
+     "total_charges": {
+      "target": "1289.55",
+      "off": "1321.35"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "year": "2021",
+     "entry_charges": {
+      "target": "333.90",
+      "off": "302.10"
+     },
+     "total_charges": {
+      "target": "1291.45",
+      "off": "1259.65"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "year": "2023",
+     "entry_charges": {
+      "target": "238.50",
+      "off": "262.35"
+     },
+     "total_charges": {
+      "target": "1607.70",
+      "off": "1631.55"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "year": "2024",
+     "entry_charges": {
+      "target": "286.20",
+      "off": "262.35"
+     },
+     "total_charges": {
+      "target": "1892.38",
+      "off": "1868.53"
+     }
+    },
+    {
+     "policy_id": "BL10000061",
+     "year": "2009",
+     "entry_charges": {
+      "target": "2.80",
+      "off": "5.60"
+     },
+     "total_charges": {
+      "target": "8.93",
+      "off": "11.73"
+     }
+    },
+    {
+     "policy_id": "BL10000061",
+     "year": "2010",
+     "entry_charges": {
+      "target": "30.80",
+      "off": "28.00"
+     },
+     "total_charges": {
+      "target": "113.15",
+      "off": "110.35"
+     }
+    },
+    {
+     "policy_id": "BL10000182",
+     "year": "2002",
+     "entry_charges": {
+      "target": "2.60",
+      "off": "3.90"
+     },
+     "total_charges": {
+      "target": "7.99",
+      "off": "9.29"
+     }
+    },
+    {
+     "policy_id": "BL10000182",
+     "year": "2003",
+     "entry_charges": {
+      "target": "15.60",
+      "off": "14.30"
+     },
+     "total_charges": {
+      "target": "95.05",
+      "off": "93.75"
+     }
+    },
+    {
+     "policy_id": "BL10000182",
+     "year": "2006",
+     "entry_charges": {
+      "target": "16.10",
+      "off": "17.40"
+     },
+     "total_charges": {
+      "target": "119.73",
+      "off": "121.03"
+     }
+    },
+    {
+     "policy_id": "BL10000182",
+     "year": "2007",
+     "entry_charges": {
+      "target": "13.00",
+      "off": "11.70"
+     },
+     "total_charges": {
+      "target": "124.01",
+      "off": "122.71"
+     }
+    }
+   ],
+   "trees": {
+    "entry_charges": [
+     "Where it is wrong: optimal tree errors 1918, leaves 1 on {PH_FREQ}",
+     "conflicting vector {'PH_FREQ': 'M'}: {'ok': 16406, 'x0.92': 561, 'x1.09': 334, 'x1.08': 280, 'x0.91': 213, 'x1.10': 143, 'x0.90': 69, 'x1.11': 54, 'x0.89': 18, 'x1.00': 18, 'x0.50': 12, 'x0.00': 9, 'x0.88': 8, 'x1.12': 8, 'x0.67': 7, 'x0.93': 6, 'x0.86': 6, 'x0.75': 6, 'x1.01': 6, 'x0.80': 5, 'x0.83': 4, 'x1.17': 4, 'x1.06': 4, 'x1.02': 4, 'x1.07': 4, 'x1.04': 3, 'x0.99': 3, '+5.10': 2, 'x1.03': 2, '+8.40': 1, '+4.40': 1, 'x1.20': 1, '+14.00': 1, 'x1.25': 1, 'x1.50': 1}; example ['BL10000001', 2023]",
+     "conflicting vector {'PH_FREQ': 'E'}: {'ok': 6450, 'x0.00': 4}; example ['BL10000541', 2013]",
+     "conflicting vector {'PH_FREQ': 'Q'}: {'ok': 6294, 'x1.33': 38, 'x0.80': 34, 'x0.75': 15, 'x1.25': 9, 'x1.50': 7, 'x0.67': 4, 'x0.50': 2, 'x1.08': 1}; example ['BL10000036', 2000]"
+    ],
+    "total_charges": [
+     "Where it is wrong: optimal tree errors 1922, leaves 1 on {PH_FREQ}",
+     "conflicting vector {'PH_FREQ': 'M'}: {'ok': 16391, 'x0.98': 303, 'x1.02': 300, 'x1.01': 284, 'x0.99': 277, 'x0.97': 173, 'x1.03': 173, 'x0.96': 78, 'x1.00': 54, 'x1.04': 54, 'x0.95': 26, 'x1.05': 22, 'x0.94': 11, 'x0.00': 9, 'x0.93': 7, 'x0.91': 3, 'x0.90': 3, 'x1.10': 3, 'x1.08': 3, 'x1.06': 3, 'x0.88': 2, 'x0.84': 2, 'x0.92': 2, 'x1.11': 2, '+30.00': 1, 'x0.89': 1, '-29.25': 1, '-8.40': 1, '-14.00': 1, 'x0.80': 1, '-14.60': 1, '-34.00': 1, 'x1.09': 1}; example ['BL10000001', 2023]",
+     "conflicting vector {'PH_FREQ': 'E'}: {'ok': 6448, 'x0.00': 4, 'x1.02': 1}; example ['BL10000541', 2013]",
+     "conflicting vector {'PH_FREQ': 'Q'}: {'ok': 6290, 'x1.06': 8, 'x0.96': 8, 'x0.94': 7, 'x1.07': 7, 'x0.95': 7, 'x1.04': 6, 'x0.98': 6, 'x1.05': 6, 'x0.93': 5, 'x1.08': 5, 'x1.02': 5, 'x0.97': 5, 'x1.03': 5, 'x1.10': 4, 'x0.90': 4, 'x0.92': 4, 'x1.09': 3, 'x1.01': 3, 'x0.88': 2, 'x1.11': 2, 'x0.99': 2, 'x0.91': 1, 'x0.89': 1, '-36.75': 1, '+36.75': 1, '-7.20': 1, '-10.80': 1}; example ['BL10000036', 2001]"
+    ]
+   }
+  },
+  {
+   "id": "risk-cap",
+   "rule": "The monthly risk charge is at most the value left in the policy",
+   "off": "the full risk charge, even above the value",
+   "where": "year",
+   "where_label": "statement year",
+   "edits": [
+    {
+     "file": "funds/charges.py",
+     "old": "return min(risk_charge(self.insured, tariff, value, insured_age, era_rounding(day_)), max(value, 0))",
+     "new": "return risk_charge(self.insured, tariff, value, insured_age, era_rounding(day_))"
+    }
+   ],
+   "run": "t4_annual_statement~off-risk-cap",
+   "wrong_on": 23,
+   "wrong_off": 24,
+   "broken": 1,
+   "fixed": 0,
+   "broken_by_value": {
+    "premiums": 0,
+    "entry_charges": 0,
+    "admin_fees": 0,
+    "management_fees": 0,
+    "risk_charges": 1,
+    "total_charges": 1
+   },
+   "examples": [
+    {
+     "policy_id": "BL10004387",
+     "year": "2020",
+     "risk_charges": {
+      "target": "69.46",
+      "off": "73.82"
+     },
+     "total_charges": {
+      "target": "174.14",
+      "off": "178.50"
+     }
+    }
+   ],
+   "trees": {}
+  },
+  {
+   "id": "entry-agreements",
+   "rule": "An individual agreement (NRAGRE) replaces the entry charge rate of the broker tier",
+   "off": "the rate of the broker tier for every policy",
+   "where": "year",
+   "where_label": "statement year",
+   "edits": [
+    {
+     "file": "funds/replay.py",
+     "old": "entry_rate = self.rules.agreed_rate(\"ENT\", received, tier_rate)",
+     "new": "entry_rate = tier_rate"
+    }
+   ],
+   "run": "t4_annual_statement~off-entry-agreements",
+   "wrong_on": 23,
+   "wrong_off": 1570,
+   "broken": 1547,
+   "fixed": 0,
+   "broken_by_value": {
+    "premiums": 0,
+    "entry_charges": 1042,
+    "admin_fees": 0,
+    "management_fees": 1534,
+    "risk_charges": 713,
+    "total_charges": 1547
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000022",
+     "year": "1998",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "101.82"
+     },
+     "management_fees": {
+      "target": "15.60",
+      "off": "14.80"
+     },
+     "total_charges": {
+      "target": "57.60",
+      "off": "158.62"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "1999",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "174.12"
+     },
+     "management_fees": {
+      "target": "106.64",
+      "off": "101.16"
+     },
+     "risk_charges": {
+      "target": "0.16",
+      "off": "0.15"
+     },
+     "total_charges": {
+      "target": "190.80",
+      "off": "359.43"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2000",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "176.22"
+     },
+     "management_fees": {
+      "target": "211.70",
+      "off": "200.84"
+     },
+     "risk_charges": {
+      "target": "0.43",
+      "off": "0.42"
+     },
+     "total_charges": {
+      "target": "296.13",
+      "off": "461.48"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2001",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "174.00"
+     },
+     "management_fees": {
+      "target": "266.77",
+      "off": "253.00"
+     },
+     "risk_charges": {
+      "target": "0.74",
+      "off": "0.70"
+     },
+     "total_charges": {
+      "target": "351.51",
+      "off": "511.70"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2002",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "161.86"
+     },
+     "management_fees": {
+      "target": "311.88",
+      "off": "295.68"
+     },
+     "risk_charges": {
+      "target": "1.10",
+      "off": "1.07"
+     },
+     "total_charges": {
+      "target": "396.98",
+      "off": "542.61"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2003",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "174.00"
+     },
+     "management_fees": {
+      "target": "369.52",
+      "off": "350.34"
+     },
+     "risk_charges": {
+      "target": "1.55",
+      "off": "1.49"
+     },
+     "total_charges": {
+      "target": "461.07",
+      "off": "615.83"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2004",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "175.26"
+     },
+     "management_fees": {
+      "target": "432.14",
+      "off": "409.73"
+     },
+     "risk_charges": {
+      "target": "2.16",
+      "off": "2.06"
+     },
+     "total_charges": {
+      "target": "524.30",
+      "off": "677.05"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2005",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "188.50"
+     },
+     "management_fees": {
+      "target": "471.07",
+      "off": "446.69"
+     },
+     "risk_charges": {
+      "target": "2.74",
+      "off": "2.57"
+     },
+     "total_charges": {
+      "target": "563.81",
+      "off": "727.76"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2006",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "159.50"
+     },
+     "management_fees": {
+      "target": "531.09",
+      "off": "503.55"
+     },
+     "risk_charges": {
+      "target": "3.63",
+      "off": "3.44"
+     },
+     "total_charges": {
+      "target": "624.72",
+      "off": "756.49"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2007",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "174.00"
+     },
+     "management_fees": {
+      "target": "597.42",
+      "off": "566.52"
+     },
+     "risk_charges": {
+      "target": "4.74",
+      "off": "4.50"
+     },
+     "total_charges": {
+      "target": "692.16",
+      "off": "835.02"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2008",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "147.30"
+     },
+     "management_fees": {
+      "target": "627.51",
+      "off": "594.94"
+     },
+     "risk_charges": {
+      "target": "5.62",
+      "off": "5.34"
+     },
+     "total_charges": {
+      "target": "723.13",
+      "off": "837.58"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2009",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "130.50"
+     },
+     "management_fees": {
+      "target": "658.82",
+      "off": "624.58"
+     },
+     "risk_charges": {
+      "target": "6.66",
+      "off": "6.32"
+     },
+     "total_charges": {
+      "target": "755.48",
+      "off": "851.40"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2010",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "188.50"
+     },
+     "management_fees": {
+      "target": "715.55",
+      "off": "678.52"
+     },
+     "risk_charges": {
+      "target": "8.24",
+      "off": "7.81"
+     },
+     "total_charges": {
+      "target": "813.79",
+      "off": "964.83"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2011",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "145.00"
+     },
+     "management_fees": {
+      "target": "756.32",
+      "off": "717.10"
+     },
+     "risk_charges": {
+      "target": "9.74",
+      "off": "9.21"
+     },
+     "total_charges": {
+      "target": "856.06",
+      "off": "961.31"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2012",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "159.50"
+     },
+     "management_fees": {
+      "target": "752.31",
+      "off": "713.31"
+     },
+     "risk_charges": {
+      "target": "10.88",
+      "off": "10.32"
+     },
+     "total_charges": {
+      "target": "853.19",
+      "off": "973.13"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2013",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "174.00"
+     },
+     "management_fees": {
+      "target": "848.52",
+      "off": "804.58"
+     },
+     "risk_charges": {
+      "target": "13.59",
+      "off": "12.90"
+     },
+     "total_charges": {
+      "target": "964.11",
+      "off": "1093.48"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2014",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "173.94"
+     },
+     "management_fees": {
+      "target": "933.62",
+      "off": "885.22"
+     },
+     "risk_charges": {
+      "target": "16.87",
+      "off": "16.01"
+     },
+     "total_charges": {
+      "target": "1052.49",
+      "off": "1177.17"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2015",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "159.39"
+     },
+     "management_fees": {
+      "target": "1034.97",
+      "off": "981.43"
+     },
+     "risk_charges": {
+      "target": "21.05",
+      "off": "19.94"
+     },
+     "total_charges": {
+      "target": "1158.02",
+      "off": "1262.76"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2016",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "159.39"
+     },
+     "management_fees": {
+      "target": "1036.60",
+      "off": "982.98"
+     },
+     "risk_charges": {
+      "target": "23.65",
+      "off": "22.44"
+     },
+     "total_charges": {
+      "target": "1162.25",
+      "off": "1266.81"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2017",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "144.90"
+     },
+     "management_fees": {
+      "target": "1073.61",
+      "off": "1018.09"
+     },
+     "risk_charges": {
+      "target": "27.14",
+      "off": "25.73"
+     },
+     "total_charges": {
+      "target": "1202.75",
+      "off": "1290.72"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2018",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "173.88"
+     },
+     "management_fees": {
+      "target": "1160.19",
+      "off": "1100.19"
+     },
+     "risk_charges": {
+      "target": "32.82",
+      "off": "31.13"
+     },
+     "total_charges": {
+      "target": "1295.01",
+      "off": "1407.20"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2019",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "173.88"
+     },
+     "management_fees": {
+      "target": "1151.95",
+      "off": "1092.31"
+     },
+     "risk_charges": {
+      "target": "35.86",
+      "off": "34.03"
+     },
+     "total_charges": {
+      "target": "1289.81",
+      "off": "1402.22"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2020",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "173.88"
+     },
+     "management_fees": {
+      "target": "1171.90",
+      "off": "1111.11"
+     },
+     "risk_charges": {
+      "target": "39.97",
+      "off": "37.93"
+     },
+     "total_charges": {
+      "target": "1313.87",
+      "off": "1424.92"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2021",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "188.37"
+     },
+     "management_fees": {
+      "target": "1247.50",
+      "off": "1182.74"
+     },
+     "risk_charges": {
+      "target": "47.04",
+      "off": "44.62"
+     },
+     "total_charges": {
+      "target": "1396.54",
+      "off": "1517.73"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "year": "2022",
+     "entry_charges": {
+      "target": "0.00",
+      "off": "159.39"
+     },
+     "management_fees": {
+      "target": "1412.54",
+      "off": "1339.26"
+     },
+     "risk_charges": {
+      "target": "59.84",
+      "off": "56.78"
+     },
+     "total_charges": {
+      "target": "1574.38",
+      "off": "1657.43"
+     }
+    }
+   ],
+   "trees": {
+    "entry_charges": [
+     "Where it is wrong: optimal tree errors 1006, leaves 4 on {BR_REGIO, PH_FREQ, RK_TARKEY[5]}",
+     "BR_REGIO = SUD and PH_FREQ = H and RK_TARKEY[5] = 3 -> x0.00 (5 rows, 0 of them not x0.00), e.g. [('BL10000882', 2015), ('BL10000882', 2016)]",
+     "conflicting vector {'BR_REGIO': 'OST', 'PH_FREQ': 'M', 'RK_TARKEY[5]': '2'}: {'ok': 1511, 'x0.38': 14, 'x0.12': 13, 'x0.17': 4, 'x0.50': 4, 'x0.37': 2, 'x0.14': 1, 'x0.40': 1, 'x0.13': 1, 'x0.43': 1}; example ['BL10001227', 2008]",
+     "conflicting vector {'BR_REGIO': 'WST', 'PH_FREQ': 'M', 'RK_TARKEY[5]': '2'}: {'ok': 1430, 'x0.50': 26, 'x0.25': 16, 'x0.00': 3, 'x0.12': 2}; example ['BL10000722', 2008]",
+     "conflicting vector {'BR_REGIO': 'MIT', 'PH_FREQ': 'M', 'RK_TARKEY[5]': '2'}: {'ok': 1441, 'x0.20': 11, 'x0.10': 11, 'x0.30': 5, 'x0.12': 4, 'x0.25': 3, 'x0.75': 1}; example ['BL10000974', 2006]"
+    ],
+    "management_fees": [
+     "Where it is wrong: optimal tree errors 1527, leaves 4 on {PH_FREQ, BR_REGIO@RK_ENDDT, PS_LANG}",
+     "PH_FREQ = H and BR_REGIO@RK_ENDDT = SUD and PS_LANG = IT -> x1.06 (23 rows, 12 of them not x1.06), e.g. [('BL10001031', 2009), ('BL10001031', 2010)]",
+     "conflicting vector {'PH_FREQ': 'M', 'BR_REGIO@RK_ENDDT': 'MIT', 'PS_LANG': 'EN'}: {'ok': 1054, 'x1.02': 24, 'x1.01': 23, 'x1.03': 9, 'x1.04': 8, 'x1.00': 4}; example ['BL10001833', 2016]",
+     "conflicting vector {'PH_FREQ': 'M', 'BR_REGIO@RK_ENDDT': 'WST', 'PS_LANG': 'EN'}: {'ok': 1023, 'x1.03': 21, 'x1.01': 13, 'x1.04': 6, 'x1.02': 1}; example ['BL10000221', 2013]",
+     "conflicting vector {'PH_FREQ': 'M', 'BR_REGIO@RK_ENDDT': 'OST', 'PS_LANG': 'IT'}: {'ok': 995, 'x1.01': 11, 'x1.04': 10, 'x1.03': 6, 'x1.00': 4, 'x1.02': 4}; example ['BL10000045', 2016]"
+    ],
+    "risk_charges": [
+     "Where it is wrong: optimal tree errors 673, leaves 6 on {PS_LANG, AD_REGIO@RK_BEGDT, PS_LANG@RK_BEGDT}",
+     "PS_LANG = DE and AD_REGIO@RK_BEGDT = LOM and PS_LANG@RK_BEGDT = EN -> x1.05 (45 rows, 24 of them not x1.05), e.g. [('BL10004588', 2005), ('BL10004588', 2006)]",
+     "PS_LANG != DE and AD_REGIO@RK_BEGDT = NW and PS_LANG@RK_BEGDT = DE -> x1.01 (19 rows, 9 of them not x1.01), e.g. [('BL10001964', 2015), ('BL10001964', 2016)]",
+     "conflicting vector {'PS_LANG': 'DE', 'AD_REGIO@RK_BEGDT': 'TI', 'PS_LANG@RK_BEGDT': 'DE'}: {'ok': 5324, 'x1.05': 32, 'x1.04': 25, 'x1.03': 16, '+0.01': 13, 'x1.02': 9, '+0.02': 9, 'x0.99': 8, 'x1.00': 7, '+0.04': 7, '+0.03': 5, 'x0.93': 4, 'x1.01': 3, 'x0.98': 3, 'x0.00': 3, 'x1.06': 3, 'x0.97': 2, 'x0.96': 2, 'x0.95': 2, '+0.05': 2, '-0.25': 1, '-0.01': 1, '+0.06': 1, 'x1.07': 1, '-0.09': 1}; example ['BL10000379', 2018]",
+     "conflicting vector {'PS_LANG': 'EN', 'AD_REGIO@RK_BEGDT': 'TI', 'PS_LANG@RK_BEGDT': 'EN'}: {'ok': 5335, 'x1.02': 26, '+0.01': 22, '+0.02': 16, 'x1.03': 16, 'x1.01': 10, '+0.03': 8, 'x1.04': 6, '+0.04': 5, 'x1.05': 4, 'x0.99': 4, 'x0.96': 2, 'x0.97': 2, '+0.05': 1, 'x1.06': 1, 'x1.07': 1, 'x1.00': 1, 'x0.98': 1, 'x0.94': 1, 'x0.92': 1, 'x0.00': 1, '-0.01': 1, 'x0.86': 1}; example ['BL10000037', 2018]",
+     "conflicting vector {'PS_LANG': 'IT', 'AD_REGIO@RK_BEGDT': 'TI', 'PS_LANG@RK_BEGDT': 'IT'}: {'ok': 5238, 'x0.99': 9, 'x1.02': 9, '+0.01': 7, 'x1.01': 7, '+0.02': 7, 'x1.00': 7, 'x1.05': 6, 'x0.97': 4, '+0.03': 3, 'x0.96': 3, 'x1.04': 3, 'x0.94': 2, 'x0.62': 2, 'x1.03': 2, 'x0.98': 2, 'x1.07': 2, '-0.07': 1, '-0.16': 1, '-0.11': 1, 'x0.90': 1, 'x0.67': 1, 'x0.89': 1, 'x0.86': 1, 'x0.92': 1}; example ['BL10000045', 2016]"
+    ],
+    "total_charges": [
+     "Where it is wrong: optimal tree errors 1523, leaves 3 on {BR_REGIO, BR_REGIO@RK_ENDDT}",
+     "BR_REGIO != SUD and BR_REGIO@RK_ENDDT = SUD -> x0.58 (4 rows, 3 of them not x0.58), e.g. [('BL10003331', 2022)]",
+     "conflicting vector {'BR_REGIO': 'MIT', 'BR_REGIO@RK_ENDDT': 'MIT'}: {'ok': 7221, 'x1.01': 57, 'x1.03': 31, 'x1.05': 28, 'x1.00': 25, 'x1.02': 15, 'x0.87': 14, 'x0.84': 11, 'x0.91': 11, 'x0.88': 9, 'x0.93': 9, 'x0.85': 9, 'x0.89': 8, 'x0.75': 8, 'x0.82': 8, 'x0.81': 8, 'x0.95': 7, 'x0.94': 7, 'x0.74': 7, 'x0.77': 7, 'x0.76': 7, 'x0.78': 7, 'x0.86': 7, 'x0.90': 6, 'x0.97': 6, 'x0.79': 6, 'x0.92': 6, 'x0.96': 5, 'x0.72': 5, 'x0.68': 5, 'x0.73': 5, 'x0.71': 4, 'x0.69': 4, 'x0.70': 3, 'x0.83': 3, 'x0.63': 3, 'x0.67': 3, 'x0.54': 3, 'x0.18': 3, 'x0.61': 3, 'x0.65': 3, 'x0.53': 2, 'x0.60': 2, 'x0.80': 2, 'x0.62': 2, 'x0.66': 2, 'x0.58': 2, 'x0.64': 2, 'x0.56': 2, 'x0.55': 1, '-26.20': 1, 'x0.40': 1, 'x0.57': 1, 'x0.51': 1, 'x1.04': 1, 'x0.00': 1, 'x0.50': 1, 'x0.59': 1}; example ['BL10000151', 2010]",
+     "conflicting vector {'BR_REGIO': 'OST', 'BR_REGIO@RK_ENDDT': 'OST'}: {'ok': 6726, 'x1.01': 64, 'x1.00': 23, 'x0.89': 14, 'x0.90': 13, 'x1.02': 13, 'x0.77': 11, 'x0.96': 11, 'x0.88': 9, 'x0.79': 8, 'x0.84': 8, 'x0.81': 7, 'x0.83': 7, 'x0.93': 7, 'x0.91': 7, 'x0.95': 7, 'x0.85': 6, 'x0.97': 6, 'x0.87': 5, 'x0.66': 4, 'x0.70': 4, 'x0.86': 4, 'x0.71': 3, 'x0.74': 3, 'x0.78': 3, 'x0.73': 3, 'x0.75': 3, 'x0.94': 3, 'x0.50': 3, 'x0.82': 3, 'x0.54': 2, 'x0.63': 2, 'x0.68': 2, 'x0.69': 2, 'x0.67': 2, 'x0.62': 2, 'x0.76': 2, 'x0.55': 2, 'x0.65': 2, 'x0.72': 2, 'x0.37': 2, 'x0.53': 2, 'x0.58': 1, 'x0.59': 1, 'x0.31': 1, 'x0.92': 1, 'x0.98': 1, 'x0.80': 1, 'x0.64': 1}; example ['BL10000045', 2016]",
+     "conflicting vector {'BR_REGIO': 'SUD', 'BR_REGIO@RK_ENDDT': 'SUD'}: {'ok': 6275, 'x1.02': 35, 'x1.01': 23, 'x0.92': 22, 'x0.97': 16, 'x0.91': 12, 'x1.00': 12, 'x0.84': 11, 'x0.87': 11, 'x0.83': 10, 'x0.80': 10, 'x1.04': 10, 'x0.77': 9, 'x0.89': 9, 'x0.88': 9, 'x0.94': 9, 'x0.98': 9, 'x0.96': 8, 'x0.72': 8, 'x0.74': 8, 'x0.90': 8, 'x0.93': 7, 'x0.62': 7, 'x0.81': 7, 'x0.85': 7, 'x0.95': 6, 'x0.78': 6, 'x0.73': 5, 'x0.79': 5, 'x0.82': 5, 'x1.05': 5, 'x0.65': 5, 'x0.69': 4, 'x0.75': 4, 'x0.86': 4, 'x0.70': 4, 'x0.61': 3, 'x0.71': 3, 'x0.76': 3, 'x0.36': 2, 'x0.53': 2, 'x0.64': 2, 'x0.55': 2, 'x0.58': 2, 'x0.63': 2, 'x0.99': 2, 'x0.68': 2, 'x0.40': 2, 'x0.31': 1, 'x0.49': 1, 'x0.67': 1, 'x0.56': 1, 'x0.59': 1, 'x0.54': 1, 'x0.50': 1, 'x0.18': 1, 'x0.57': 1, 'x1.03': 1, 'x0.51': 1, 'x0.00': 1, 'x0.42': 1}; example ['BL10000022', 1998]"
+    ]
+   }
+  },
+  {
+   "id": "amc-agreements",
+   "rule": "An individual agreement (NRAGRE) replaces the management charge rate of the tariff",
+   "off": "the rate of the tariff for every policy",
+   "where": "year",
+   "where_label": "statement year",
+   "edits": [
+    {
+     "file": "funds/charges.py",
+     "old": "self.agreed_rate(\"AMC\", day_, tariff[POT_RATE[key[1]]])",
+     "new": "tariff[POT_RATE[key[1]]]"
+    }
+   ],
+   "run": "t4_annual_statement~off-amc-agreements",
+   "wrong_on": 23,
+   "wrong_off": 426,
+   "broken": 403,
+   "fixed": 0,
+   "broken_by_value": {
+    "premiums": 0,
+    "entry_charges": 0,
+    "admin_fees": 0,
+    "management_fees": 403,
+    "risk_charges": 75,
+    "total_charges": 403
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000105",
+     "year": "2018",
+     "management_fees": {
+      "target": "217.22",
+      "off": "233.23"
+     },
+     "risk_charges": {
+      "target": "110.80",
+      "off": "110.82"
+     },
+     "total_charges": {
+      "target": "691.62",
+      "off": "707.65"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "year": "2019",
+     "management_fees": {
+      "target": "221.61",
+      "off": "318.99"
+     },
+     "risk_charges": {
+      "target": "50.45",
+      "off": "51.11"
+     },
+     "total_charges": {
+      "target": "635.66",
+      "off": "733.70"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "year": "2020",
+     "management_fees": {
+      "target": "290.78",
+      "off": "383.35"
+     },
+     "risk_charges": {
+      "target": "3.84",
+      "off": "4.39"
+     },
+     "total_charges": {
+      "target": "658.22",
+      "off": "751.34"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "year": "2021",
+     "management_fees": {
+      "target": "379.31",
+      "off": "471.30"
+     },
+     "total_charges": {
+      "target": "707.19",
+      "off": "799.18"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "year": "2022",
+     "management_fees": {
+      "target": "423.30",
+      "off": "501.20"
+     },
+     "total_charges": {
+      "target": "715.46",
+      "off": "793.36"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "year": "2023",
+     "management_fees": {
+      "target": "475.07",
+      "off": "553.89"
+     },
+     "total_charges": {
+      "target": "785.23",
+      "off": "864.05"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "year": "2024",
+     "management_fees": {
+      "target": "529.29",
+      "off": "605.27"
+     },
+     "total_charges": {
+      "target": "839.45",
+      "off": "915.43"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "year": "2025",
+     "management_fees": {
+      "target": "573.18",
+      "off": "642.62"
+     },
+     "total_charges": {
+      "target": "883.34",
+      "off": "952.78"
+     }
+    },
+    {
+     "policy_id": "BL10000183",
+     "year": "2020",
+     "management_fees": {
+      "target": "624.03",
+      "off": "597.85"
+     },
+     "total_charges": {
+      "target": "672.61",
+      "off": "646.43"
+     }
+    },
+    {
+     "policy_id": "BL10000183",
+     "year": "2021",
+     "management_fees": {
+      "target": "714.83",
+      "off": "643.92"
+     },
+     "total_charges": {
+      "target": "763.49",
+      "off": "692.58"
+     }
+    },
+    {
+     "policy_id": "BL10000183",
+     "year": "2022",
+     "management_fees": {
+      "target": "739.48",
+      "off": "666.79"
+     },
+     "total_charges": {
+      "target": "788.20",
+      "off": "715.51"
+     }
+    },
+    {
+     "policy_id": "BL10000183",
+     "year": "2023",
+     "management_fees": {
+      "target": "704.19",
+      "off": "635.58"
+     },
+     "total_charges": {
+      "target": "770.93",
+      "off": "702.32"
+     }
+    },
+    {
+     "policy_id": "BL10000183",
+     "year": "2024",
+     "management_fees": {
+      "target": "720.31",
+      "off": "650.86"
+     },
+     "risk_charges": {
+      "target": "0.85",
+      "off": "0.87"
+     },
+     "total_charges": {
+      "target": "787.16",
+      "off": "717.73"
+     }
+    },
+    {
+     "policy_id": "BL10000183",
+     "year": "2025",
+     "management_fees": {
+      "target": "824.77",
+      "off": "745.92"
+     },
+     "total_charges": {
+      "target": "891.82",
+      "off": "812.97"
+     }
+    },
+    {
+     "policy_id": "BL10000295",
+     "year": "2024",
+     "management_fees": {
+      "target": "976.63",
+      "off": "1453.05"
+     },
+     "risk_charges": {
+      "target": "20.05",
+      "off": "20.04"
+     },
+     "total_charges": {
+      "target": "1062.68",
+      "off": "1539.09"
+     }
+    },
+    {
+     "policy_id": "BL10000295",
+     "year": "2025",
+     "management_fees": {
+      "target": "900.19",
+      "off": "1612.49"
+     },
+     "risk_charges": {
+      "target": "24.69",
+      "off": "24.57"
+     },
+     "total_charges": {
+      "target": "990.88",
+      "off": "1703.06"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2011",
+     "management_fees": {
+      "target": "411.08",
+      "off": "441.82"
+     },
+     "total_charges": {
+      "target": "569.46",
+      "off": "600.20"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2012",
+     "management_fees": {
+      "target": "311.65",
+      "off": "496.84"
+     },
+     "total_charges": {
+      "target": "483.73",
+      "off": "668.92"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2013",
+     "management_fees": {
+      "target": "375.94",
+      "off": "571.55"
+     },
+     "risk_charges": {
+      "target": "0.64",
+      "off": "0.63"
+     },
+     "total_charges": {
+      "target": "560.18",
+      "off": "755.78"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2014",
+     "management_fees": {
+      "target": "424.42",
+      "off": "624.43"
+     },
+     "total_charges": {
+      "target": "608.76",
+      "off": "808.77"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2015",
+     "management_fees": {
+      "target": "441.52",
+      "off": "643.76"
+     },
+     "total_charges": {
+      "target": "700.75",
+      "off": "902.99"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2016",
+     "management_fees": {
+      "target": "458.32",
+      "off": "664.83"
+     },
+     "total_charges": {
+      "target": "697.27",
+      "off": "903.78"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2017",
+     "management_fees": {
+      "target": "502.39",
+      "off": "718.45"
+     },
+     "risk_charges": {
+      "target": "1.13",
+      "off": "1.10"
+     },
+     "total_charges": {
+      "target": "768.72",
+      "off": "984.75"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2018",
+     "management_fees": {
+      "target": "564.20",
+      "off": "797.45"
+     },
+     "risk_charges": {
+      "target": "1.34",
+      "off": "1.31"
+     },
+     "total_charges": {
+      "target": "789.94",
+      "off": "1023.16"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "year": "2019",
+     "management_fees": {
+      "target": "591.28",
+      "off": "808.61"
+     },
+     "risk_charges": {
+      "target": "1.52",
+      "off": "1.49"
+     },
+     "total_charges": {
+      "target": "844.40",
+      "off": "1061.70"
+     }
+    }
+   ],
+   "trees": {
+    "management_fees": [
+     "Where it is wrong: optimal tree errors 352, leaves 1 on {BR_REGIO@RK_ENDDT}",
+     "conflicting vector {'BR_REGIO@RK_ENDDT': 'MIT'}: {'ok': 7586, 'x1.11': 5, 'x0.77': 4, 'x0.79': 4, 'x0.69': 3, 'x0.73': 3, 'x0.78': 3, 'x0.80': 3, 'x0.67': 2, 'x0.56': 2, 'x0.74': 2, 'x0.75': 2, 'x0.76': 2, 'x0.32': 2, 'x0.88': 2, 'x0.93': 1, 'x0.63': 1, 'x0.66': 1, 'x0.68': 1, 'x0.71': 1, 'x0.54': 1, 'x0.72': 1, 'x0.30': 1, 'x0.31': 1, 'x0.33': 1, 'x0.59': 1, 'x0.42': 1, 'x0.84': 1, 'x0.89': 1, 'x0.55': 1}; example ['BL10000183', 2021]",
+     "conflicting vector {'BR_REGIO@RK_ENDDT': 'OST'}: {'ok': 6928, 'x0.51': 10, 'x0.47': 6, 'x0.50': 6, 'x1.11': 5, 'x0.67': 5, 'x0.48': 5, 'x0.49': 5, 'x0.52': 5, 'x0.45': 4, 'x0.75': 3, 'x0.62': 3, 'x0.20': 2, 'x0.71': 2, 'x0.72': 2, 'x0.33': 2, 'x0.58': 2, 'x0.61': 2, 'x0.74': 2, 'x0.46': 2, 'x0.53': 2, 'x0.80': 1, 'x0.83': 1, 'x0.65': 1, 'x0.66': 1, 'x0.68': 1, 'x0.54': 1, 'x0.69': 1, 'x0.73': 1, 'x0.76': 1, 'x0.77': 1, 'x0.40': 1, 'x0.55': 1, 'x0.59': 1, 'x0.60': 1, 'x0.63': 1, 'x0.95': 1, 'x0.42': 1, 'x0.43': 1, 'x0.44': 1}; example ['BL10000427', 2025]",
+     "conflicting vector {'BR_REGIO@RK_ENDDT': 'SUD'}: {'ok': 6601, 'x0.84': 4, 'x0.93': 3, 'x0.95': 3, 'x0.45': 3, 'x0.76': 2, 'x0.83': 2, 'x0.46': 2, 'x0.69': 1, 'x0.80': 1, 'x0.89': 1, 'x0.49': 1, 'x0.51': 1, 'x0.53': 1, 'x0.54': 1, 'x0.55': 1, 'x0.67': 1, 'x0.77': 1, 'x0.31': 1, 'x0.37': 1, 'x0.41': 1, 'x0.88': 1, 'x0.73': 1, 'x0.40': 1, 'x0.42': 1, 'x0.52': 1, 'x0.56': 1, 'x0.60': 1, 'x0.63': 1, 'x0.66': 1, 'x0.68': 1, 'x0.44': 1}; example ['BL10000105', 2018]"
+    ],
+    "risk_charges": [
+     "Where it is wrong: optimal tree errors 58, leaves 1 on {PH_MKTCD}",
+     "conflicting vector {'PH_MKTCD': None}: {'ok': 10731, '+0.01': 5, '+0.02': 4, 'x1.00': 2, 'x0.99': 1, '+0.03': 1, 'x1.03': 1, '+0.07': 1, '+0.10': 1, 'x1.05': 1, 'x1.01': 1, 'x1.02': 1}; example ['BL10001510', 2019]",
+     "conflicting vector {'PH_MKTCD': 'WEB14'}: {'ok': 6282, 'x1.00': 5, 'x0.99': 4, '+0.01': 4, 'x1.02': 2, '+0.02': 1}; example ['BL10000105', 2018]",
+     "conflicting vector {'PH_MKTCD': 'TV2017'}: {'ok': 5951, 'x0.99': 6, 'x1.03': 3, '+0.01': 2, 'x1.02': 2, 'x1.00': 1, '+0.10': 1, 'x1.05': 1}; example ['BL10000295', 2024]"
+    ],
+    "total_charges": [
+     "Where it is wrong: optimal tree errors 390, leaves 4 on {BR_REGIO@RK_BEGDT, RK_TARKEY[5], BR_REGIO@RK_ENDDT}",
+     "BR_REGIO@RK_BEGDT = NRD and RK_TARKEY[5] = 4 and BR_REGIO@RK_ENDDT != NRD -> x0.69 (6 rows, 4 of them not x0.69), e.g. [('BL10000414', 2023), ('BL10000414', 2024)]",
+     "conflicting vector {'BR_REGIO@RK_BEGDT': 'MIT', 'RK_TARKEY[5]': '2', 'BR_REGIO@RK_ENDDT': 'MIT'}: {'ok': 2905, 'x0.91': 9, 'x0.89': 4, 'x0.96': 1, 'x0.92': 1, 'x0.90': 1, 'x1.09': 1}; example ['BL10001245', 2011]",
+     "conflicting vector {'BR_REGIO@RK_BEGDT': 'SUD', 'RK_TARKEY[5]': '2', 'BR_REGIO@RK_ENDDT': 'SUD'}: {'ok': 2709, 'x0.95': 6, 'x0.88': 5, 'x0.94': 2, 'x0.58': 2, 'x0.60': 2, 'x0.74': 1, 'x0.55': 1, 'x1.10': 1, 'x0.90': 1, 'x0.92': 1, 'x0.91': 1, 'x0.89': 1, 'x0.87': 1, 'x0.93': 1, 'x0.96': 1, 'x0.97': 1}; example ['BL10001915', 2022]",
+     "conflicting vector {'BR_REGIO@RK_BEGDT': 'OST', 'RK_TARKEY[5]': '2', 'BR_REGIO@RK_ENDDT': 'OST'}: {'ok': 2567, 'x0.88': 6, 'x0.70': 6, 'x0.89': 4, 'x0.87': 3, 'x0.69': 3, 'x0.71': 3, 'x0.72': 3, 'x0.86': 2, 'x0.91': 1, 'x0.85': 1, 'x0.84': 1, 'x0.73': 1, 'x0.93': 1, 'x0.57': 1, 'x1.10': 1}; example ['BL10000447', 2025]"
+    ]
+   }
+  }
+ ]
+}

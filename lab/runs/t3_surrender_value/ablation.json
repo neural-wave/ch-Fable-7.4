@@ -1,0 +1,1657 @@
+{
+ "task": "t3_surrender_value",
+ "keys": [
+  "policy_id",
+  "valuation_date"
+ ],
+ "values": [
+  "surrender_value"
+ ],
+ "rows": 6153,
+ "wrong": 16,
+ "cards": [
+  {
+   "id": "system-change",
+   "rule": "Before the system change of 2007-08-11 COBOL cut units and cents off and charged management fees by days / 360",
+   "off": "every booking computed like Neuron NG",
+   "where": "PH_BEGDT",
+   "where_label": "begin date of the policy",
+   "edits": [
+    {
+     "file": "neuron/eras.py",
+     "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)",
+     "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"
+    }
+   ],
+   "run": "t3_surrender_value~off-system-change",
+   "wrong_on": 16,
+   "wrong_off": 1536,
+   "broken": 1520,
+   "fixed": 0,
+   "broken_by_value": {
+    "surrender_value": 1520
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "19146.91",
+      "off": "19146.93"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "41577.35",
+      "off": "41577.37"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "4762.01",
+      "off": "4762.36"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "3325.80",
+      "off": "3326.34"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "118181.18",
+      "off": "118189.95"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "195044.90",
+      "off": "195073.82"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "272106.20",
+      "off": "272146.65"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "33145.43",
+      "off": "33184.72"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "85579.92",
+      "off": "85634.16"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "123634.36",
+      "off": "123701.72"
+     }
+    },
+    {
+     "policy_id": "BL10000029",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "74795.67",
+      "off": "74850.04"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "37681.68",
+      "off": "37703.50"
+     }
+    },
+    {
+     "policy_id": "BL10000043",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "7000.42",
+      "off": "7000.62"
+     }
+    },
+    {
+     "policy_id": "BL10000043",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "9080.18",
+      "off": "9080.47"
+     }
+    },
+    {
+     "policy_id": "BL10000044",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "60207.26",
+      "off": "60266.30"
+     }
+    },
+    {
+     "policy_id": "BL10000044",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "181714.24",
+      "off": "181780.47"
+     }
+    },
+    {
+     "policy_id": "BL10000044",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "179424.36",
+      "off": "179477.86"
+     }
+    },
+    {
+     "policy_id": "BL10000050",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "9829.58",
+      "off": "9839.62"
+     }
+    },
+    {
+     "policy_id": "BL10000055",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "13475.65",
+      "off": "13481.30"
+     }
+    },
+    {
+     "policy_id": "BL10000059",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "66455.34",
+      "off": "66498.22"
+     }
+    },
+    {
+     "policy_id": "BL10000059",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "43050.39",
+      "off": "43081.79"
+     }
+    },
+    {
+     "policy_id": "BL10000076",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "135086.58",
+      "off": "135089.94"
+     }
+    },
+    {
+     "policy_id": "BL10000078",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "8859.96",
+      "off": "8879.65"
+     }
+    },
+    {
+     "policy_id": "BL10000078",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "3582.61",
+      "off": "3593.53"
+     }
+    },
+    {
+     "policy_id": "BL10000078",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "1242.53",
+      "off": "1247.56"
+     }
+    }
+   ],
+   "trees": {
+    "surrender_value": [
+     "Where it is wrong: optimal tree errors 338, leaves 5 on {RK_TARKEY[5], PH_STATE@valuation_date, weekday(valuation_date)}",
+     "PH_STATE@valuation_date != 60 and RK_TARKEY[5] = 1 and PH_STATE@valuation_date != 70 -> x1.00 (1017 rows, 0 of them not x1.00), e.g. [('BL10000022', datetime.date(2006, 12, 31)), ('BL10000022', datetime.date(2020, 4, 30))]",
+     "PH_STATE@valuation_date != 60 and RK_TARKEY[5] != 1 and weekday(valuation_date) = 7 -> x1.00 (181 rows, 2 of them not x1.00), e.g. [('BL10000007', datetime.date(2006, 12, 31)), ('BL10000012', datetime.date(2006, 12, 31))]",
+     "conflicting vector {'RK_TARKEY[5]': '4', 'PH_STATE@valuation_date': '10', 'weekday(valuation_date)': '3'}: {'ok': 687, 'x1.00': 1, 'x1.01': 1}; example ['BL10000694', datetime.date(2025, 12, 31)]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'PH_STATE@valuation_date': '10', 'weekday(valuation_date)': '4'}: {'ok': 513, 'x1.00': 169, 'x1.01': 1}; example ['BL10000001', datetime.date(2020, 4, 30)]",
+     "conflicting vector {'RK_TARKEY[5]': '3', 'PH_STATE@valuation_date': '10', 'weekday(valuation_date)': '3'}: {'ok': 578, 'x1.01': 2}; example ['BL10004585', datetime.date(2025, 12, 31)]"
+    ]
+   }
+  },
+  {
+   "id": "charge-run-first",
+   "rule": "On the same day the monthly charge run is booked before the premiums and the customer orders",
+   "off": "every booking of a day in the order of its event number",
+   "where": "PH_BEGDT",
+   "where_label": "begin date of the policy",
+   "edits": [
+    {
+     "file": "funds/bookings.py",
+     "old": "RANKS = {CHARGE_RUN: FIRST,",
+     "new": "RANKS = {CHARGE_RUN: AFTER_CHARGE_RUN,"
+    }
+   ],
+   "run": "t3_surrender_value~off-charge-run-first",
+   "wrong_on": 16,
+   "wrong_off": 592,
+   "broken": 576,
+   "fixed": 0,
+   "broken_by_value": {
+    "surrender_value": 576
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "33145.43",
+      "off": "33143.19"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "85579.92",
+      "off": "85575.96"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "123634.36",
+      "off": "123628.79"
+     }
+    },
+    {
+     "policy_id": "BL10000055",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "13475.65",
+      "off": "13474.11"
+     }
+    },
+    {
+     "policy_id": "BL10000062",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "46460.22",
+      "off": "46457.50"
+     }
+    },
+    {
+     "policy_id": "BL10000062",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "79090.76",
+      "off": "79085.41"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "23331.93",
+      "off": "23330.81"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "48909.61",
+      "off": "48907.56"
+     }
+    },
+    {
+     "policy_id": "BL10000070",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "19917.96",
+      "off": "19915.01"
+     }
+    },
+    {
+     "policy_id": "BL10000082",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "22175.36",
+      "off": "22173.62"
+     }
+    },
+    {
+     "policy_id": "BL10000085",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "21632.06",
+      "off": "21628.06"
+     }
+    },
+    {
+     "policy_id": "BL10000109",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "27427.40",
+      "off": "27422.90"
+     }
+    },
+    {
+     "policy_id": "BL10000109",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "71651.07",
+      "off": "71644.89"
+     }
+    },
+    {
+     "policy_id": "BL10000109",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "107678.92",
+      "off": "107670.30"
+     }
+    },
+    {
+     "policy_id": "BL10000138",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "23910.11",
+      "off": "23907.97"
+     }
+    },
+    {
+     "policy_id": "BL10000138",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "38773.33",
+      "off": "38769.99"
+     }
+    },
+    {
+     "policy_id": "BL10000142",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "5374.80",
+      "off": "5373.90"
+     }
+    },
+    {
+     "policy_id": "BL10000142",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "26002.33",
+      "off": "26000.82"
+     }
+    },
+    {
+     "policy_id": "BL10000161",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "3272.42",
+      "off": "3269.20"
+     }
+    },
+    {
+     "policy_id": "BL10000182",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "3098.88",
+      "off": "3098.79"
+     }
+    },
+    {
+     "policy_id": "BL10000182",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "8893.08",
+      "off": "8892.58"
+     }
+    },
+    {
+     "policy_id": "BL10000182",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "8711.72",
+      "off": "8711.29"
+     }
+    },
+    {
+     "policy_id": "BL10000219",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "58032.79",
+      "off": "58029.07"
+     }
+    },
+    {
+     "policy_id": "BL10000223",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "20261.28",
+      "off": "20260.73"
+     }
+    },
+    {
+     "policy_id": "BL10000228",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "17068.57",
+      "off": "17066.29"
+     }
+    }
+   ],
+   "trees": {
+    "surrender_value": [
+     "Where it is wrong: optimal tree errors 253, leaves 5 on {PH_PAYMT, PH_STATE@valuation_date, PH_FREQ}",
+     "PH_PAYMT != LS and PH_STATE@valuation_date = 10 and PH_FREQ != E -> x1.00 (650 rows, 161 of them not x1.00), e.g. [('BL10000022', datetime.date(2006, 12, 31)), ('BL10000022', datetime.date(2020, 4, 30))]",
+     "PH_PAYMT != LS and PH_STATE@valuation_date != 10 and PH_STATE@valuation_date = 20 -> x1.00 (14 rows, 4 of them not x1.00), e.g. [('BL10000824', datetime.date(2025, 12, 31)), ('BL10001725', datetime.date(2025, 12, 31))]",
+     "conflicting vector {'PH_PAYMT': 'LS', 'PH_STATE@valuation_date': '10', 'PH_FREQ': 'M'}: {'ok': 1947, 'x1.00': 67, 'x1.01': 4}; example ['BL10000339', datetime.date(2006, 12, 31)]",
+     "conflicting vector {'PH_PAYMT': 'LS', 'PH_STATE@valuation_date': '10', 'PH_FREQ': 'E'}: {'ok': 746, 'x1.00': 2}; example ['BL10000694', datetime.date(2025, 12, 31)]",
+     "conflicting vector {'PH_PAYMT': 'LS', 'PH_STATE@valuation_date': '10', 'PH_FREQ': 'Q'}: {'ok': 611, 'x1.00': 11}; example ['BL10000495', datetime.date(2006, 12, 31)]"
+    ]
+   }
+  },
+  {
+   "id": "trade-after-money-date",
+   "rule": "A premium buys units on the first price date of the fund after the money date",
+   "off": "on the last price date on or before the money date",
+   "where": "PH_BEGDT",
+   "where_label": "begin date of the policy",
+   "edits": [
+    {
+     "file": "funds/bookings.py",
+     "old": "market.price_day(share[\"AL_FNDID\"], premium[\"PR_RCVDT\"], after=True)",
+     "new": "market.price_day(share[\"AL_FNDID\"], premium[\"PR_RCVDT\"])"
+    }
+   ],
+   "run": "t3_surrender_value~off-trade-after-money-date",
+   "wrong_on": 16,
+   "wrong_off": 4635,
+   "broken": 4619,
+   "fixed": 0,
+   "broken_by_value": {
+    "surrender_value": 4619
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "19146.91",
+      "off": "19135.23"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "41577.35",
+      "off": "41728.70"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "4762.01",
+      "off": "4745.92"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "3325.80",
+      "off": "3313.19"
+     }
+    },
+    {
+     "policy_id": "BL10000010",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "1808.30",
+      "off": "1866.22"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "118181.18",
+      "off": "118006.08"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "195044.90",
+      "off": "194754.87"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "272106.20",
+      "off": "271701.05"
+     }
+    },
+    {
+     "policy_id": "BL10000013",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "11211.19",
+      "off": "11220.20"
+     }
+    },
+    {
+     "policy_id": "BL10000013",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "31111.18",
+      "off": "31106.03"
+     }
+    },
+    {
+     "policy_id": "BL10000018",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "948.57",
+      "off": "945.78"
+     }
+    },
+    {
+     "policy_id": "BL10000020",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "97367.66",
+      "off": "96047.71"
+     }
+    },
+    {
+     "policy_id": "BL10000020",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "104412.21",
+      "off": "103040.37"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "33145.43",
+      "off": "33133.63"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "85579.92",
+      "off": "85597.33"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "123634.36",
+      "off": "123674.54"
+     }
+    },
+    {
+     "policy_id": "BL10000025",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "5350.42",
+      "off": "5356.69"
+     }
+    },
+    {
+     "policy_id": "BL10000025",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "20400.32",
+      "off": "20414.45"
+     }
+    },
+    {
+     "policy_id": "BL10000028",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "62606.18",
+      "off": "62724.65"
+     }
+    },
+    {
+     "policy_id": "BL10000029",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "74795.67",
+      "off": "74866.08"
+     }
+    },
+    {
+     "policy_id": "BL10000030",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "1061.29",
+      "off": "1061.44"
+     }
+    },
+    {
+     "policy_id": "BL10000034",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "56504.26",
+      "off": "56691.29"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "37681.68",
+      "off": "39714.95"
+     }
+    },
+    {
+     "policy_id": "BL10000037",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "20482.30",
+      "off": "20926.97"
+     }
+    },
+    {
+     "policy_id": "BL10000037",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "55827.62",
+      "off": "55841.21"
+     }
+    }
+   ],
+   "trees": {
+    "surrender_value": [
+     "Where it is wrong: optimal tree errors 864, leaves 6 on {PH_STATE@valuation_date, AD_REGIO, AD_REGIO@RK_BEGDT}",
+     "PH_STATE@valuation_date = 10 and AD_REGIO = TI and AD_REGIO@RK_BEGDT = BW -> x1.01 (5 rows, 1 of them not x1.01), e.g. [('BL10003856', datetime.date(2020, 4, 30)), ('BL10003856', datetime.date(2025, 12, 31))]",
+     "PH_STATE@valuation_date = 10 and AD_REGIO = TI and AD_REGIO@RK_BEGDT != BW -> x1.00 (2882 rows, 535 of them not x1.00), e.g. [('BL10000001', datetime.date(2020, 4, 30)), ('BL10000001', datetime.date(2025, 12, 31))]",
+     "PH_STATE@valuation_date = 10 and AD_REGIO != TI -> x1.00 (1616 rows, 317 of them not x1.00), e.g. [('BL10000012', datetime.date(2006, 12, 31)), ('BL10000012', datetime.date(2020, 4, 30))]",
+     "PH_STATE@valuation_date != 10 and PH_STATE@valuation_date = 20 -> x1.00 (107 rows, 10 of them not x1.00), e.g. [('BL10000078', datetime.date(2006, 12, 31)), ('BL10000078', datetime.date(2020, 4, 30))]",
+     "PH_STATE@valuation_date != 10 and PH_STATE@valuation_date != 20 and PH_STATE@valuation_date = 30 -> x1.00 (10 rows, 1 of them not x1.00), e.g. [('BL10000104', datetime.date(2020, 4, 30)), ('BL10001061', datetime.date(2025, 12, 31))]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'AD_REGIO': 'TI', 'AD_REGIO@RK_BEGDT': 'TI'}: {'x1.00': 2318, 'x0.99': 263, 'x1.01': 134, 'x0.98': 52, 'x0.97': 20, 'x0.96': 15, 'x0.93': 9, 'x0.95': 9, 'x1.02': 7, 'x0.94': 7, 'x0.86': 2, 'x0.80': 2, 'x0.92': 1, 'ok': 1, 'x0.90': 1}; example ['BL10000020', datetime.date(2020, 4, 30)]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'AD_REGIO': 'LOM', 'AD_REGIO@RK_BEGDT': 'LOM'}: {'x1.00': 421, 'x0.99': 62, 'x1.01': 24, 'x0.98': 12, 'x0.96': 4, 'x0.94': 3, 'x0.95': 2, 'x0.97': 2, 'x1.02': 2, 'x0.90': 1, 'x0.92': 1, 'x0.86': 1}; example ['BL10000036', datetime.date(2006, 12, 31)]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'AD_REGIO': None, 'AD_REGIO@RK_BEGDT': None}: {'x1.00': 158, 'x0.99': 22, 'x1.01': 13, 'x0.98': 4, 'x1.02': 2, 'x0.94': 1, 'x0.96': 1, 'x0.97': 1, 'x0.95': 1}; example ['BL10000198', datetime.date(2025, 12, 31)]"
+    ]
+   }
+  },
+  {
+   "id": "restated-prices",
+   "rule": "A restated unit price replaces the earlier publication (latest FP_CHGTS)",
+   "off": "the first publication of the price",
+   "where": "valuation_date",
+   "where_label": "valuation date",
+   "edits": [
+    {
+     "file": "funds/market.py",
+     "old": "key=lambda row: row[\"FP_CHGTS\"])",
+     "new": "key=lambda row: row[\"FP_CHGTS\"], reverse=True)"
+    }
+   ],
+   "run": "t3_surrender_value~off-restated-prices",
+   "wrong_on": 16,
+   "wrong_off": 2665,
+   "broken": 2649,
+   "fixed": 0,
+   "broken_by_value": {
+    "surrender_value": 2649
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "19146.91",
+      "off": "19146.95"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "41577.35",
+      "off": "41575.14"
+     }
+    },
+    {
+     "policy_id": "BL10000010",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "1808.30",
+      "off": "1807.63"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "195044.90",
+      "off": "195044.93"
+     }
+    },
+    {
+     "policy_id": "BL10000012",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "272106.20",
+      "off": "272106.24"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "85579.92",
+      "off": "85579.93"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "123634.36",
+      "off": "123634.42"
+     }
+    },
+    {
+     "policy_id": "BL10000025",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "20400.32",
+      "off": "20400.40"
+     }
+    },
+    {
+     "policy_id": "BL10000029",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "74795.67",
+      "off": "74784.71"
+     }
+    },
+    {
+     "policy_id": "BL10000030",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "1061.29",
+      "off": "1061.51"
+     }
+    },
+    {
+     "policy_id": "BL10000039",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "14554.41",
+      "off": "14554.37"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "49805.57",
+      "off": "49800.05"
+     }
+    },
+    {
+     "policy_id": "BL10000040",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "97062.17",
+      "off": "97048.72"
+     }
+    },
+    {
+     "policy_id": "BL10000043",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "7000.42",
+      "off": "7000.41"
+     }
+    },
+    {
+     "policy_id": "BL10000050",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "9829.58",
+      "off": "9829.15"
+     }
+    },
+    {
+     "policy_id": "BL10000054",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "2580.52",
+      "off": "2580.31"
+     }
+    },
+    {
+     "policy_id": "BL10000058",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "4191.87",
+      "off": "4192.08"
+     }
+    },
+    {
+     "policy_id": "BL10000058",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "9748.21",
+      "off": "9748.56"
+     }
+    },
+    {
+     "policy_id": "BL10000061",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "5730.40",
+      "off": "5730.42"
+     }
+    },
+    {
+     "policy_id": "BL10000062",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "79090.76",
+      "off": "79090.75"
+     }
+    },
+    {
+     "policy_id": "BL10000063",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "13251.74",
+      "off": "13250.33"
+     }
+    },
+    {
+     "policy_id": "BL10000063",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "28929.42",
+      "off": "28931.40"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "23331.93",
+      "off": "23330.76"
+     }
+    },
+    {
+     "policy_id": "BL10000068",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "48909.61",
+      "off": "48911.51"
+     }
+    },
+    {
+     "policy_id": "BL10000070",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "19917.96",
+      "off": "19918.04"
+     }
+    }
+   ],
+   "trees": {
+    "surrender_value": [
+     "Where it is wrong: optimal tree errors 1502, leaves 7 on {PH_STATE@valuation_date, RK_TARKEY[5], weekday(valuation_date)}",
+     "PH_STATE@valuation_date = 10 and RK_TARKEY[5] = 3 and weekday(valuation_date) = 3 -> x1.00 (580 rows, 179 of them not x1.00), e.g. [('BL10000025', datetime.date(2025, 12, 31)), ('BL10000063', datetime.date(2025, 12, 31))]",
+     "PH_STATE@valuation_date = 10 and RK_TARKEY[5] != 3 and RK_TARKEY[5] != 4 -> x1.00 (2423 rows, 772 of them not x1.00), e.g. [('BL10000001', datetime.date(2020, 4, 30)), ('BL10000001', datetime.date(2025, 12, 31))]",
+     "PH_STATE@valuation_date != 10 and PH_STATE@valuation_date = 20 and RK_TARKEY[5] != 4 -> x1.00 (93 rows, 22 of them not x1.00), e.g. [('BL10000078', datetime.date(2006, 12, 31)), ('BL10000078', datetime.date(2020, 4, 30))]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'RK_TARKEY[5]': '4', 'weekday(valuation_date)': '3'}: {'ok': 428, 'x1.00': 259, 'x0.99': 1, 'x1.01': 1}; example ['BL10000010', datetime.date(2025, 12, 31)]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'RK_TARKEY[5]': '2', 'weekday(valuation_date)': '4'}: {'x1.00': 452, 'ok': 228, 'x0.99': 2, 'x1.01': 1}; example ['BL10000007', datetime.date(2020, 4, 30)]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'RK_TARKEY[5]': '3', 'weekday(valuation_date)': '4'}: {'ok': 421, 'x1.00': 248}; example ['BL10000030', datetime.date(2020, 4, 30)]"
+    ]
+   }
+  },
+  {
+   "id": "fx-day-before",
+   "rule": "A premium is converted with the exchange rate of the day before the trade date",
+   "off": "the exchange rate of the trade date",
+   "where": "PH_CCY",
+   "where_label": "policy currency",
+   "edits": [
+    {
+     "file": "funds/account.py",
+     "old": "fx_day=day_ - ONE_DAY",
+     "new": "fx_day=day_"
+    }
+   ],
+   "run": "t3_surrender_value~off-fx-day-before",
+   "wrong_on": 16,
+   "wrong_off": 1611,
+   "broken": 1595,
+   "fixed": 0,
+   "broken_by_value": {
+    "surrender_value": 1595
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000001",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "19146.91",
+      "off": "19140.92"
+     }
+    },
+    {
+     "policy_id": "BL10000001",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "41577.35",
+      "off": "41567.67"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "4762.01",
+      "off": "4764.74"
+     }
+    },
+    {
+     "policy_id": "BL10000007",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "3325.80",
+      "off": "3327.95"
+     }
+    },
+    {
+     "policy_id": "BL10000018",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "948.57",
+      "off": "949.17"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "33145.43",
+      "off": "33141.51"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "85579.92",
+      "off": "85579.26"
+     }
+    },
+    {
+     "policy_id": "BL10000022",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "123634.36",
+      "off": "123643.48"
+     }
+    },
+    {
+     "policy_id": "BL10000029",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "74795.67",
+      "off": "74813.57"
+     }
+    },
+    {
+     "policy_id": "BL10000036",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "37681.68",
+      "off": "37704.35"
+     }
+    },
+    {
+     "policy_id": "BL10000039",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "14554.41",
+      "off": "14540.75"
+     }
+    },
+    {
+     "policy_id": "BL10000043",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "7000.42",
+      "off": "7039.71"
+     }
+    },
+    {
+     "policy_id": "BL10000043",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "9080.18",
+      "off": "9135.42"
+     }
+    },
+    {
+     "policy_id": "BL10000045",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "22049.51",
+      "off": "22037.94"
+     }
+    },
+    {
+     "policy_id": "BL10000045",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "55990.36",
+      "off": "55949.61"
+     }
+    },
+    {
+     "policy_id": "BL10000058",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "4191.87",
+      "off": "4191.69"
+     }
+    },
+    {
+     "policy_id": "BL10000058",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "9748.21",
+      "off": "9747.58"
+     }
+    },
+    {
+     "policy_id": "BL10000059",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "66455.34",
+      "off": "66236.31"
+     }
+    },
+    {
+     "policy_id": "BL10000059",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "43050.39",
+      "off": "42906.94"
+     }
+    },
+    {
+     "policy_id": "BL10000076",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "135086.58",
+      "off": "135063.52"
+     }
+    },
+    {
+     "policy_id": "BL10000078",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "8859.96",
+      "off": "8871.20"
+     }
+    },
+    {
+     "policy_id": "BL10000078",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "3582.61",
+      "off": "3587.45"
+     }
+    },
+    {
+     "policy_id": "BL10000078",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "1242.53",
+      "off": "1244.59"
+     }
+    },
+    {
+     "policy_id": "BL10000080",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "39228.54",
+      "off": "39225.58"
+     }
+    },
+    {
+     "policy_id": "BL10000081",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "7874.03",
+      "off": "7887.09"
+     }
+    }
+   ],
+   "trees": {
+    "surrender_value": [
+     "Where it is wrong: optimal tree errors 1587, leaves 7 on {PH_STATE@valuation_date, PH_CCY, PS_LANG}",
+     "PH_CCY = GBP and PS_LANG = DE and PH_STATE@valuation_date = 10 -> x1.00 (64 rows, 28 of them not x1.00), e.g. [('BL10000631', datetime.date(2025, 12, 31)), ('BL10001119', datetime.date(2020, 4, 30))]",
+     "PH_CCY = GBP and PS_LANG != DE and PH_STATE@valuation_date = 20 -> x1.00 (4 rows, 0 of them not x1.00), e.g. [('BL10003434', datetime.date(2020, 4, 30)), ('BL10003434', datetime.date(2025, 12, 31))]",
+     "PH_CCY != GBP and PH_STATE@valuation_date = 20 and PH_CCY != CHF -> x1.00 (30 rows, 13 of them not x1.00), e.g. [('BL10000078', datetime.date(2006, 12, 31)), ('BL10000078', datetime.date(2020, 4, 30))]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'PH_CCY': 'CHF', 'PS_LANG': 'DE'}: {'ok': 513, 'x1.00': 235, 'x1.01': 3, 'x0.99': 1}; example ['BL10000001', datetime.date(2020, 4, 30)]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'PH_CCY': 'CHF', 'PS_LANG': 'EN'}: {'ok': 454, 'x1.00': 252, 'x1.01': 4, 'x0.99': 2}; example ['BL10000007', datetime.date(2006, 12, 31)]",
+     "conflicting vector {'PH_STATE@valuation_date': '10', 'PH_CCY': 'CHF', 'PS_LANG': 'IT'}: {'ok': 458, 'x1.00': 236, 'x1.01': 6}; example ['BL10000018', datetime.date(2025, 12, 31)]"
+    ]
+   }
+  },
+  {
+   "id": "waiver",
+   "rule": "No surrender penalty in a waiver period of NRWAIV",
+   "off": "the penalty of the scale on every day",
+   "where": "valuation_date",
+   "where_label": "valuation date",
+   "edits": [
+    {
+     "file": "policies/surrender.py",
+     "old": "if any(waiver[\"WV_VLDFR\"] <= day_ <= waiver[\"WV_VLDTO\"] for waiver in self.waivers):",
+     "new": "if False:"
+    }
+   ],
+   "run": "t3_surrender_value~off-waiver",
+   "wrong_on": 16,
+   "wrong_off": 498,
+   "broken": 482,
+   "fixed": 0,
+   "broken_by_value": {
+    "surrender_value": 482
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000025",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "5350.42",
+      "off": "5189.91"
+     }
+    },
+    {
+     "policy_id": "BL10000030",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "1061.29",
+      "off": "1018.84"
+     }
+    },
+    {
+     "policy_id": "BL10000037",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "20482.30",
+      "off": "20072.65"
+     }
+    },
+    {
+     "policy_id": "BL10000063",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "13251.74",
+      "off": "12986.71"
+     }
+    },
+    {
+     "policy_id": "BL10000064",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "24993.34",
+      "off": "24743.41"
+     }
+    },
+    {
+     "policy_id": "BL10000074",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "6770.80",
+      "off": "6432.26"
+     }
+    },
+    {
+     "policy_id": "BL10000101",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "8269.68",
+      "off": "7938.89"
+     }
+    },
+    {
+     "policy_id": "BL10000112",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "3686.97",
+      "off": "3576.36"
+     }
+    },
+    {
+     "policy_id": "BL10000121",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "42025.19",
+      "off": "41604.94"
+     }
+    },
+    {
+     "policy_id": "BL10000134",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "84445.74",
+      "off": "82756.83"
+     }
+    },
+    {
+     "policy_id": "BL10000142",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "5374.80",
+      "off": "5159.81"
+     }
+    },
+    {
+     "policy_id": "BL10000163",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "17569.80",
+      "off": "17218.40"
+     }
+    },
+    {
+     "policy_id": "BL10000165",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "95781.21",
+      "off": "93865.59"
+     }
+    },
+    {
+     "policy_id": "BL10000180",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "695.83",
+      "off": "674.96"
+     }
+    },
+    {
+     "policy_id": "BL10000206",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "598.83",
+      "off": "568.89"
+     }
+    },
+    {
+     "policy_id": "BL10000208",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "9751.77",
+      "off": "9361.70"
+     }
+    },
+    {
+     "policy_id": "BL10000209",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "3764.45",
+      "off": "3576.23"
+     }
+    },
+    {
+     "policy_id": "BL10000215",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "23919.49",
+      "off": "23441.10"
+     }
+    },
+    {
+     "policy_id": "BL10000219",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "19351.43",
+      "off": "18770.89"
+     }
+    },
+    {
+     "policy_id": "BL10000242",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "4736.40",
+      "off": "4594.31"
+     }
+    },
+    {
+     "policy_id": "BL10000245",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "17029.76",
+      "off": "16689.16"
+     }
+    },
+    {
+     "policy_id": "BL10000254",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "4121.35",
+      "off": "3956.50"
+     }
+    },
+    {
+     "policy_id": "BL10000280",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "65.32",
+      "off": "63.36"
+     }
+    },
+    {
+     "policy_id": "BL10000291",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "30925.17",
+      "off": "30306.67"
+     }
+    },
+    {
+     "policy_id": "BL10000304",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "15036.77",
+      "off": "14585.67"
+     }
+    }
+   ],
+   "trees": {
+    "surrender_value": [
+     "Where it is wrong: optimal tree errors 396, leaves 4 on {RK_TARKEY[5], weekday(valuation_date), PH_PRDCD}",
+     "RK_TARKEY[5] = 4 and weekday(valuation_date) != 3 and PH_PRDCD = FLKL -> x1.05 (84 rows, 17 of them not x1.05), e.g. [('BL10000074', datetime.date(2020, 4, 30)), ('BL10000206', datetime.date(2020, 4, 30))]",
+     "RK_TARKEY[5] = 4 and weekday(valuation_date) != 3 and PH_PRDCD != FLKL -> x1.02 (74 rows, 37 of them not x1.02), e.g. [('BL10000134', datetime.date(2020, 4, 30)), ('BL10000165', datetime.date(2020, 4, 30))]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'weekday(valuation_date)': '3', 'PH_PRDCD': 'FLKL'}: {'ok': 496, 'x1.00': 2}; example ['BL10002704', datetime.date(2025, 12, 31)]",
+     "conflicting vector {'RK_TARKEY[5]': '2', 'weekday(valuation_date)': '4', 'PH_PRDCD': 'FLKL'}: {'ok': 496, 'x1.00': 2}; example ['BL10001063', datetime.date(2020, 4, 30)]",
+     "conflicting vector {'RK_TARKEY[5]': '4', 'weekday(valuation_date)': '3', 'PH_PRDCD': 'FLKL'}: {'ok': 407, 'x1.01': 1, 'x1.02': 1}; example ['BL10001756', datetime.date(2025, 12, 31)]"
+    ]
+   }
+  },
+  {
+   "id": "amc-agreements",
+   "rule": "An individual agreement (NRAGRE) replaces the management charge rate of the tariff",
+   "off": "the rate of the tariff for every policy",
+   "where": "PH_PRDCD",
+   "where_label": "product",
+   "edits": [
+    {
+     "file": "funds/charges.py",
+     "old": "self.agreed_rate(\"AMC\", day_, tariff[POT_RATE[key[1]]])",
+     "new": "tariff[POT_RATE[key[1]]]"
+    }
+   ],
+   "run": "t3_surrender_value~off-amc-agreements",
+   "wrong_on": 16,
+   "wrong_off": 98,
+   "broken": 82,
+   "fixed": 0,
+   "broken_by_value": {
+    "surrender_value": 82
+   },
+   "examples": [
+    {
+     "policy_id": "BL10000105",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "27415.42",
+      "off": "27268.38"
+     }
+    },
+    {
+     "policy_id": "BL10000105",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "60677.81",
+      "off": "60125.01"
+     }
+    },
+    {
+     "policy_id": "BL10000183",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "89020.36",
+      "off": "89505.31"
+     }
+    },
+    {
+     "policy_id": "BL10000295",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "178961.41",
+      "off": "177711.87"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "57099.84",
+      "off": "55364.91"
+     }
+    },
+    {
+     "policy_id": "BL10000309",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "92243.28",
+      "off": "88411.25"
+     }
+    },
+    {
+     "policy_id": "BL10000318",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "28097.85",
+      "off": "27376.84"
+     }
+    },
+    {
+     "policy_id": "BL10000318",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "36939.59",
+      "off": "34959.72"
+     }
+    },
+    {
+     "policy_id": "BL10000414",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "49602.50",
+      "off": "47980.76"
+     }
+    },
+    {
+     "policy_id": "BL10000427",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "80179.57",
+      "off": "80008.04"
+     }
+    },
+    {
+     "policy_id": "BL10000431",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "36657.34",
+      "off": "36555.12"
+     }
+    },
+    {
+     "policy_id": "BL10000447",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "70289.83",
+      "off": "70152.30"
+     }
+    },
+    {
+     "policy_id": "BL10000585",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "17563.65",
+      "off": "17547.75"
+     }
+    },
+    {
+     "policy_id": "BL10000700",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "36266.28",
+      "off": "36219.12"
+     }
+    },
+    {
+     "policy_id": "BL10001058",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "37382.11",
+      "off": "36391.13"
+     }
+    },
+    {
+     "policy_id": "BL10001058",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "58449.97",
+      "off": "56410.06"
+     }
+    },
+    {
+     "policy_id": "BL10001061",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "825.21",
+      "off": "814.61"
+     }
+    },
+    {
+     "policy_id": "BL10001176",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "83265.36",
+      "off": "79874.12"
+     }
+    },
+    {
+     "policy_id": "BL10001191",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "2111.99",
+      "off": "2085.20"
+     }
+    },
+    {
+     "policy_id": "BL10001228",
+     "valuation_date": "2006-12-31",
+     "surrender_value": {
+      "target": "38167.14",
+      "off": "37761.13"
+     }
+    },
+    {
+     "policy_id": "BL10001245",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "7995.04",
+      "off": "7883.20"
+     }
+    },
+    {
+     "policy_id": "BL10001245",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "16284.17",
+      "off": "15963.52"
+     }
+    },
+    {
+     "policy_id": "BL10001357",
+     "valuation_date": "2020-04-30",
+     "surrender_value": {
+      "target": "56830.33",
+      "off": "57049.12"
+     }
+    },
+    {
+     "policy_id": "BL10001357",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "63096.08",
+      "off": "63701.84"
+     }
+    },
+    {
+     "policy_id": "BL10001423",
+     "valuation_date": "2025-12-31",
+     "surrender_value": {
+      "target": "72696.12",
+      "off": "72273.25"
+     }
+    }
+   ],
+   "trees": {
+    "surrender_value": [
+     "Where it is wrong: optimal tree errors 94, leaves 6 on {BR_REGIO@valuation_date, BR_REGIO@RK_BEGDT, RK_UWCLS}",
+     "BR_REGIO@valuation_date = WST and BR_REGIO@RK_BEGDT = NRD and RK_UWCLS = N1 -> x1.03 (1 rows, 0 of them not x1.03), e.g. [('BL10000414', datetime.date(2025, 12, 31))]",
+     "BR_REGIO@valuation_date != WST and BR_REGIO@RK_BEGDT = WST and RK_UWCLS = E1 -> x1.04 (2 rows, 1 of them not x1.04), e.g. [('BL10001976', datetime.date(2020, 4, 30))]",
+     "conflicting vector {'BR_REGIO@valuation_date': 'MIT', 'BR_REGIO@RK_BEGDT': 'MIT', 'RK_UWCLS': 'E1'}: {'ok': 359, 'x1.01': 2, 'x0.99': 1, 'x1.02': 1, 'x1.04': 1, 'x1.00': 1}; example ['BL10000183', datetime.date(2025, 12, 31)]",
+     "conflicting vector {'BR_REGIO@valuation_date': 'MIT', 'BR_REGIO@RK_BEGDT': 'MIT', 'RK_UWCLS': 'N1'}: {'ok': 352, 'x1.05': 1}; example ['BL10003488', datetime.date(2025, 12, 31)]",
+     "conflicting vector {'BR_REGIO@valuation_date': 'MIT', 'BR_REGIO@RK_BEGDT': 'MIT', 'RK_UWCLS': 'N2'}: {'ok': 336, 'x1.01': 4}; example ['BL10000295', datetime.date(2025, 12, 31)]"
+    ]
+   }
+  }
+ ]
+}
