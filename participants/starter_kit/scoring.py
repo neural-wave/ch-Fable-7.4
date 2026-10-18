@@ -25,6 +25,14 @@ def policy(v):
     return str(v).strip()
 
 
+def optional_date(v):
+    return None if v in ("", None) else date(v)
+
+
+def country(v):
+    return str(v).strip().upper()
+
+
 @dataclasses.dataclass(frozen=True)
 class Task:
     key: tuple  # converters of the key columns, in file order
@@ -54,6 +62,8 @@ TASKS = {
     "t2_projected_maturity_value": Task((policy,), (amount,)),
     "t3_surrender_value": Task((policy, date), (amount,)),
     "t4_annual_statement": Task((policy, int), (amount,) * 6),
+    "t7_tax_payout": Task((policy, int), (country,) + (amount,) * 4 + (optional_date,)),
+    "t7_tax_annual": Task((policy, int), (amount,) * 7),
 }
 OUTLIER_TASK = "t5_outlier_detection"
 
