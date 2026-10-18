@@ -300,7 +300,7 @@ def card_html(task, card, data, table):
     rows = data["rows"]
     if card["broken"] == 0:
         body = '<p class="empty">Switching this rule off changes no row of this task.</p>'
-    elif card["broken"] <= SMALL or not card.get("where"):
+    elif card["broken"] <= SMALL or f"where:{card['id']}" not in table.columns:
         body = examples_table(card, data["keys"], data["values"])
     else:
         fig, table_view = where_figure(card, table)

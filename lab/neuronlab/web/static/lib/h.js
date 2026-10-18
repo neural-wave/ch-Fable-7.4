@@ -68,10 +68,10 @@ export function toast(text, bad = false) {
   toastTimer = setTimeout(() => el.remove(), bad ? 12000 : 5000);
 }
 
-export function dialog(title, body, actions) {
+export function dialog(title, body, actions, closeLabel) {
   const el = h('dialog', { class: 'dialog' },
     h('form', { method: 'dialog', class: 'stack-16' }, h('h2', {}, title), body,
-      h('div', { class: 'row', style: { justifyContent: 'flex-end' } }, h('button', { class: 'btn', value: 'cancel' }, actions ? 'Cancel' : 'Close'), actions)));
+      h('div', { class: 'row', style: { justifyContent: 'flex-end' } }, h('button', { class: 'btn', value: 'cancel' }, closeLabel || (actions ? 'Cancel' : 'Close')), actions)));
   document.body.append(el);
   el.addEventListener('close', () => el.remove());
   el.showModal();
@@ -102,7 +102,8 @@ export function term(label, help = GLOSSARY[label]) {
 }
 
 // --- language model -------------------------------------------------------------------------------------------
-// Step 5 (lab suggest) and the agent call Claude Code. .env.llm is read when `lab serve` starts.
+// Step 5 (lab suggest) and the agent call Claude Code. /api/model asks it once, the way a task run reads its trace:
+// the model named by the init event, connected when the request went through. Custom models come from .env.llm.
 
 let settingsCache = null;
 export function settings() {
@@ -110,76 +111,107 @@ export function settings() {
   return settingsCache;
 }
 
-const MODEL_USES = { suggest: 'model', agent: 'agent_model' };
+const USE_LABEL = { suggest: 'Suggest features (step 5)', agent: 'Agent sessions' };
 
-// ok: every model is set; warn: Claude Code picks its default; bad: no Claude Code, nothing can run.
+let modelCache = null;
+export function modelStatus(refresh = false) {
+  if (refresh || !modelCache) modelCache = pollModel(refresh);
+  return modelCache;
+}
+
+async function pollModel(refresh) {
+  let st = await (refresh ? post('/api/model/check') : get('/api/model')).catch(() => null);
+  while (st && st.state === 'checking') {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    st = await get('/api/model').catch(() => null);
+  }
+  return st;
+}
+
+// ok: every use answers; warn: one of them does not; bad: none does, nothing can run.
 export function modelState(st) {
-  if (!st) return { level: 'unknown', chip: 'Model unknown', text: 'The lab could not read its settings.' };
-  if (!st.claude) {
-    return { level: 'bad', chip: 'No language model', text: 'Claude Code is not installed on the lab machine, so Suggest features and the agent cannot run.' };
+  if (!st) return { level: 'unknown', chip: 'Model unknown', text: 'The lab could not ask Claude Code which model it uses.' };
+  const uses = Object.values(st.uses || {});
+  const up = uses.filter((u) => u.ok);
+  const names = [...new Set(up.map((u) => u.model))].join(' / ');
+  if (!up.length) {
+    return { level: 'bad', chip: 'Model not connected', text: `Claude Code does not answer: ${uses[0]?.error || 'no answer'}` };
   }
-  if (!st.model && !st.agent_model) {
-    return { level: 'warn', chip: 'Model not set', text: 'No model is set: Suggest features and the agent use the default model of Claude Code, which can change from one day to the next.' };
+  if (up.length < uses.length) {
+    const down = Object.keys(st.uses).filter((k) => !st.uses[k].ok).map((k) => USE_LABEL[k]).join(', ');
+    return { level: 'warn', chip: `${names} · one not connected`, text: `${down}: the model does not answer.` };
   }
-  if (!st.model || !st.agent_model) {
-    const missing = st.model ? 'the agent' : 'Suggest features';
-    return { level: 'warn', chip: `Model: ${st.model || st.agent_model} · one not set`, text: `No model is set for ${missing}: it uses the default model of Claude Code.` };
-  }
-  return { level: 'ok', chip: `Model: ${st.model === st.agent_model ? st.model : `${st.model} / ${st.agent_model}`}`, text: 'Both uses of the language model have a model set.' };
+  return { level: 'ok', chip: `Connected: ${names}`, text: `Claude Code answers with ${names}${st.endpoint ? ` on ${st.endpoint}` : ''} (checked at ${st.checked}).` };
 }
 
 const LEVEL_ICON = { ok: () => icons.check(), warn: () => icons.warn(), bad: () => icons.warn(), unknown: () => icons.info() };
 
+function paintChip(chip, st) {
+  const state = modelState(st);
+  chip.dataset.level = state.level;
+  chip.title = state.text;
+  chip.replaceChildren(h('span', { class: 'dot' }), h('span', {}, state.chip));
+}
+
+function modelBody(st) {
+  const state = modelState(st);
+  const row = (use, u) => h('li', { class: ['model-row', u.ok ? 'ok' : 'warn'] },
+    h('span', { class: 'model-row-icon' }, u.ok ? icons.check() : icons.warn()),
+    h('span', { class: 'stack' }, h('span', { class: 'strong' }, USE_LABEL[use]),
+      u.ok ? h('span', { class: 'small' }, 'Connected to ', h('span', { class: 'mono' }, u.model))
+        : h('span', { class: 'small' }, 'Not connected', u.model ? [' to ', h('span', { class: 'mono' }, u.model)] : null, `: ${u.error}`),
+      h('span', { class: 'small muted' }, u.requested ? ['Asked with ', h('span', { class: 'mono' }, `${u.variable}=${u.requested}`)] : ['Default model of Claude Code', h('span', { class: 'mono' }, ` (${u.variable} not set)`)],
+        u.version ? ` · Claude Code ${u.version}` : null, u.source ? [' · ', u.source === 'none' ? 'login of claude' : ['key ', h('span', { class: 'mono' }, u.source)]] : null)));
+  return h('div', { class: 'stack-16' },
+    h('div', { class: ['banner', state.level === 'ok' ? 'ok' : state.level === 'bad' ? 'bad' : 'warn'] }, LEVEL_ICON[state.level](), h('span', { style: { flex: '1 1 300px' } }, state.text)),
+    st ? h('ul', { class: 'model-rows' }, Object.entries(st.uses || {}).map(([use, u]) => row(use, u))) : null,
+    state.level === 'ok' ? null : h('div', { class: 'stack-8' },
+      h('h3', {}, 'How to fix it'),
+      h('p', { class: 'small' }, 'Install Claude Code on this machine and log in once with ', h('span', { class: 'mono' }, 'claude'), '. For a custom model set the endpoint in ', h('span', { class: 'mono' }, '.env.llm'), ' at the root of the repository, then restart ', h('span', { class: 'mono' }, 'lab serve'), ':'),
+      h('pre', { class: 'code' }, 'ANTHROPIC_BASE_URL=https://your-endpoint\nANTHROPIC_AUTH_TOKEN=your-key\nANTHROPIC_MODEL=your-model\nLLM_MODEL=your-model\nAGENT_MODEL=your-model')));
+}
+
 export function modelDialog() {
-  settings().then((st) => {
-    const state = modelState(st);
-    const row = (use, value, variable) => h('li', { class: ['model-row', value ? 'ok' : 'warn'] },
-      h('span', { class: 'model-row-icon' }, value ? icons.check() : icons.warn()),
-      h('span', { class: 'stack' }, h('span', { class: 'strong' }, use),
-        h('span', { class: 'small muted' }, value ? ['Uses ', h('span', { class: 'mono' }, value)] : ['Not set: the default model of Claude Code', h('span', { class: 'mono' }, ` (${variable})`)])));
-    dialog('Language model', h('div', { class: 'stack-16' },
-      h('div', { class: ['banner', state.level === 'ok' ? 'ok' : state.level === 'bad' ? 'bad' : 'warn'] }, LEVEL_ICON[state.level](), h('span', { style: { flex: '1 1 300px' } }, state.text)),
-      st && st.claude ? h('ul', { class: 'model-rows' },
-        row('Suggest features (step 5)', st.model, 'LLM_MODEL'),
-        row('Agent sessions', st.agent_model, 'AGENT_MODEL')) : null,
-      state.level === 'ok' ? null : h('div', { class: 'stack-8' },
-        h('h3', {}, 'How to set it'),
-        st && !st.claude ? h('p', { class: 'small' }, 'Install Claude Code on this machine and log in once with ', h('span', { class: 'mono' }, 'claude'), '.') : null,
-        h('p', { class: 'small' }, 'Add the models to ', h('span', { class: 'mono' }, '.env.llm'), ' at the root of the repository, then restart ', h('span', { class: 'mono' }, 'lab serve'), ':'),
-        h('pre', { class: 'code' }, 'LLM_MODEL=opus\nAGENT_MODEL=opus'))), null);
+  const body = h('div', {}, h('p', { class: 'spinner' }, 'Asking Claude Code which model it uses…'));
+  const again = h('button', { type: 'button', class: 'btn' }, 'Check again');
+  const paint = (st) => {
+    body.replaceChildren(modelBody(st));
+    document.querySelectorAll('.model-chip').forEach((chip) => paintChip(chip, st));
+    again.disabled = false;
+  };
+  again.addEventListener('click', () => {
+    again.disabled = true;
+    body.replaceChildren(h('p', { class: 'spinner' }, 'Asking Claude Code which model it uses…'));
+    modelStatus(true).then(paint);
   });
+  dialog('Language model', body, again, 'Close');
+  modelStatus().then(paint);
 }
 
 function modelChip() {
-  const chip = h('button', { type: 'button', class: 'model-chip', 'data-level': 'unknown', onClick: modelDialog, 'aria-haspopup': 'dialog' }, 'Model…');
-  settings().then((st) => {
-    const state = modelState(st);
-    chip.dataset.level = state.level;
-    chip.title = state.text;
-    chip.replaceChildren(h('span', { class: 'dot' }), h('span', {}, state.chip));
-  });
+  const chip = h('button', { type: 'button', class: 'model-chip', 'data-level': 'unknown', onClick: modelDialog, 'aria-haspopup': 'dialog' }, h('span', { class: 'dot' }), h('span', {}, 'Checking the model…'));
+  modelStatus().then((st) => paintChip(chip, st));
   return chip;
 }
 
-// A notice where a use of the model starts: nothing when it is set.
+// Where a use of the model starts: the model it is connected to, or why it cannot run.
 export function modelNotice(use) {
   const slot = h('div', { class: 'model-notice' });
-  settings().then((st) => {
-    if (!st) return;
-    const missing = !st.claude ? 'bad' : !st[MODEL_USES[use]] ? 'warn' : null;
-    if (!missing) return;
-    slot.replaceChildren(h('div', { class: ['banner', missing], role: 'status' }, icons.warn(),
-      h('span', { style: { flex: '1 1 300px' } }, missing === 'bad' ? 'Claude Code is not installed: this step cannot run.'
-        : 'No model is set for this step: it will use the default model of Claude Code.'),
-      h('button', { type: 'button', class: 'btn small', onClick: modelDialog }, missing === 'bad' ? 'How to fix it' : 'Set the model')));
+  modelStatus().then((st) => {
+    const u = st?.uses?.[use];
+    if (!u) return;
+    slot.replaceChildren(u.ok ? h('p', { class: 'small muted' }, 'Runs on ', h('span', { class: 'mono' }, u.model), ', connected at ', st.checked, '.')
+      : h('div', { class: ['banner', 'bad'], role: 'status' }, icons.warn(),
+        h('span', { style: { flex: '1 1 300px' } }, `The model does not answer, this step cannot run: ${u.error}`),
+        h('button', { type: 'button', class: 'btn small', onClick: modelDialog }, 'How to fix it')));
   });
   return slot;
 }
 
 export async function start(action, task, options = {}) {
-  if (MODEL_USES[action]) {
-    const st = await settings();
-    if (st && !st.claude) { modelDialog(); return; }
+  if (action === 'suggest' || action === 'agent') {
+    const st = await modelStatus();
+    if (st && !st.uses?.[action]?.ok) { modelDialog(); return; }
   }
   try {
     const job = await post('/api/jobs', { action, task, options });

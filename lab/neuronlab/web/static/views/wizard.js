@@ -1,7 +1,7 @@
 // New task in four steps: legacy data, task description, test pairs, review and run. One draft per task, kept in
 // memory and in this browser until it is saved as lab/tasks/<id>.json.
 import { zoomCanvas } from '../lib/canvas.js';
-import { card, edges, get, h, header, icons, loading, mount, post, table, tech, toast } from '../lib/h.js';
+import { card, edges, get, h, header, icons, loading, modelNotice, mount, post, table, tech, toast } from '../lib/h.js';
 
 const STEPS = [['legacy', 'Legacy data', 'required'], ['task', 'Task description', ''], ['pairs', 'Test pairs', 'optional'], ['review', 'Review and run', '']];
 const PIPELINE = [['profile', 'Profile keys and joins'], ['frame', 'Build the frame'], ['cluster', 'Cluster relations'], ['tree', 'Optimal decision trees'],
@@ -522,11 +522,11 @@ async function reviewStep(ctx) {
             h('span', { class: 'mono muted' }, '+'), 'Language model features (step 5)'))),
       h('div', { class: 'row', style: { padding: '16px', borderRadius: '6px', background: 'var(--tint)', alignItems: 'flex-end' } },
         h('label', { class: 'field', style: { flex: '1 1 200px' } }, 'Model for step 5', h('select', { class: 'input', onChange: (e) => { def.run.model = e.target.value; ctx.changed(); ctx.redraw(); } },
-          [['', `Claude Code default${settings.model ? ` (LLM_MODEL=${settings.model})` : ''}`], ['opus', 'opus'], ['sonnet', 'sonnet']].map(([v, label]) => h('option', { value: v, selected: def.run.model === v ? true : null }, label)))),
+          modelOptions(settings).map(([v, label]) => h('option', { value: v, selected: def.run.model === v ? true : null }, label)))),
         h('label', { class: 'field', style: { flex: '1 1 200px' } }, 'Features per request', h('input', { class: 'input', type: 'number', min: 1, max: 3, value: def.run.max_features,
           onChange: (e) => { def.run.max_features = Math.max(1, Math.min(3, Number(e.target.value) || 3)); ctx.changed(); ctx.redraw(); } })),
-        h('p', { class: 'small muted', style: { flex: '1 1 100%' } }, settings.claude ? 'Step 5 runs only where the trees need a feature that is not in the data yet. Every proposal is parsed in the DSL and scored exactly, before and after.' :
-          'Claude Code is not on the PATH of the server: step 5 will fail until `claude` is installed and logged in.')),
+        h('p', { class: 'small muted', style: { flex: '1 1 100%' } }, 'Step 5 runs only where the trees need a feature that is not in the data yet. Every proposal is parsed in the DSL and scored exactly, before and after.'),
+        modelNotice('suggest')),
       tech('cli', 'Same on the command line', h('pre', { class: 'code' }, commands.join('\n')))),
     h('div', { class: 'row-between', style: { padding: '16px 0' } }, h('a', { class: 'btn', href: href(ctx, 'pairs') }, 'Back'),
       h('div', { class: 'row' },
@@ -536,6 +536,13 @@ async function reviewStep(ctx) {
   return [main, [tech('json', `tasks/${def.id || '<id>'}.json`, h('pre', {}, JSON.stringify(definitionToSave(def), null, 2)), 'dark'),
     h('div', { class: 'card tight', style: { gap: '8px' } }, h('h3', {}, 'One file, versioned'),
       h('p', { class: 'small muted' }, 'The definition sits in ', h('code', {}, 'lab/tasks/'), ' next to ', h('code', {}, 'rules/'), ', so the pipeline, the agent of ', h('code', {}, 'lab agent'), ' and this page read the same task.'))]];
+}
+
+// The default of Claude Code, then the Claude aliases, or the models of a custom endpoint (ANTHROPIC_BASE_URL).
+function modelOptions(settings) {
+  const fallback = settings.model || settings.custom_model;
+  const named = settings.endpoint ? [...new Set([settings.model, settings.custom_model].filter(Boolean))] : ['opus', 'sonnet'];
+  return [['', `Claude Code default${fallback ? ` (${fallback})` : ''}`], ...named.map((m) => [m, m])];
 }
 
 function summary(title, link, mono, line1, line2) {

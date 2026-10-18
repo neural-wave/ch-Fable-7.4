@@ -282,3 +282,29 @@ def test_tasks_without_a_submission_function_are_refused_before_queueing():
         with pytest.raises(ValueError, match="no function in submission.py"):
             runner.plan(action, "t2_projection_year")
     assert runner.plan("score", "t0_commission")[0] == "Score"
+
+
+FAKE_ENDPOINT = """import json, os, sys
+args = sys.argv[1:]
+model = args[args.index("--model") + 1] if "--model" in args else os.environ.get("ANTHROPIC_MODEL", "claude-default")
+print(json.dumps({"type": "system", "subtype": "init", "model": model, "apiKeySource": "ANTHROPIC_AUTH_TOKEN",
+                  "claude_code_version": "9.9.9"}))
+failed = model == "missing-model"
+print(json.dumps({"type": "result", "subtype": "success", "is_error": failed,
+                  "result": "There's an issue with the selected model" if failed else "ok"}))
+"""
+
+
+def test_the_probe_names_the_connected_model_custom_ones_too(tmp_path, monkeypatch):
+    """The model check reads the init and result events, as in the trace of a task run."""
+    from neuronlab import agent
+    fake = tmp_path / "fake_endpoint.py"
+    fake.write_text(FAKE_ENDPOINT, encoding="utf-8")
+    claude = [sys.executable, str(fake)]
+    monkeypatch.setenv("ANTHROPIC_MODEL", "qwen3.6:35b-a3b-coding")
+    assert agent.probe("", claude) == {"model": "qwen3.6:35b-a3b-coding", "source": "ANTHROPIC_AUTH_TOKEN",
+                                       "version": "9.9.9", "ok": True, "error": None}
+    assert agent.probe("gpt-oss:120b", claude)["model"] == "gpt-oss:120b"
+    missing = agent.probe("missing-model", claude)
+    assert not missing["ok"] and missing["model"] == "missing-model" and "selected model" in missing["error"]
+    assert agent.probe("", [str(tmp_path / "no-such-claude")])["error"].startswith("Claude Code could not start")

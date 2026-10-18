@@ -109,19 +109,22 @@ def summary(card, run, on, off, keys, text):
 
 def ablate(task, ids=()):
     """Score the submission with every rule on and with each chosen card off; write ablation.json and .parquet."""
-    chosen = [c for c in cards(task) if not ids or c["id"] in ids]
+    folder = paths.run_dir(task)
+    old_json = folder / "ablation.json"
+    entries = {c["id"]: c for c in json.loads(old_json.read_text())["cards"]} if old_json.exists() else {}
+    old_table = folder / "ablation.parquet"
+    old_columns = pl.read_parquet_schema(old_table).names() if old_table.exists() else []
+    # a card of ablation.json without its columns in ablation.parquet (the .json is versioned, the .parquet is not)
+    stale = {i for i in entries if f"off:{i}" not in old_columns}
+    chosen = [c for c in cards(task) if not ids or c["id"] in ids or c["id"] in stale]
     if not chosen:
         raise ValueError(f"no rule cards for {task}{' with the ids ' + ', '.join(ids) if ids else ''} in {paths.RULES}")
     on, _ = scored(task, f"{task}~on", paths.SUBMISSION)
     keys = [c for c in on.columns if ":" not in c and c != "exact"]
     values = value_columns(on)
-    folder = paths.run_dir(task)
-    old_json = folder / "ablation.json"
-    entries = {c["id"]: c for c in json.loads(old_json.read_text())["cards"]} if old_json.exists() else {}
     table = on.select(keys + [pl.col("exact").alias("on")])
-    old_table = folder / "ablation.parquet"
     if old_table.exists():  # the columns of the cards that are not scored again
-        kept = [c for c in pl.read_parquet(old_table).columns if ":" in c and c.split(":", 1)[1] in entries
+        kept = [c for c in old_columns if ":" in c and c.split(":", 1)[1] in entries
                 and c.split(":", 1)[1] not in {card["id"] for card in chosen}]
         table = table.join(pl.read_parquet(old_table).select(keys + kept), on=keys, how="left")
     for card in chosen:

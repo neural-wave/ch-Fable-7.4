@@ -8,6 +8,7 @@ import datetime as dt
 import json
 import math
 import re
+import threading
 
 from .. import freeze, labels, paths
 from . import history, layout, runner as runner_module
@@ -796,8 +797,10 @@ def agent_timeline(job):
     if not traces:
         return {"trace": None, "items": []}
     trace = traces[-1]
+    from .. import agent
+    lines = trace.read_text(encoding="utf-8", errors="replace").splitlines()
     items = []
-    for line in trace.read_text(encoding="utf-8", errors="replace").splitlines():
+    for line in lines:
         if not line.startswith("{"):
             continue
         try:
@@ -813,7 +816,7 @@ def agent_timeline(job):
                     items.append({"tool": "says", "what": text})
         if event.get("type") == "result":
             items.append({"tool": "result", "what": history.last_line(event.get("result"), 200)})
-    return {"trace": trace.name, "items": items[-30:], "total": len(items)}
+    return {"trace": trace.name, "items": items[-30:], "total": len(items), "model": agent.connection(lines)["model"]}
 
 
 def tool_summary(arguments):
@@ -857,7 +860,34 @@ def settings():
     import shutil
     return {"legacy": str(paths.LEGACY), "targets": str(paths.TARGETS), "claude": bool(shutil.which("claude")),
             "model": os.environ.get("LLM_MODEL", ""), "agent_model": os.environ.get("AGENT_MODEL", ""),
+            "endpoint": os.environ.get("ANTHROPIC_BASE_URL", ""), "custom_model": os.environ.get("ANTHROPIC_MODEL", ""),
             "workspace": paths.REPO.name}
+
+
+# Which model each use of Claude Code answers with, read like the trace of a task run (agent.connection): one
+# one-word request per model when the page first asks, again on "Check again".
+MODEL_USES = {"suggest": "LLM_MODEL", "agent": "AGENT_MODEL"}
+model_check = {"state": "idle", "uses": {}, "checked": None}
+model_lock = threading.Lock()
+
+
+def model_status(refresh=False):
+    with model_lock:
+        if refresh and model_check["state"] != "checking" or model_check["state"] == "idle":
+            model_check["state"] = "checking"
+            threading.Thread(target=check_models, daemon=True).start()
+        return json.loads(json.dumps(model_check))
+
+
+def check_models():
+    import os
+    from .. import agent
+    wanted = {use: os.environ.get(variable, "") for use, variable in MODEL_USES.items()}
+    found = {model: agent.probe(model) for model in set(wanted.values())}
+    uses = {use: dict(found[model], requested=model, variable=MODEL_USES[use]) for use, model in wanted.items()}
+    with model_lock:
+        model_check.update(state="done", uses=uses, checked=dt.datetime.now().strftime("%H:%M:%S"),
+                           endpoint=os.environ.get("ANTHROPIC_BASE_URL") or None)
 
 
 def dsl_check(task, expr):

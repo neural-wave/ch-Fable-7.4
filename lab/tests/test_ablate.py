@@ -45,3 +45,15 @@ def test_switching_off_half_up_breaks_one_commission():
     assert (card["broken"], card["fixed"]) == (1, 0)
     assert card["examples"][0]["policy_id"] == "BL10000869" and card["examples"][0]["due_nr"] == "1"
     assert card["examples"][0]["amount"] == {"target": "399.21", "off": "399.20"}
+
+
+def test_cards_without_their_columns_are_scored_again():
+    """ablation.json is versioned and ablation.parquet is not: a card of the .json with no column is ablated again,
+    so that `lab viz` finds the columns of every card."""
+    import polars as pl
+    table = paths.RUNS / "t0_commission" / "ablation.parquet"
+    if table.exists():
+        pl.read_parquet(table).select("policy_id", "due_nr", "on").write_parquet(table)
+    result = ablate.ablate("t0_commission", ["half-up"])
+    columns = pl.read_parquet(table).columns
+    assert all(f"off:{c['id']}" in columns for c in result["cards"])

@@ -1,5 +1,5 @@
 // Runs: every run of the pipeline, of step 5, of scoring, of ablation and of the agent. Newest first.
-import { cells, dialog, get, h, header, icons, loading, modelNotice, mount, pill, post, settings, start, table, term, toast } from '../lib/h.js';
+import { cells, dialog, get, h, header, icons, loading, modelNotice, modelStatus, mount, pill, post, start, table, term, toast } from '../lib/h.js';
 
 const PAGE = 25;
 const state = { kind: 'All', task: 'All tasks', search: '', page: 0 };
@@ -120,7 +120,8 @@ function unattended(data) {
     h('div', {}, boxes)), go);
   go.addEventListener('click', async () => {
     el.close();
-    if ((await settings())?.claude === false) { toast('Claude Code is not installed: the agent cannot run. See the model in the header.', true); return; }
+    const st = await modelStatus();
+    if (st && !st.uses?.agent?.ok) { toast(`The model does not answer, the agent cannot run: ${st.uses?.agent?.error}`, true); return; }
     const chosen = boxes.map((b) => b.querySelector('input')).filter((i) => i.checked).map((i) => i.value);
     if (!chosen.length) return;
     try {
