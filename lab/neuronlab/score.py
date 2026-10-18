@@ -164,9 +164,9 @@ def with_features(df, meta, extra):
     return df, dict(meta, lineage=lineage)
 
 
-def explain(task, df, meta, labels):
-    """Run steps 3 (optimal trees) on the labels in the scratch run `<task>~score`, return its trees.json."""
-    run = f"{task}~score"
+def explain(run, df, meta, labels):
+    """Run steps 3 (optimal trees) on the labels in the scratch run `<run>~score`, return its trees.json."""
+    run = f"{run}~score"
     folder = paths.run_dir(run)
     df.write_parquet(folder / "frame.parquet")
     (folder / "frame.json").write_text(json.dumps(meta, indent=1, default=str))
@@ -221,11 +221,13 @@ def record(task, source, ok, held, wrong):
     return entry
 
 
-def score(task, extra=None, folder=None):
+def score(task, extra=None, folder=None, run=None):
     """Score the task function of submission.py, explain its wrong rows, write runs/<task>/score.md and diffs.parquet.
 
-    `folder` scores another submission folder (a scratch copy): nothing is written to the ledger then.
+    `folder` scores another submission folder (a scratch copy): nothing is written to the ledger then. `run` writes
+    score.md and diffs.parquet into another run folder, e.g. `<task>~off-<card>` of `lab ablate`.
     """
+    out = paths.run_dir(run or task)
     module = load_submission(folder or paths.SUBMISSION)
     targets = scoring.read_targets(paths.TARGETS, task)
     started = time.time()
@@ -237,14 +239,14 @@ def score(task, extra=None, folder=None):
     df, meta = frames.load(task)
     keys = meta["keys"]
     per_value = compare(task, targets, predictions)
-    differences(task, targets, predictions, keys, df.schema).write_parquet(paths.run_dir(task) / "diffs.parquet")
+    differences(task, targets, predictions, keys, df.schema).write_parquet(out / "diffs.parquet")
     labels = key_frame(targets, keys, df.schema).with_columns(
         pl.Series(f"label:{v}", per_value[v]) for v in per_value)
     df = df.with_row_index("_order").join(labels, on=keys, how="left").sort("_order").drop("_order")
     labels = df.select(keys + [f"label:{v}" for v in per_value])
     df = df.drop([f"label:{v}" for v in per_value])
     df, meta = with_features(df, meta, extra or {})
-    trees = explain(task, df, meta, labels)
+    trees = explain(run or task, df, meta, labels)
     ok = pl.all_horizontal([pl.col(f"label:{v}") == "ok" for v in per_value])
     flags = labels.select(ok.alias("ok"))["ok"]
     held = evaluate.holdout(labels, keys[0])
@@ -262,5 +264,5 @@ def score(task, extra=None, folder=None):
         work = df.with_columns(labels[f"label:{value}"].alias("_label"))
         lines += describe(task, value, work, keys, per_value[value], trees)
     text = "\n".join(lines) + "\n"
-    (paths.run_dir(task) / "score.md").write_text(text)
+    (out / "score.md").write_text(text)
     return text

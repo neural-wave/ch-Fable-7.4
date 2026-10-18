@@ -1,0 +1,48 @@
+{
+ "task": "t2_projected_maturity_value",
+ "about": "Rule cards of t2: each card switches one rule off in a scratch copy of the submission (lab ablate).",
+ "cards": [
+  {
+   "id": "system-change",
+   "rule": "Offers applied before the system change of 2007-08-11 were projected by the COBOL version: cents cut off, age from days / 365",
+   "off": "every offer projected like Neuron NG",
+   "edits": [
+    {"file": "neuron/eras.py", "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)", "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"}
+   ],
+   "where": "PH_APPDT",
+   "where_label": "application date of the offer"
+  },
+  {
+   "id": "nearest-birthday",
+   "rule": "Neuron NG takes the age at the nearest birthday",
+   "off": "the age at the last birthday",
+   "edits": [
+    {"file": "policies/insured.py", "old": "return age(self.birth, add_months(start, 6))", "new": "return age(self.birth, start)"}
+   ],
+   "where": "birthday_days(PS_BIRTH, PH_BEGDT)",
+   "where_label": "days from the begin date to the next birthday"
+  },
+  {
+   "id": "smoker-j",
+   "rule": "PS_SMOKE = J (German ja) is a smoker too",
+   "off": "only Y is a smoker",
+   "edits": [
+    {"file": "policies/codes.py", "old": "SMOKER = {\"Y\", \"J\"}", "new": "SMOKER = {\"Y\"}"}
+   ],
+   "where": "PS_SMOKE",
+   "where_label": "smoker code"
+  },
+  {
+   "id": "application-date",
+   "rule": "The offer uses the tariff, entry charge and growth rate valid on its application date",
+   "off": "the parameters valid on the begin date",
+   "edits": [
+    {"file": "policies/projection.py", "old": "portfolio.tariff(policy_id, applied)", "new": "portfolio.tariff(policy_id, self.start)"},
+    {"file": "policies/projection.py", "old": "portfolio.entry_rate(self.offer, applied)", "new": "portfolio.entry_rate(self.offer, self.start)"},
+    {"file": "policies/projection.py", "old": "valid(illustration_rates, \"IL\", applied)", "new": "valid(illustration_rates, \"IL\", self.start)"}
+   ],
+   "where": "PH_APPDT",
+   "where_label": "application date of the offer"
+  }
+ ]
+}

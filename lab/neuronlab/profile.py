@@ -11,7 +11,6 @@ of the grain that separates target rows from the other rows of the train policie
 import itertools
 import json
 
-import desbordante
 import polars as pl
 
 from . import paths, schema, store
@@ -67,6 +66,7 @@ def mine_uccs(table, max_size=MAX_UCC):
     df = store.load(table)
     if table in SKIP_UCC:
         return [[c] for c in df.columns if df[c].n_unique() == df.height]
+    import desbordante  # here, not at the top: it has no wheels for Windows, and only the mining needs it
     frame = df.select(pl.all().cast(pl.String).fill_null("")).to_pandas()
     algorithm = desbordante.ucc.algorithms.HyUCC()
     algorithm.load_data(table=frame)
@@ -77,6 +77,7 @@ def mine_uccs(table, max_size=MAX_UCC):
 
 def mine_inds(columns):
     """Unary inclusion dependencies {(lhs, rhs)} among named value sets (Desbordante Spider)."""
+    import desbordante
     names = [n for n, values in columns.items() if values]
     frames = [pl.DataFrame({"v": sorted(columns[n])}).to_pandas() for n in names]
     algorithm = desbordante.ind.algorithms.Spider()

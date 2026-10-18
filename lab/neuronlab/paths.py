@@ -10,6 +10,7 @@ SUBMISSION = STARTER_KIT / "my_solution"
 CACHE = REPO / "lab" / ".cache"
 DERIVED = CACHE / "derived"  # pseudo-targets built from legacy tables (derived.py)
 RUNS = REPO / "lab" / "runs"
+RULES = REPO / "lab" / "rules"  # the rule cards of `lab ablate`, one file per task
 
 
 def run_dir(task):

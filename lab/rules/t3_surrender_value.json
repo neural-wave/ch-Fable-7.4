@@ -1,0 +1,78 @@
+{
+ "task": "t3_surrender_value",
+ "about": "Rule cards of t3: each card switches one rule off in a scratch copy of the submission (lab ablate).",
+ "cards": [
+  {
+   "id": "system-change",
+   "rule": "Before the system change of 2007-08-11 COBOL cut units and cents off and charged management fees by days / 360",
+   "off": "every booking computed like Neuron NG",
+   "edits": [
+    {"file": "neuron/eras.py", "old": "SYSTEM_CHANGE = dt.date(2007, 8, 11)", "new": "SYSTEM_CHANGE = dt.date(1, 1, 1)"}
+   ],
+   "where": "PH_BEGDT",
+   "where_label": "begin date of the policy"
+  },
+  {
+   "id": "charge-run-first",
+   "rule": "On the same day the monthly charge run is booked before the premiums and the customer orders",
+   "off": "every booking of a day in the order of its event number",
+   "edits": [
+    {"file": "funds/bookings.py", "old": "RANKS = {CHARGE_RUN: FIRST,", "new": "RANKS = {CHARGE_RUN: AFTER_CHARGE_RUN,"}
+   ],
+   "where": "PH_BEGDT",
+   "where_label": "begin date of the policy"
+  },
+  {
+   "id": "trade-after-money-date",
+   "rule": "A premium buys units on the first price date of the fund after the money date",
+   "off": "on the last price date on or before the money date",
+   "edits": [
+    {"file": "funds/bookings.py", "old": "market.price_day(share[\"AL_FNDID\"], premium[\"PR_RCVDT\"], after=True)",
+     "new": "market.price_day(share[\"AL_FNDID\"], premium[\"PR_RCVDT\"])"}
+   ],
+   "where": "PH_BEGDT",
+   "where_label": "begin date of the policy"
+  },
+  {
+   "id": "restated-prices",
+   "rule": "A restated unit price replaces the earlier publication (latest FP_CHGTS)",
+   "off": "the first publication of the price",
+   "edits": [
+    {"file": "funds/market.py", "old": "key=lambda row: row[\"FP_CHGTS\"])", "new": "key=lambda row: row[\"FP_CHGTS\"], reverse=True)"}
+   ],
+   "where": "valuation_date",
+   "where_label": "valuation date"
+  },
+  {
+   "id": "fx-day-before",
+   "rule": "A premium is converted with the exchange rate of the day before the trade date",
+   "off": "the exchange rate of the trade date",
+   "edits": [
+    {"file": "funds/account.py", "old": "fx_day=day_ - ONE_DAY", "new": "fx_day=day_"}
+   ],
+   "where": "PH_CCY",
+   "where_label": "policy currency"
+  },
+  {
+   "id": "waiver",
+   "rule": "No surrender penalty in a waiver period of NRWAIV",
+   "off": "the penalty of the scale on every day",
+   "edits": [
+    {"file": "policies/surrender.py", "old": "if any(waiver[\"WV_VLDFR\"] <= day_ <= waiver[\"WV_VLDTO\"] for waiver in self.waivers):",
+     "new": "if False:"}
+   ],
+   "where": "valuation_date",
+   "where_label": "valuation date"
+  },
+  {
+   "id": "amc-agreements",
+   "rule": "An individual agreement (NRAGRE) replaces the management charge rate of the tariff",
+   "off": "the rate of the tariff for every policy",
+   "edits": [
+    {"file": "funds/charges.py", "old": "self.agreed_rate(\"AMC\", day_, tariff[POT_RATE[key[1]]])", "new": "tariff[POT_RATE[key[1]]]"}
+   ],
+   "where": "PH_PRDCD",
+   "where_label": "product"
+  }
+ ]
+}
