@@ -103,6 +103,10 @@ REMITTANCE_CALENDARS = {"DE": {"country": "DE", "years": range(1994, 2100)},
 STAMP_DUTY_COUNTRY = "IT"  # a payout with stamp duty only pays it to Italy
 STAMP_DUTY_REMITTED = False  # a payout with stamp duty alone has no remittance day: the PDF's "None if nothing was
 # withheld", the Bollo collected is not withheld (targets: 6 IT payouts with Bollo alone, none has a day)
+NO_REMITTANCE_DATE = ""  # the remittance_date of a payout with nothing withheld, the PDF's "None": the empty
+# field of the target files, which the official scoring reads as None as well. The leaderboard credited no payout
+# whose date was None: in five readings its payout score was exactly the correct rows with a date (leaderboard and
+# public samples 1 and 2; assumption, to test)
 CHURCH_REDUCED, CHURCH_TAX = "KST", "KIS"  # DE: with a KIS booking the KST is base x KST / (1 + KST x KIS),
 # section 32d EStG (law); the KIS booking of the payout is the label, not the address
 CHURCH_REDUCES_KST = True  # DE: the KIS booking reduces the KST as above (law, from 2009); False: base x KST and the
@@ -131,6 +135,6 @@ HALF_INCOME_WITHHELD = False  # DE: HEV does not halve the base of the withholdi
 # to the assessment, and the targets leave the other taxable share of NRTAXR, TFS, out of the withholding too
 PARTIAL_EXEMPTION_WITHHELD = False  # DE: the partial exemption TFS (15 % from 2018) does not reduce the base of the
 # withholding; True: it does (targets: BL10004408 2020 and BL10000301 2024, KST on the whole gain)
-PAYOUT_SCOPE = "unflagged"  # the payouts that t7_tax_payout reports: "all"; or, for a leaderboard probe, "unflagged" (only
+PAYOUT_SCOPE = "all"  # the payouts that t7_tax_payout reports: "all"; or, for a leaderboard probe, "unflagged" (only
 # those without a flag of `gaps.FLAGS`, decided by verified rules alone) or "flagged" (only those with one). A probe
 # scores only the rows it reports, so it tells in which of the two groups the rows of a sample are right

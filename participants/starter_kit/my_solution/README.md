@@ -255,7 +255,8 @@ actuary (60 payouts, 50 years: `participants/targets`), which they now reproduce
 - remittance: when something was withheld (not for the Bollo collected alone, `STAMP_DUTY_REMITTED` off), in the
   month after the effective date (`REMITTED_FROM_PAYMENT` off) on the day of the law: DE the 10th, IT the 16th,
   CH 30 days after the month end (`REMITTANCE`), moved to the next business day of the tax office, the Swiss one
-  in Bern (`REMITTANCE_SHIFTED`, `REMITTANCE_CALENDARS`);
+  in Bern (`REMITTANCE_SHIFTED`, `REMITTANCE_CALENDARS`). Without anything withheld the date is empty
+  (`NO_REMITTANCE_DATE`), as in the target files: the leaderboard never credited a payout whose date was None;
 - annual table: the taxes withheld count in the year of their remittance (`REPORTED_WHEN_REMITTED`), STP and the
   Bollo in the year of their effective date.
 

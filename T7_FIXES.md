@@ -283,3 +283,35 @@ scores must add up to 7, which also proves that sample 3 stayed the same.
 |---|---|---|---|---|
 | 19.10 | `3f27c59` | all | 7/40 | 28/30 |
 | next | `t7-probe-unflagged` | unflagged | | |
+
+## The leaderboard never credits a payout without a date (18.10)
+
+Every earlier reading, scored locally against the published samples with the code that was uploaded: the
+leaderboard's payout score is exactly the number of correct rows **with** a remittance date. A correct row whose
+date is None was never counted; the annual table, which has no dates, matches the leaderboard to the row.
+
+| Code | Sample | Payout correct locally | of which with a date | Payout on the leaderboard | Annual locally / leaderboard |
+|---|---|---|---|---|---|
+| `0522fa7` | 1 | 11/20 | 1 | 1/20 | 14/20 / 14/20 |
+| `cbaf38b` | 2 | 7/40 | 0 | 0/40 | 8/30 / 8/30 |
+| `d595375` | 2 | 7/40 | 0 | 0/40 | 11/30 / 11/30 |
+| `290312d` | 2 | 28/40 | 0 | 0/40 | 10/30 / 10/30 |
+| `d320801` | 2 | 28/40 | 0 | 0/40 | 10/30 / 10/30 |
+
+48 of the 60 sample payouts have no date (80 %), so a sample 3 drawn the same way holds about 8 rows with a date:
+7/40 for `3f27c59` reads as 7 of those right and the undated rows not counted, not as 33 wrong rules. Probe 1
+assumes the misses are wrong values, so this commit replaces it.
+
+The change, payout table only: `PAYOUT_SCOPE = "all"` and `NO_REMITTANCE_DATE = ""`, the empty field of the target
+files, which the official `scoring_t7.optional_date` reads as None just as it reads None. Against `3f27c59` exactly
+the 1995 undated payouts change, from None to ""; after normalization by `scoring_t7` nothing differs (2493
+payouts, 6387 annual rows identical), samples 1 and 2 stay 60/60 and 50/50, t7_check ALL PASS, t0-t5 unchanged,
+MI 100. The mechanism is a guess (the evaluator turning None into the text "None", a malformed date it drops):
+
+- payout well above 7: confirmed, keep it;
+- payout still 7: the evaluator drops these rows whatever we send; the change costs nothing.
+
+| Evaluated | Code | Scope | Date without tax | Payout | Annual |
+|---|---|---|---|---|---|
+| 18.10 ~08:00 | `3f27c59` | all | None | 7/40 | 28/30 |
+| next | this commit | all | "" | | |

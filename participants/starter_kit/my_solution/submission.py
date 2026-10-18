@@ -15,7 +15,7 @@ from decimal import Decimal
 import polars as pl
 
 from bookings import received_premiums
-from conventions import CONVERSION, DIRECT_DEBIT, IN_FORCE, MONTHS, SINGLE_PREMIUM
+from conventions import CONVERSION, DIRECT_DEBIT, IN_FORCE, MONTHS, NO_REMITTANCE_DATE, SINGLE_PREMIUM
 from dates import business_day, every_months
 from gaps import in_scope
 from legacy import as_date, table, valid_on, versions_on
@@ -197,12 +197,13 @@ def t7_tax_payout(legacy_dir) -> dict[tuple[str, int], tuple]:
     Neuron, so the rules calculate their amounts (`taxes`): the country is that of the taxes withheld, else the
     residence of the holder valid on the payout day as Neuron knew it then (`taxpayer`); the base the gross (CH)
     or the gain over the premiums used, each premium converted on its money date (IT, DE) (`payouts`); the stamp
-    duty the Bollo collected (`bollo`). remittance_date is None without tax. A leaderboard probe reports only
-    part of the payouts (`conventions.PAYOUT_SCOPE`, `gaps`).
+    duty the Bollo collected (`bollo`). remittance_date is empty without tax (`conventions.NO_REMITTANCE_DATE`).
+    A leaderboard probe reports only part of the payouts (`conventions.PAYOUT_SCOPE`, `gaps`).
     """
     amounts = ["taxable_base", *PAYOUT_AMOUNTS]
     rows = in_scope(legacy_dir, payout_table(legacy_dir)).with_columns(map(francs, map(pl.col, amounts)))
-    return {(policy, event): tuple(values) for policy, event, *values in rows.iter_rows()}
+    undated = {None: NO_REMITTANCE_DATE}  # the date of a payout with nothing withheld
+    return {(policy, event): (*values, undated.get(day, day)) for policy, event, *values, day in rows.iter_rows()}
 
 
 def t7_tax_annual(legacy_dir) -> dict[tuple[str, int], tuple[Decimal, ...]]:
