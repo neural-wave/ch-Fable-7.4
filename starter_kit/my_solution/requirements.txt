@@ -1,1 +1,2 @@
-# The submission uses only the Python standard library.
+polars==2.0.0
+holidays==0.106
