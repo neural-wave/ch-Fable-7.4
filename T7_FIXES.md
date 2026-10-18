@@ -239,3 +239,26 @@ t7_check passes, t0-t5 are unchanged and the MI is 100.
 
 Against `bb98fee` 428 payout rows and 755 annual rows change on the whole extract. Still assumed, as no sample
 row tests it: the base of a death claim without tax, the first EUR rate for the days before 31.12.1998.
+
+## Missing data made visible (19.10)
+
+The third sample scored 7/40 (payout) and 28/30 (annual): the tax amounts generalize, the payout-only parts do
+not. The submission turns a missing input into a value that looks valid, so `t7lab/t7_gaps.py` now builds a gap
+ledger: per payout, the flags of the missing inputs (a fallback stands in) and of the untested assumptions, a CSV
+without tax values, and with `--targets FILE` the accuracy per flag. `t7_check` prints the counts on every run and
+fails on a payout without any residence. On our extract (2493 payouts):
+
+| Flag | Kind | Rows | In samples 1-2 |
+|---|---|---|---|
+| NO_PAYOUT_BOOKING (gross 0) | gap | 2 | - |
+| RESIDENCE_LATE (processing view and today's differ; the country too) | gap | 4 | - |
+| RATE_STAND_IN (payout before the euro) | gap | 13 | - |
+| PREMIUM_RATE_STAND_IN (premium before the euro) | gap | 128 | 4 of 4 correct |
+| AFTER_EXTRACT (remitted after 30.6.2026) | gap | 1 | - |
+| UNTAXED_DEATH_BASE | assumption | 10 | - |
+| DE_EXEMPT_BASE | assumption | 1 | - |
+| DEATH_OPTION_B_C | assumption | 41 | 2 of 2 correct |
+| no flag | | 2318 | 54 of 54 correct |
+
+The four RESIDENCE_LATE payouts change country between the views (LU/CH, CH/LU, IT/DE, CH/DE); only BL10000487
+has a label (its Bollo says IT, the view at processing).

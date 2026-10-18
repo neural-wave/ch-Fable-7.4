@@ -16,7 +16,9 @@ Then it checks:
   (`due_against_booked`, with no contradiction).
 
 It also reports, as INFO, what the rules handle but a person should look at: the payouts without a country, those
-whose residence disagrees with the taxes Neuron booked (the country follows the taxes), and the thresholds.
+whose residence disagrees with the taxes Neuron booked (the country follows the taxes), the thresholds, and every
+flag of the gap ledger (`t7_gaps`): the missing inputs a fallback stands in for and the untested assumptions. A
+payout without a country fails: no rule can give it one.
 """
 import argparse
 import datetime as dt
@@ -36,6 +38,7 @@ from neuron.load import LEGACY
 from neuron.targets import TARGETS, scoring
 from payouts import payouts
 from taxes import tax_bookings
+from t7lab.t7_gaps import FLAGS, counts, ledger
 
 SECONDS, GIGABYTES = 300, 5  # the limits of the evaluator for t0 - t4 and t7 together
 EXAMPLES = {  # task PDF, section 4
@@ -166,6 +169,15 @@ def due_against_booked(debug: bool) -> list[bool]:
     return [*oks, failures("labels: a BOC on a withdrawal only after a BOL", unaccrued.height, debug)]
 
 
+def gap_checks(debug: bool) -> list[bool]:
+    """The flags of the gap ledger as INFO, by kind; a payout without any residence fails."""
+    found = counts(ledger(str(LEGACY)))
+    for name, (kind, meaning) in FLAGS.items():
+        info(f"{kind} {name}: {meaning}", found[name], debug)
+    info("payouts decided by verified rules only (no flag)", found["none"], debug)
+    return [failures("every payout has a residence or a booked country", found["RESIDENCE_UNKNOWN"], debug)]
+
+
 def result_checks(results: dict, debug: bool) -> list[bool]:
     """The format of the two t7 results and the two examples of the task PDF."""
     payout, annual = results["t7_tax_payout"], results["t7_tax_annual"]
@@ -192,7 +204,7 @@ def main():
                     int(seconds > SECONDS / 2), debug),
            failures(f"peak memory {gigabytes:.2f} GB: under 80 % of {GIGABYTES} GB", int(gigabytes > GIGABYTES * 0.8),
                     debug),
-           *result_checks(results, debug), *label_checks(debug), *due_against_booked(debug)]
+           *result_checks(results, debug), *label_checks(debug), *due_against_booked(debug), *gap_checks(debug)]
     print("\nALL PASS: ready to upload" if all(oks) else "\nSOMETHING FAILED: do not upload yet")
     sys.exit(0 if all(oks) else 1)
 
