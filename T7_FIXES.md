@@ -262,3 +262,24 @@ fails on a payout without any residence. On our extract (2493 payouts):
 
 The four RESIDENCE_LATE payouts change country between the views (LU/CH, CH/LU, IT/DE, CH/DE); only BL10000487
 has a label (its Bollo says IT, the view at processing).
+
+## Probe 1: the payouts without a flag (branch `t7-probe-unflagged`)
+
+The flags now live in the hand-in (`gaps.py`), and `PAYOUT_SCOPE` reports only part of the payouts. On `anto-t0`
+the scope is "all" (outputs identical to `3f27c59`); the probe branch sets "unflagged": 2318 of the 2493
+payouts, the same values, and the annual table unchanged. Locally 54/60 (the 6 flagged sample rows are left out
+on purpose), t7_check ALL PASS, t0-t5 unchanged, MI 100.
+
+Reading against 7/40 of the full table on the same sample: the probe scores only the unflagged rows.
+
+- 7: every hit of sample 3 is an unflagged row; its flagged rows are all wrong (or there are none).
+- below 7: 7 minus the score is the number of hits among the flagged rows.
+- above 7: the sample changed between the evaluations; the reading is void.
+
+The score does not say how many of the 40 rows are unflagged. Probe 2 ("flagged") gives the complement: the two
+scores must add up to 7, which also proves that sample 3 stayed the same.
+
+| Evaluated | Code | Scope | Payout | Annual |
+|---|---|---|---|---|
+| 19.10 | `3f27c59` | all | 7/40 | 28/30 |
+| next | `t7-probe-unflagged` | unflagged | | |

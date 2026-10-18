@@ -11,6 +11,7 @@ SINGLE_PREMIUM = "E"  # PH_FREQ of single premium policies; the others pay regul
 MONTHS = {"M": 1, "Q": 3, "H": 6, "J": 12}  # PH_FREQ -> months between two due dates
 
 # Events
+EXTRACT_DATE = dt.date(2026, 6, 30)  # the day of the export (SCHEMA.md): what Neuron did up to then
 REVERSAL = 900  # EV_EVTTP of an event that reverses the event EV_REVNR
 CONVERSION = dt.date(2007, 8, 11)  # COBOL -> Java (Neuron NG): event 800 on all live policies that night
 
@@ -130,3 +131,6 @@ HALF_INCOME_WITHHELD = False  # DE: HEV does not halve the base of the withholdi
 # to the assessment, and the targets leave the other taxable share of NRTAXR, TFS, out of the withholding too
 PARTIAL_EXEMPTION_WITHHELD = False  # DE: the partial exemption TFS (15 % from 2018) does not reduce the base of the
 # withholding; True: it does (targets: BL10004408 2020 and BL10000301 2024, KST on the whole gain)
+PAYOUT_SCOPE = "all"  # the payouts that t7_tax_payout reports: "all"; or, for a leaderboard probe, "unflagged" (only
+# those without a flag of `gaps.FLAGS`, decided by verified rules alone) or "flagged" (only those with one). A probe
+# scores only the rows it reports, so it tells in which of the two groups the rows of a sample are right

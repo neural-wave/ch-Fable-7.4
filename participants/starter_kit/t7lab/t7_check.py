@@ -148,7 +148,8 @@ def due_against_booked(debug: bool) -> list[bool]:
         pl.col("TB_EFFDT").is_between(pl.col("TX_VLDFR"), pl.col("TX_VLDTO"))).group_by("TB_POLNR", "TB_EVTNR").agg(
         THRESHOLD=pl.col("TX_THRSH").max())
     rows = rows.join(flags, on=["TB_POLNR", "TB_EVTNR"], how="left").join(
-        limits, on=["TB_POLNR", "TB_EVTNR"], how="left").with_columns(pl.col("VST", "SOS", "KST", "KIS").fill_null(False))
+        limits, on=["TB_POLNR", "TB_EVTNR"], how="left").with_columns(
+        pl.col("VST", "SOS", "KST", "KIS").fill_null(False))
     first_kst = booked.filter(pl.col("TB_TAXTP").eq("KST"))["TB_EFFDT"].min()
     first_kis = rates.filter(pl.col("TX_TAXTP").eq("KIS"))["TX_VLDFR"].min()
     base, country, death = pl.col("TAXABLE_BASE"), pl.col("COUNTRY"), pl.col("EVENT_TYPE").eq(500)
@@ -183,7 +184,7 @@ def result_checks(results: dict, debug: bool) -> list[bool]:
     payout, annual = results["t7_tax_payout"], results["t7_tax_annual"]
     if payout is None or annual is None:
         return [False]
-    oks = [failures("payout rows: country, 4 amounts to the cent, a date or None (None exactly when nothing was withheld)",
+    oks = [failures("payout rows: country, 4 amounts to the cent, a date or None (None when nothing was withheld)",
                     sum(not payout_row_ok(value) for value in payout.values()), debug),
            failures("annual rows: 7 amounts to the cent, at least one not 0",
                     sum(not (all(map(is_amount, value)) and any(value)) for value in annual.values()), debug)]

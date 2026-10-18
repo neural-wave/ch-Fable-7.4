@@ -41,8 +41,8 @@ from bookings import counted_events, received_premiums, uncharged_bookings
 from charges import death_benefit_factors
 from conventions import (CONVERSION, DEATH_CLAIM, HALF_INCOME_2012, HALF_INCOME_AGE, HALF_INCOME_WITHHELD, HELD_YEARS,
                          OLD_CONTRACT, PAID_OUT, PARTIAL_EXEMPTION_WITHHELD, PARTLY_TAXED, PAYOUTS, PENALIZED,
-                         ROUNDED_BY_SYSTEM, SINGLE_PREMIUM, TAX_CURRENCY, TAXED_ON_GAIN, TAXED_ON_GROSS, TAXES, TERMINATING,
-                         TRUNCATED_CONVERSION, WITHHELD)
+                         ROUNDED_BY_SYSTEM, SINGLE_PREMIUM, TAX_CURRENCY, TAXED_ON_GAIN, TAXED_ON_GROSS, TAXES,
+                         TERMINATING, TRUNCATED_CONVERSION, WITHHELD)
 from dates import public_holidays
 from legacy import as_cyymmdd, as_date, as_lenient_date, table
 from money import RATE_UNIT, SHARE_UNIT, rounded
