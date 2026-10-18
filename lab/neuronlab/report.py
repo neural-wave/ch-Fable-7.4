@@ -35,6 +35,9 @@ def build(task, conflicts_shown=8):
         lines += ["", f"## {value}", ""]
         for s in info.get("identities", []):
             lines.append(f"Exact identity: {value} = {' + '.join(s['sum_of'])} on {s['rows']} of {total_rows} rows")
+        if not info.get("relation") and str(info.get("note", "")).startswith("text value"):
+            lines.append(f"Not searched: {info['note']}. It may copy an input column read on some date.")
+            continue
         if not info.get("relation"):
             lines.append("No relation with dense clusters: a feature or a different relation is missing.")
             hint = info.get("approximate")

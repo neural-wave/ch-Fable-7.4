@@ -213,8 +213,9 @@ def run(task):
         tried, hint = cluster_value(df, meta, value)
         sums = relations.identities(df, meta, value)
         if not tried:
-            out["values"][value] = {"relation": None, "note": "no clusterable relation", "approximate": hint,
-                                    "identities": sums}
+            note = "no clusterable relation" if relations.clusterable(df[value].dtype) else \
+                f"text value ({df[value].dtype}): the relations compute numbers and dates only, steps 2 to 7 skip it"
+            out["values"][value] = {"relation": None, "note": note, "approximate": hint, "identities": sums}
             continue
         best = tried[0]
         label, modes = best["label"], best["modes"]

@@ -804,6 +804,13 @@ def agent_timeline(job):
             event = json.loads(line)
         except json.JSONDecodeError:
             continue
+        part = event.get("part") if isinstance(event.get("part"), dict) else None
+        if part and event.get("type") == "tool_use":  # OpenCode
+            items.append({"tool": part.get("tool"), "what": tool_summary((part.get("state") or {}).get("input") or {})})
+        elif part and event.get("type") == "text":
+            text = history.last_line(part.get("text"), 140)
+            if text:
+                items.append({"tool": "says", "what": text})
         for block in (event.get("message") or {}).get("content") or []:
             if isinstance(block, dict) and block.get("type") == "tool_use":
                 items.append({"tool": block.get("name"), "what": tool_summary(block.get("input") or {})})
@@ -817,7 +824,7 @@ def agent_timeline(job):
 
 
 def tool_summary(arguments):
-    for key in ("command", "file_path", "pattern", "description", "prompt", "skill"):
+    for key in ("command", "file_path", "filePath", "path", "pattern", "description", "prompt", "skill"):
         if arguments.get(key):
             return str(arguments[key]).splitlines()[0][:140]
     return json.dumps(arguments)[:140]
@@ -853,11 +860,24 @@ def task_definition(task):
 
 
 def settings():
+    """Folders, and the models the pages offer for step 5 and for the agent (with the default of each)."""
     import os
     import shutil
+    from .. import agent, llm
+    models = llm.models()
+    step5_default = "open:" if os.environ.get("LLM_BACKEND", "claude") == "open" else "claude:"
+    agent_models = [m for m in models if m["backend"] == "claude"] if shutil.which("claude") else []
+    if shutil.which("opencode"):
+        agent_models = [dict(m, label=f"OpenCode · {m['model']}") for m in models if m["backend"] == "open"] \
+            + agent_models
+    agent_default = next((m["id"] for m in agent_models if m["backend"] == ("open" if agent.backend() == "opencode"
+                                                                            else "claude")), None)
     return {"legacy": str(paths.LEGACY), "targets": str(paths.TARGETS), "claude": bool(shutil.which("claude")),
-            "model": os.environ.get("LLM_MODEL", ""), "agent_model": os.environ.get("AGENT_MODEL", ""),
-            "workspace": paths.REPO.name}
+            "opencode": bool(shutil.which("opencode")), "model": os.environ.get("LLM_MODEL", ""),
+            "agent_model": os.environ.get("AGENT_MODEL", ""),
+            "models": models, "step5_default": next((m["id"] for m in models if m["id"].startswith(step5_default)),
+                                                    None),
+            "agent_models": agent_models, "agent_default": agent_default, "workspace": paths.REPO.name}
 
 
 def dsl_check(task, expr):

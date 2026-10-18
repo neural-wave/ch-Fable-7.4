@@ -1,5 +1,6 @@
 // Runs: every run of the pipeline, of step 5, of scoring, of ablation and of the agent. Newest first.
-import { cells, dialog, get, h, header, icons, loading, modelNotice, mount, pill, post, settings, start, table, term, toast } from '../lib/h.js';
+import { cells, dialog, get, h, header, icons, loading, mount, pill, post, start, table, term, toast } from '../lib/h.js';
+import { modelSelect } from './wizard.js';
 
 const PAGE = 25;
 const state = { kind: 'All', task: 'All tasks', search: '', page: 0 };
@@ -97,36 +98,41 @@ function legend(state_, label) {
   return h('span', { class: 'row', style: { gap: '6px' } }, h('span', { class: ['cell', state_] }), label);
 }
 
-function newRun(data) {
+async function newRun(data) {
+  const st = await get('/api/settings').catch(() => ({ models: [] }));
+  let model = st.step5_default || '';
   const tasks = [...new Set(data.tasks.map((t) => t.id))];
   const task = h('select', { class: 'input mono' }, tasks.map((t) => h('option', {}, t)));
-  const notice = h('div', {});
-  const kind = h('select', { class: 'input', onChange: () => notice.replaceChildren(kind.value === 'Step 5' ? modelNotice('suggest') : '') }, Object.keys(KIND_ACTION).map((k) => h('option', {}, k)));
+  const kind = h('select', { class: 'input' }, Object.keys(KIND_ACTION).map((k) => h('option', {}, k)));
   const go = h('button', { class: 'btn primary', value: 'go' }, 'Start');
   const el = dialog('New run', h('div', { class: 'stack-12' },
     h('label', { class: 'field' }, 'Task', task),
-    h('label', { class: 'field' }, 'Kind', kind), notice,
+    h('label', { class: 'field' }, 'Kind', kind),
+    h('label', { class: 'field' }, 'Model for step 5', modelSelect(st.models || [], model, (v) => { model = v; })),
     h('p', { class: 'small muted' }, 'Pipeline runs steps 1–4, 6 and 7. Step 5 asks the language model for features. Score runs submission.py. Ablation switches each rule card off.')), go);
-  go.addEventListener('click', () => { el.close(); start(KIND_ACTION[kind.value], task.value); });
+  go.addEventListener('click', () => { el.close(); start(KIND_ACTION[kind.value], task.value, kind.value === 'Step 5' && model ? { model } : {}); });
 }
 
-function unattended(data) {
+async function unattended(data) {
+  const st = await get('/api/settings').catch(() => ({ agent_models: [] }));
+  let model = st.agent_default || '';
   const scored = data.tasks.map((t) => t.id).filter((t) => /^t\d_/.test(t) && !t.includes('projection_year') && !t.includes('holding') && !t.includes('booking'));
   const boxes = scored.map((t) => h('label', { class: 'check' }, h('input', { type: 'checkbox', value: t, checked: t !== 't0_commission' ? true : null }), h('span', { class: 'mono' }, t)));
   const go = h('button', { class: 'btn primary', value: 'go' }, 'Queue the sessions');
   const el = dialog('Run every task unattended', h('div', { class: 'stack-12' },
-    h('p', { class: 'small muted' }, 'One headless Claude Code session per task, one after the other, with the skill rule-discovery: the same as lab agent. Each session edits submission.py.'),
-    modelNotice('agent'),
+    h('p', { class: 'small muted' }, 'One headless session per task, one after the other, with the skill rule-discovery: the same as lab agent. Each session edits submission.py. OpenCode runs with the guardrails of scripts/opencode-open.jsonc: no network, no files outside the repository, no secrets, edits only in the submission, the runs and the rules, no git push or commit.'),
+    h('label', { class: 'field' }, 'Agent', (st.agent_models || []).length ? modelSelect(st.agent_models, model, (v) => { model = v; })
+      : h('span', { class: 'small', style: { color: 'var(--bad)' } }, 'Neither OpenCode nor Claude Code is on the PATH of the server.')),
     h('div', {}, boxes)), go);
   go.addEventListener('click', async () => {
     el.close();
-    if ((await settings())?.claude === false) { toast('Claude Code is not installed: the agent cannot run. See the model in the header.', true); return; }
+    if (!(st.agent_models || []).length) { toast('Neither OpenCode nor Claude Code is installed: the agent cannot run.', true); return; }
     const chosen = boxes.map((b) => b.querySelector('input')).filter((i) => i.checked).map((i) => i.value);
     if (!chosen.length) return;
     try {
       let first = null;
       for (const t of chosen) {
-        const job = await post('/api/jobs', { action: 'agent', task: t });
+        const job = await post('/api/jobs', { action: 'agent', task: t, options: model ? { model } : {} });
         first = first || job;
       }
       location.hash = `#/jobs/${first.id}`;

@@ -181,21 +181,39 @@ and the scored runs in `runs/<task>~on` and `runs/<task>~off-<card>` (not versio
 - A row counts only if it equals the target, with the same semantics as `scoring.accuracy`.
 - One policy in five (`crc32(policy_id) % 5 == 0`) is the holdout.
 
-## Step 5 with Claude Code
+## Step 5 and the agent: Claude Code or an open-weights model
 
-`llm.py` sends the prompt of step 5 to Claude Code in headless mode (`claude -p`): no tools, no skills, no MCP
-servers, no saved session, and the system prompt of step 5 instead of the one of Claude Code. It uses the login of
-the `claude` CLI (subscription or `ANTHROPIC_API_KEY`). `LLM_MODEL` (in the environment or in `../.env.llm`) picks
-the model, e.g. `opus`; without it Claude Code uses its default model. There is no temperature setting, so two runs
-may propose different features; each one is scored exactly. The model can only propose expressions of the DSL in
-`neuronlab/dsl.py`. They are parsed with a restricted `ast`, never evaluated as Python.
+`llm.py` sends the prompt of step 5 to one of two backends, chosen by `LLM_BACKEND` (environment or `../.env.llm`):
+- `claude` (default): Claude Code in headless mode (`claude -p`): no tools, no skills, no MCP servers, no saved
+  session, and the system prompt of step 5 instead of the one of Claude Code. It uses the login of the `claude` CLI
+  (subscription or `ANTHROPIC_API_KEY`). `LLM_MODEL` picks the model, e.g. `opus`; without it Claude Code uses its
+  default model. There is no temperature setting, so two runs may propose different features.
+- `open`: the open-weights endpoint of `../.env.llm` (`OPEN_PROTOCOL`, `OPEN_BASE_URL`, `OPEN_API_KEY`,
+  `OPEN_MODEL`, overridden by `LLM_*`), at temperature 0, with the OpenAI chat API or the Anthropic Messages API.
+In `lab serve` the model menu offers both: Claude Code's models when `claude` is on the PATH, and the models the
+endpoint lists at `<base>/models`. Either way the model can only propose expressions of the DSL in
+`neuronlab/dsl.py`, parsed with a restricted `ast` and never evaluated as Python; each one is scored exactly.
 
-The agent is Claude Code too: it finds the protocol in `../.claude/skills/rule-discovery/SKILL.md` as the skill
-`rule-discovery`, when started with `claude` in the root of the repository. `lab agent [task ...]` runs it without
-supervision: one headless session per task (default t1 to t4), one after the other, with the trace in
-`runs/<task>/agent-<time>.jsonl`. `neuronlab/agent.py` uses the standard library only, so
-`python lab/neuronlab/agent.py [task ...]` works without installing the lab, and `../scripts/claude-tasks.sh` is a
-wrapper around it.
+The agent follows the protocol in `../.claude/skills/rule-discovery/SKILL.md`. `lab agent [task ...]` runs it
+without supervision: one headless session per task (default t1 to t4), one after the other, with the trace in
+`runs/<task>/agent-<time>.jsonl`, closed by a `result` line (answer, turns, cost, duration). `AGENT_BACKEND` picks
+the agent:
+- `opencode` (default): OpenCode (`npm i -g @opencode/cli`, a program of its own, not a Python dependency) on the
+  endpoint of `../.env.llm`, `AGENT_MODEL` overriding `OPEN_MODEL`. It runs `opencode run --standalone --auto` with
+  the configuration `../scripts/opencode-open.jsonc`: the provider of `.env.llm` and no other, and guardrails, since
+  `--auto` approves every action not denied there. Denied: files outside the repository, the network, questions,
+  reading or writing `.env` files, edits outside `starter_kit/my_solution/`, `lab/runs/` and `lab/rules/`, and
+  commands that push, commit, reset, check out, stash, delete in bulk, install, download or start another agent.
+  The tool rules go under `"permissions"`: OpenCode 2 reads `"policies"` only for providers. The prompt names the
+  skill file, so OpenCode needs no skill discovery.
+- `claude`: Claude Code in auto permission mode (its classifier denies the actions it finds risky), `AGENT_MODEL`
+  e.g. `opus`, `MAX_BUDGET_USD` a cap per session.
+A session whose trace gets no new event for `AGENT_IDLE_TIMEOUT` seconds (default 900, 0 turns it off) or that runs
+longer than `AGENT_TIMEOUT` seconds (off by default) is stopped with every process it started: exit code 124, a
+`result` that says why, and the next task starts. With a remote open-weights model a session can hang without a
+word; this keeps the queue of `lab serve` moving.
+`neuronlab/agent.py` uses the standard library only, so `python lab/neuronlab/agent.py [task ...]` works without
+installing the lab, and `../scripts/claude-tasks.sh` is a wrapper around it.
 
 ## Tests
 
