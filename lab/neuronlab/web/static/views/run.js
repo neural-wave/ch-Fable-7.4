@@ -82,6 +82,7 @@ export async function render(root, { run, anchor, query }) {
             h('span', { class: 'row-between small muted' }, h('span', {}, x.what), h('span', { style: { color: 'var(--ink)', fontWeight: 500 } }, x.score))))) :
             h('p', { class: 'small muted' }, 'No other run of this task.')),
         h('section', { class: 'card tight' }, h('h3', {}, 'Look closer'),
+          h('a', { href: '/atlas', class: 'small' }, 'Before / after of each rule in the atlas'),
           d.files.includes('notes.md') ? h('a', { href: `/files/${encodeURIComponent(run)}/notes.md`, class: 'small' }, 'Notes of the agent') : null,
           tech('files', 'Raw files', h('div', { class: 'stack-8' },
             h('a', { href: `/files/${encodeURIComponent(run)}/ledger.jsonl`, class: 'small' }, 'Every scored candidate in ledger.jsonl'),

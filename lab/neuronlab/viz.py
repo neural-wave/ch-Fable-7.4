@@ -25,16 +25,21 @@ from . import paths
 from .store import scoring
 
 THEMES = {
-    "light": {"surface": "#fcfcfb", "page": "#f9f9f7", "ink": "#0b0b0b", "ink2": "#52514e", "muted": "#898781",
-              "grid": "#e1e0d9", "axis": "#c3c2b7", "border": "rgba(11,11,11,0.10)", "wash": "rgba(42,120,214,0.10)",
-              "series-1": "#2a78d6", "series-2": "#eb6834", "series-3": "#1baf7a", "series-4": "#eda100",
-              "neutral": "#c3c2b7", "critical": "#d03b3b", "good": "#006300"},
-    "dark": {"surface": "#1a1a19", "page": "#0d0d0d", "ink": "#f0efec", "ink2": "#c3c2b7", "muted": "#898781",
-             "grid": "#2c2c2a", "axis": "#383835", "border": "rgba(255,255,255,0.10)", "wash": "rgba(57,135,229,0.16)",
-             "series-1": "#3987e5", "series-2": "#d95926", "series-3": "#199e70", "series-4": "#c98500",
-             "neutral": "#52514e", "critical": "#d03b3b", "good": "#0ca30c"},
+    "light": {"surface": "#ffffff", "page": "#f5f5f2", "ink": "#1a1c1e", "ink2": "#575b60", "muted": "#8a8d90",
+              "grid": "#ecece7", "axis": "#b9bbb5", "border": "#ddded8", "wash": "rgba(224,38,36,0.08)",
+              "tint": "#f7f7f4", "bar": "rgba(255,255,255,0.92)", "accent": "#e02624", "accent-ink": "#b81c1f",
+              "accent-line": "#eda9a7", "focus": "rgba(224,38,36,0.35)",
+              "series-1": "#1a1c1e", "series-2": "#d9a035", "series-3": "#3e7d52", "series-4": "#5a7fb0",
+              "neutral": "#ddded8", "critical": "#e02624", "good": "#3e7d52"},
+    "dark": {"surface": "#1b1d1f", "page": "#121314", "ink": "#f0f0ec", "ink2": "#b8bab4", "muted": "#8a8d90",
+             "grid": "#2a2c2e", "axis": "#45484c", "border": "#2e3134", "wash": "rgba(240,74,71,0.14)",
+             "tint": "#232528", "bar": "rgba(27,29,31,0.92)", "accent": "#f04a47", "accent-ink": "#f2a09e",
+             "accent-line": "rgba(242,160,158,0.45)", "focus": "rgba(240,74,71,0.45)",
+             "series-1": "#e8e9e4", "series-2": "#e0ac45", "series-3": "#5aa673", "series-4": "#7d9fd0",
+             "neutral": "#3a3d40", "critical": "#f04a47", "good": "#5aa673"},
 }
-FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif'
+FONT = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif'  # Plex when online, as in Ergo
+MONO = '"IBM Plex Mono", ui-monospace, Consolas, monospace'
 SMALL = 12  # a card that breaks at most this many rows shows them as a table instead of a chart
 BINS = 40
 TOP_CATEGORIES = 12
@@ -480,65 +485,103 @@ def chart(fig, name):
 
 PAGE = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Neuron Rule Atlas</title>
+<title>Atlas · Ergo</title>
 <style>
 :root { color-scheme: light; %(light)s }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; %(dark)s } }
 :root[data-theme="dark"] { color-scheme: dark; %(dark)s }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--page); color: var(--ink); font-family: %(font)s; line-height: 1.5; }
-a { color: var(--series-1); }
-code { font-size: 0.92em; }
-.bar { position: sticky; top: 0; z-index: 5; background: var(--page); border-bottom: 1px solid var(--border); }
-.bar-inner { max-width: 1080px; margin: 0 auto; padding: 10px 16px; display: flex; gap: 12px 20px; align-items: center;
-             flex-wrap: wrap; }
-.brand { font-weight: 650; color: var(--ink); text-decoration: none; margin-right: auto; }
-.bar nav { display: flex; gap: 4px; flex-wrap: wrap; }
-.bar nav a { color: var(--ink2); text-decoration: none; padding: 4px 10px; border-radius: 6px; }
-.bar nav a[aria-current="page"] { color: var(--ink); background: var(--wash); }
-main { max-width: 1080px; margin: 0 auto; padding: 8px 16px 64px; }
-h1, h2, h3 { line-height: 1.25; } h2 { font-size: 20px; margin: 32px 0 4px; } h3 { font-size: 16px; margin: 0 0 4px; }
-.view-title { font-size: 26px; margin-top: 24px; }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: %(font)s; font-size: 15px; line-height: 1.5;
+       -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+a { color: var(--accent-ink); text-decoration-color: var(--accent-line); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+code, pre { font-family: %(mono)s; } code { font-size: 0.92em; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.top { position: sticky; top: 0; z-index: 5; background: var(--bar); backdrop-filter: saturate(1.4) blur(10px);
+       -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--border);
+       box-shadow: inset 0 3px 0 var(--accent); }
+.top-inner { padding: 0 32px; min-height: 60px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 32px; }
+.brand { display: flex; align-items: center; padding: 12px 0 10px; }
+.brand img { display: block; height: 28px; width: auto; }
+.brand img.logo-dark { display: none; }
+:root[data-theme="dark"] .brand img.logo-light { display: none; } :root[data-theme="dark"] .brand img.logo-dark { display: block; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .brand img.logo-light { display: none; }
+  :root:not([data-theme="light"]) .brand img.logo-dark { display: block; } }
+.top nav { display: flex; gap: 4px; align-self: stretch; font-size: 14px; }
+.top nav a { display: inline-flex; align-items: center; padding: 0 12px; color: var(--ink2); text-decoration: none;
+             border-bottom: 2px solid transparent; }
+.top nav a:hover { color: var(--ink); border-bottom-color: var(--border); }
+.top nav a[aria-current="page"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.top-end { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+main { max-width: 1360px; margin: 0 auto; padding: 28px 32px 64px; }
+.crumbs { font-size: 13px; color: var(--muted); } .crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--ink); text-decoration: underline; }
+.page-head h1 { margin: 6px 0 4px; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+.page-head p { margin: 0; color: var(--ink2); font-size: 14px; max-width: 76ch; }
+.views { display: flex; flex-wrap: wrap; gap: 4px; margin: 20px 0 8px; border-bottom: 1px solid var(--border); }
+.views a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; margin-bottom: -1px;
+           border-bottom: 2px solid transparent; color: var(--ink2); text-decoration: none; font-size: 14px; }
+.views a:hover { color: var(--ink); border-bottom-color: var(--border); }
+.views a[aria-current="page"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+@media (max-width: 640px) {
+  .top-inner { padding: 0 16px; gap: 0 8px; } .top nav { order: 3; width: 100%%; min-height: 40px; margin: 0 -12px; }
+  main { padding: 20px 16px 48px; } .page-head h1 { font-size: 24px; } }
+h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
+h2 { font-size: 20px; font-weight: 600; margin: 36px 0 4px; } h3 { font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+.view-title { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 24px 0 8px; }
 h3.sub { margin: 24px 0 8px; }
 .lead { color: var(--ink2); margin: 0 0 16px; max-width: 76ch; }
 .note, .empty { color: var(--muted); font-size: 14px; margin: 8px 0; }
-.chart { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; margin: 8px 0; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 8px 0; }
-.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; }
-.tile-label { color: var(--ink2); font-size: 13px; } .tile-value { font-size: 26px; font-weight: 600; }
+.chart { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin: 12px 0; overflow: hidden; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%%), 1fr)); gap: 12px; margin: 12px 0; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+        display: flex; flex-direction: column; gap: 2px; }
+.tile-label { color: var(--ink2); font-size: 13px; }
+.tile-value { font-size: 30px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; }
 .tile-note { color: var(--muted); font-size: 13px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin: 16px 0; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 16px 0; }
 .card .tile { background: var(--page); }
-.view-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.view-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%%), 1fr)); gap: 12px; }
 .view-card { display: flex; flex-direction: column; gap: 6px; background: var(--surface); border: 1px solid var(--border);
-             border-radius: 10px; padding: 16px; text-decoration: none; color: var(--ink); }
-.view-card:hover, .view-card:focus-visible { border-color: var(--series-1); }
-.view-card-title { font-weight: 650; } .view-card-text { color: var(--ink2); font-size: 14px; }
-.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 4px; }
-.tab { border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; color: var(--ink2); text-decoration: none;
-       background: var(--surface); font-size: 14px; }
-.tab[aria-current="true"] { color: var(--ink); border-color: var(--series-1); background: var(--wash); }
-.tab-note { color: var(--muted); font-size: 12px; margin-left: 6px; }
+             border-radius: 12px; padding: 18px; text-decoration: none; color: var(--ink);
+             transition: border-color 140ms ease, box-shadow 140ms ease; }
+.view-card:hover, .view-card:focus-visible { border-color: var(--axis); box-shadow: 0 6px 20px -12px rgba(26,28,30,0.35); }
+.view-card-title { font-weight: 600; } .view-card-text { color: var(--ink2); font-size: 14px; }
+.tabs { display: flex; gap: 2px; flex-wrap: wrap; margin: 8px 0 4px; padding: 3px; border: 1px solid var(--border);
+        border-radius: 8px; background: var(--tint); width: fit-content; max-width: 100%%; }
+.tab { border-radius: 6px; padding: 5px 12px; color: var(--ink2); text-decoration: none; font-size: 13px; font-weight: 500; }
+.tab:hover { color: var(--ink); }
+.tab[aria-current="true"] { color: var(--ink); background: var(--surface); font-weight: 600;
+                            box-shadow: 0 1px 2px rgba(26,28,30,0.12), 0 0 0 1px var(--border); }
+.tab-note { color: var(--muted); font-size: 12px; margin-left: 6px; font-weight: 400; }
 .scroll { overflow-x: auto; }
-table { border-collapse: collapse; font-size: 13px; margin: 8px 0; font-variant-numeric: tabular-nums; }
-th, td { text-align: left; padding: 4px 10px 4px 0; border-bottom: 1px solid var(--border); white-space: nowrap; }
-th { color: var(--ink2); font-weight: 600; }
+table { border-collapse: collapse; font-size: 14px; margin: 8px 0; }
+th, td { text-align: left; padding: 10px 16px 10px 0; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th { color: var(--muted); font-weight: 500; font-size: 13px; }
 th.num, td.num { text-align: right; padding-left: 16px; }
 table.index td { white-space: normal; } table.index { width: 100%%; }
-details.data { margin: 8px 0; } details.data summary { cursor: pointer; color: var(--ink2); font-size: 14px; }
+details.data { margin: 8px 0; } details.data summary { cursor: pointer; color: var(--ink2); font-size: 13px; font-weight: 500; }
 pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: var(--ink2); background: var(--page);
-      border-radius: 6px; padding: 8px; }
-button { font: inherit; background: var(--surface); color: var(--ink); border: 1px solid var(--border);
-         border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+      border-radius: 8px; padding: 10px 12px; }
+button { font: inherit; font-size: 13px; font-weight: 500; background: var(--surface); color: var(--ink);
+         border: 1px solid var(--border); border-radius: 8px; min-height: 34px; padding: 0 12px; cursor: pointer;
+         transition: background 140ms ease, border-color 140ms ease; }
+button:hover { background: var(--tint); border-color: var(--axis); }
 [hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 %(story_css)s
 </style></head><body>
-<header class="bar"><div class="bar-inner"><a class="brand" href="#index">Neuron Rule Atlas</a>
-<nav aria-label="Views"><a href="#index" data-nav="index">Index</a><a href="#rules" data-nav="rules">Before / after</a>
-<a href="#policy" data-nav="policy">Policy timeline</a>%(story_nav)s</nav>
-<button id="theme" type="button">Switch theme</button></div></header>
+<header class="top"><div class="top-inner">
+<a class="brand" href="/#/runs" data-home><img class="logo-light" src="data:image/png;base64,%(logo)s" alt="Ergo" height="28">
+<img class="logo-dark" src="data:image/png;base64,%(logo_white)s" alt="" height="28"></a>
+<nav aria-label="Main" data-ergo><a href="/#/tasks">Tasks</a><a href="/#/runs">Runs</a><a href="/atlas" aria-current="page">Atlas</a></nav>
+<div class="top-end"><button id="theme" type="button">Switch theme</button></div></div></header>
 <main>
-<div class="view" data-view="index"><h1 class="view-title">How the rules of Neuron were found, and how well they work</h1>
+<div class="page-head"><div class="crumbs" data-ergo><a href="/#/runs">Runs</a> / Atlas</div><h1>Atlas</h1>
+<p>Before and after of every rule, a policy month by month, and the story of 100 francs, from the artifacts of the lab.</p></div>
+<nav class="views" aria-label="Views"><a href="#index" data-nav="index">Index</a><a href="#rules" data-nav="rules">Before / after</a>
+<a href="#policy" data-nav="policy">Policy timeline</a>%(story_nav)s</nav>
+<div class="view" data-view="index"><h2 class="view-title">How the rules of Neuron were found, and how well they work</h2>
 %(index)s</div>
 <div class="view" data-view="rules" hidden>%(rules)s</div>
 <div class="view" data-view="policy" hidden>%(policy)s</div>
@@ -547,6 +590,15 @@ button { font: inherit; background: var(--surface); color: var(--ink); border: 1
 <script type="application/octet-stream" id="plotly-gzip">%(plotly)s</script>
 <script>
 const THEMES = %(themes)s;
+if (location.protocol === "file:") {  // opened from disk: no Ergo around it, and the system fonts
+  document.querySelectorAll("[data-ergo]").forEach(el => el.remove());
+  document.querySelector("[data-home]").href = "#index";
+} else {  // served by `lab serve`: IBM Plex, as on the other pages of Ergo
+  const fonts = document.createElement("link");
+  fonts.rel = "stylesheet";
+  fonts.href = "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap";
+  document.head.appendChild(fonts);
+}
 async function loadPlotly() {  // plotly.js is embedded gzip-compressed (2.8 MB less); the browser unpacks it offline
   const packed = Uint8Array.from(atob(document.getElementById("plotly-gzip").textContent), c => c.charCodeAt(0));
   const code = await new Response(new Blob([packed]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
@@ -614,12 +666,18 @@ def packed_plotly():
     return base64.b64encode(gzip.compress(get_plotlyjs().encode("utf-8"), 9, mtime=0)).decode("ascii")
 
 
+def logo(name):
+    """A brand image of Ergo in base64, embedded so the page stays one offline file."""
+    return base64.b64encode((paths.REPO / "lab/neuronlab/web/static/brand" / name).read_bytes()).decode("ascii")
+
+
 def page(index, rules, policy, story):
     from . import story as stories
 
     def tokens(theme):
         return " ".join(f"--{k}: {v};" for k, v in THEMES[theme].items())
-    return PAGE % dict(light=tokens("light"), dark=tokens("dark"), font=FONT, index=index, rules=rules, policy=policy,
+    return PAGE % dict(light=tokens("light"), dark=tokens("dark"), font=FONT, mono=MONO, logo=logo("ergo-logo.png"),
+                       logo_white=logo("ergo-logo-white.png"), index=index, rules=rules, policy=policy,
                        story=story or "", story_nav='<a href="#story" data-nav="story">Story</a>' if story else "",
                        story_css=stories.CSS, story_js=stories.JS, plotly=packed_plotly(), themes=json.dumps(THEMES))
 

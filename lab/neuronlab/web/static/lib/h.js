@@ -216,7 +216,7 @@ export function header(active) {
   return h('header', { class: 'top' },
     h('button', { type: 'button', class: 'skip', onClick: skipToContent }, 'Skip to content'),
     h('a', { href: '#/runs', class: 'brand' }, h('img', { src: '/static/brand/ergo-logo.png', alt: 'Ergo', height: 28 })),
-    h('nav', { 'aria-label': 'Main' }, link('#/tasks', 'Tasks', 'tasks'), link('#/runs', 'Runs', 'runs')),
+    h('nav', { 'aria-label': 'Main' }, link('#/tasks', 'Tasks', 'tasks'), link('#/runs', 'Runs', 'runs'), link('/atlas', 'Atlas', 'atlas')),
     h('div', { class: 'top-end' }, workspaceName(), modelChip()));
 }
 
